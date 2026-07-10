@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Informe Canal Tradicional 2026 · Xuma</title>
+  <meta name="description" content="Informe ejecutivo Canal Tradicional 1S 2026: visitas de formación, cobertura de formación por aliado, ventas y estrategia 2S." />
+  
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    #home-btn {
+      position: fixed; top: 12px; left: 20px; z-index: 1001;
+      color: rgba(255,255,255,.65); font-size: .72rem; font-weight: 700;
+      letter-spacing: .08em; text-decoration: none;
+      background: rgba(18,1,128,.6); border: 1px solid rgba(90,226,128,.3);
+      padding: 6px 14px; border-radius: 20px; backdrop-filter: blur(8px);
+      transition: all 0.2s ease;
+    }
+    #home-btn:hover { color: #120180; background: #5AE280; border-color: #5AE280; }
+    
+    /* Premium Dark themed Leaflet Popups */
+    .custom-popup .leaflet-popup-content-wrapper {
+      background: rgba(18, 1, 128, 0.95) !important;
+      color: #ffffff !important;
+      border: 1px solid #5AE280 !important;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.5) !important;
+      border-radius: 8px !important;
+      padding: 4px 8px !important;
+    }
+    .custom-popup .leaflet-popup-tip {
+      background: rgba(18, 1, 128, 0.95) !important;
+      border: 1px solid #5AE280 !important;
+    }
+    .custom-popup .leaflet-popup-close-button {
+      color: rgba(255,255,255,0.7) !important;
+    }
+  </style>
+</head>
+<body>
+
+<a id="home-btn" href="../index.html" title="Volver al portal de canales">⌂ PORTAL</a>
+<div id="progress" style="width:0"></div>
+<div id="counter">1 / 8</div>
+<button id="prev-btn" title="Anterior (←)">&#8592;</button>
+<button id="next-btn" title="Siguiente (→)">&#8594;</button>
+
+<div id="app">
+<div id="scaler">
+
+  <!-- ══════════ SLIDE 0 · PORTADA ══════════ -->
+  <div class="slide slide-cover active" data-label="Portada">
+    <img class="cover-logo" src="../assets/logos/Logo_transparente.png" alt="Xuma" />
+    <div class="cover-tag">Informe Ejecutivo · Canal Tradicional</div>
+    <h1 class="cover-title">Canal<br><span>Tradicional</span><br>2026</h1>
+    <p class="cover-subtitle">
+      Ejecución de visitas de formación · Cobertura por aliado<br>
+      Ventas del canal y estrategia de Formación para el segundo semestre
+    </p>
+    <div class="cover-chips">
+      <span class="cover-chip">Ene – Jun 2026</span>
+      <span class="cover-chip">22 aliados · motos, gas y muebles</span>
+      <span class="cover-chip">Cuota Protegida · Rueda Seguro</span>
+    </div>
+    <div class="cover-vanti">Presentado por Xuma · Para Orlando</div>
+  </div>
+
+  <!-- ══════════ SLIDE 1 · VISITAS DE FORMACIÓN ══════════ -->
+  <div class="slide slide-content" data-label="Formación">
+    <div class="s-header">
+      <h2>Ejecución de Visitas de Formación · 1S 2026</h2>
+      <span class="s-tag">Tradicional · Formación</span>
+    </div>
+    <div class="s-body" id="formacion-body">
+      <!-- Renderizado dinámico -->
+    </div>
+  </div>
+
+  <!-- ══════════ SLIDE 2 · MAPA GEOGRÁFICO ══════════ -->
+  <div class="slide slide-content" data-label="Geografía">
+    <div class="s-header">
+      <h2>Distribución Geográfica de Visitas · 1S 2026</h2>
+      <span class="s-tag">Tradicional · Cobertura</span>
+    </div>
+    <div class="s-body" id="mapa-body">
+      <!-- Renderizado dinámico -->
+    </div>
+  </div>
+
+  <!-- ══════════ SLIDE 3 · VENTAS CP ══════════ -->
+  <div class="slide slide-content" data-label="Ventas CP">
+    <div class="s-header">
+      <h2>Ventas · Cuota Protegida Tradicional (12 aliados)</h2>
+      <span class="s-tag">Tradicional · Resultados</span>
+    </div>
+    <div class="s-body" id="ventas-cp-body">
+      <!-- Renderizado dinámico -->
+    </div>
+  </div>
+
+  <!-- ══════════ SLIDE 4 · VENTAS RS ══════════ -->
+  <div class="slide slide-content" data-label="Ventas RS">
+    <div class="s-header">
+      <h2>Ventas · Rueda Seguro Tradicional (25 aliados)</h2>
+      <span class="s-tag">Tradicional · Resultados</span>
+    </div>
+    <div class="s-body" id="ventas-rs-body">
+      <!-- Renderizado dinámico -->
+    </div>
+  </div>
+
+  <!-- ══════════ SLIDE 5 · COBERTURA POR ALIADO ══════════ -->
+  <div class="slide slide-content" data-label="Cobertura">
+    <div class="s-header">
+      <h2>Cobertura de Formación por Aliado (Cruce por Cédula)</h2>
+      <span class="s-tag">Tradicional · Cobertura</span>
+    </div>
+    <div class="s-body" id="cobertura-body">
+      <!-- Renderizado dinámico -->
+    </div>
+  </div>
+
+  <!-- ══════════ SLIDE 6 · ESTRATEGIA 2S ══════════ -->
+  <div class="slide slide-content" data-label="Estrategia 2S">
+    <div class="s-header">
+      <h2>Estrategia de Formación · Segundo Semestre 2026</h2>
+      <span class="s-tag">Tradicional · Estrategia</span>
+    </div>
+    <div class="s-body">
+      <div class="alert alert-warn">
+        <span class="ico">📋</span>
+        <span><strong>Sección en proceso de alineación con Erika Zambrano (formadora del canal).</strong> Acciones estratégicas sugeridas con base en el diagnóstico del primer semestre.</span>
+      </div>
+      <div class="two-col">
+        <div class="panel">
+          <h3>🎯 Frentes Estratégicos 2S</h3>
+          <ul class="check-list">
+            <li><strong>Recuperar el ritmo del canal:</strong> Volver a los niveles de marzo (~140 visitas) para sostener las ventas del canal.</li>
+            <li><strong>Plan específico por Aliado:</strong> Diseñar campañas dirigidas a los 7 aliados con baja densidad de formación (≤6 visitas).</li>
+            <li><strong>Acompañamiento en venta real:</strong> Foco en la conversión (Efectivas/Financiaciones) mediante mentorías in-situ.</li>
+            <li><strong>Optimización de registros:</strong> Garantizar la captura del documento del asesor capacitado para la trazabilidad.</li>
+          </ul>
+        </div>
+        <div class="panel">
+          <h3>💡 Recomendaciones de Negocio</h3>
+          <ul class="check-list">
+            <li>Incrementar la penetración promedio del canal de 4,2% a ≥5% en aliados capacitados.</li>
+            <li>Establecer como KPI clave: <em>Cobertura de Formación Mensual por Aliado</em> (Métrica de Orlando).</li>
+            <li>Focalizar las visitas en los aliados de mayor tracción transaccional (Diverxa y Multintegral).</li>
+            <li>Sincronizar cronogramas de capacitación con los picos de ventas de motos y planes de incentivos de aliados.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════ SLIDE 7 · CIERRE ══════════ -->
+  <div class="slide slide-section bg-teal" data-label="Cierre">
+    <div class="section-label">Cierre del Informe</div>
+    <h2 class="section-title">Hitos Alcanzados y Siguientes Pasos</h2>
+    <div style="margin-top:30px; max-width:780px">
+      <ul class="check-list" style="gap:12px">
+        <li style="color:rgba(255,255,255,.9); font-size:.95rem">Integración de cierres reales "Como vamos" para <strong>Mayo y Junio de 2026</strong>.</li>
+        <li style="color:rgba(255,255,255,.9); font-size:.95rem">Cálculo de la tasa de cruce / cobertura de formación para todos los aliados por mes.</li>
+        <li style="color:rgba(255,255,255,.9); font-size:.95rem">Visualización de distribución geográfica de visitas (450 visitas tradicionales mapeadas).</li>
+        <li style="color:rgba(255,255,255,.9); font-size:.95rem">Pendiente: Aprobación final del cronograma 2S por la formadora Erika Zambrano.</li>
+      </ul>
+    </div>
+    <div style="margin-top:40px">
+      <img src="../assets/logos/Logo_transparente.png" alt="Xuma" style="height:36px; opacity:.7" />
+    </div>
+  </div>
+
+</div><!-- #scaler -->
+</div><!-- #app -->
+
+<div id="nav"></div>
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+<!-- Project Data and Scripts -->
+<script src="data_tradicional.js"></script>
+<script src="municipalities_geojson.js"></script>
+<script src="app_tradicional.js"></script>
+
+</body>
+</html>

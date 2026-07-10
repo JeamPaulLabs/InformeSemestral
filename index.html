@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Informes de Canales 2026 · Xuma</title>
+  <meta name="description" content="Portal de informes ejecutivos por canal: Televentas, Retail y Tradicional. Xuma / Vanti 2026." />
+  <style>
+    :root {
+      --blue: #120180; --blue-l: #1d02b8;
+      --green: #5AE280; --teal: #00CD93;
+      --dark: #333333; --gray1: #f5f6fb; --gray2: #e2e5f0; --gray3: #9098b0;
+      --warn: #ff6b35;
+      --canvas-w: 1280px; --canvas-h: 760px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      height: 100%; overflow: hidden;
+      font-family: 'Raleway', 'Segoe UI', sans-serif;
+      background: linear-gradient(160deg, var(--blue) 0%, #0d016a 55%, #0a0150 100%);
+      color: #fff;
+    }
+
+    /* ── Fondo animado: red de puntos y vectores ─────────────── */
+    #netbg { position: fixed; inset: 0; z-index: 0; display: block; }
+
+    /* ── Lienzo escalado (todo cabe siempre en 1 pantalla) ───── */
+    #stage {
+      position: fixed; top: 50%; left: 50%;
+      width: var(--canvas-w); height: var(--canvas-h);
+      transform-origin: center center;
+      z-index: 1;
+      display: flex; flex-direction: column; align-items: center;
+    }
+
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+    .fade-in { animation: fadeUp .7s cubic-bezier(.4,0,.2,1) backwards; }
+
+    .logo { height: 34px; margin-top: 6px; margin-bottom: 12px; }
+    .tag {
+      font-size: .66rem; font-weight: 700; letter-spacing: .26em; text-transform: uppercase;
+      color: var(--green); margin-bottom: 8px;
+    }
+    h1 { font-size: 1.85rem; font-weight: 800; text-align: center; line-height: 1.12; }
+    h1 span { color: var(--green); }
+    .sub { margin-top: 8px; font-size: .8rem; color: rgba(255,255,255,.65); text-align: center; max-width: 620px; line-height: 1.5; }
+
+    /* ── Tarjetas de canal ──────────────────────────────────── */
+    .cards { display: flex; gap: 18px; margin-top: 20px; justify-content: center; }
+    .card {
+      width: 280px; border-radius: 16px; padding: 18px 20px 16px;
+      background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.14);
+      text-decoration: none; color: #fff; position: relative;
+      transition: transform .25s, background .25s, border-color .25s, box-shadow .25s;
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .card:hover { transform: translateY(-4px); background: rgba(255,255,255,.10); border-color: var(--teal); box-shadow: 0 16px 34px rgba(0,0,0,.35); }
+    .card .ico { font-size: 1.5rem; }
+    .card h2 { font-size: 1.05rem; font-weight: 800; }
+    .card p { font-size: .68rem; color: rgba(255,255,255,.6); line-height: 1.45; flex: 1; }
+    .badge {
+      align-self: flex-start; font-size: .58rem; font-weight: 800; letter-spacing: .07em;
+      padding: 3px 10px; border-radius: 20px; text-transform: uppercase;
+      background: rgba(0,205,147,.2); color: var(--green); border: 1px solid rgba(0,205,147,.45);
+    }
+    .card .cta { font-size: .7rem; font-weight: 700; color: var(--green); display: flex; align-items: center; gap: 5px; transition: gap .2s; }
+    .card:hover .cta { gap: 9px; }
+    .stats { display: flex; gap: 12px; }
+    .stat .n { font-size: .92rem; font-weight: 800; color: #fff; }
+    .stat .l { font-size: .54rem; color: rgba(255,255,255,.5); letter-spacing: .04em; text-transform: uppercase; }
+
+    /* ── Equipo ──────────────────────────────────────────────── */
+    .section-tag {
+      font-size: .58rem; font-weight: 800; letter-spacing: .2em; text-transform: uppercase;
+      color: var(--green); margin: 20px 0 3px; text-align: center;
+    }
+    .section-title { font-size: .92rem; font-weight: 700; text-align: center; margin-bottom: 6px; color: rgba(255,255,255,.85); }
+
+    .teamline {
+      font-size: .66rem; font-style: italic; color: rgba(255,255,255,.7);
+      text-align: center; max-width: 560px; line-height: 1.4; margin: 0 auto 14px;
+    }
+    .teamline strong { color: var(--green); font-style: normal; }
+    .team { display: flex; gap: 9px; justify-content: center; }
+    .person {
+      width: 134px; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.12);
+      border-radius: 13px; padding: 10px 6px; text-align: center;
+      transition: transform .22s, background .22s, border-color .22s;
+    }
+    .person:hover { transform: translateY(-3px); background: rgba(255,255,255,.09); border-color: rgba(90,226,128,.4); }
+    .person.lead { border-color: rgba(90,226,128,.45); background: rgba(90,226,128,.07); }
+    .avatar {
+      width: 36px; height: 36px; border-radius: 50%; margin: 0 auto 6px;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: .72rem; color: #fff;
+      box-shadow: 0 5px 14px rgba(0,0,0,.3);
+    }
+    .person-name { font-size: .62rem; font-weight: 800; color: #fff; line-height: 1.22; }
+    .person-role { font-size: .54rem; color: rgba(255,255,255,.6); margin-top: 2px; line-height: 1.28; }
+    .person-chip {
+      display: inline-block; margin-top: 5px; font-size: .46rem; font-weight: 700;
+      letter-spacing: .03em; text-transform: uppercase; padding: 2px 7px; border-radius: 20px;
+      background: rgba(255,255,255,.1); color: rgba(255,255,255,.7);
+    }
+
+    /* ── Footer ──────────────────────────────────────────────── */
+    .foot {
+      margin-top: 22px; padding-top: 14px; width: 100%; max-width: 640px;
+      border-top: 1px solid rgba(255,255,255,.12);
+      text-align: center;
+    }
+    .foot .validated {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: .62rem; font-weight: 700; color: var(--green);
+      background: rgba(90,226,128,.1); border: 1px solid rgba(90,226,128,.3);
+      padding: 4px 13px; border-radius: 20px; margin-bottom: 8px;
+    }
+    .foot .copy { font-size: .58rem; color: rgba(255,255,255,.4); line-height: 1.6; }
+    .foot .copy strong { color: rgba(255,255,255,.65); }
+  </style>
+</head>
+<body>
+
+<canvas id="netbg"></canvas>
+
+<div id="stage">
+  <img class="logo fade-in" src="assets/logos/Logo_transparente.png" alt="Xuma" />
+  <div class="tag fade-in" style="animation-delay:.05s">Portal de informes · 2026</div>
+  <h1 class="fade-in" style="animation-delay:.1s">Informes Ejecutivos <span>por Canal</span></h1>
+  <p class="sub fade-in" style="animation-delay:.15s">Gestión del primer semestre y estrategia del segundo semestre 2026. Selecciona un canal para abrir su informe.</p>
+
+  <div class="cards">
+    <a class="card fade-in" style="animation-delay:.2s" href="televentas/index.html">
+      <span class="ico">📞</span>
+      <span class="badge">Completado · data 1S integrada</span>
+      <h2>Televentas</h2>
+      <div class="stats">
+        <div class="stat"><div class="n">13.917</div><div class="l">Ventas 1S</div></div>
+        <div class="stat"><div class="n">912K</div><div class="l">Registros</div></div>
+        <div class="stat"><div class="n">3.000</div><div class="l">Meta/mes 2S</div></div>
+      </div>
+      <p>Gestión del canal 1S, análisis de bases operativas y proyección para la meta de 3.000 ventas/mes.</p>
+      <span class="cta">Abrir informe →</span>
+    </a>
+
+    <a class="card fade-in" style="animation-delay:.28s" href="retail/index.html">
+      <span class="ico">🏬</span>
+      <span class="badge">Completado · data 1S integrada</span>
+      <h2>Retail</h2>
+      <div class="stats">
+        <div class="stat"><div class="n">12.688</div><div class="l">Ventas CP</div></div>
+        <div class="stat"><div class="n">373</div><div class="l">Visitas 1S</div></div>
+        <div class="stat"><div class="n">467</div><div class="l">Ventas RS</div></div>
+      </div>
+      <p>Visitas de formación, cobertura de PDV y ventas del 1S. Mapa geográfico de visitas integrado.</p>
+      <span class="cta">Abrir informe →</span>
+    </a>
+
+    <a class="card fade-in" style="animation-delay:.36s" href="tradicional/index.html">
+      <span class="ico">🏪</span>
+      <span class="badge">Completado · data 1S integrada</span>
+      <h2>Tradicional</h2>
+      <div class="stats">
+        <div class="stat"><div class="n">563</div><div class="l">Ventas CP</div></div>
+        <div class="stat"><div class="n">463</div><div class="l">Visitas 1S</div></div>
+        <div class="stat"><div class="n">171</div><div class="l">Ventas RS</div></div>
+      </div>
+      <p>Visitas por municipio, cobertura de formación (cédula: financiaron vs. capacitados) y ventas 1S.</p>
+      <span class="cta">Abrir informe →</span>
+    </a>
+  </div>
+
+  <div class="section-tag fade-in">El equipo detrás del informe</div>
+  <h2 class="section-title fade-in">Construido con datos de todo el canal</h2>
+  <p class="teamline fade-in">Un equipo, distintos canales: <strong>trabajo en conjunto</strong>, <strong>creatividad</strong> para resolver y <strong>mejora continua</strong> en cada corte.</p>
+
+  <div class="team">
+    <div class="person lead fade-in" style="animation-delay:.05s">
+      <div class="avatar" style="background:linear-gradient(135deg,#5AE280,#00CD93)">OT</div>
+      <div class="person-name">Orlando Tesillo</div>
+      <div class="person-role">Director Comercial</div>
+      <div class="person-chip">Dirección</div>
+    </div>
+    <div class="person fade-in" style="animation-delay:.1s">
+      <div class="avatar" style="background:linear-gradient(135deg,#120180,#1d02b8)">IA</div>
+      <div class="person-name">Isaac Álvarez</div>
+      <div class="person-role">Data Marshall</div>
+      <div class="person-chip">Televentas</div>
+    </div>
+    <div class="person fade-in" style="animation-delay:.15s">
+      <div class="avatar" style="background:linear-gradient(135deg,#120180,#1d02b8)">MC</div>
+      <div class="person-name">Martha Carvajal</div>
+      <div class="person-role">Coord. Comercial</div>
+      <div class="person-chip">Televentas</div>
+    </div>
+    <div class="person fade-in" style="animation-delay:.18s">
+      <div class="avatar" style="background:linear-gradient(135deg,#120180,#1d02b8)">KG</div>
+      <div class="person-name">Kevin Guzmán</div>
+      <div class="person-role">Auditor Interno de Calidad</div>
+      <div class="person-chip">Televentas</div>
+    </div>
+    <div class="person fade-in" style="animation-delay:.2s">
+      <div class="avatar" style="background:linear-gradient(135deg,#00CD93,#00a878)">DS</div>
+      <div class="person-name">Daniela Saldarriaga</div>
+      <div class="person-role">Formadora Comercial</div>
+      <div class="person-chip">Retail · Trad.</div>
+    </div>
+    <div class="person fade-in" style="animation-delay:.25s">
+      <div class="avatar" style="background:linear-gradient(135deg,#00CD93,#00a878)">EZ</div>
+      <div class="person-name">Erika Zambrano</div>
+      <div class="person-role">Formadora Comercial</div>
+      <div class="person-chip">Retail · Trad.</div>
+    </div>
+    <div class="person lead fade-in" style="animation-delay:.3s">
+      <div class="avatar" style="background:linear-gradient(135deg,#ff6b35,#ff9a5a)">JP</div>
+      <div class="person-name">Jeam Paul Arcón Solano</div>
+      <div class="person-role">Analyst Data</div>
+      <div class="person-chip">Todos los canales</div>
+    </div>
+  </div>
+
+  <div class="foot fade-in">
+    <div class="validated">✓ Datos validados sobre cierres oficiales 1S 2026</div>
+    <div class="copy">
+      © 2026 Xuma para Vanti · Informe ejecutivo de uso interno<br>
+      <strong>Solicitado por Orlando Tesillo</strong> · Director Comercial
+    </div>
+  </div>
+</div>
+
+<script>
+  /* ── Escalar el lienzo para que TODO quepa siempre en 1 pantalla ── */
+  function scaleStage() {
+    const stage = document.getElementById('stage');
+    const W = 1280, H = 760;
+    const s = Math.min(window.innerWidth / W, window.innerHeight / H, 1.15);
+    stage.style.transform = `translate(-50%, -50%) scale(${s})`;
+  }
+  window.addEventListener('resize', scaleStage);
+  scaleStage();
+
+  /* ── Fondo animado: red de puntos y vectores ─────────────────── */
+  const canvas = document.getElementById('netbg');
+  const ctx = canvas.getContext('2d');
+  let W, H, pts;
+
+  function resize() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+    const count = Math.max(28, Math.min(70, Math.round((W * H) / 24000)));
+    pts = Array.from({ length: count }, () => ({
+      x: Math.random() * W, y: Math.random() * H,
+      vx: (Math.random() - 0.5) * 0.35, vy: (Math.random() - 0.5) * 0.35,
+    }));
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  const LINK_DIST = 150;
+  function tick() {
+    ctx.clearRect(0, 0, W, H);
+    for (const p of pts) {
+      p.x += p.vx; p.y += p.vy;
+      if (p.x < 0 || p.x > W) p.vx *= -1;
+      if (p.y < 0 || p.y > H) p.vy *= -1;
+    }
+    for (let i = 0; i < pts.length; i++) {
+      for (let j = i + 1; j < pts.length; j++) {
+        const dx = pts[i].x - pts[j].x, dy = pts[i].y - pts[j].y;
+        const d = Math.sqrt(dx * dx + dy * dy);
+        if (d < LINK_DIST) {
+          ctx.strokeStyle = `rgba(90,226,128,${(1 - d / LINK_DIST) * 0.22})`;
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(pts[i].x, pts[i].y); ctx.lineTo(pts[j].x, pts[j].y);
+          ctx.stroke();
+        }
+      }
+    }
+    for (const p of pts) {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, 1.8, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(0,205,147,.55)';
+      ctx.fill();
+    }
+    requestAnimationFrame(tick);
+  }
+  tick();
+</script>
+
+</body>
+</html>

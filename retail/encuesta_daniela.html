@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Formulario Profesional de Formacion Retail - Daniela Saldarriaga</title>
+<style>
+  :root { --blue:#120180; --green:#5AE280; --teal:#00CD93; --dark:#333; --gray1:#f5f6fb; --gray2:#e2e5f0; --gray3:#9098b0; --warn:#ff6b35; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:'Raleway','Segoe UI',sans-serif; background:var(--gray1); color:var(--dark); padding-bottom:90px; }
+  .top { background:linear-gradient(135deg,var(--blue),#0d016a); padding:16px 36px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:50; }
+  .top img { height:32px; }
+  .top span { color:rgba(255,255,255,.8); font-size:.74rem; font-weight:700; letter-spacing:.08em; }
+  .wrap { max-width:820px; margin:34px auto 0; padding:0 20px; }
+  .intro { background:#fff; border-radius:14px; border-top:5px solid var(--teal); padding:28px 32px; box-shadow:0 4px 20px rgba(18,1,128,.06); margin-bottom:24px; }
+  .intro h1 { font-size:1.5rem; font-weight:800; color:var(--blue); margin-bottom:10px; }
+  .intro p { font-size:.86rem; line-height:1.6; color:#555; margin-bottom:8px; }
+  .sec { font-size:.95rem; font-weight:800; color:var(--blue); margin:28px 0 12px; padding-bottom:6px; border-bottom:2px solid var(--gray2); }
+  .q { background:#fff; border-radius:14px; border-left:4px solid var(--gray2); padding:22px 26px; margin-bottom:18px; box-shadow:0 2px 10px rgba(18,1,128,.04); }
+  .q:focus-within { border-left-color:var(--teal); }
+  .q .num { display:inline-block; background:var(--gray1); color:var(--blue); font-size:.7rem; font-weight:800; padding:3px 8px; border-radius:6px; margin-bottom:8px; }
+  .q .txt { font-size:.9rem; font-weight:700; line-height:1.5; margin-bottom:12px; }
+  .data { background:rgba(18,1,128,.04); border:1.5px solid rgba(18,1,128,.14); border-radius:10px; padding:12px 14px; margin-bottom:12px; font-size:.76rem; line-height:1.6; }
+  .data b { color:var(--blue); }
+  .data table { width:100%; border-collapse:collapse; margin-top:6px; }
+  .data th { background:rgba(18,1,128,.1); color:var(--blue); padding:4px 8px; font-size:.68rem; text-align:left; }
+  .data td { padding:4px 8px; border-bottom:1px solid rgba(18,1,128,.06); font-size:.72rem; }
+  .insight { background:rgba(0,205,147,.06); border:1.5px solid rgba(0,205,147,.2); border-radius:10px; padding:10px 14px; margin-bottom:12px; font-size:.74rem; line-height:1.5; }
+  .insight b { color:#0a5c45; }
+  textarea { width:100%; min-height:100px; border-radius:10px; border:2px solid var(--gray2); background:var(--gray1); padding:12px 14px; font-family:inherit; font-size:.86rem; resize:vertical; outline:none; }
+  textarea:focus { border-color:var(--teal); background:#fff; }
+  .foot { position:fixed; bottom:0; left:0; right:0; background:rgba(255,255,255,.96); border-top:1px solid var(--gray2); padding:14px 36px; display:flex; justify-content:space-between; align-items:center; z-index:50; }
+  .foot span { font-size:.76rem; color:var(--gray3); font-weight:600; }
+  button.export { font-family:inherit; background:var(--blue); color:#fff; font-size:.86rem; font-weight:700; padding:11px 26px; border:none; border-radius:30px; cursor:pointer; transition:transform .15s; }
+  button.export:hover { background:#1d02b8; transform:translateY(-1px); }
+  .progress-wrap { position:sticky; top:0; z-index:60; height:5px; background:rgba(18,1,128,.08); }
+  .progress-bar { height:100%; width:0%; background:linear-gradient(90deg,var(--teal),var(--green)); transition:width .4s cubic-bezier(.4,0,.2,1); }
+  .top .pct { color:var(--green); font-size:.72rem; font-weight:800; background:rgba(90,226,128,.15); padding:4px 12px; border-radius:20px; }
+  .q { transition:border-color .3s, box-shadow .3s, opacity .6s, transform .6s; opacity:0; transform:translateY(14px); position:relative; }
+  .q.in-view { opacity:1; transform:translateY(0); }
+  .q.answered { border-left-color:var(--teal); box-shadow:0 4px 16px rgba(0,205,147,.12); }
+  .q .done-badge { display:none; position:absolute; top:20px; right:24px; width:22px; height:22px; border-radius:50%; background:var(--teal); color:#fff; font-size:.72rem; font-weight:800; align-items:center; justify-content:center; }
+  .q.answered .done-badge { display:flex; }
+  .table-input { width:100%; border-collapse:collapse; margin-top:8px; }
+  .table-input th { background:var(--blue); color:#fff; padding:8px 10px; text-align:left; font-size:.68rem; font-weight:700; letter-spacing:.04em; }
+  .table-input td { padding:6px 7px; border-bottom:1px solid var(--gray2); }
+  .table-input tr:last-child td { border-bottom:none; }
+  .table-input input[type="text"] { min-height:unset; padding:7px 9px; font-size:.78rem; border-radius:6px; border:2px solid var(--gray2); background:var(--gray1); font-family:inherit; width:100%; }
+  .table-input input[type="text"]:focus { border-color:var(--teal); background:#fff; outline:none; }
+  .add-row-btn { margin-top:8px; background:none; border:1.5px dashed var(--gray2); color:var(--gray3); font-family:inherit; font-size:.76rem; font-weight:700; padding:7px 14px; border-radius:8px; cursor:pointer; }
+  .add-row-btn:hover { border-color:var(--teal); color:var(--teal); }
+</style>
+</head>
+<body>
+
+<div class="top">
+  <img src="../assets/logos/Logo_fondoAzul.png" alt="Xuma" />
+  <span>PROFESIONAL DE FORMACION - CANAL RETAIL - DANIELA SALDARRIAGA</span>
+  <span class="pct" id="pct-label">0% completado</span>
+</div>
+<div class="progress-wrap"><div class="progress-bar" id="progress-bar"></div></div>
+
+<div class="wrap">
+  <div class="intro">
+    <h1>Hola, Daniela</h1>
+    <p>Estamos armando el <strong>informe ejecutivo del canal Retail</strong> que pidio Orlando. Ya procesamos tu formulario de visitas y los cierres "Como vamos" del semestre completo (ene-jun, cierres oficiales de mayo y junio).</p>
+    <p>Como <strong>profesional de Formacion del canal Retail</strong>, necesitamos que valides la ejecucion del 1S y construyas con nosotros la <strong>estrategia de Formacion del 2S</strong>: objetivos, iniciativas, plan de trabajo, cronograma, indicadores y organigrama (exactamente lo que pide Orlando). Tiempo estimado: 20 minutos. Al final presiona <strong>"Copiar respuestas"</strong> y envianos el texto por correo o Teams.</p>
+  </div>
+
+  <div class="sec">A. Ejecucion de la formacion 1S 2026</div>
+
+  <div class="q"><span class="num">P1</span>
+    <div class="txt">Valida tu ejecucion del 1S: estas cifras coinciden con tu registro? Queremos entender que paso en mayo-junio.</div>
+    <div class="data">
+      <b>Ejecucion de visitas de formacion - Canal Retail (cierres ene-jun 2026):</b>
+      <table>
+        <tr><th>Indicador</th><th>Ene</th><th>Feb</th><th>Mar</th><th>Abr</th><th>May</th><th>Jun</th><th>Total</th></tr>
+        <tr><td><b>Visitas realizadas</b></td><td>81</td><td>74</td><td>75</td><td>76</td><td>37</td><td>30</td><td><b>373</b></td></tr>
+        <tr><td><b>Asesores capacitados</b></td><td>71</td><td>65</td><td>71</td><td>61</td><td>33</td><td>25</td><td>--</td></tr>
+        <tr><td><b>PDV visitados</b></td><td>56</td><td>52</td><td>45</td><td>36</td><td>19</td><td>14</td><td>--</td></tr>
+        <tr><td><b>Planta Serdan activa*</b></td><td>147</td><td>146</td><td>135</td><td>118</td><td>93</td><td>93</td><td>--</td></tr>
+        <tr><td><b>% capacitados vs planta</b></td><td>48%</td><td>45%</td><td>53%</td><td>52%</td><td>35%</td><td><b>27%</b></td><td>--</td></tr>
+      </table>
+      * Planta al ultimo corte de cada mes, consolidada desde los 26 cortes semanales de los "Como vamos" (la que Serdan reportaba cada semana).
+      <b>Por aliado (1S):</b> Colombiana de Comercio (Alkosto/Ktronix/AKT) 184 visitas - Excito 99 - Cencosud (Jumbo/Metro/Easy) 90 - Olimpica 4 (activo como aliado propio solo en enero, luego salio del roster).
+      <br><b>Tipos de capacitacion:</b> Inicial 44% - Portafolio 40% - Recapacitacion 9% - Acompanamiento 7%.
+    </div>
+    <div class="insight">
+      <b>Hallazgo clave:</b> Las visitas se mantuvieron estables en ~75/mes hasta abril, pero <b>cayeron a la mitad en mayo (37) y junio (30)</b>. Los PDV visitados cayeron de 56 a 14 (-75%). La cobertura de formacion sobre PDV activos bajo de 61% (ene) a 27% (jun). <b>Que explico esta caida?</b> Reduccion del equipo, cambio de prioridades, vacaciones, agenda del aliado?
+    </div>
+    <textarea id="r1" placeholder="Las cifras son correctas? Que paso en mayo-junio? (agenda, zonas, disponibilidad del aliado, otras tareas asignadas, cambio de estrategia...)"></textarea>
+  </div>
+
+  <div class="q"><span class="num">P2</span>
+    <div class="txt">Que capacitaciones o intervenciones de formacion destacas del 1S y que resultado dieron? (temas, tipo, aliados donde mejor funciono)</div>
+    <div class="data">
+      <b>Contexto de ventas del canal (para medir impacto de tu formacion):</b>
+      <table>
+        <tr><th>Mes</th><th>Gestores activos</th><th>PDV c/gestion</th><th>Ventas CP efectivas</th><th>Ventas RS efectivas</th></tr>
+        <tr><td><b>Ene</b></td><td>147</td><td>92</td><td>1.614</td><td>34</td></tr>
+        <tr><td><b>Feb</b></td><td>146</td><td>91</td><td>1.798</td><td>65</td></tr>
+        <tr><td><b>Mar</b></td><td>135</td><td>82</td><td><b>2.474</b></td><td><b>122</b></td></tr>
+        <tr><td><b>Abr</b></td><td>118</td><td>72</td><td>2.177</td><td>91</td></tr>
+        <tr><td><b>May</b></td><td>93</td><td>57</td><td>2.443</td><td>70</td></tr>
+        <tr><td><b>Jun</b></td><td>96</td><td>52</td><td>2.182</td><td>85</td></tr>
+      </table>
+      <b>Total 1S:</b> 12.694 ventas CP efectivas + 467 RS efectivas. Efectividad CP promedio: 80,4%.
+    </div>
+    <textarea id="r2" placeholder="Ej.: induccion de portafolio en Alkosto en marzo (75 visitas) coincidio con el pico de ventas CP (2.474)... Que capacitaciones tuvieron mayor impacto?"></textarea>
+  </div>
+
+  <div class="q"><span class="num">P3</span>
+    <div class="txt">Tu diagnostico como formadora: que dificulta hoy la formacion en Retail y que cambiarias?</div>
+    <div class="insight">
+      <b>Datos que respaldan tu diagnostico:</b> La planta de gestores se contrajo de 147 (ene) a 96 (jun, -35%) y los PDV con gestion de 92 a 52 (-43%). La <b>rotacion del semestre fue muy alta</b>: por la planta pasaron <b>207 asesores distintos</b>, con <b>84 ingresos y 145 salidas</b> entre cortes semanales — es decir, cada mes hay caras nuevas que requieren capacitacion inicial. A pesar de eso, la efectividad de ventas CP se mantuvo alta (78-84%). <b>Como impacta esta rotacion tu trabajo? La formacion alcanza a cubrir a los que entran antes de que salgan?</b>
+    </div>
+    <textarea id="r3" placeholder="Tu diagnostico honesto: rotacion de asesores del aliado, tiempos en el punto, materiales, frecuencia, coordinacion con los aliados..."></textarea>
+  </div>
+
+  <div class="sec">B. Estrategia de Formacion 2S 2026 (lo que pide Orlando)</div>
+
+  <div class="q"><span class="num">P4</span>
+    <div class="txt">Cual propones que sea el objetivo general de Formacion para Retail en el 2S?</div>
+    <div class="insight">
+      <b>Referencia para tu propuesta:</b> El ritmo ideal del canal fue ene-abr (~75 visitas/mes, 50-61% cobertura PDV). La planta actual es ~96 gestores y ~52 PDV activos. Para el 2S se espera estabilizar la planta y recuperar cobertura. Meta sugerida: >=60% de PDV activos visitados por mes.
+    </div>
+    <textarea id="r4" placeholder="Ej.: recuperar ritmo de >=75 visitas/mes, cubrir >=60% de los PDV activos y capacitar al 100% de asesores nuevos en su primer mes..."></textarea>
+  </div>
+
+  <div class="q"><span class="num">P5</span>
+    <div class="txt">Cuales seran las principales iniciativas de formacion y el plan de trabajo del 2S? (lista, una por linea)</div>
+    <textarea id="r5" placeholder="1. Ruta mensual por las 3 cadenas (Alkosto, Excito, Cencosud)...&#10;2. Recapacitacion en PDV con baja conversion...&#10;3. Formacion express para asesores nuevos...&#10;4. ..."></textarea>
+  </div>
+
+  <div class="q"><span class="num">P6</span>
+    <div class="txt">Cronograma general julio-diciembre: que accion, quien es el responsable y en que mes(es) se ejecuta?</div>
+    <div class="insight">Agrega una fila por accion. Marca los meses en que se ejecuta (puede ser un mes puntual o varios seguidos, como la depuracion de base o las clinicas mensuales en Televentas).</div>
+    <div style="overflow:auto; border-radius:10px; margin-bottom:10px">
+      <table class="table-input" id="table-p6">
+        <thead>
+          <tr>
+            <th style="min-width:170px">Accion</th>
+            <th style="min-width:110px">Responsable</th>
+            <th style="text-align:center">Jul</th><th style="text-align:center">Ago</th>
+            <th style="text-align:center">Sep</th><th style="text-align:center">Oct</th>
+            <th style="text-align:center">Nov</th><th style="text-align:center">Dic</th>
+          </tr>
+        </thead>
+        <tbody id="tbody-p6">
+          <tr>
+            <td><input type="text" placeholder="Ej: Ruta mensual Alkosto/Exito/Cencosud" /></td>
+            <td><input type="text" placeholder="Responsable" /></td>
+            <td style="text-align:center"><input type="checkbox" /></td>
+            <td style="text-align:center"><input type="checkbox" /></td>
+            <td style="text-align:center"><input type="checkbox" /></td>
+            <td style="text-align:center"><input type="checkbox" /></td>
+            <td style="text-align:center"><input type="checkbox" /></td>
+            <td style="text-align:center"><input type="checkbox" /></td>
+          </tr>
+          <tr>
+            <td><input type="text" placeholder="Accion..." /></td>
+            <td><input type="text" placeholder="Responsable" /></td>
+            <td style="text-align:center"><input type="checkbox" /></td>
+            <td style="text-align:center"><input type="checkbox" /></td>
+            <td style="text-align:center"><input type="checkbox" /></td>
+            <td style="text-align:center"><input type="checkbox" /></td>
+            <td style="text-align:center"><input type="checkbox" /></td>
+            <td style="text-align:center"><input type="checkbox" /></td>
+          </tr>
+          <tr>
+            <td><input type="text" placeholder="Accion..." /></td>
+            <td><input type="text" placeholder="Responsable" /></td>
+            <td style="text-align:center"><input type="checkbox" /></td>
+            <td style="text-align:center"><input type="checkbox" /></td>
+            <td style="text-align:center"><input type="checkbox" /></td>
+            <td style="text-align:center"><input type="checkbox" /></td>
+            <td style="text-align:center"><input type="checkbox" /></td>
+            <td style="text-align:center"><input type="checkbox" /></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <button class="add-row-btn" onclick="addCronRow()">+ Agregar accion</button>
+  </div>
+
+  <div class="q"><span class="num">P7</span>
+    <div class="txt">Con que indicadores propones que se mida la formacion del canal en el 2S? (indicador, formula y meta mensual)</div>
+    <div class="insight">
+      <b>Sugerencias a validar:</b> visitas de formacion/mes (>=75, nivel ene-abr) - % de PDV activos visitados (>=60%) - % asesores capacitados vs planta activa - asesores nuevos capacitados en <=30 dias.
+    </div>
+    <textarea id="r7" placeholder="Indicador | formula | meta mensual..."></textarea>
+  </div>
+
+  <div class="q"><span class="num">P8</span>
+    <div class="txt">Organigrama del equipo de Formacion: quienes lo componen hoy, como se reparten canales/zonas y a quien reportan?</div>
+    <textarea id="r8" placeholder="Ej.: Daniela Saldarriaga - Formacion Retail (Excito, Cencosud, Alkosto) - Erika Zambrano - Formacion Tradicional - Reportan a..."></textarea>
+  </div>
+
+  <div class="sec">C. Datos y apoyos</div>
+
+  <div class="q"><span class="num">P9</span>
+    <div class="txt">Ya avanzamos en varios de los datos que nos faltaban. Valida lo que encontramos:</div>
+    <div class="data">
+      <b>1) Planta activa Serdan (consolidada de los 26 cortes semanales):</b> 147 &rarr; 93 asesores, con 84 ingresos y 145 salidas en el semestre. ¿Te cuadra esa rotacion tan alta?<br><br>
+      <b>2) Universo de PDV por aliado (estimado desde los cortes, sin maestro de puntos oficial):</b>
+      <table>
+        <tr><th>Aliado</th><th>Universo estimado</th><th>PDV visitados 1S</th><th>Cobertura</th></tr>
+        <tr><td>Colombiana de Comercio</td><td>42</td><td>38</td><td>90,5%</td></tr>
+        <tr><td>Excito</td><td>31</td><td>36</td><td>116%</td></tr>
+        <tr><td>Cencosud</td><td>26</td><td>31</td><td>119%</td></tr>
+        <tr><td>Olimpica (solo ene)</td><td>6</td><td>3</td><td>50%</td></tr>
+      </table>
+      Las coberturas sobre 100% indican que visitaste puntos con nombre distinto al que aparece en el "Como vamos" ese corte, o sin gestion activa ese mes. <b>¿Cual es el universo REAL de puntos por cadena? ¿Coincide con lo que ves en el terreno?</b><br><br>
+      <b>3) Las 90 visitas "Serdan" ya las clasificamos por cedula del asesor:</b> 24 son de Retail, 47 de Tradicional (contando las 14 que son ambiguas, activas en ambos canales, para los dos), y 33 son sedes/roles internos de Serdan (reuniones, supervision, cobertura itinerante) que no corresponden a un punto de venta. Del total, solo 37 de las 90 (41%) fueron a un PDV fisico real.
+    </div>
+    <textarea id="r9" placeholder="Sobre la rotacion: ... / Sobre el universo real de PDV por cadena: ... / Sobre la clasificacion de las visitas Serdan, ¿algo que corregir?..."></textarea>
+  </div>
+
+  <div class="q"><span class="num">P10</span>
+    <div class="txt">Que apoyos o decisiones necesitas de Orlando para ejecutar la estrategia de formacion del 2S? (viaticos, materiales, acceso a los aliados, apoyo de personal, herramientas)</div>
+    <textarea id="r10" placeholder="Lo que necesitas para cumplir el plan..."></textarea>
+  </div>
+</div>
+
+<div class="foot">
+  <span>Al terminar: copia tus respuestas y envialas por correo o Teams.</span>
+  <button class="export" onclick="exportar()">Copiar respuestas</button>
+</div>
+
+<script>
+const PREGUNTAS = {
+  r1:'P1. Validacion ejecucion 1S y causa de la caida may-jun',
+  r2:'P2. Capacitaciones destacadas del 1S y resultados',
+  r3:'P3. Diagnostico: que dificulta la formacion / que cambiar',
+  r4:'P4. Objetivo general Formacion Retail 2S',
+  r5:'P5. Iniciativas y plan de trabajo 2S',
+  r6:'P6. Cronograma julio-diciembre',
+  r7:'P7. Indicadores de seguimiento propuestos',
+  r8:'P8. Organigrama y responsabilidades del equipo de Formacion',
+  r9:'P9. Datos faltantes (planta activa, universo PDV, Serdan)',
+  r10:'P10. Apoyos y decisiones que necesita de Orlando'
+};
+
+/* ── Cronograma: fila dinamica ─────────────── */
+function addCronRow() {
+  const tbody = document.getElementById('tbody-p6');
+  const tr = document.createElement('tr');
+  let td = document.createElement('td');
+  let inp = document.createElement('input'); inp.type='text'; inp.placeholder='Accion...';
+  td.appendChild(inp); tr.appendChild(td);
+  td = document.createElement('td');
+  inp = document.createElement('input'); inp.type='text'; inp.placeholder='Responsable';
+  td.appendChild(inp); tr.appendChild(td);
+  for (let i = 0; i < 6; i++) {
+    td = document.createElement('td'); td.style.textAlign = 'center';
+    const cb = document.createElement('input'); cb.type = 'checkbox';
+    td.appendChild(cb); tr.appendChild(td);
+  }
+  tbody.appendChild(tr);
+  updateProgress();
+}
+
+function getCronValue() {
+  const rows = document.querySelectorAll('#tbody-p6 tr');
+  const MESES = ['Jul','Ago','Sep','Oct','Nov','Dic'];
+  const lines = [];
+  rows.forEach(r => {
+    const inputs = r.querySelectorAll('input[type="text"]');
+    const boxes = r.querySelectorAll('input[type="checkbox"]');
+    const accion = inputs[0]?.value.trim();
+    const resp = inputs[1]?.value.trim();
+    if (!accion) return;
+    const meses = MESES.filter((_, i) => boxes[i]?.checked);
+    lines.push(`${accion} | Responsable: ${resp || '(sin definir)'} | Meses: ${meses.join(', ') || '(sin marcar)'}`);
+  });
+  return lines.join('\n');
+}
+
+function exportar() {
+  let out = "=== RESPUESTAS FORMACION CANAL RETAIL - DANIELA SALDARRIAGA ===\n\n";
+  for (const [id, titulo] of Object.entries(PREGUNTAS)) {
+    const val = id === 'r6' ? getCronValue() : document.getElementById(id).value;
+    out += titulo + ":\n" + (val || "(sin responder)") + "\n\n";
+  }
+  navigator.clipboard.writeText(out).then(
+    () => alert("Respuestas copiadas. Pegalas en un correo o mensaje de Teams."),
+    () => alert("No se pudo copiar automaticamente. Selecciona el texto manualmente.")
+  );
+}
+
+/* ── Progreso en vivo + tarjeta completada ──── */
+function updateProgress() {
+  const cards = document.querySelectorAll('.q');
+  let done = 0;
+  cards.forEach(card => {
+    const ta = card.querySelector('textarea');
+    let filled = false;
+    if (ta) filled = ta.value.trim().length >= 5;
+    const cronTbody = card.querySelector('#tbody-p6');
+    if (cronTbody) filled = getCronValue().length > 0;
+    card.classList.toggle('answered', filled);
+    if (filled) done++;
+  });
+  const pct = Math.round((done / cards.length) * 100);
+  document.getElementById('progress-bar').style.width = pct + '%';
+  document.getElementById('pct-label').textContent = pct + '% completado';
+}
+
+/* ── Animacion de entrada al hacer scroll ───── */
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in-view'); io.unobserve(e.target); } });
+}, { threshold: 0.12 });
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.q').forEach(card => {
+    const badge = document.createElement('div');
+    badge.className = 'done-badge';
+    badge.textContent = '✓';
+    card.appendChild(badge);
+    io.observe(card);
+  });
+  document.querySelectorAll('textarea').forEach(ta => ta.addEventListener('input', updateProgress));
+  document.getElementById('tbody-p6').addEventListener('input', updateProgress);
+  document.getElementById('tbody-p6').addEventListener('change', updateProgress);
+  updateProgress();
+});
+</script>
+
+</body>
+</html>

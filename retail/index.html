@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Informe Canal Retail 2026 · Xuma</title>
+  <meta name="description" content="Informe ejecutivo Canal Retail 1S 2026: visitas de formación, ventas, cobertura de PDV y estrategia de formación 2S." />
+  
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    #home-btn {
+      position: fixed; top: 12px; left: 20px; z-index: 1001;
+      color: rgba(255,255,255,.65); font-size: .72rem; font-weight: 700;
+      letter-spacing: .08em; text-decoration: none;
+      background: rgba(18,1,128,.6); border: 1px solid rgba(90,226,128,.3);
+      padding: 6px 14px; border-radius: 20px; backdrop-filter: blur(8px);
+      transition: all 0.2s ease;
+    }
+    #home-btn:hover { color: #120180; background: #5AE280; border-color: #5AE280; }
+    
+    /* Premium Dark themed Leaflet Popups */
+    .custom-popup .leaflet-popup-content-wrapper {
+      background: rgba(18, 1, 128, 0.95) !important;
+      color: #ffffff !important;
+      border: 1px solid #5AE280 !important;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.5) !important;
+      border-radius: 8px !important;
+      padding: 4px 8px !important;
+    }
+    .custom-popup .leaflet-popup-tip {
+      background: rgba(18, 1, 128, 0.95) !important;
+      border: 1px solid #5AE280 !important;
+    }
+    .custom-popup .leaflet-popup-close-button {
+      color: rgba(255,255,255,0.7) !important;
+    }
+  </style>
+</head>
+<body>
+
+<a id="home-btn" href="../index.html" title="Volver al portal de canales">⌂ PORTAL</a>
+<div id="progress" style="width:0"></div>
+<div id="counter">1 / 7</div>
+<button id="prev-btn" title="Anterior (←)">&#8592;</button>
+<button id="next-btn" title="Siguiente (→)">&#8594;</button>
+
+<div id="app">
+<div id="scaler">
+
+  <!-- ══════════ SLIDE 0 · PORTADA ══════════ -->
+  <div class="slide slide-cover active" data-label="Portada">
+    <img class="cover-logo" src="../assets/logos/Logo_transparente.png" alt="Xuma" />
+    <div class="cover-tag">Informe Ejecutivo · Canal Retail</div>
+    <h1 class="cover-title">Canal<br><span>Retail</span><br>2026</h1>
+    <p class="cover-subtitle">
+      Ejecución de visitas de formación · Ventas y cobertura de puntos de venta<br>
+      Estrategia de Formación para el segundo semestre
+    </p>
+    <div class="cover-chips">
+      <span class="cover-chip">Ene – Jun 2026</span>
+      <span class="cover-chip">Éxito · Alkosto · Cencosud</span>
+      <span class="cover-chip">Cuota Protegida · Rueda Seguro</span>
+    </div>
+    <div class="cover-vanti">Presentado por Xuma · Para Orlando</div>
+  </div>
+
+  <!-- ══════════ SLIDE 1 · VISITAS DE FORMACIÓN ══════════ -->
+  <div class="slide slide-content" data-label="Formación">
+    <div class="s-header">
+      <h2>Ejecución de Visitas de Formación · 1S 2026</h2>
+      <span class="s-tag">Retail · Formación</span>
+    </div>
+    <div class="s-body" id="formacion-body">
+      <!-- Renderizado dinámico -->
+    </div>
+  </div>
+
+  <!-- ══════════ SLIDE 2 · MAPA GEOGRÁFICO ══════════ -->
+  <div class="slide slide-content" data-label="Geografía">
+    <div class="s-header">
+      <h2>Distribución Geográfica de Visitas · 1S 2026</h2>
+      <span class="s-tag">Retail · Cobertura</span>
+    </div>
+    <div class="s-body" id="mapa-body">
+      <!-- Renderizado dinámico -->
+    </div>
+  </div>
+
+  <!-- ══════════ SLIDE 3 · VENTAS ══════════ -->
+  <div class="slide slide-content" data-label="Ventas">
+    <div class="s-header">
+      <h2>Ventas del Canal · Cuota Protegida y Rueda Seguro</h2>
+      <span class="s-tag">Retail · Resultados</span>
+    </div>
+    <div class="s-body" id="ventas-body">
+      <!-- Renderizado dinámico -->
+    </div>
+  </div>
+
+  <!-- ══════════ SLIDE 4 · COBERTURA PDV ══════════ -->
+  <div class="slide slide-content" data-label="Cobertura">
+    <div class="s-header">
+      <h2>Cobertura de Puntos de Venta (PDV)</h2>
+      <span class="s-tag">Retail · Cobertura</span>
+    </div>
+    <div class="s-body" id="cobertura-body">
+      <!-- Renderizado dinámico -->
+    </div>
+  </div>
+
+  <!-- ══════════ SLIDE 5 · ESTRATEGIA 2S ══════════ -->
+  <div class="slide slide-content" data-label="Estrategia 2S">
+    <div class="s-header">
+      <h2>Estrategia de Formación · Segundo Semestre 2026</h2>
+      <span class="s-tag">Retail · Estrategia</span>
+    </div>
+    <div class="s-body">
+      <div class="alert alert-warn">
+        <span class="ico">📋</span>
+        <span><strong>Sección en proceso de alineación con el equipo de Formación.</strong> Acciones clave sugeridas para consolidar el canal Retail y cumplir metas mensuales.</span>
+      </div>
+      <div class="two-col">
+        <div class="panel">
+          <h3>🎯 Frentes Estratégicos 2S</h3>
+          <ul class="check-list">
+            <li><strong>Re-acondicionar la planta de gestores:</strong> Estabilizar en ≥90 gestores entrenados en portafolio de venta.</li>
+            <li><strong>Optimizar la malla horaria de formación:</strong> Priorizar visitas a PDVs en franjas de alta afluencia (viernes a domingos).</li>
+            <li><strong>Acompañamiento en venta real:</strong> Foco en Clínicas de Ventas in-situ sobre el manejo de objeciones de Cuota Protegida.</li>
+            <li><strong>Campaña Spiff / Torneos:</strong> Lanzar incentivos rápidos focalizados en la conversión (Efectivas/Cantadas).</li>
+          </ul>
+        </div>
+        <div class="panel">
+          <h3>💡 Recomendaciones de Negocio</h3>
+          <ul class="check-list">
+            <li>Recuperar el ritmo de ~75 visitas/mes que sostuvo el canal hasta abril.</li>
+            <li>Meta sugerida de cobertura: ≥ 60 % de los PDV activos por mes (nivel de enero).</li>
+            <li>Priorizar los PDVs de mayor volumen de venta (Alkosto y Éxito representan el 76% del canal).</li>
+            <li>Registrar de forma obligatoria el canal y aliado en el formulario de visitas para evitar registros huérfanos.</li>
+            <li>Implementar el indicador mensual: <em>Asesores Capacitados vs Planta Activa Comercial</em>.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════ SLIDE 6 · CIERRE ══════════ -->
+  <div class="slide slide-section bg-blue" data-label="Cierre">
+    <div class="section-label">Cierre del Informe</div>
+    <h2 class="section-title">Hitos Alcanzados y Siguientes Pasos</h2>
+    <div style="margin-top:30px; max-width:760px">
+      <ul class="check-list" style="gap:12px">
+        <li style="color:rgba(255,255,255,.85); font-size:.95rem">Integración total de datos reales de cierres para <strong>Mayo y Junio de 2026</strong>.</li>
+        <li style="color:rgba(255,255,255,.85); font-size:.95rem">Consolidación del mapa de distribución geográfica con 373 visitas localizadas.</li>
+        <li style="color:rgba(255,255,255,.85); font-size:.95rem">Cruce de planta Serdán (26 cortes) vs. asesores capacitados: cobertura mensual calculada (48 % → 27 %).</li>
+        <li style="color:rgba(255,255,255,.85); font-size:.95rem">Pendiente: validar con Daniela el universo real de PDV por aliado y aprobar el plan de trabajo 2S.</li>
+      </ul>
+    </div>
+    <div style="margin-top:40px">
+      <img src="../assets/logos/Logo_transparente.png" alt="Xuma" style="height:36px; opacity:.6" />
+    </div>
+  </div>
+
+</div><!-- #scaler -->
+</div><!-- #app -->
+
+<div id="nav"></div>
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+<!-- Project Data and Scripts -->
+<script src="data_retail.js"></script>
+<script src="municipalities_geojson.js"></script>
+<script src="app_retail.js"></script>
+
+</body>
+</html>

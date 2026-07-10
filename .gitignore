@@ -1,0 +1,7 @@
+# Nunca versionar datos crudos/sensibles por accidente si algún día se copian aquí
+*.xlsx
+*.xls
+*.csv
+respuestas*.md
+.DS_Store
+Thumbs.db
