@@ -122,35 +122,108 @@
     </div>
   </div>
 
-  <!-- ══════════ SLIDE 6 · ESTRATEGIA 2S ══════════ -->
+  <!-- ══════════ SLIDE 6 · ESTRATEGIA 2S (respuestas reales de Erika Zambrano) ══════════ -->
   <div class="slide slide-content" data-label="Estrategia 2S">
     <div class="s-header">
       <h2>Estrategia de Formación · Segundo Semestre 2026</h2>
       <span class="s-tag">Tradicional · Estrategia</span>
     </div>
     <div class="s-body">
-      <div class="alert alert-warn">
-        <span class="ico">📋</span>
-        <span><strong>Sección en proceso de alineación con Erika Zambrano (formadora del canal).</strong> Acciones estratégicas sugeridas con base en el diagnóstico del primer semestre.</span>
+      <div class="panel">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px">
+          <h3 style="margin:0; border:none; padding:0">🎯 Estrategia según Erika Zambrano, Formadora Tradicional</h3>
+          <div class="strategy-tabs">
+            <button class="strategy-tab active" data-tab="tobj" onclick="deckTab('tobj')">🎯 Objetivo</button>
+            <button class="strategy-tab" data-tab="tcron" onclick="deckTab('tcron')">📅 Cronograma</button>
+            <button class="strategy-tab" data-tab="tkpi" onclick="deckTab('tkpi')">📈 KPIs</button>
+            <button class="strategy-tab" data-tab="torg" onclick="deckTab('torg')">👥 Organigrama</button>
+          </div>
+        </div>
+
+        <!-- TAB: Objetivo e iniciativas -->
+        <div class="strategy-pane active" id="pane-tobj">
+          <div class="alert alert-info" style="margin-bottom:10px">
+            <span class="ico">🎯</span>
+            <span><strong>Objetivo general 2S:</strong> Fortalecer las competencias comerciales de los asesores del Canal Tradicional mediante un plan de formación continuo que incremente la cobertura de capacitación, mejore la experiencia de venta y aumente la penetración de Cuota Protegida y Rueda Seguro.</span>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:6px">
+            <div class="ini-card" style="cursor:default"><div class="ini-head"><span class="ini-ico" style="background:rgba(0,205,147,.12); color:var(--teal)">🎯</span><div class="ini-title" style="font-size:.78rem">Priorizar aliados de mayor potencial comercial y oportunidad de mejora</div></div></div>
+            <div class="ini-card" style="cursor:default"><div class="ini-head"><span class="ini-ico" style="background:rgba(0,205,147,.12); color:var(--teal)">🗣️</span><div class="ini-title" style="font-size:.78rem">Talleres prácticos: presentación de beneficios, manejo de objeciones y cierre</div></div></div>
+            <div class="ini-card" style="cursor:default"><div class="ini-head"><span class="ini-ico" style="background:rgba(0,205,147,.12); color:var(--teal)">🤝</span><div class="ini-title" style="font-size:.78rem">Acompañamientos en punto de venta con retroalimentación en tiempo real</div></div></div>
+            <div class="ini-card" style="cursor:default"><div class="ini-head"><span class="ini-ico" style="background:rgba(0,205,147,.12); color:var(--teal)">🆕</span><div class="ini-title" style="font-size:.78rem">Formación oportuna de asesores nuevos desde su ingreso</div></div></div>
+            <div class="ini-card" style="cursor:default"><div class="ini-head"><span class="ini-ico" style="background:rgba(0,205,147,.12); color:var(--teal)">🔁</span><div class="ini-title" style="font-size:.78rem">Jornadas periódicas de refuerzo presencial y virtual</div></div></div>
+            <div class="ini-card" style="cursor:default"><div class="ini-head"><span class="ini-ico" style="background:rgba(0,205,147,.12); color:var(--teal)">📊</span><div class="ini-title" style="font-size:.78rem">Seguimiento a indicadores comerciales para compartir buenas prácticas entre aliados</div></div></div>
+          </div>
+        </div>
+
+        <!-- TAB: Cronograma -->
+        <div class="strategy-pane" id="pane-tcron">
+          <div class="tbl-wrap" style="margin-top:0">
+            <table style="font-size:.74rem">
+              <thead><tr>
+                <th>Acción</th><th>Responsable</th>
+                <th class="r">Jul</th><th class="r">Ago</th><th class="r">Sep</th>
+                <th class="r">Oct</th><th class="r">Nov</th><th class="r">Dic</th>
+              </tr></thead>
+              <tbody>
+                <tr>
+                  <td><strong>Formación de asesores nuevos</strong></td><td style="color:var(--gray3)">Especialista de Formación</td>
+                  <td class="r" style="color:var(--teal)">✓</td><td class="r" style="color:var(--teal)">✓</td><td class="r" style="color:var(--teal)">✓</td>
+                  <td class="r" style="color:var(--teal)">✓</td><td class="r" style="color:var(--teal)">✓</td><td class="r" style="color:var(--teal)">✓</td>
+                </tr>
+                <tr>
+                  <td><strong>Ruta de formación en aliados priorizados</strong></td><td style="color:var(--gray3)">Especialista de Formación</td>
+                  <td class="r" style="color:var(--teal)">✓</td><td class="r" style="color:var(--teal)">✓</td><td class="r" style="color:var(--teal)">✓</td>
+                  <td class="r" style="color:var(--teal)">✓</td><td class="r" style="color:var(--teal)">✓</td><td class="r" style="color:var(--teal)">✓</td>
+                </tr>
+                <tr>
+                  <td><strong>Talleres de habilidades comerciales</strong></td><td style="color:var(--gray3)">Especialista de Formación</td>
+                  <td class="r" style="color:var(--teal)">✓</td><td class="r" style="color:var(--gray2)">—</td><td class="r" style="color:var(--teal)">✓</td>
+                  <td class="r" style="color:var(--gray2)">—</td><td class="r" style="color:var(--teal)">✓</td><td class="r" style="color:var(--gray2)">—</td>
+                </tr>
+                <tr>
+                  <td><strong>Acompañamientos en punto de venta</strong></td><td style="color:var(--gray3)">Especialista de Formación</td>
+                  <td class="r" style="color:var(--teal)">✓</td><td class="r" style="color:var(--teal)">✓</td><td class="r" style="color:var(--teal)">✓</td>
+                  <td class="r" style="color:var(--teal)">✓</td><td class="r" style="color:var(--teal)">✓</td><td class="r" style="color:var(--teal)">✓</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- TAB: KPIs -->
+        <div class="strategy-pane" id="pane-tkpi">
+          <div class="tbl-wrap" style="margin-top:0">
+            <table style="font-size:.78rem">
+              <thead><tr><th>Indicador propuesto por Erika</th><th class="r">Meta</th></tr></thead>
+              <tbody>
+                <tr><td>Cobertura de asesores capacitados</td><td class="r"><span class="badge badge-y">Por definir</span></td></tr>
+                <tr><td>Cumplimiento del plan mensual de visitas</td><td class="r"><span class="badge badge-y">Por definir</span></td></tr>
+                <tr><td>% de asesores nuevos capacitados</td><td class="r"><span class="badge badge-y">Por definir</span></td></tr>
+                <tr><td>Penetración de Cuota Protegida</td><td class="r"><span class="badge badge-y">Por definir</span></td></tr>
+                <tr><td>Penetración de Rueda Seguro</td><td class="r"><span class="badge badge-y">Por definir</span></td></tr>
+                <tr><td>Cumplimiento de acompañamientos comerciales</td><td class="r"><span class="badge badge-y">Por definir</span></td></tr>
+                <tr><td>Nivel de aprobación en evaluaciones de conocimiento</td><td class="r"><span class="badge badge-y">Por definir</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div style="font-size:.62rem; color:var(--gray3); margin-top:6px">Erika definió los 7 indicadores; las metas numéricas quedan por acordar con Orlando en el arranque del 2S.</div>
+        </div>
+
+        <!-- TAB: Organigrama -->
+        <div class="strategy-pane" id="pane-torg">
+          <p style="font-size:.8rem; line-height:1.6; color:var(--dark)">El equipo de Formación está conformado por el <strong>Coordinador de Formación Comercial</strong> y los <strong>Especialistas de Formación</strong> asignados en los canales. La gestión se desarrolla de forma articulada con KAM, supervisores comerciales y líderes de los aliados para garantizar la ejecución del plan y el seguimiento a resultados.</p>
+        </div>
       </div>
-      <div class="two-col">
+
+      <div class="two-col" style="margin-top:12px">
         <div class="panel">
-          <h3>🎯 Frentes Estratégicos 2S</h3>
-          <ul class="check-list">
-            <li><strong>Recuperar el ritmo del canal:</strong> Volver a los niveles de marzo (~140 visitas) para sostener las ventas del canal.</li>
-            <li><strong>Plan específico por Aliado:</strong> Diseñar campañas dirigidas a los 7 aliados con baja densidad de formación (≤6 visitas).</li>
-            <li><strong>Acompañamiento en venta real:</strong> Foco en la conversión (Efectivas/Financiaciones) mediante mentorías in-situ.</li>
-            <li><strong>Optimización de registros:</strong> Garantizar la captura del documento del asesor capacitado para la trazabilidad.</li>
-          </ul>
+          <div class="asesores-section-label" style="color:var(--warn)">⚠️ Qué dificulta hoy la formación (Erika)</div>
+          <p style="font-size:.76rem; line-height:1.5">Alta rotación de asesores, disponibilidad limitada de tiempo en los puntos de venta y la dinámica operativa de los aliados afectan la continuidad. Se requiere fortalecer presentación de beneficios, manejo de objeciones y cierre de venta.</p>
         </div>
         <div class="panel">
-          <h3>💡 Recomendaciones de Negocio</h3>
-          <ul class="check-list">
-            <li>Incrementar la penetración promedio del canal de 4,2% a ≥5% en aliados capacitados.</li>
-            <li>Establecer como KPI clave: <em>Cobertura de Formación Mensual por Aliado</em> (Métrica de Orlando).</li>
-            <li>Focalizar las visitas en los aliados de mayor tracción transaccional (Diverxa y Multintegral).</li>
-            <li>Sincronizar cronogramas de capacitación con los picos de ventas de motos y planes de incentivos de aliados.</li>
-          </ul>
+          <div class="asesores-section-label" style="color:var(--teal)">🤝 Apoyos que necesita de Orlando</div>
+          <p style="font-size:.76rem; line-height:1.5">Coordinación permanente con KAM y supervisores para facilitar espacios de capacitación, información comercial actualizada para orientar la formación, y fortalecer los materiales de apoyo.</p>
         </div>
       </div>
     </div>
@@ -165,7 +238,8 @@
         <li style="color:rgba(255,255,255,.9); font-size:.95rem">Integración de cierres reales "Como vamos" para <strong>Mayo y Junio de 2026</strong>.</li>
         <li style="color:rgba(255,255,255,.9); font-size:.95rem">Cálculo de la tasa de cruce / cobertura de formación para todos los aliados por mes.</li>
         <li style="color:rgba(255,255,255,.9); font-size:.95rem">Visualización de distribución geográfica de visitas (450 visitas tradicionales mapeadas).</li>
-        <li style="color:rgba(255,255,255,.9); font-size:.95rem">Pendiente: Aprobación final del cronograma 2S por la formadora Erika Zambrano.</li>
+        <li style="color:rgba(255,255,255,.9); font-size:.95rem">Estrategia 2S completa recibida de Erika Zambrano: objetivo, iniciativas, cronograma, KPIs y organigrama.</li>
+        <li style="color:rgba(255,255,255,.9); font-size:.95rem">Pendiente: acordar con Orlando las metas numéricas de los 7 KPIs propuestos.</li>
       </ul>
     </div>
     <div style="margin-top:40px">
@@ -184,6 +258,7 @@
 <!-- Project Data and Scripts -->
 <script src="data_tradicional.js"></script>
 <script src="municipalities_geojson.js"></script>
+<script src="../core/deck-engine.js"></script>
 <script src="app_tradicional.js"></script>
 
 </body>

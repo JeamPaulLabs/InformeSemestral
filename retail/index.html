@@ -118,29 +118,67 @@
       <span class="s-tag">Retail · Estrategia</span>
     </div>
     <div class="s-body">
-      <div class="alert alert-warn">
-        <span class="ico">📋</span>
-        <span><strong>Sección en proceso de alineación con el equipo de Formación.</strong> Acciones clave sugeridas para consolidar el canal Retail y cumplir metas mensuales.</span>
+      <div class="panel">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px">
+          <h3 style="margin:0; border:none; padding:0">🎯 Estrategia según Daniela Saldarriaga, Formadora Retail</h3>
+          <div class="strategy-tabs">
+            <button class="strategy-tab active" data-tab="dobj" onclick="deckTab('dobj')">🎯 Objetivo</button>
+            <button class="strategy-tab" data-tab="dcron" onclick="deckTab('dcron')">📅 Cronograma</button>
+            <button class="strategy-tab" data-tab="dkpi" onclick="deckTab('dkpi')">📈 KPIs</button>
+            <button class="strategy-tab" data-tab="dorg" onclick="deckTab('dorg')">👥 Organigrama</button>
+          </div>
+        </div>
+
+        <!-- TAB: Objetivo e iniciativas -->
+        <div class="strategy-pane active" id="pane-dobj">
+          <div class="alert alert-info" style="margin-bottom:10px">
+            <span class="ico">🎯</span>
+            <span><strong>Objetivo general 2S:</strong> Explotar el brochure y los portafolios de capacitación segmentando por gestor, dando seguimiento a su mantenimiento y crecimiento; incrementar el nivel de visitas y fortalecer el relacionamiento en Retail y Tradicional para crecer las ventas de seguros.</span>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:6px">
+            <div class="ini-card" style="cursor:default"><div class="ini-head"><span class="ini-ico" style="background:rgba(0,205,147,.12); color:var(--teal)">📘</span><div class="ini-title" style="font-size:.78rem">Explotar brochure y portafolios de capacitación segmentando por gestor</div></div></div>
+            <div class="ini-card" style="cursor:default"><div class="ini-head"><span class="ini-ico" style="background:rgba(0,205,147,.12); color:var(--teal)">🤝</span><div class="ini-title" style="font-size:.78rem">Incrementar visitas y fortalecer relacionamiento en Retail y Tradicional para crecer ventas de seguros</div></div></div>
+            <div class="ini-card" style="cursor:default"><div class="ini-head"><span class="ini-ico" style="background:rgba(0,205,147,.12); color:var(--teal)">🎁</span><div class="ini-title" style="font-size:.78rem">Capacitaciones con incentivo inmediato en punto de venta</div></div></div>
+            <div class="ini-card" style="cursor:default"><div class="ini-head"><span class="ini-ico" style="background:rgba(0,205,147,.12); color:var(--teal)">⚡</span><div class="ini-title" style="font-size:.78rem">Cambiar la evaluación mensual por evaluación inmediata, justo después de la formación</div></div></div>
+          </div>
+        </div>
+
+        <!-- TAB: Cronograma -->
+        <div class="strategy-pane" id="pane-dcron">
+          <div class="alert alert-warn" style="margin-bottom:0">
+            <span class="ico">📋</span>
+            <span><strong>Sin dato — pendiente.</strong> Daniela no entregó un cronograma mes a mes para el 2S; queda por definir junto con Orlando y Erika, en línea con la reestructuración de zonas realizada en mayo-junio.</span>
+          </div>
+        </div>
+
+        <!-- TAB: KPIs -->
+        <div class="strategy-pane" id="pane-dkpi">
+          <div class="alert alert-warn" style="margin-bottom:0">
+            <span class="ico">📋</span>
+            <span><strong>Sin dato — pendiente.</strong> Daniela no propuso indicadores numéricos para el 2S. Sí pidió que el "cómo vamos" de ventas y presupuesto se automatice en tiempo real (ver Apoyos que necesita de Orlando).</span>
+          </div>
+        </div>
+
+        <!-- TAB: Organigrama -->
+        <div class="strategy-pane" id="pane-dorg">
+          <p style="font-size:.8rem; line-height:1.6; color:var(--dark)">Tras la reestructuración de mayo-junio, Daniela y Erika comparten metas y realizaron empalmes y visitas conjuntas. Distribución territorial acordada:</p>
+          <div style="display:flex; flex-direction:column; gap:6px; margin-top:8px">
+            <div class="ini-card" style="cursor:default"><div class="ini-head"><span class="ini-ico" style="background:rgba(0,205,147,.12); color:var(--teal)">🏙️</span><div class="ini-title" style="font-size:.78rem">Bogotá Vanti (Tradicional y Retail): compartido entre Daniela Saldarriaga y Erika Zambrano</div></div></div>
+            <div class="ini-card" style="cursor:default"><div class="ini-head"><span class="ini-ico" style="background:rgba(0,205,147,.12); color:var(--teal)">📍</span><div class="ini-title" style="font-size:.78rem">Filial GOR y Gas Nacer: Daniela Saldarriaga</div></div></div>
+            <div class="ini-card" style="cursor:default"><div class="ini-head"><span class="ini-ico" style="background:rgba(0,205,147,.12); color:var(--teal)">📍</span><div class="ini-title" style="font-size:.78rem">Filial Cundiboyacá: Erika Zambrano</div></div></div>
+          </div>
+          <div style="font-size:.62rem; color:var(--gray3); margin-top:8px">Pendiente de Daniela: solicitar a Erika Zambrano el archivo de distribución real por aliado y canal.</div>
+        </div>
       </div>
-      <div class="two-col">
+
+      <div class="two-col" style="margin-top:12px">
         <div class="panel">
-          <h3>🎯 Frentes Estratégicos 2S</h3>
-          <ul class="check-list">
-            <li><strong>Re-acondicionar la planta de gestores:</strong> Estabilizar en ≥90 gestores entrenados en portafolio de venta.</li>
-            <li><strong>Optimizar la malla horaria de formación:</strong> Priorizar visitas a PDVs en franjas de alta afluencia (viernes a domingos).</li>
-            <li><strong>Acompañamiento en venta real:</strong> Foco en Clínicas de Ventas in-situ sobre el manejo de objeciones de Cuota Protegida.</li>
-            <li><strong>Campaña Spiff / Torneos:</strong> Lanzar incentivos rápidos focalizados en la conversión (Efectivas/Cantadas).</li>
-          </ul>
+          <div class="asesores-section-label" style="color:var(--warn)">⚠️ Qué dificulta hoy la formación (Daniela)</div>
+          <p style="font-size:.76rem; line-height:1.5">La reestructuración de zonas y canales entre mayo y junio explica la caída de visitas de ese período. En el diagnóstico, propone reemplazar la evaluación mensual por una evaluación inmediata, justo después de cada formación.</p>
         </div>
         <div class="panel">
-          <h3>💡 Recomendaciones de Negocio</h3>
-          <ul class="check-list">
-            <li>Recuperar el ritmo de ~75 visitas/mes que sostuvo el canal hasta abril.</li>
-            <li>Meta sugerida de cobertura: ≥ 60 % de los PDV activos por mes (nivel de enero).</li>
-            <li>Priorizar los PDVs de mayor volumen de venta (Alkosto y Éxito representan el 76% del canal).</li>
-            <li>Registrar de forma obligatoria el canal y aliado en el formulario de visitas para evitar registros huérfanos.</li>
-            <li>Implementar el indicador mensual: <em>Asesores Capacitados vs Planta Activa Comercial</em>.</li>
-          </ul>
+          <div class="asesores-section-label" style="color:var(--teal)">🤝 Apoyos que necesita de Orlando</div>
+          <p style="font-size:.76rem; line-height:1.5">Un "cómo vamos" automatizado en tiempo real para ventas y presupuesto propio, más material POP y presupuesto para motivar a los gestores con incentivos inmediatos durante las capacitaciones.</p>
         </div>
       </div>
     </div>
@@ -155,7 +193,8 @@
         <li style="color:rgba(255,255,255,.85); font-size:.95rem">Integración total de datos reales de cierres para <strong>Mayo y Junio de 2026</strong>.</li>
         <li style="color:rgba(255,255,255,.85); font-size:.95rem">Consolidación del mapa de distribución geográfica con 373 visitas localizadas.</li>
         <li style="color:rgba(255,255,255,.85); font-size:.95rem">Cruce de planta Serdán (26 cortes) vs. asesores capacitados: cobertura mensual calculada (48 % → 27 %).</li>
-        <li style="color:rgba(255,255,255,.85); font-size:.95rem">Pendiente: validar con Daniela el universo real de PDV por aliado y aprobar el plan de trabajo 2S.</li>
+        <li style="color:rgba(255,255,255,.85); font-size:.95rem">Estrategia 2S recibida de Daniela Saldarriaga: objetivo, iniciativas y organigrama por zonas.</li>
+        <li style="color:rgba(255,255,255,.85); font-size:.95rem">Pendiente: acordar con Orlando y Daniela el cronograma y los indicadores numéricos del 2S.</li>
       </ul>
     </div>
     <div style="margin-top:40px">
@@ -174,6 +213,7 @@
 <!-- Project Data and Scripts -->
 <script src="data_retail.js"></script>
 <script src="municipalities_geojson.js"></script>
+<script src="../core/deck-engine.js"></script>
 <script src="app_retail.js"></script>
 
 </body>

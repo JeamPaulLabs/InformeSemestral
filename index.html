@@ -135,9 +135,9 @@
       <span class="badge">Completado · data 1S integrada</span>
       <h2>Televentas</h2>
       <div class="stats">
-        <div class="stat"><div class="n">13.917</div><div class="l">Ventas 1S</div></div>
-        <div class="stat"><div class="n">912K</div><div class="l">Registros</div></div>
-        <div class="stat"><div class="n">3.000</div><div class="l">Meta/mes 2S</div></div>
+        <div class="stat"><div class="n" id="stat-tv-ventas">13.917</div><div class="l">Ventas 1S</div></div>
+        <div class="stat"><div class="n" id="stat-tv-registros">912K</div><div class="l">Registros</div></div>
+        <div class="stat"><div class="n" id="stat-tv-meta">3.000</div><div class="l">Meta/mes 2S</div></div>
       </div>
       <p>Gestión del canal 1S, análisis de bases operativas y proyección para la meta de 3.000 ventas/mes.</p>
       <span class="cta">Abrir informe →</span>
@@ -148,9 +148,9 @@
       <span class="badge">Completado · data 1S integrada</span>
       <h2>Retail</h2>
       <div class="stats">
-        <div class="stat"><div class="n">12.688</div><div class="l">Ventas CP</div></div>
-        <div class="stat"><div class="n">373</div><div class="l">Visitas 1S</div></div>
-        <div class="stat"><div class="n">467</div><div class="l">Ventas RS</div></div>
+        <div class="stat"><div class="n" id="stat-re-cp">12.688</div><div class="l">Ventas CP</div></div>
+        <div class="stat"><div class="n" id="stat-re-visitas">373</div><div class="l">Visitas 1S</div></div>
+        <div class="stat"><div class="n" id="stat-re-rs">467</div><div class="l">Ventas RS</div></div>
       </div>
       <p>Visitas de formación, cobertura de PDV y ventas del 1S. Mapa geográfico de visitas integrado.</p>
       <span class="cta">Abrir informe →</span>
@@ -161,9 +161,9 @@
       <span class="badge">Completado · data 1S integrada</span>
       <h2>Tradicional</h2>
       <div class="stats">
-        <div class="stat"><div class="n">563</div><div class="l">Ventas CP</div></div>
-        <div class="stat"><div class="n">463</div><div class="l">Visitas 1S</div></div>
-        <div class="stat"><div class="n">171</div><div class="l">Ventas RS</div></div>
+        <div class="stat"><div class="n" id="stat-tr-cp">563</div><div class="l">Ventas CP</div></div>
+        <div class="stat"><div class="n" id="stat-tr-visitas">463</div><div class="l">Visitas 1S</div></div>
+        <div class="stat"><div class="n" id="stat-tr-rs">171</div><div class="l">Ventas RS</div></div>
       </div>
       <p>Visitas por municipio, cobertura de formación (cédula: financiaron vs. capacitados) y ventas 1S.</p>
       <span class="cta">Abrir informe →</span>
@@ -227,6 +227,41 @@
     </div>
   </div>
 </div>
+
+<!-- Data de cada canal (misma fuente que usan sus informes) para calcular
+     los números de las tarjetas en vivo, sin duplicarlos a mano. -->
+<script src="televentas/data_televentas.js"></script>
+<script src="retail/data_retail.js"></script>
+<script src="tradicional/data_tradicional.js"></script>
+<script>
+  /* ── Números del portal, calculados desde la data real de cada canal ──
+     Si algo falla al cargar (ruta movida, etc.) se conservan los valores
+     de referencia que ya están escritos en el HTML como respaldo. */
+  (function () {
+    const sumArr = arr => arr.reduce((a, b) => a + b, 0);
+    const sumKey = (arr, key) => arr.reduce((a, x) => a + (x[key] || 0), 0);
+    const fmt = n => n.toLocaleString('es-CO');
+    const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+
+    try {
+      // Televentas
+      set('stat-tv-ventas', fmt(sumArr(DATA.ventasLiq)));
+      set('stat-tv-registros', Math.round(sumArr(DATA.registros) / 1000) + 'K');
+
+      // Retail
+      set('stat-re-cp', fmt(sumKey(RETAIL_DATA.ventas.cp, 'efectivas')));
+      set('stat-re-visitas', fmt(sumKey(RETAIL_DATA.visitas, 'visitas')));
+      set('stat-re-rs', fmt(sumKey(RETAIL_DATA.ventas.rs, 'efectivas')));
+
+      // Tradicional
+      set('stat-tr-cp', fmt(sumKey(TRADICIONAL_DATA.ventas.cp, 'positivas')));
+      set('stat-tr-visitas', fmt(sumKey(TRADICIONAL_DATA.visitas, 'visitas')));
+      set('stat-tr-rs', fmt(sumKey(TRADICIONAL_DATA.ventas.rs, 'positivas')));
+    } catch (e) {
+      console.warn('Portal: no se pudieron calcular los números desde la data de cada canal, se muestran los valores de referencia.', e);
+    }
+  })();
+</script>
 
 <script>
   /* ── Escalar el lienzo para que TODO quepa siempre en 1 pantalla ── */

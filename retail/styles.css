@@ -252,7 +252,12 @@ body {
 }
 .slide-content .s-body {
   flex: 1;
-  padding: 32px 60px 96px; /* espacio reservado abajo para que #nav (fijo al viewport, no al lienzo escalado) nunca tape el contenido */
+  /* padding-bottom: var(--chrome-clearance), calculado en JS (scaleSlider) en cada resize.
+     #nav está fixed al viewport real, no al lienzo escalado por #scaler; por eso este
+     espacio se recalcula en unidades del lienzo (px de diseño / factor de escala) para
+     que la reserva real en pantalla sea siempre la altura de #nav, sin importar la
+     resolución. 96px es solo el valor de respaldo antes de que corra el primer JS. */
+  padding: 32px 60px var(--chrome-clearance, 96px);
   overflow: auto;
   display: flex;
   flex-direction: column;
@@ -315,11 +320,11 @@ tbody tr.total td { font-weight: 800; background: #eeedf9; color: var(--blue); }
   background: linear-gradient(90deg, var(--blue), var(--blue-l));
   width: 0;
   transition: width 1s cubic-bezier(.4,0,.2,1);
-  display: flex; align-items: center; padding-left: 8px;
 }
 .bar-fill.teal  { background: linear-gradient(90deg, var(--teal), #00e5a4); }
 .bar-fill.green { background: linear-gradient(90deg, var(--green), #7fffaa); }
-.bar-val { font-size: .72rem; font-weight: 700; color: var(--white); white-space: nowrap; }
+/* Valor fuera del relleno: en barras angostas el texto quedaba cortado por el overflow:hidden de .bar-track */
+.bar-val { font-size: .72rem; font-weight: 700; color: var(--dark); white-space: nowrap; flex-shrink: 0; min-width: 48px; text-align: right; }
 
 /* ── Two-col layout ──────────────────────────────────────── */
 .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; flex: 1; }
@@ -431,6 +436,30 @@ ul.check-list li::before { content: '✓'; position: absolute; left: 0; top: 1px
 .strategy-tab.active { background: var(--blue); border-color: var(--blue); color: var(--white); }
 .strategy-pane { display: none; }
 .strategy-pane.active { display: block; animation: panelIn .35s ease backwards; }
+
+/* ── Pestañas propias de Telefonía (misma apariencia, clase distinta:
+   .strategy-tab hace un querySelectorAll global y no debe mezclarse
+   con otro grupo de pestañas en la misma página) ────────────────── */
+.tele-tab {
+  font-family: 'Raleway', sans-serif; font-size: .72rem; font-weight: 700;
+  padding: 6px 14px; border-radius: 20px; border: 1px solid var(--gray2);
+  background: var(--white); color: var(--gray3); cursor: pointer; transition: all .2s;
+}
+.tele-tab:hover { border-color: var(--teal); color: var(--teal); }
+.tele-tab.active { background: var(--blue); border-color: var(--blue); color: var(--white); }
+.tele-pane { display: none; }
+.tele-pane.active { display: block; animation: panelIn .35s ease backwards; }
+
+/* ── Pestañas propias de Proyección (mismo patrón, otra clase) ──── */
+.proy-tab {
+  font-family: 'Raleway', sans-serif; font-size: .72rem; font-weight: 700;
+  padding: 6px 14px; border-radius: 20px; border: 1px solid var(--gray2);
+  background: var(--white); color: var(--gray3); cursor: pointer; transition: all .2s;
+}
+.proy-tab:hover { border-color: var(--teal); color: var(--teal); }
+.proy-tab.active { background: var(--blue); border-color: var(--blue); color: var(--white); }
+.proy-pane { display: none; }
+.proy-pane.active { display: block; animation: panelIn .35s ease backwards; }
 
 .ini-card {
   border: 1px solid var(--gray2); border-radius: 12px; padding: 10px 14px;
