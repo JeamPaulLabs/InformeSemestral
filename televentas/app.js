@@ -926,9 +926,9 @@ function renderTelefonia() {
         </div>
         <div style="font-size:.6rem; color:var(--gray3); text-align:center; margin-bottom:10px">Estimación con la efectividad del semestre; validar con Isaac el período de la muestra.</div>
 
-        <div class="alert alert-info" style="margin-bottom:0">
+        <div class="alert alert-info" style="margin-bottom:0; padding:8px 14px">
           <span class="ico">${icon('pin')}</span>
-          <span>El "no contacto" operativo (59,6 % del gestionado) tiene al menos una causa técnica confirmada: <strong>69.740 llamadas</strong> nunca se cursaron por fallas de red (11,1 % de las 628.406 analizadas). Hipótesis a validar con Isaac: parte de ese mismo insumo, al no lograr contacto, vuelve a la base y termina descartándose luego como "re-enviado" (49 % del descarte del semestre) — cruce pendiente de confirmar con el detalle de registro por llamada.</span>
+          <span style="font-size:.72rem">Del 59,6 % de "no contacto", al menos <strong>69.740 llamadas (11,1 %)</strong> nunca se cursaron por fallas de red. <strong>Hipótesis a validar con Isaac:</strong> parte de ese insumo termina descartándose luego como "re-enviado" — cruce pendiente de confirmar registro por registro.</span>
         </div>
 
         <div style="margin-top:12px">
@@ -1114,8 +1114,8 @@ function renderProyeccion() {
     </div>
 
     <div class="proy-pane" id="proy-pane-escenario">
-      <div class="panel" style="padding:8px 16px">
-        <h3 style="margin-bottom:3px; padding-bottom:3px">${icon('rocket')} Escenario con base depurada (recomendado)</h3>
+      <div class="panel" style="padding:6px 16px">
+        <h3 style="margin-bottom:2px; padding-bottom:2px">${icon('rocket')} Escenario con base depurada (recomendado)</h3>
 
         <!-- Flujo de 3 pasos -->
         <div style="display:flex; align-items:stretch; gap:8px; margin:4px 0">
@@ -1131,10 +1131,10 @@ function renderProyeccion() {
               <div style="font-size:.58rem; color:var(--gray3); line-height:1.25">${det}</div>
             </div>`).join('')}
         </div>
-        <div style="font-size:.6rem; color:var(--gray3); text-align:center; margin-bottom:4px">Premisas del cálculo: 88 % gestión · 45 % contactabilidad · 8,6 % conversión (históricos 1S)</div>
+        <div style="font-size:.6rem; color:var(--gray3); text-align:center; margin-bottom:2px">Premisas del cálculo: 88 % gestión · 45 % contactabilidad · 8,6 % conversión (históricos 1S)</div>
 
         <!-- Notas complementarias -->
-        <ul class="check-list" style="gap:2px">
+        <ul class="check-list" style="gap:1px; margin:2px 0">
           <li style="font-size:.68rem"><strong>Validado por Isaac:</strong> la deduplicación en origen es viable (registro del distribuidor + validación de fuentes). Su meta de corto plazo: rechazo <strong>≤ 50 %</strong> como escalón intermedio hacia el 35 %.</li>
           <li style="font-size:.68rem">Priorizar <strong>Bienvenidas CP</strong> y <strong>Autogestión</strong> (conversión 17–33 % sobre contacto) reduce el volumen necesario a la mitad.</li>
           <li style="font-size:.68rem">Capacidad del equipo: meta agregada jun = <strong>${fmt(metaAgregJun)} pólizas</strong> (${totalEquipoJun} asesores, ${Math.round(metaAgregJun/totalEquipoJun)} pol/asesor). Para 3.000 → <strong>~150 pol/asesor con 20 asesores</strong>.</li>
@@ -1164,9 +1164,9 @@ function renderProyeccion() {
           </div>
         </div>
 
-        <div class="alert alert-info" style="margin-top:4px; padding:5px 14px">
+        <div class="alert alert-info" style="margin-top:2px; padding:4px 14px">
           <span class="ico">${icon('pin')}</span>
-          <span>El camino a 3.000 pasa más por <strong>calidad y depuración de base</strong> que por aumentar el volumen bruto de registros. Cálculo con el semestre completo (ene–jun), liquidación de junio ya incluida.</span>
+          <span style="font-size:.7rem">El camino a 3.000 pasa más por <strong>calidad y depuración de base</strong> que por aumentar el volumen bruto de registros. Cálculo con el semestre completo (ene–jun), liquidación de junio ya incluida.</span>
         </div>
       </div>
     </div>`;
