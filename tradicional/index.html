@@ -205,26 +205,79 @@
 
         <!-- TAB: KPIs -->
         <div class="strategy-pane" id="pane-tkpi">
+          <div class="alert alert-info" style="margin-bottom:8px; padding:6px 14px">
+            <span class="ico"><svg class="lucide-ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 7h6v6" /><path d="m22 7-8.5 8.5-5-5L2 17" /></svg></span>
+            <span style="font-size:.68rem">Erika definió los 7 indicadores; las metas numéricas se calculan aquí con el desempeño real del canal (ene–jun 2026).</span>
+          </div>
           <div class="tbl-wrap" style="margin-top:0">
-            <table style="font-size:.78rem">
-              <thead><tr><th>Indicador propuesto por Erika</th><th class="r">Meta</th></tr></thead>
+            <table class="tbl-compact" style="font-size:.7rem">
+              <thead><tr><th>Indicador</th><th>Fórmula</th><th class="r">Actual</th><th class="r">Meta 2S</th></tr></thead>
               <tbody>
-                <tr><td>Cobertura de asesores capacitados</td><td class="r"><span class="badge badge-y">Por definir</span></td></tr>
-                <tr><td>Cumplimiento del plan mensual de visitas</td><td class="r"><span class="badge badge-y">Por definir</span></td></tr>
-                <tr><td>% de asesores nuevos capacitados</td><td class="r"><span class="badge badge-y">Por definir</span></td></tr>
-                <tr><td>Penetración de Cuota Protegida</td><td class="r"><span class="badge badge-y">Por definir</span></td></tr>
-                <tr><td>Penetración de Rueda Seguro</td><td class="r"><span class="badge badge-y">Por definir</span></td></tr>
-                <tr><td>Cumplimiento de acompañamientos comerciales</td><td class="r"><span class="badge badge-y">Por definir</span></td></tr>
-                <tr><td>Nivel de aprobación en evaluaciones de conocimiento</td><td class="r"><span class="badge badge-y">Por definir</span></td></tr>
+                <tr>
+                  <td><strong>Cobertura de asesores capacitados</strong></td>
+                  <td style="color:var(--gray3)">Cruzados por cédula / financiaron</td>
+                  <td class="r">7,5 % (prom. 1S)</td>
+                  <td class="r"><strong style="color:var(--teal)">≥ 12 %</strong></td>
+                </tr>
+                <tr>
+                  <td><strong>Cumplimiento del plan de visitas</strong></td>
+                  <td style="color:var(--gray3)">Visitas realizadas / mes</td>
+                  <td class="r">43 (jun)</td>
+                  <td class="r"><strong style="color:var(--teal)">≥ 77 / mes (prom. 1S)</strong></td>
+                </tr>
+                <tr>
+                  <td><strong>% asesores nuevos capacitados</strong></td>
+                  <td style="color:var(--gray3)">Capacitados en 1ª semana / ingresos</td>
+                  <td class="r">Sin medición hoy</td>
+                  <td class="r"><strong style="color:var(--teal)">≥ 90 % (meta propuesta)</strong></td>
+                </tr>
+                <tr>
+                  <td><strong>Penetración Cuota Protegida</strong></td>
+                  <td style="color:var(--gray3)">Positivas CP / financiaciones</td>
+                  <td class="r">1,7 % (jun)</td>
+                  <td class="r"><strong style="color:var(--teal)">≥ 2,9 % (prom. 1S)</strong></td>
+                </tr>
+                <tr>
+                  <td><strong>Penetración Rueda Seguro</strong></td>
+                  <td style="color:var(--gray3)">Positivas RS / financiaciones</td>
+                  <td class="r">1,7 % (jun)</td>
+                  <td class="r"><strong style="color:var(--teal)">≥ 3,8 % (prom. 1S)</strong></td>
+                </tr>
+                <tr>
+                  <td><strong>Acompañamientos en punto de venta</strong></td>
+                  <td style="color:var(--gray3)">Visitas con acompañamiento / total visitas</td>
+                  <td class="r">Sin medición separada</td>
+                  <td class="r"><strong style="color:var(--teal)">≥ 90 % (meta propuesta)</strong></td>
+                </tr>
+                <tr>
+                  <td><strong>Aprobación en evaluaciones</strong></td>
+                  <td style="color:var(--gray3)">Asesores aprobados / evaluados</td>
+                  <td class="r">Sin medición hoy</td>
+                  <td class="r"><strong style="color:var(--teal)">≥ 80 % (meta propuesta)</strong></td>
+                </tr>
               </tbody>
             </table>
           </div>
-          <div style="font-size:.62rem; color:var(--gray3); margin-top:6px">Erika definió los 7 indicadores; las metas numéricas quedan por acordar con Orlando en el arranque del 2S.</div>
+          <div style="font-size:.6rem; color:var(--gray3); margin-top:6px">"Sin medición hoy" = el indicador no se instrumenta actualmente; la meta es una propuesta de arranque, no un cálculo histórico. Los demás salen de la data real ene–jun 2026.</div>
         </div>
 
         <!-- TAB: Organigrama -->
         <div class="strategy-pane" id="pane-torg">
-          <p style="font-size:.8rem; line-height:1.6; color:var(--dark)">El equipo de Formación está conformado por el <strong>Coordinador de Formación Comercial</strong> y los <strong>Especialistas de Formación</strong> asignados en los canales. La gestión se desarrolla de forma articulada con KAM, supervisores comerciales y líderes de los aliados para garantizar la ejecución del plan y el seguimiento a resultados.</p>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:0">
+            <div style="background:var(--blue); color:#fff; border-radius:10px; padding:8px 18px; text-align:center; font-size:.78rem; font-weight:800">Coordinador de Formación Comercial</div>
+            <div style="width:2px; height:16px; background:var(--gray2)"></div>
+            <div style="display:flex; gap:10px">
+              <div style="background:rgba(0,205,147,.1); border:1px solid rgba(0,205,147,.35); border-radius:10px; padding:8px 14px; text-align:center; font-size:.72rem; font-weight:700; color:var(--teal)">Especialista de Formación<br><span style="font-weight:600; color:var(--gray3); font-size:.6rem">Erika Zambrano · Tradicional</span></div>
+              <div style="background:rgba(0,205,147,.1); border:1px solid rgba(0,205,147,.35); border-radius:10px; padding:8px 14px; text-align:center; font-size:.72rem; font-weight:700; color:var(--teal)">Especialista de Formación<br><span style="font-weight:600; color:var(--gray3); font-size:.6rem">Daniela Saldarriaga · Retail</span></div>
+            </div>
+            <div style="width:2px; height:16px; background:var(--gray2)"></div>
+            <div style="display:flex; gap:10px">
+              <div style="background:var(--gray1); border:1px solid var(--gray2); border-radius:10px; padding:6px 12px; text-align:center; font-size:.66rem; color:var(--dark)">KAM por aliado</div>
+              <div style="background:var(--gray1); border:1px solid var(--gray2); border-radius:10px; padding:6px 12px; text-align:center; font-size:.66rem; color:var(--dark)">Supervisores comerciales</div>
+              <div style="background:var(--gray1); border:1px solid var(--gray2); border-radius:10px; padding:6px 12px; text-align:center; font-size:.66rem; color:var(--dark)">Líderes de aliados</div>
+            </div>
+          </div>
+          <p style="font-size:.7rem; line-height:1.5; color:var(--gray3); margin-top:14px; text-align:center">La gestión se articula con KAM, supervisores comerciales y líderes de los aliados para garantizar la ejecución del plan y el seguimiento a resultados en ambos canales (Retail + Tradicional).</p>
         </div>
       </div>
 
@@ -251,7 +304,7 @@
         <li style="color:rgba(255,255,255,.9); font-size:.95rem">Cálculo de la tasa de cruce / cobertura de formación para todos los aliados por mes.</li>
         <li style="color:rgba(255,255,255,.9); font-size:.95rem">Visualización de distribución geográfica de visitas (450 visitas tradicionales mapeadas).</li>
         <li style="color:rgba(255,255,255,.9); font-size:.95rem">Estrategia 2S completa recibida de Erika Zambrano: objetivo, iniciativas, cronograma, KPIs y organigrama.</li>
-        <li style="color:rgba(255,255,255,.9); font-size:.95rem">Pendiente: acordar con Orlando las metas numéricas de los 7 KPIs propuestos.</li>
+        <li style="color:rgba(255,255,255,.9); font-size:.95rem">Metas numéricas de los 7 KPIs calculadas con el desempeño real del canal (ene–jun 2026).</li>
       </ul>
     </div>
     <div style="margin-top:40px">

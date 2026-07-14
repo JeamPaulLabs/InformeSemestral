@@ -15,6 +15,7 @@ function scaleSlider() {
   const scaleY = window.innerHeight / H;
   const s = Math.min(scaleX, scaleY);
   el.style.transform = `translate(-50%, -50%) scale(${s})`;
+  el.classList.add('ready');
 
   // #nav está fixed al viewport real, no al lienzo escalado: en pantallas anchas
   // (scaleY es el factor limitante) el lienzo toca el borde inferior real y #nav

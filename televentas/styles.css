@@ -419,7 +419,15 @@ ul.check-list li::before { content: '✓'; position: absolute; left: 0; top: 1px
   position: absolute;
   top: 50%; left: 50%;
   transform-origin: center center;
+  /* Centrado de respaldo antes de que corra scaleSlider() (JS calcula el
+     scale real en el primer frame). Sin esto, el cover (marcado "active"
+     en el HTML estático) se ve un instante con solo su esquina inferior-
+     derecha en pantalla — top/left:50% sin transform deja el borde
+     superior-izquierdo del lienzo en el centro del viewport. */
+  transform: translate(-50%, -50%);
+  opacity: 0;
 }
+#scaler.ready { opacity: 1; transition: opacity .25s ease; }
 
 /* ── Micro-interacciones: hover lift + entrada animada ────── */
 .kpi-card, .panel { transition: transform .25s cubic-bezier(.4,0,.2,1), box-shadow .25s ease; }

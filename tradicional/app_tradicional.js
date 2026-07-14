@@ -464,7 +464,7 @@ function renderCobertura() {
       <div class="panel" style="padding:12px 16px">
         <h3 style="margin-bottom:5px; padding-bottom:4px">${icon('store')} Cobertura de Formación por Aliado (Ene-Jun 2026)</h3>
         <p style="font-size: .66rem; color: var(--gray3); margin-top: -3px; margin-bottom: 6px;">
-          Adesores que financiaron en conciliaciones vs capacitados (cruzados por cédula).
+          Asesores que financiaron en conciliaciones vs capacitados (cruzados por cédula).
         </p>
         <div class="tbl-wrap" style="margin-top:0; max-height: 440px; overflow-y: auto;">
           <table class="tbl-compact" style="font-size: 0.68rem;">

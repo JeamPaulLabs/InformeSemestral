@@ -497,7 +497,7 @@ function renderCobertura() {
                 <td class="r">184</td>
               </tr>
               <tr>
-                <td><strong>Almacenes Éxito</strong></td>
+                <td><strong>Almacenes Éxito</strong> <span class="pend" style="font-size:.58rem">aliado retirado</span></td>
                 <td class="r">31</td>
                 <td class="r">36</td>
                 <td class="r">${badge('116 %','g')}</td>
@@ -511,7 +511,7 @@ function renderCobertura() {
                 <td class="r">90</td>
               </tr>
               <tr>
-                <td><strong>Olímpica</strong> <span class="pend" style="font-size:.58rem">solo ene</span></td>
+                <td><strong>Olímpica</strong> <span class="pend" style="font-size:.58rem">solo ene · aliado retirado</span></td>
                 <td class="r">6</td>
                 <td class="r">3</td>
                 <td class="r">${badge('50 %','y')}</td>
@@ -534,7 +534,7 @@ function renderCobertura() {
     <div style="display:flex; flex-direction:column; gap:6px">
     <div class="alert alert-warn" style="margin-bottom: 0; padding:7px 14px">
       <span class="ico">${icon('search')}</span>
-      <span><strong>Hallazgo:</strong> el parque de PDV con gestión activa se contrajo 43 % (92→52) y la cobertura mensual cayó de 61 % a 27 %, pero Éxito y Cencosud muestran cobertura acumulada &gt;100 % en el semestre: Formación llega a más puntos de los que hoy tienen venta activa.</span>
+      <span><strong>Hallazgo:</strong> el parque de PDV con gestión activa se contrajo 43 % (92→52) y la cobertura mensual cayó de 61 % a 27 %, pero Éxito (aliado retirado tras el semestre) y Cencosud mostraron cobertura acumulada &gt;100 % durante el 1S: Formación llegó a más puntos de los que en ese momento tenían venta activa.</span>
     </div>
 
     <div class="two-col" style="gap:10px">
