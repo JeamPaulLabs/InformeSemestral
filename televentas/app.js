@@ -362,7 +362,7 @@ function renderAsesores() {
         <div class="asesores-section" style="margin-bottom:10px">
           <div class="alert alert-info" style="margin:0; padding:8px 14px">
             <span class="ico">${icon('star')}</span>
-            <span>El top 5 aporta <strong>4.279 pólizas (37 %)</strong> del semestre y los 3 primeros recibieron <strong>meta premium (150)</strong> en junio. Jesús Cortés nunca bajó de 197.</span>
+            <span>El top 5 aporta <strong>4.279 pólizas (37 %)</strong> del semestre y los 3 primeros recibieron <strong>meta premium (150)</strong> en junio.</span>
           </div>
         </div>
 
