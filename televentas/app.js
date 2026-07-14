@@ -780,13 +780,15 @@ function renderContactab() {
               <th class="r">Ventas</th><th class="r">Efect.</th>
             </tr></thead>
             <tbody>
-              ${DATA.meses.map((m,i)=>`
+              ${DATA.meses.map((m,i)=>{
+                const efect = DATA.ventasLiq[i] / DATA.contactados[i] * 100;
+                return `
                 <tr>
                   <td><strong>${m}</strong></td>
                   <td class="r">${fmt(DATA.contactados[i])}</td>
-                  <td class="r">${fmt(DATA.ventasOp[i])}</td>
-                  <td class="r">${badge(fmtPct(DATA.efectividad[i]), DATA.efectividad[i]>=9?'g':DATA.efectividad[i]>=7?'y':'r')}</td>
-                </tr>`).join('')}
+                  <td class="r">${fmt(DATA.ventasLiq[i])}</td>
+                  <td class="r">${badge(fmtPct(efect), efect>=9?'g':efect>=7?'y':'r')}</td>
+                </tr>`;}).join('')}
             </tbody>
           </table>
         </div>
@@ -903,7 +905,7 @@ function renderTelefonia() {
         </div>
         <div class="alert alert-warn" style="margin-top:10px; padding:8px 14px">
           <span class="ico">${icon('alert-circle')}</span>
-          <span>El <strong>backup (Movistar) carga el 71 % del tráfico</strong> con la peor red: pierde 17 de cada 100 llamadas por congestión o rechazo de troncal, frente a 0,86 % en Tigo.</span>
+          <span>El <strong>backup (Movistar) carga el 71 % del tráfico</strong> con la red menos estable de las dos: pierde 17 de cada 100 llamadas por congestión o rechazo de troncal, frente a 0,86 % en Tigo.</span>
         </div>
       </div>
 
@@ -926,7 +928,7 @@ function renderTelefonia() {
 
         <div class="alert alert-info" style="margin-bottom:0">
           <span class="ico">${icon('pin')}</span>
-          <span>El "no contacto" operativo (59,9 % del gestionado) tiene causa técnica: parte son llamadas que <strong>nunca se cursaron</strong> por fallas de red — el mismo insumo que luego se descarta como "re-enviado".</span>
+          <span>El "no contacto" operativo (59,6 % del gestionado) tiene al menos una causa técnica confirmada: <strong>69.740 llamadas</strong> nunca se cursaron por fallas de red (11,1 % de las 628.406 analizadas). Hipótesis a validar con Isaac: parte de ese mismo insumo, al no lograr contacto, vuelve a la base y termina descartándose luego como "re-enviado" (49 % del descarte del semestre) — cruce pendiente de confirmar con el detalle de registro por llamada.</span>
         </div>
 
         <div style="margin-top:12px">
@@ -1164,7 +1166,7 @@ function renderProyeccion() {
 
         <div class="alert alert-info" style="margin-top:4px; padding:5px 14px">
           <span class="ico">${icon('pin')}</span>
-          <span>El camino a 3.000 pasa más por <strong>calidad y depuración de base</strong> que por aumentar el volumen bruto de registros. Cálculo con semestre completo (ene–jun); falta solo la liquidación de junio.</span>
+          <span>El camino a 3.000 pasa más por <strong>calidad y depuración de base</strong> que por aumentar el volumen bruto de registros. Cálculo con el semestre completo (ene–jun), liquidación de junio ya incluida.</span>
         </div>
       </div>
     </div>`;
