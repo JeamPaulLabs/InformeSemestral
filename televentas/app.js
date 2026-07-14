@@ -146,9 +146,9 @@ function renderVentas() {
                 <th colspan="3" style="text-align:center; border-left:2px solid var(--gray2)">General</th>
               </tr>
               <tr>
-                <th class="r" style="border-left:2px solid var(--gray2)">Meta</th><th class="r">Vtas</th><th class="r">Cumpl.</th>
-                <th class="r" style="border-left:2px solid var(--gray2)">Meta</th><th class="r">Vtas</th><th class="r">Cumpl.</th>
-                <th class="r" style="border-left:2px solid var(--gray2)">Meta</th><th class="r">Vtas</th><th class="r">Cumpl.</th>
+                <th class="r" style="border-left:2px solid var(--gray2)">Venta</th><th class="r">Meta</th><th class="r">Cumplimiento</th>
+                <th class="r" style="border-left:2px solid var(--gray2)">Venta</th><th class="r">Meta</th><th class="r">Cumplimiento</th>
+                <th class="r" style="border-left:2px solid var(--gray2)">Venta</th><th class="r">Meta</th><th class="r">Cumplimiento</th>
               </tr>
             </thead>
             <tbody>
@@ -156,27 +156,27 @@ function renderVentas() {
                 <tr>
                   <td><strong>${m}</strong></td>
                   <td class="r">${DATA.asesores[i]}</td>
-                  <td class="r" style="border-left:2px solid var(--gray2)">${fmt(DATA.metaVantiCP[i])}</td>
-                  <td class="r">${fmt(DATA.ventasCP[i])}</td>
+                  <td class="r" style="border-left:2px solid var(--gray2)">${fmt(DATA.ventasCP[i])}</td>
+                  <td class="r">${fmt(DATA.metaVantiCP[i])}</td>
                   <td class="r">${pctBadge(Math.round(DATA.ventasCP[i]/DATA.metaVantiCP[i]*100))}</td>
-                  <td class="r" style="border-left:2px solid var(--gray2)">${fmt(DATA.metaVantiVOL[i])}</td>
-                  <td class="r">${fmt(DATA.ventasVOL[i])}</td>
+                  <td class="r" style="border-left:2px solid var(--gray2)">${fmt(DATA.ventasVOL[i])}</td>
+                  <td class="r">${fmt(DATA.metaVantiVOL[i])}</td>
                   <td class="r">${pctBadge(Math.round(DATA.ventasVOL[i]/DATA.metaVantiVOL[i]*100))}</td>
-                  <td class="r" style="border-left:2px solid var(--gray2)">${fmt(DATA.metaVanti[i])}</td>
-                  <td class="r">${fmt(DATA.ventasCP[i]+DATA.ventasVOL[i])}</td>
+                  <td class="r" style="border-left:2px solid var(--gray2)">${fmt(DATA.ventasCP[i]+DATA.ventasVOL[i])}</td>
+                  <td class="r">${fmt(DATA.metaVanti[i])}</td>
                   <td class="r">${pctBadge(Math.round((DATA.ventasCP[i]+DATA.ventasVOL[i])/DATA.metaVanti[i]*100))}</td>
                 </tr>`).join('')}
               <tr class="total">
                 <td>Total</td>
                 <td class="r">${Math.round(DATA.asesores.reduce((a,b)=>a+b,0)/DATA.asesores.length)}</td>
-                <td class="r" style="border-left:2px solid var(--gray2)">${fmt(DATA.metaVantiCP.reduce((a,b)=>a+b,0))}</td>
-                <td class="r">${fmt(DATA.ventasCP.reduce((a,b)=>a+b,0))}</td>
+                <td class="r" style="border-left:2px solid var(--gray2)">${fmt(DATA.ventasCP.reduce((a,b)=>a+b,0))}</td>
+                <td class="r">${fmt(DATA.metaVantiCP.reduce((a,b)=>a+b,0))}</td>
                 <td class="r">${pctBadge(Math.round(DATA.ventasCP.reduce((a,b)=>a+b,0)/DATA.metaVantiCP.reduce((a,b)=>a+b,0)*100))}</td>
-                <td class="r" style="border-left:2px solid var(--gray2)">${fmt(DATA.metaVantiVOL.reduce((a,b)=>a+b,0))}</td>
-                <td class="r">${fmt(DATA.ventasVOL.reduce((a,b)=>a+b,0))}</td>
+                <td class="r" style="border-left:2px solid var(--gray2)">${fmt(DATA.ventasVOL.reduce((a,b)=>a+b,0))}</td>
+                <td class="r">${fmt(DATA.metaVantiVOL.reduce((a,b)=>a+b,0))}</td>
                 <td class="r">${pctBadge(Math.round(DATA.ventasVOL.reduce((a,b)=>a+b,0)/DATA.metaVantiVOL.reduce((a,b)=>a+b,0)*100))}</td>
-                <td class="r" style="border-left:2px solid var(--gray2)">${fmt(totalMetaVanti)}</td>
-                <td class="r">${fmt(totalLiq)}</td>
+                <td class="r" style="border-left:2px solid var(--gray2)">${fmt(totalLiq)}</td>
+                <td class="r">${fmt(totalMetaVanti)}</td>
                 <td class="r">${pctBadge(Math.round(totalLiq/totalMetaVanti*100))}</td>
               </tr>
             </tbody>
@@ -196,9 +196,9 @@ function renderVentas() {
                 <th colspan="3" style="text-align:center; border-left:2px solid var(--gray2)">General</th>
               </tr>
               <tr>
-                <th class="r" style="border-left:2px solid var(--gray2)">Meta</th><th class="r">Vtas</th><th class="r">Cumpl.</th>
-                <th class="r" style="border-left:2px solid var(--gray2)">Meta</th><th class="r">Vtas</th><th class="r">Cumpl.</th>
-                <th class="r" style="border-left:2px solid var(--gray2)">Meta</th><th class="r">Vtas</th><th class="r">Cumpl.</th>
+                <th class="r" style="border-left:2px solid var(--gray2)">Venta</th><th class="r">Meta</th><th class="r">Cumplimiento</th>
+                <th class="r" style="border-left:2px solid var(--gray2)">Venta</th><th class="r">Meta</th><th class="r">Cumplimiento</th>
+                <th class="r" style="border-left:2px solid var(--gray2)">Venta</th><th class="r">Meta</th><th class="r">Cumplimiento</th>
               </tr>
             </thead>
             <tbody>
@@ -206,27 +206,27 @@ function renderVentas() {
                 <tr>
                   <td><strong>${m}</strong></td>
                   <td class="r">${DATA.asesores[i]}</td>
-                  <td class="r" style="border-left:2px solid var(--gray2)">${fmt(DATA.metaXumaCP[i])}</td>
-                  <td class="r">${fmt(DATA.ventasCP[i])}</td>
+                  <td class="r" style="border-left:2px solid var(--gray2)">${fmt(DATA.ventasCP[i])}</td>
+                  <td class="r">${fmt(DATA.metaXumaCP[i])}</td>
                   <td class="r">${pctBadge(Math.round(DATA.ventasCP[i]/DATA.metaXumaCP[i]*100))}</td>
-                  <td class="r" style="border-left:2px solid var(--gray2)">${fmt(DATA.metaXumaVOL[i])}</td>
-                  <td class="r">${fmt(DATA.ventasVOL[i])}</td>
+                  <td class="r" style="border-left:2px solid var(--gray2)">${fmt(DATA.ventasVOL[i])}</td>
+                  <td class="r">${fmt(DATA.metaXumaVOL[i])}</td>
                   <td class="r">${pctBadge(Math.round(DATA.ventasVOL[i]/DATA.metaXumaVOL[i]*100))}</td>
-                  <td class="r" style="border-left:2px solid var(--gray2)">${fmt(DATA.metaXuma[i])}</td>
-                  <td class="r">${fmt(DATA.ventasCP[i]+DATA.ventasVOL[i])}</td>
+                  <td class="r" style="border-left:2px solid var(--gray2)">${fmt(DATA.ventasCP[i]+DATA.ventasVOL[i])}</td>
+                  <td class="r">${fmt(DATA.metaXuma[i])}</td>
                   <td class="r">${pctBadge(Math.round((DATA.ventasCP[i]+DATA.ventasVOL[i])/DATA.metaXuma[i]*100))}</td>
                 </tr>`).join('')}
               <tr class="total">
                 <td>Total</td>
                 <td class="r">${Math.round(DATA.asesores.reduce((a,b)=>a+b,0)/DATA.asesores.length)}</td>
-                <td class="r" style="border-left:2px solid var(--gray2)">${fmt(DATA.metaXumaCP.reduce((a,b)=>a+b,0))}</td>
-                <td class="r">${fmt(DATA.ventasCP.reduce((a,b)=>a+b,0))}</td>
+                <td class="r" style="border-left:2px solid var(--gray2)">${fmt(DATA.ventasCP.reduce((a,b)=>a+b,0))}</td>
+                <td class="r">${fmt(DATA.metaXumaCP.reduce((a,b)=>a+b,0))}</td>
                 <td class="r">${pctBadge(Math.round(DATA.ventasCP.reduce((a,b)=>a+b,0)/DATA.metaXumaCP.reduce((a,b)=>a+b,0)*100))}</td>
-                <td class="r" style="border-left:2px solid var(--gray2)">${fmt(DATA.metaXumaVOL.reduce((a,b)=>a+b,0))}</td>
-                <td class="r">${fmt(DATA.ventasVOL.reduce((a,b)=>a+b,0))}</td>
+                <td class="r" style="border-left:2px solid var(--gray2)">${fmt(DATA.ventasVOL.reduce((a,b)=>a+b,0))}</td>
+                <td class="r">${fmt(DATA.metaXumaVOL.reduce((a,b)=>a+b,0))}</td>
                 <td class="r">${pctBadge(Math.round(DATA.ventasVOL.reduce((a,b)=>a+b,0)/DATA.metaXumaVOL.reduce((a,b)=>a+b,0)*100))}</td>
-                <td class="r" style="border-left:2px solid var(--gray2)">${fmt(totalMetaXuma)}</td>
-                <td class="r">${fmt(totalLiq)}</td>
+                <td class="r" style="border-left:2px solid var(--gray2)">${fmt(totalLiq)}</td>
+                <td class="r">${fmt(totalMetaXuma)}</td>
                 <td class="r">${pctBadge(Math.round(totalLiq/totalMetaXuma*100))}</td>
               </tr>
             </tbody>
@@ -303,8 +303,10 @@ function vtasRenderChart(tab) {
   const totalMetaVOL = metaVOL.reduce((a,b)=>a+b,0);
   const cumplCP  = Math.round(totalCP  / totalMetaCP  * 100);
   const cumplVOL = Math.round(totalVOL / totalMetaVOL * 100);
-  const mejor = cumplCP >= cumplVOL ? 'Cuota Protegida' : 'Combo Vida';
-  const mejorPct = Math.max(cumplCP, cumplVOL);
+  const totalVentas = totalCP + totalVOL;
+  const totalMetaGen = totalMetaCP + totalMetaVOL;
+  const cumplGen = Math.round(totalVentas / totalMetaGen * 100);
+  const mesesSobreMeta = DATA.meses.filter((_,i) => (cp[i]+vol[i]) >= (metaCP[i]+metaVOL[i])).length;
 
   area.innerHTML = `
     <div class="two-col" style="gap:12px">
@@ -319,7 +321,7 @@ function vtasRenderChart(tab) {
     </div>
     <div class="alert alert-info" style="margin-top:6px; padding:6px 14px">
       <span class="ico">${icon('trophy')}</span>
-      <span style="font-size:.72rem"><strong>${tab === 'vanti' ? 'Vanti' : 'Xuma'}:</strong> <strong>${fmt(totalCP)}</strong> pólizas de Cuota Protegida (${cumplCP} % de meta) y <strong>${fmt(totalVOL)}</strong> de Combo Vida (${cumplVOL} % de meta) — ${mejor} lidera el cumplimiento con ${mejorPct} %.</span>
+      <span style="font-size:.72rem"><strong>${tab === 'vanti' ? 'Vanti' : 'Xuma'}:</strong> <strong>${fmt(totalVentas)} pólizas vendidas</strong> en el semestre — <strong>${cumplGen} %</strong> de la meta general${mesesSobreMeta === 6 ? ', cumpliendo los 6 meses' : mesesSobreMeta >= 3 ? `, con ${mesesSobreMeta} de 6 meses sobre la meta` : ''}. Cuota Protegida aportó ${fmt(totalCP)} (${cumplCP} %) y Combo Vida ${fmt(totalVOL)} (${cumplVOL} %).</span>
     </div>`;
 }
 
