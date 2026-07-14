@@ -527,7 +527,7 @@ function renderCobertura() {
             </tbody>
           </table>
         </div>
-        <div style="font-size:.6rem; color:var(--gray3); margin-top:5px">* Universo = PDV físicos distintos observados en los 26 cortes semanales "Como vamos" del semestre (no hay maestro de puntos entregado; a validar con Daniela). Coberturas &gt;100 % indican PDV que Formación visitó con nombre distinto al registrado en Como vamos ese corte, o puntos sin gestión comercial activa ese mes.</div>
+        <div style="font-size:.6rem; color:var(--gray3); margin-top:5px">* Universo = PDV físicos distintos observados en los 26 cortes semanales "Como vamos" del semestre. Coberturas &gt;100 % indican PDV que Formación visitó con nombre distinto al registrado en Como vamos ese corte, o puntos sin gestión comercial activa ese mes.</div>
       </div>
     </div>
 
