@@ -72,7 +72,7 @@
     /* ── Equipo ──────────────────────────────────────────────── */
     .section-tag {
       font-size: .58rem; font-weight: 800; letter-spacing: .2em; text-transform: uppercase;
-      color: var(--green); margin: 20px 0 3px; text-align: center;
+      color: var(--green); margin: 20px 0 14px; text-align: center;
     }
     .section-title { font-size: .92rem; font-weight: 700; text-align: center; margin-bottom: 6px; color: rgba(255,255,255,.85); }
 
@@ -82,6 +82,12 @@
     }
     .teamline strong { color: var(--green); font-style: normal; }
     .team { display: flex; gap: 9px; justify-content: center; }
+    .quote {
+      font-size: .68rem; font-style: italic; color: rgba(255,255,255,.75);
+      text-align: center; max-width: 460px; line-height: 1.35; margin: 10px auto 0;
+      padding-top: 8px; border-top: 1px solid rgba(255,255,255,.1);
+    }
+    .quote span { display: inline-block; margin-left: 6px; font-style: normal; font-size: .6rem; font-weight: 700; color: var(--green); letter-spacing: .04em; }
     .person {
       width: 134px; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.12);
       border-radius: 13px; padding: 10px 6px; text-align: center;
@@ -131,7 +137,7 @@
 
   <div class="cards">
     <a class="card fade-in" style="animation-delay:.2s" href="televentas/index.html">
-      <span class="ico">📞</span>
+      <span class="ico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384" /></svg></span>
       <span class="badge">Completado · data 1S integrada</span>
       <h2>Televentas</h2>
       <div class="stats">
@@ -144,7 +150,7 @@
     </a>
 
     <a class="card fade-in" style="animation-delay:.28s" href="retail/index.html">
-      <span class="ico">🏬</span>
+      <span class="ico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M10 12h4" /><path d="M10 8h4" /><path d="M14 21v-3a2 2 0 0 0-4 0v3" /><path d="M6 10H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2" /><path d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16" /></svg></span>
       <span class="badge">Completado · data 1S integrada</span>
       <h2>Retail</h2>
       <div class="stats">
@@ -157,7 +163,7 @@
     </a>
 
     <a class="card fade-in" style="animation-delay:.36s" href="tradicional/index.html">
-      <span class="ico">🏪</span>
+      <span class="ico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M15 21v-5a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v5" /><path d="M17.774 10.31a1.12 1.12 0 0 0-1.549 0 2.5 2.5 0 0 1-3.451 0 1.12 1.12 0 0 0-1.548 0 2.5 2.5 0 0 1-3.452 0 1.12 1.12 0 0 0-1.549 0 2.5 2.5 0 0 1-3.77-3.248l2.889-4.184A2 2 0 0 1 7 2h10a2 2 0 0 1 1.653.873l2.895 4.192a2.5 2.5 0 0 1-3.774 3.244" /><path d="M4 10.95V19a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8.05" /></svg></span>
       <span class="badge">Completado · data 1S integrada</span>
       <h2>Tradicional</h2>
       <div class="stats">
@@ -168,11 +174,22 @@
       <p>Visitas por municipio, cobertura de formación (cédula: financiaron vs. capacitados) y ventas 1S.</p>
       <span class="cta">Abrir informe →</span>
     </a>
+
+    <a class="card fade-in" style="animation-delay:.44s" href="innovacion/index.html">
+      <span class="ico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5" /><path d="M9 18h6" /><path d="M10 22h4" /></svg></span>
+      <span class="badge">Nuevo · proyectos técnicos</span>
+      <h2>Innovación</h2>
+      <div class="stats">
+        <div class="stat"><div class="n" id="stat-in-proyectos">13</div><div class="l">Proyectos</div></div>
+        <div class="stat"><div class="n" id="stat-in-produccion">4</div><div class="l">En producción</div></div>
+        <div class="stat"><div class="n">94,5 %</div><div class="l">Efect. geocod.</div></div>
+      </div>
+      <p>Qué se construyó en tecnología en el 1S y qué está en producción o desarrollo para el 2S, transversal a los 3 canales.</p>
+      <span class="cta">Abrir informe →</span>
+    </a>
   </div>
 
   <div class="section-tag fade-in">El equipo detrás del informe</div>
-  <h2 class="section-title fade-in">Construido con datos de todo el canal</h2>
-  <p class="teamline fade-in">Un equipo, distintos canales: <strong>trabajo en conjunto</strong>, <strong>creatividad</strong> para resolver y <strong>mejora continua</strong> en cada corte.</p>
 
   <div class="team">
     <div class="person lead fade-in" style="animation-delay:.05s">
@@ -182,15 +199,15 @@
       <div class="person-chip">Dirección</div>
     </div>
     <div class="person fade-in" style="animation-delay:.1s">
-      <div class="avatar" style="background:linear-gradient(135deg,#120180,#1d02b8)">IA</div>
-      <div class="person-name">Isaac Álvarez</div>
-      <div class="person-role">Data Marshall</div>
-      <div class="person-chip">Televentas</div>
-    </div>
-    <div class="person fade-in" style="animation-delay:.15s">
       <div class="avatar" style="background:linear-gradient(135deg,#120180,#1d02b8)">MC</div>
       <div class="person-name">Martha Carvajal</div>
       <div class="person-role">Coord. Comercial</div>
+      <div class="person-chip">Televentas</div>
+    </div>
+    <div class="person fade-in" style="animation-delay:.15s">
+      <div class="avatar" style="background:linear-gradient(135deg,#120180,#1d02b8)">IA</div>
+      <div class="person-name">Isaac Álvarez</div>
+      <div class="person-role">Data Marshall</div>
       <div class="person-chip">Televentas</div>
     </div>
     <div class="person fade-in" style="animation-delay:.18s">
@@ -219,6 +236,8 @@
     </div>
   </div>
 
+  <p class="quote fade-in">"Los datos son un lenguaje universal para la buena decisión."<span>— Ginni Rometty, IBM</span></p>
+
   <div class="foot fade-in">
     <div class="validated">✓ Datos validados sobre cierres oficiales 1S 2026</div>
     <div class="copy">
@@ -230,9 +249,11 @@
 
 <!-- Data de cada canal (misma fuente que usan sus informes) para calcular
      los números de las tarjetas en vivo, sin duplicarlos a mano. -->
+<script src="core/icons.js"></script>
 <script src="televentas/data_televentas.js"></script>
 <script src="retail/data_retail.js"></script>
 <script src="tradicional/data_tradicional.js"></script>
+<script src="innovacion/data_innovacion.js"></script>
 <script>
   /* ── Números del portal, calculados desde la data real de cada canal ──
      Si algo falla al cargar (ruta movida, etc.) se conservan los valores
@@ -257,6 +278,10 @@
       set('stat-tr-cp', fmt(sumKey(TRADICIONAL_DATA.ventas.cp, 'positivas')));
       set('stat-tr-visitas', fmt(sumKey(TRADICIONAL_DATA.visitas, 'visitas')));
       set('stat-tr-rs', fmt(sumKey(TRADICIONAL_DATA.ventas.rs, 'positivas')));
+
+      // Innovación
+      set('stat-in-proyectos', FUNDACION_1S.length + EN_PRODUCCION.length + EN_DESARROLLO.length);
+      set('stat-in-produccion', EN_PRODUCCION.length);
     } catch (e) {
       console.warn('Portal: no se pudieron calcular los números desde la data de cada canal, se muestran los valores de referencia.', e);
     }

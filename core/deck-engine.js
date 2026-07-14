@@ -26,6 +26,20 @@ function scaleSlider() {
     const navClearanceReal = (window.innerHeight - nav.getBoundingClientRect().top) + 24;
     document.documentElement.style.setProperty('--chrome-clearance', (navClearanceReal / s) + 'px');
   }
+
+  // Mismo problema, ahora horizontal: #home-btn está fixed al viewport (no al
+  // lienzo). En pantallas angostas (scaleX es el factor limitante) el borde
+  // izquierdo del lienzo coincide con el borde real de la pantalla, y el botón
+  // tapa el inicio del título del header. Se mide cuánto sobra entre el borde
+  // real del botón y el borde real del lienzo, convertido a px de diseño.
+  const homeBtn = document.getElementById('home-btn');
+  const scalerEl = document.getElementById('scaler');
+  if (homeBtn && scalerEl) {
+    const scalerLeft = scalerEl.getBoundingClientRect().left;
+    const homeRight = homeBtn.getBoundingClientRect().right + 16;
+    const homeClearanceReal = Math.max(0, homeRight - scalerLeft);
+    document.documentElement.style.setProperty('--home-clearance', (homeClearanceReal / s) + 'px');
+  }
 }
 
 /* ── NAVIGATION ─────────────────────────────────────────────── */
@@ -39,9 +53,13 @@ function goTo(idx, immediate = false) {
   if (!immediate && oldSlide !== newSlide) {
     animating = true;
     oldSlide.classList.add('leaving');
-    setTimeout(() => { oldSlide.classList.remove('active', 'leaving'); }, 400);
+    // Sin esto, oldSlide conserva el display:flex inline que le puso goTo() la
+    // vez que fue newSlide — al quitarle solo las clases queda invisible
+    // (opacity:0) pero sigue en el layout, tapando y capturando clics de la
+    // slide que sí se ve. Bug real detectado en revisión de diseño.
+    setTimeout(() => { oldSlide.classList.remove('active', 'leaving'); oldSlide.style.display = 'none'; }, 400);
   } else if (immediate) {
-    slides.forEach(s => s.classList.remove('active', 'entering', 'leaving'));
+    slides.forEach(s => { s.classList.remove('active', 'entering', 'leaving'); s.style.display = 'none'; });
   }
 
   current = idx;
@@ -62,8 +80,9 @@ function goTo(idx, immediate = false) {
     triggerAnimations(idx);
   }
 
-  // Handle Leaflet map resizing when entering Map Slide (idx === 2)
-  if (idx === 2) {
+  // Handle Leaflet map resizing when entering Map Slide (idx === 2).
+  // Guardado: Televentas e Innovación no tienen mapa ni definen initMap().
+  if (idx === 2 && typeof initMap === 'function') {
     initMap();
   }
 }

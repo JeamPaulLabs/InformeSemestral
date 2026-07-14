@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Informe Innovación & Tecnología 2026 · Xuma – Vanti</title>
+  <meta name="description" content="Informe de Innovación y Tecnología: proyectos técnicos transversales a los 3 canales (Televentas, Retail, Tradicional), qué se hizo en el 1S y qué se construyó/planea para el 2S 2026. Xuma / Vanti." />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    #home-btn {
+      position: fixed; top: 12px; left: 20px; z-index: 1001;
+      color: rgba(255,255,255,.65); font-size: .72rem; font-weight: 700;
+      letter-spacing: .08em; text-decoration: none;
+      background: rgba(18,1,128,.6); border: 1px solid rgba(90,226,128,.3);
+      padding: 6px 14px; border-radius: 20px; backdrop-filter: blur(8px);
+      transition: all 0.2s ease;
+    }
+    #home-btn:hover { color: #120180; background: #5AE280; border-color: #5AE280; }
+  </style>
+</head>
+<body>
+
+<a id="home-btn" href="../index.html" title="Volver al portal de canales">⌂ PORTAL</a>
+
+<div id="progress" style="width:0"></div>
+<div id="counter">1 / 7</div>
+<button id="prev-btn" title="Anterior (←)">&#8592;</button>
+<button id="next-btn" title="Siguiente (→)">&#8594;</button>
+
+<div id="app">
+<div id="scaler">
+
+  <!-- ══════════ SLIDE 0 · PORTADA ══════════ -->
+  <div class="slide slide-cover active" data-label="Portada">
+    <img class="cover-logo" src="../assets/logos/Logo_transparente.png" alt="Xuma" />
+    <div class="cover-tag">Informe Ejecutivo · Innovación & Tecnología</div>
+    <h1 class="cover-title">Innovación<br><span>& Tecnología</span><br>2026</h1>
+    <p class="cover-subtitle">
+      Qué se construyó en el primer semestre y qué sigue para el segundo — capa transversal a los <strong style="color:var(--green)">3 canales</strong>
+    </p>
+    <div class="cover-credits">
+      <div class="cover-credit-group">
+        <span class="cover-credit-role">Construcción técnica</span>
+        <span class="cover-credit-name">Jeam Paul Arcón Solano</span>
+      </div>
+      <div class="cover-credit-divider"></div>
+      <div class="cover-credit-group">
+        <span class="cover-credit-role">Contribuyentes</span>
+        <span class="cover-credit-name">Isaac Álvarez <span class="cover-credit-detail">· reglas de negocio, lógica OCM</span></span>
+        <span class="cover-credit-name">Kevin Guzmán <span class="cover-credit-detail">· criterios de auditoría</span></span>
+      </div>
+    </div>
+    <div class="cover-chips">
+      <span class="cover-chip">Ene – Jul 2026</span>
+      <span class="cover-chip">Vanti · Xuma</span>
+      <span class="cover-chip">13 proyectos técnicos</span>
+    </div>
+  </div>
+
+  <!-- ══════════ SLIDE 1 · RESUMEN 1S ══════════ -->
+  <div class="slide slide-content" data-label="Resumen 1S">
+    <div class="s-header">
+      <h2>Resumen Ejecutivo · De la Fundación a la Producción</h2>
+      <span class="s-tag">Innovación · Resumen</span>
+    </div>
+    <div class="s-body" id="resumen-body"></div>
+  </div>
+
+  <!-- ══════════ SLIDE 2 · LÍNEA DE TIEMPO ══════════ -->
+  <div class="slide slide-content" id="slide-timeline" data-label="Línea de Tiempo">
+    <div class="s-header">
+      <h2>Línea de Tiempo · De la Fundación a la Producción</h2>
+      <span class="s-tag">Innovación · Proyectos técnicos</span>
+    </div>
+    <div class="s-body" id="timeline-body"></div>
+  </div>
+
+  <!-- ══════════ SLIDE 3 · DETALLE DE PROYECTOS ══════════ -->
+  <div class="slide slide-content" data-label="Detalle de Proyectos">
+    <div class="s-header">
+      <h2>Detalle de Proyectos · Portafolio Completo (1S + 2S)</h2>
+      <span class="s-tag">Innovación · Ficha técnica</span>
+    </div>
+    <div class="s-body" id="tablero-body"></div>
+  </div>
+
+  <!-- ══════════ SLIDE 4 · TRABAJO CONJUNTO ══════════ -->
+  <div class="slide slide-content" data-label="Trabajo Conjunto">
+    <div class="s-header">
+      <h2>Trabajo Conjunto · Isaac Álvarez y Jeam Paul</h2>
+      <span class="s-tag">Innovación · Equipo</span>
+    </div>
+    <div class="s-body" id="equipo-body"></div>
+  </div>
+
+  <!-- ══════════ SLIDE 5 · PLAN 2S ══════════ -->
+  <div class="slide slide-content" data-label="Plan 2S">
+    <div class="s-header">
+      <h2>Plan y Puntos Abiertos · Segundo Semestre</h2>
+      <span class="s-tag">Innovación · Estrategia</span>
+    </div>
+    <div class="s-body" id="plan-body"></div>
+  </div>
+
+  <!-- ══════════ SLIDE 6 · CIERRE ══════════ -->
+  <div class="slide slide-section bg-teal" data-label="Cierre">
+    <div class="section-label">Cierre del Informe</div>
+    <h2 class="section-title">Innovación como Base del Canal</h2>
+    <div style="margin-top:30px; max-width:780px; background:rgba(0,0,0,.2); border-radius:16px; padding:24px 28px; box-shadow:0 1px 0 rgba(255,255,255,.08) inset">
+      <ul class="check-list" style="gap:12px">
+        <li style="color:#ffffff; font-size:.95rem">12 de 13 proyectos nacieron en el 1S — pero <strong style="color:var(--dark); background:rgba(255,255,255,.92); padding:1px 7px; border-radius:5px">solo OCM Vanti llegó a producción real dentro del propio semestre</strong> (23 Jun); el resto de las automatizaciones de producción se consolidaron ya en julio (2S).</li>
+        <li style="color:#ffffff; font-size:.95rem">3 sistemas corren hoy en producción real dentro del DataCenter (OCM Vanti, AutoReport_Ilio, actiXuma) — más 2 automatizaciones diarias reales que aún operan en local (Depuración activa; autoConciliación validada, en pausa desde el 30 Jun).</li>
+        <li style="color:#ffffff; font-size:.95rem">4 proyectos en desarrollo activo: implementación del DataCenter (ya aloja esos 3 servicios reales), Auditor de Llamadas con IA, notebooKevin y CRM Twenty.</li>
+        <li style="color:#ffffff; font-size:.95rem">Plan 2S: retomar 4 proyectos validados en pausa, cerrar los hallazgos de mayor prioridad (36 de Ilio, 7 fuentes que faltan en el DataCenter), y arrancar las 6 líneas estratégicas que Isaac Álvarez declaró para el canal.</li>
+      </ul>
+    </div>
+    <div style="margin-top:40px">
+      <img src="../assets/logos/Logo_transparente.png" alt="Xuma" style="height:36px; opacity:.7" />
+    </div>
+  </div>
+
+</div><!-- #scaler -->
+</div><!-- #app -->
+
+<div id="nav"></div>
+
+<script src="../core/icons.js"></script>
+<script src="data_innovacion.js"></script>
+<script src="../core/deck-engine.js"></script>
+<script src="app_innovacion.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    renderResumen();
+    renderTimeline();
+    renderTablero();
+    renderEquipo();
+    renderPlan();
+  });
+</script>
+
+</body>
+</html>

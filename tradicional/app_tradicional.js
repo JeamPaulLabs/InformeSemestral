@@ -176,7 +176,7 @@ function renderFormacion() {
 
     <div class="two-col">
       <div class="panel">
-        <h3>📅 Visitas, asesores capacitados y PDV por mes</h3>
+        <h3>${icon('calendar')} Visitas, asesores capacitados y PDV por mes</h3>
         <div class="tbl-wrap" style="margin-top:0">
           <table>
             <thead>
@@ -208,7 +208,7 @@ function renderFormacion() {
       </div>
 
       <div class="panel">
-        <h3>📉 Evolución de visitas por mes</h3>
+        <h3>${icon('trending-down')} Evolución de visitas por mes</h3>
         <div class="chart-wrap" style="margin-top:8px">
           ${TRADICIONAL_DATA.visitas.map(v => {
             const pct = (v.visitas / bestMonth.visitas * 100).toFixed(0) + '%';
@@ -226,7 +226,7 @@ function renderFormacion() {
           }).join('')}
         </div>
         <div class="alert alert-warn" style="margin-top:14px">
-          <span class="ico">⚠️</span>
+          <span class="ico">${icon('alert-triangle')}</span>
           <span>Marzo concentró el esfuerzo (148 visitas, 93 asesores) y desde abril la ejecución cae hasta 43 visitas en junio (-72 %). Causa: reestructuración de rutas y de planta.</span>
         </div>
       </div>
@@ -244,7 +244,7 @@ function renderMapaSlide() {
         <div id="map-container" style="width: 100%; height: 100%"></div>
       </div>
       <div class="panel" style="max-height: 500px; display: flex; flex-direction: column;">
-        <h3 style="margin-top: 0">📍 Visitas de Formación por Zona</h3>
+        <h3 style="margin-top: 0">${icon('map-pin')} Visitas de Formación por Zona</h3>
         <div class="tbl-wrap" style="margin-top: 0; flex-grow: 1; overflow-y: auto;">
           <table>
             <thead>
@@ -264,7 +264,7 @@ function renderMapaSlide() {
           </table>
         </div>
         <div class="alert alert-info" style="margin-top: 12px; margin-bottom: 0;">
-          <span class="ico">📌</span>
+          <span class="ico">${icon('pin')}</span>
           <span>Bogotá Centro, Sur y Occidente agrupan el 62% del total. Tunja, Bucaramanga y Soacha reportan importante despliegue regional.</span>
         </div>
       </div>
@@ -285,33 +285,33 @@ function renderVentasCP() {
   const cumplimiento = totalMeta > 0 ? (totalPositivas / totalMeta * 100) : 0;
 
   el.innerHTML = `
-    <div class="kpi-grid">
-      <div class="kpi-card">
+    <div class="kpi-grid" style="gap:12px">
+      <div class="kpi-card" style="padding:10px 16px">
         <div class="kpi-label">Financiaciones Ene–Jun</div>
         <div class="kpi-val">${fmt(totalFinanciaciones)}</div>
         <div class="kpi-sub">Universo total de oportunidades</div>
       </div>
-      <div class="kpi-card green">
+      <div class="kpi-card green" style="padding:10px 16px">
         <div class="kpi-label">Ventas Positivas 1S</div>
         <div class="kpi-val">${fmt(totalPositivas)}</div>
         <div class="kpi-sub">${fmt(totalCantadas)} cantadas (${(totalCantadas > 0 ? totalPositivas/totalCantadas*100 : 0).toFixed(1)}% efectivas)</div>
       </div>
-      <div class="kpi-card warn">
+      <div class="kpi-card warn" style="padding:10px 16px">
         <div class="kpi-label">% Cumplimiento Meta</div>
         <div class="kpi-val">${cumplimiento.toFixed(1).replace('.', ',')}%</div>
         <div class="kpi-sub">${fmt(totalPositivas)} de ${fmt(totalMeta)} meta total</div>
       </div>
-      <div class="kpi-card">
+      <div class="kpi-card" style="padding:10px 16px">
         <div class="kpi-label">Penetración Canal</div>
         <div class="kpi-val">${penetracion.toFixed(2).replace('.', ',')}%</div>
         <div class="kpi-sub">Total Cantadas / Financiaciones</div>
       </div>
     </div>
 
-    <div class="panel">
-      <h3>🛡️ Evolución mensual Cuota Protegida Tradicional (Como vamos)</h3>
+    <div class="panel" style="padding:12px 16px">
+      <h3 style="margin-bottom:6px; padding-bottom:5px">${icon('shield')} Evolución mensual Cuota Protegida Tradicional (Como vamos)</h3>
       <div class="tbl-wrap" style="margin-top:0">
-        <table>
+        <table class="tbl-compact">
           <thead>
             <tr>
               <th>Mes</th>
@@ -358,8 +358,8 @@ function renderVentasCP() {
           </tbody>
         </table>
       </div>
-      <div class="alert alert-info" style="margin-top:12px; margin-bottom: 0;">
-        <span class="ico">📌</span>
+      <div class="alert alert-info" style="margin-top:8px; margin-bottom: 0; padding:8px 14px">
+        <span class="ico">${icon('pin')}</span>
         <span>El cierre de junio registra un incremento significativo en financiaciones (5.605) y consolidación de 12 aliados activos en el cierre comercial.</span>
       </div>
     </div>
@@ -379,33 +379,33 @@ function renderVentasRS() {
   const cumplimiento = totalMeta > 0 ? (totalPositivas / totalMeta * 100) : 0;
 
   el.innerHTML = `
-    <div class="kpi-grid">
-      <div class="kpi-card">
+    <div class="kpi-grid" style="gap:12px">
+      <div class="kpi-card" style="padding:10px 16px">
         <div class="kpi-label">Financiaciones Ene–Jun</div>
         <div class="kpi-val">${fmt(totalFinanciaciones)}</div>
         <div class="kpi-sub">Universo total de oportunidades</div>
       </div>
-      <div class="kpi-card green">
+      <div class="kpi-card green" style="padding:10px 16px">
         <div class="kpi-label">Ventas Positivas 1S</div>
         <div class="kpi-val">${fmt(totalPositivas)}</div>
         <div class="kpi-sub">${fmt(totalCantadas)} cantadas (${(totalCantadas > 0 ? totalPositivas/totalCantadas*100 : 0).toFixed(1)}% efectivas)</div>
       </div>
-      <div class="kpi-card warn">
+      <div class="kpi-card warn" style="padding:10px 16px">
         <div class="kpi-label">% Cumplimiento Meta</div>
         <div class="kpi-val">${totalMeta > 0 ? cumplimiento.toFixed(1).replace('.', ',') + '%' : 'S/D'}</div>
         <div class="kpi-sub">${fmt(totalPositivas)} de ${fmt(totalMeta)} meta total</div>
       </div>
-      <div class="kpi-card">
+      <div class="kpi-card" style="padding:10px 16px">
         <div class="kpi-label">Penetración RS</div>
         <div class="kpi-val">${penetracion.toFixed(2).replace('.', ',')}%</div>
         <div class="kpi-sub">Total Cantadas / Financiaciones</div>
       </div>
     </div>
 
-    <div class="panel">
-      <h3>🛵 Evolución mensual Rueda Seguro Tradicional (Como vamos)</h3>
+    <div class="panel" style="padding:12px 16px">
+      <h3 style="margin-bottom:6px; padding-bottom:5px">${icon('bike')} Evolución mensual Rueda Seguro Tradicional (Como vamos)</h3>
       <div class="tbl-wrap" style="margin-top:0">
-        <table>
+        <table class="tbl-compact">
           <thead>
             <tr>
               <th>Mes</th>
@@ -447,8 +447,8 @@ function renderVentasRS() {
           </tbody>
         </table>
       </div>
-      <div class="alert alert-info" style="margin-top:12px; margin-bottom: 0;">
-        <span class="ico">📌</span>
+      <div class="alert alert-info" style="margin-top:8px; margin-bottom: 0; padding:8px 14px">
+        <span class="ico">${icon('pin')}</span>
         <span>Junio muestra un repunte significativo de las financiaciones tradicionales de motocicletas (1.395) con 25 aliados activos.</span>
       </div>
     </div>
@@ -461,13 +461,13 @@ function renderCobertura() {
 
   el.innerHTML = `
     <div class="two-col" style="grid-template-columns: 1.15fr 1fr; gap: 15px;">
-      <div class="panel">
-        <h3>🏪 Cobertura de Formación por Aliado (Ene-Jun 2026)</h3>
-        <p style="font-size: .68rem; color: var(--gray3); margin-top: -6px; margin-bottom: 8px;">
+      <div class="panel" style="padding:12px 16px">
+        <h3 style="margin-bottom:5px; padding-bottom:4px">${icon('store')} Cobertura de Formación por Aliado (Ene-Jun 2026)</h3>
+        <p style="font-size: .66rem; color: var(--gray3); margin-top: -3px; margin-bottom: 6px;">
           Adesores que financiaron en conciliaciones vs capacitados (cruzados por cédula).
         </p>
-        <div class="tbl-wrap" style="margin-top:0; max-height: 480px; overflow-y: auto;">
-          <table style="font-size: 0.68rem;">
+        <div class="tbl-wrap" style="margin-top:0; max-height: 440px; overflow-y: auto;">
+          <table class="tbl-compact" style="font-size: 0.68rem;">
             <thead>
               <tr>
                 <th>Aliado</th>
@@ -496,11 +496,11 @@ function renderCobertura() {
         </div>
       </div>
 
-      <div class="panel" style="display: flex; flex-direction: column; justify-content: space-between;">
+      <div class="panel" style="display: flex; flex-direction: column; justify-content: space-between; padding:12px 16px">
         <div>
-          <h3>📅 Cobertura de Formación por Mes (Semestre)</h3>
+          <h3 style="margin-bottom:5px; padding-bottom:4px">${icon('calendar')} Cobertura de Formación por Mes (Semestre)</h3>
           <div class="tbl-wrap" style="margin-top:0">
-            <table style="font-size: 0.74rem;">
+            <table class="tbl-compact" style="font-size: 0.7rem;">
               <thead>
                 <tr>
                   <th>Mes</th>
@@ -528,8 +528,8 @@ function renderCobertura() {
           </div>
         </div>
         
-        <div class="alert alert-warn" style="margin-top:12px; margin-bottom: 0;">
-          <span class="ico">⚖️</span>
+        <div class="alert alert-warn" style="margin-top:8px; margin-bottom: 0; padding:8px 14px">
+          <span class="ico">${icon('scale')}</span>
           <span><strong>Regla de Cobertura de Orlando:</strong> Cruce por documento del asesor en conciliaciones contra visitas del mes. Se identifica una cobertura agregada promedio del canal de <strong>7,5%</strong>, con espacio de mejora prioritario en los aliados con baja tasa de cruce.</span>
         </div>
       </div>

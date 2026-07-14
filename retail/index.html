@@ -1,220 +1,302 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Informe Canal Retail 2026 · Xuma</title>
-  <meta name="description" content="Informe ejecutivo Canal Retail 1S 2026: visitas de formación, ventas, cobertura de PDV y estrategia de formación 2S." />
-  
-  <!-- Leaflet CSS -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
-  
+  <meta name="description"
+    content="Informe ejecutivo Canal Retail 1S 2026: visitas de formación, ventas, cobertura de PDV y estrategia de formación 2S." />
+
+  <!-- Leaflet CSS (vendorizado en dash/core/leaflet — sitio autocontenido, sin CDN) -->
+  <link rel="stylesheet" href="../core/leaflet/leaflet.css" />
+
   <link rel="stylesheet" href="styles.css" />
   <style>
     #home-btn {
-      position: fixed; top: 12px; left: 20px; z-index: 1001;
-      color: rgba(255,255,255,.65); font-size: .72rem; font-weight: 700;
-      letter-spacing: .08em; text-decoration: none;
-      background: rgba(18,1,128,.6); border: 1px solid rgba(90,226,128,.3);
-      padding: 6px 14px; border-radius: 20px; backdrop-filter: blur(8px);
+      position: fixed;
+      top: 12px;
+      left: 20px;
+      z-index: 1001;
+      color: rgba(255, 255, 255, .65);
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-decoration: none;
+      background: rgba(18, 1, 128, .6);
+      border: 1px solid rgba(90, 226, 128, .3);
+      padding: 6px 14px;
+      border-radius: 20px;
+      backdrop-filter: blur(8px);
       transition: all 0.2s ease;
     }
-    #home-btn:hover { color: #120180; background: #5AE280; border-color: #5AE280; }
-    
+
+    #home-btn:hover {
+      color: #120180;
+      background: #5AE280;
+      border-color: #5AE280;
+    }
+
     /* Premium Dark themed Leaflet Popups */
     .custom-popup .leaflet-popup-content-wrapper {
       background: rgba(18, 1, 128, 0.95) !important;
       color: #ffffff !important;
       border: 1px solid #5AE280 !important;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.5) !important;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5) !important;
       border-radius: 8px !important;
       padding: 4px 8px !important;
     }
+
     .custom-popup .leaflet-popup-tip {
       background: rgba(18, 1, 128, 0.95) !important;
       border: 1px solid #5AE280 !important;
     }
+
     .custom-popup .leaflet-popup-close-button {
-      color: rgba(255,255,255,0.7) !important;
+      color: rgba(255, 255, 255, 0.7) !important;
     }
   </style>
 </head>
+
 <body>
 
-<a id="home-btn" href="../index.html" title="Volver al portal de canales">⌂ PORTAL</a>
-<div id="progress" style="width:0"></div>
-<div id="counter">1 / 7</div>
-<button id="prev-btn" title="Anterior (←)">&#8592;</button>
-<button id="next-btn" title="Siguiente (→)">&#8594;</button>
+  <a id="home-btn" href="../index.html" title="Volver al portal de canales">⌂ PORTAL</a>
+  <div id="progress" style="width:0"></div>
+  <div id="counter">1 / 7</div>
+  <button id="prev-btn" title="Anterior (←)">&#8592;</button>
+  <button id="next-btn" title="Siguiente (→)">&#8594;</button>
 
-<div id="app">
-<div id="scaler">
+  <div id="app">
+    <div id="scaler">
 
-  <!-- ══════════ SLIDE 0 · PORTADA ══════════ -->
-  <div class="slide slide-cover active" data-label="Portada">
-    <img class="cover-logo" src="../assets/logos/Logo_transparente.png" alt="Xuma" />
-    <div class="cover-tag">Informe Ejecutivo · Canal Retail</div>
-    <h1 class="cover-title">Canal<br><span>Retail</span><br>2026</h1>
-    <p class="cover-subtitle">
-      Ejecución de visitas de formación · Ventas y cobertura de puntos de venta<br>
-      Estrategia de Formación para el segundo semestre
-    </p>
-    <div class="cover-chips">
-      <span class="cover-chip">Ene – Jun 2026</span>
-      <span class="cover-chip">Éxito · Alkosto · Cencosud</span>
-      <span class="cover-chip">Cuota Protegida · Rueda Seguro</span>
-    </div>
-    <div class="cover-vanti">Presentado por Xuma · Para Orlando</div>
-  </div>
-
-  <!-- ══════════ SLIDE 1 · VISITAS DE FORMACIÓN ══════════ -->
-  <div class="slide slide-content" data-label="Formación">
-    <div class="s-header">
-      <h2>Ejecución de Visitas de Formación · 1S 2026</h2>
-      <span class="s-tag">Retail · Formación</span>
-    </div>
-    <div class="s-body" id="formacion-body">
-      <!-- Renderizado dinámico -->
-    </div>
-  </div>
-
-  <!-- ══════════ SLIDE 2 · MAPA GEOGRÁFICO ══════════ -->
-  <div class="slide slide-content" data-label="Geografía">
-    <div class="s-header">
-      <h2>Distribución Geográfica de Visitas · 1S 2026</h2>
-      <span class="s-tag">Retail · Cobertura</span>
-    </div>
-    <div class="s-body" id="mapa-body">
-      <!-- Renderizado dinámico -->
-    </div>
-  </div>
-
-  <!-- ══════════ SLIDE 3 · VENTAS ══════════ -->
-  <div class="slide slide-content" data-label="Ventas">
-    <div class="s-header">
-      <h2>Ventas del Canal · Cuota Protegida y Rueda Seguro</h2>
-      <span class="s-tag">Retail · Resultados</span>
-    </div>
-    <div class="s-body" id="ventas-body">
-      <!-- Renderizado dinámico -->
-    </div>
-  </div>
-
-  <!-- ══════════ SLIDE 4 · COBERTURA PDV ══════════ -->
-  <div class="slide slide-content" data-label="Cobertura">
-    <div class="s-header">
-      <h2>Cobertura de Puntos de Venta (PDV)</h2>
-      <span class="s-tag">Retail · Cobertura</span>
-    </div>
-    <div class="s-body" id="cobertura-body">
-      <!-- Renderizado dinámico -->
-    </div>
-  </div>
-
-  <!-- ══════════ SLIDE 5 · ESTRATEGIA 2S ══════════ -->
-  <div class="slide slide-content" data-label="Estrategia 2S">
-    <div class="s-header">
-      <h2>Estrategia de Formación · Segundo Semestre 2026</h2>
-      <span class="s-tag">Retail · Estrategia</span>
-    </div>
-    <div class="s-body">
-      <div class="panel">
-        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px">
-          <h3 style="margin:0; border:none; padding:0">🎯 Estrategia según Daniela Saldarriaga, Formadora Retail</h3>
-          <div class="strategy-tabs">
-            <button class="strategy-tab active" data-tab="dobj" onclick="deckTab('dobj')">🎯 Objetivo</button>
-            <button class="strategy-tab" data-tab="dcron" onclick="deckTab('dcron')">📅 Cronograma</button>
-            <button class="strategy-tab" data-tab="dkpi" onclick="deckTab('dkpi')">📈 KPIs</button>
-            <button class="strategy-tab" data-tab="dorg" onclick="deckTab('dorg')">👥 Organigrama</button>
-          </div>
+      <!-- ══════════ SLIDE 0 · PORTADA ══════════ -->
+      <div class="slide slide-cover active" data-label="Portada">
+        <img class="cover-logo" src="../assets/logos/Logo_transparente.png" alt="Xuma" />
+        <div class="cover-tag">Informe Ejecutivo · Canal Retail</div>
+        <h1 class="cover-title">Canal<br><span>Retail</span><br>2026</h1>
+        <p class="cover-subtitle">
+          Ejecución de visitas de formación · Ventas y cobertura de puntos de venta<br>
+          Estrategia de Formación para el segundo semestre
+        </p>
+        <div class="cover-chips">
+          <span class="cover-chip">Ene – Jun 2026</span>
+          <span class="cover-chip">Éxito · Alkosto · Cencosud</span>
+          <span class="cover-chip">Cuota Protegida · Rueda Seguro</span>
         </div>
+        <div class="cover-vanti">Presentado por Xuma · Para Orlando</div>
+      </div>
 
-        <!-- TAB: Objetivo e iniciativas -->
-        <div class="strategy-pane active" id="pane-dobj">
-          <div class="alert alert-info" style="margin-bottom:10px">
-            <span class="ico">🎯</span>
-            <span><strong>Objetivo general 2S:</strong> Explotar el brochure y los portafolios de capacitación segmentando por gestor, dando seguimiento a su mantenimiento y crecimiento; incrementar el nivel de visitas y fortalecer el relacionamiento en Retail y Tradicional para crecer las ventas de seguros.</span>
-          </div>
-          <div style="display:flex; flex-direction:column; gap:6px">
-            <div class="ini-card" style="cursor:default"><div class="ini-head"><span class="ini-ico" style="background:rgba(0,205,147,.12); color:var(--teal)">📘</span><div class="ini-title" style="font-size:.78rem">Explotar brochure y portafolios de capacitación segmentando por gestor</div></div></div>
-            <div class="ini-card" style="cursor:default"><div class="ini-head"><span class="ini-ico" style="background:rgba(0,205,147,.12); color:var(--teal)">🤝</span><div class="ini-title" style="font-size:.78rem">Incrementar visitas y fortalecer relacionamiento en Retail y Tradicional para crecer ventas de seguros</div></div></div>
-            <div class="ini-card" style="cursor:default"><div class="ini-head"><span class="ini-ico" style="background:rgba(0,205,147,.12); color:var(--teal)">🎁</span><div class="ini-title" style="font-size:.78rem">Capacitaciones con incentivo inmediato en punto de venta</div></div></div>
-            <div class="ini-card" style="cursor:default"><div class="ini-head"><span class="ini-ico" style="background:rgba(0,205,147,.12); color:var(--teal)">⚡</span><div class="ini-title" style="font-size:.78rem">Cambiar la evaluación mensual por evaluación inmediata, justo después de la formación</div></div></div>
-          </div>
+      <!-- ══════════ SLIDE 1 · VISITAS DE FORMACIÓN ══════════ -->
+      <div class="slide slide-content" data-label="Formación">
+        <div class="s-header">
+          <h2>Ejecución de Visitas de Formación · 1S 2026</h2>
+          <span class="s-tag">Retail · Formación</span>
         </div>
-
-        <!-- TAB: Cronograma -->
-        <div class="strategy-pane" id="pane-dcron">
-          <div class="alert alert-warn" style="margin-bottom:0">
-            <span class="ico">📋</span>
-            <span><strong>Sin dato — pendiente.</strong> Daniela no entregó un cronograma mes a mes para el 2S; queda por definir junto con Orlando y Erika, en línea con la reestructuración de zonas realizada en mayo-junio.</span>
-          </div>
-        </div>
-
-        <!-- TAB: KPIs -->
-        <div class="strategy-pane" id="pane-dkpi">
-          <div class="alert alert-warn" style="margin-bottom:0">
-            <span class="ico">📋</span>
-            <span><strong>Sin dato — pendiente.</strong> Daniela no propuso indicadores numéricos para el 2S. Sí pidió que el "cómo vamos" de ventas y presupuesto se automatice en tiempo real (ver Apoyos que necesita de Orlando).</span>
-          </div>
-        </div>
-
-        <!-- TAB: Organigrama -->
-        <div class="strategy-pane" id="pane-dorg">
-          <p style="font-size:.8rem; line-height:1.6; color:var(--dark)">Tras la reestructuración de mayo-junio, Daniela y Erika comparten metas y realizaron empalmes y visitas conjuntas. Distribución territorial acordada:</p>
-          <div style="display:flex; flex-direction:column; gap:6px; margin-top:8px">
-            <div class="ini-card" style="cursor:default"><div class="ini-head"><span class="ini-ico" style="background:rgba(0,205,147,.12); color:var(--teal)">🏙️</span><div class="ini-title" style="font-size:.78rem">Bogotá Vanti (Tradicional y Retail): compartido entre Daniela Saldarriaga y Erika Zambrano</div></div></div>
-            <div class="ini-card" style="cursor:default"><div class="ini-head"><span class="ini-ico" style="background:rgba(0,205,147,.12); color:var(--teal)">📍</span><div class="ini-title" style="font-size:.78rem">Filial GOR y Gas Nacer: Daniela Saldarriaga</div></div></div>
-            <div class="ini-card" style="cursor:default"><div class="ini-head"><span class="ini-ico" style="background:rgba(0,205,147,.12); color:var(--teal)">📍</span><div class="ini-title" style="font-size:.78rem">Filial Cundiboyacá: Erika Zambrano</div></div></div>
-          </div>
-          <div style="font-size:.62rem; color:var(--gray3); margin-top:8px">Pendiente de Daniela: solicitar a Erika Zambrano el archivo de distribución real por aliado y canal.</div>
+        <div class="s-body" id="formacion-body">
+          <!-- Renderizado dinámico -->
         </div>
       </div>
 
-      <div class="two-col" style="margin-top:12px">
-        <div class="panel">
-          <div class="asesores-section-label" style="color:var(--warn)">⚠️ Qué dificulta hoy la formación (Daniela)</div>
-          <p style="font-size:.76rem; line-height:1.5">La reestructuración de zonas y canales entre mayo y junio explica la caída de visitas de ese período. En el diagnóstico, propone reemplazar la evaluación mensual por una evaluación inmediata, justo después de cada formación.</p>
+      <!-- ══════════ SLIDE 2 · MAPA GEOGRÁFICO ══════════ -->
+      <div class="slide slide-content" data-label="Geografía">
+        <div class="s-header">
+          <h2>Distribución Geográfica de Visitas · 1S 2026</h2>
+          <span class="s-tag">Retail · Cobertura</span>
         </div>
-        <div class="panel">
-          <div class="asesores-section-label" style="color:var(--teal)">🤝 Apoyos que necesita de Orlando</div>
-          <p style="font-size:.76rem; line-height:1.5">Un "cómo vamos" automatizado en tiempo real para ventas y presupuesto propio, más material POP y presupuesto para motivar a los gestores con incentivos inmediatos durante las capacitaciones.</p>
+        <div class="s-body" id="mapa-body">
+          <!-- Renderizado dinámico -->
         </div>
       </div>
-    </div>
-  </div>
 
-  <!-- ══════════ SLIDE 6 · CIERRE ══════════ -->
-  <div class="slide slide-section bg-blue" data-label="Cierre">
-    <div class="section-label">Cierre del Informe</div>
-    <h2 class="section-title">Hitos Alcanzados y Siguientes Pasos</h2>
-    <div style="margin-top:30px; max-width:760px">
-      <ul class="check-list" style="gap:12px">
-        <li style="color:rgba(255,255,255,.85); font-size:.95rem">Integración total de datos reales de cierres para <strong>Mayo y Junio de 2026</strong>.</li>
-        <li style="color:rgba(255,255,255,.85); font-size:.95rem">Consolidación del mapa de distribución geográfica con 373 visitas localizadas.</li>
-        <li style="color:rgba(255,255,255,.85); font-size:.95rem">Cruce de planta Serdán (26 cortes) vs. asesores capacitados: cobertura mensual calculada (48 % → 27 %).</li>
-        <li style="color:rgba(255,255,255,.85); font-size:.95rem">Estrategia 2S recibida de Daniela Saldarriaga: objetivo, iniciativas y organigrama por zonas.</li>
-        <li style="color:rgba(255,255,255,.85); font-size:.95rem">Pendiente: acordar con Orlando y Daniela el cronograma y los indicadores numéricos del 2S.</li>
-      </ul>
-    </div>
-    <div style="margin-top:40px">
-      <img src="../assets/logos/Logo_transparente.png" alt="Xuma" style="height:36px; opacity:.6" />
-    </div>
-  </div>
+      <!-- ══════════ SLIDE 3 · VENTAS ══════════ -->
+      <div class="slide slide-content" data-label="Ventas">
+        <div class="s-header">
+          <h2>Ventas del Canal · Cuota Protegida y Rueda Seguro</h2>
+          <span class="s-tag">Retail · Resultados</span>
+        </div>
+        <div class="s-body" id="ventas-body">
+          <!-- Renderizado dinámico -->
+        </div>
+      </div>
 
-</div><!-- #scaler -->
-</div><!-- #app -->
+      <!-- ══════════ SLIDE 4 · COBERTURA PDV ══════════ -->
+      <div class="slide slide-content" data-label="Cobertura">
+        <div class="s-header">
+          <h2>Cobertura de Puntos de Venta (PDV)</h2>
+          <span class="s-tag">Retail · Cobertura</span>
+        </div>
+        <div class="s-body" id="cobertura-body">
+          <!-- Renderizado dinámico -->
+        </div>
+      </div>
 
-<div id="nav"></div>
+      <!-- ══════════ SLIDE 5 · ESTRATEGIA 2S ══════════ -->
+      <div class="slide slide-content" data-label="Estrategia 2S">
+        <div class="s-header">
+          <h2>Estrategia de Formación · Segundo Semestre 2026</h2>
+          <span class="s-tag">Retail · Estrategia</span>
+        </div>
+        <div class="s-body">
+          <div class="panel">
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px">
+              <h3 style="margin:0; border:none; padding:0"><svg class="lucide-ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px"><circle cx="12" cy="12" r="10" /><circle cx="12" cy="12" r="6" /><circle cx="12" cy="12" r="2" /></svg> Estrategia según Daniela Saldarriaga, Formadora Retail
+              </h3>
+              <div class="strategy-tabs">
+                <button class="strategy-tab active" data-tab="dobj" onclick="deckTab('dobj')"><svg class="lucide-ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><circle cx="12" cy="12" r="10" /><circle cx="12" cy="12" r="6" /><circle cx="12" cy="12" r="2" /></svg> Objetivo</button>
+                <button class="strategy-tab" data-tab="dcron" onclick="deckTab('dcron')"><svg class="lucide-ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M8 2v4" /><path d="M16 2v4" /><rect width="18" height="18" x="3" y="4" rx="2" /><path d="M3 10h18" /></svg> Cronograma</button>
+                <button class="strategy-tab" data-tab="dkpi" onclick="deckTab('dkpi')"><svg class="lucide-ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M16 7h6v6" /><path d="m22 7-8.5 8.5-5-5L2 17" /></svg> KPIs</button>
+                <button class="strategy-tab" data-tab="dorg" onclick="deckTab('dorg')"><svg class="lucide-ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><path d="M16 3.128a4 4 0 0 1 0 7.744" /><path d="M22 21v-2a4 4 0 0 0-3-3.87" /><circle cx="9" cy="7" r="4" /></svg> Organigrama</button>
+              </div>
+            </div>
 
-<!-- Leaflet JS -->
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+            <!-- TAB: Objetivo e iniciativas -->
+            <div class="strategy-pane active" id="pane-dobj">
+              <div class="alert alert-info" style="margin-bottom:10px">
+                <span class="ico"><svg class="lucide-ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /><circle cx="12" cy="12" r="6" /><circle cx="12" cy="12" r="2" /></svg></span>
+                <span><strong>Objetivo general 2S:</strong> Explotar el brochure y los portafolios de capacitación
+                  segmentando por gestor, dando seguimiento a su mantenimiento y crecimiento; incrementar el nivel de
+                  visitas y fortalecer el relacionamiento en Retail y Tradicional para crecer las ventas de
+                  seguros.</span>
+              </div>
+              <div style="display:flex; flex-direction:column; gap:6px">
+                <div class="ini-card" style="cursor:default">
+                  <div class="ini-head"><span class="ini-ico"
+                      style="background:rgba(0,205,147,.12); color:var(--teal)"><svg class="lucide-ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20" /></svg></span>
+                    <div class="ini-title" style="font-size:.78rem">Explotar brochure y portafolios de capacitación
+                      segmentando por gestor</div>
+                  </div>
+                </div>
+                <div class="ini-card" style="cursor:default">
+                  <div class="ini-head"><span class="ini-ico"
+                      style="background:rgba(0,205,147,.12); color:var(--teal)"><svg class="lucide-ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m11 17 2 2a1 1 0 1 0 3-3" /><path d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4" /><path d="m21 3 1 11h-2" /><path d="M3 3 2 14l6.5 6.5a1 1 0 1 0 3-3" /><path d="M3 4h8" /></svg></span>
+                    <div class="ini-title" style="font-size:.78rem">Incrementar visitas y fortalecer relacionamiento en
+                      Retail y Tradicional para crecer ventas de seguros</div>
+                  </div>
+                </div>
+                <div class="ini-card" style="cursor:default">
+                  <div class="ini-head"><span class="ini-ico"
+                      style="background:rgba(0,205,147,.12); color:var(--teal)"><svg class="lucide-ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14" /><path d="M20 11v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8" /><path d="M7.5 7a1 1 0 0 1 0-5A4.8 8 0 0 1 12 7a4.8 8 0 0 1 4.5-5 1 1 0 0 1 0 5" /><rect x="3" y="7" width="18" height="4" rx="1" /></svg></span>
+                    <div class="ini-title" style="font-size:.78rem">Capacitaciones con incentivo inmediato en punto de
+                      venta</div>
+                  </div>
+                </div>
+                <div class="ini-card" style="cursor:default">
+                  <div class="ini-head"><span class="ini-ico"
+                      style="background:rgba(0,205,147,.12); color:var(--teal)"><svg class="lucide-ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z" /></svg></span>
+                    <div class="ini-title" style="font-size:.78rem">Cambiar la evaluación mensual por evaluación
+                      inmediata, justo después de la formación</div>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-<!-- Project Data and Scripts -->
-<script src="data_retail.js"></script>
-<script src="municipalities_geojson.js"></script>
-<script src="../core/deck-engine.js"></script>
-<script src="app_retail.js"></script>
+            <!-- TAB: Cronograma -->
+            <div class="strategy-pane" id="pane-dcron">
+              <div class="alert alert-warn" style="margin-bottom:0">
+                <span class="ico"><svg class="lucide-ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="8" height="4" x="8" y="2" rx="1" ry="1" /><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" /><path d="M12 11h4" /><path d="M12 16h4" /><path d="M8 11h.01" /><path d="M8 16h.01" /></svg></span>
+                <span><strong>Sin dato — pendiente.</strong> Daniela no entregó un cronograma mes a mes para el 2S;
+                  queda por definir junto con Orlando y Erika, en línea con la reestructuración de zonas realizada en
+                  mayo-junio.</span>
+              </div>
+            </div>
+
+            <!-- TAB: KPIs -->
+            <div class="strategy-pane" id="pane-dkpi">
+              <div class="alert alert-warn" style="margin-bottom:0">
+                <span class="ico"><svg class="lucide-ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="8" height="4" x="8" y="2" rx="1" ry="1" /><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" /><path d="M12 11h4" /><path d="M12 16h4" /><path d="M8 11h.01" /><path d="M8 16h.01" /></svg></span>
+                <span><strong>Sin dato — pendiente.</strong> Daniela no propuso indicadores numéricos para el 2S. Sí
+                  pidió que el "cómo vamos" de ventas y presupuesto se automatice en tiempo real (ver Apoyos que
+                  necesita de Orlando).</span>
+              </div>
+            </div>
+
+            <!-- TAB: Organigrama -->
+            <div class="strategy-pane" id="pane-dorg">
+              <p style="font-size:.8rem; line-height:1.6; color:var(--dark)">Tras la reestructuración de mayo-junio,
+                Daniela y Erika comparten metas y realizaron empalmes y visitas conjuntas. Distribución territorial
+                acordada:</p>
+              <div style="display:flex; flex-direction:column; gap:6px; margin-top:8px">
+                <div class="ini-card" style="cursor:default">
+                  <div class="ini-head"><span class="ini-ico"
+                      style="background:rgba(0,205,147,.12); color:var(--teal)"><svg class="lucide-ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 12h4" /><path d="M10 8h4" /><path d="M14 21v-3a2 2 0 0 0-4 0v3" /><path d="M6 10H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2" /><path d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16" /></svg></span>
+                    <div class="ini-title" style="font-size:.78rem">Bogotá Vanti (Tradicional y Retail): compartido
+                      entre Daniela Saldarriaga y Erika Zambrano</div>
+                  </div>
+                </div>
+                <div class="ini-card" style="cursor:default">
+                  <div class="ini-head"><span class="ini-ico"
+                      style="background:rgba(0,205,147,.12); color:var(--teal)"><svg class="lucide-ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0" /><circle cx="12" cy="10" r="3" /></svg></span>
+                    <div class="ini-title" style="font-size:.78rem">Filial GOR y Gas Nacer: Daniela Saldarriaga</div>
+                  </div>
+                </div>
+                <div class="ini-card" style="cursor:default">
+                  <div class="ini-head"><span class="ini-ico"
+                      style="background:rgba(0,205,147,.12); color:var(--teal)"><svg class="lucide-ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0" /><circle cx="12" cy="10" r="3" /></svg></span>
+                    <div class="ini-title" style="font-size:.78rem">Filial Cundiboyacá: Erika Zambrano</div>
+                  </div>
+                </div>
+              </div>
+              <div style="font-size:.62rem; color:var(--gray3); margin-top:8px">Pendiente de Daniela: solicitar a Erika
+                Zambrano el archivo de distribución real por aliado y canal.</div>
+            </div>
+          </div>
+
+          <div class="two-col" style="margin-top:12px">
+            <div class="panel">
+              <div class="asesores-section-label" style="color:var(--warn)"><svg class="lucide-ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3" /><path d="M12 9v4" /><path d="M12 17h.01" /></svg> Qué dificulta hoy la formación (Daniela)
+              </div>
+              <p style="font-size:.76rem; line-height:1.5">La reestructuración de zonas y canales entre mayo y junio
+                explica la caída de visitas de ese período. En el diagnóstico, propone reemplazar la evaluación mensual
+                por una evaluación inmediata, justo después de cada formación.</p>
+            </div>
+            <div class="panel">
+              <div class="asesores-section-label" style="color:var(--teal)"><svg class="lucide-ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m11 17 2 2a1 1 0 1 0 3-3" /><path d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4" /><path d="m21 3 1 11h-2" /><path d="M3 3 2 14l6.5 6.5a1 1 0 1 0 3-3" /><path d="M3 4h8" /></svg> Apoyos que necesita de Orlando</div>
+              <p style="font-size:.76rem; line-height:1.5">Un "cómo vamos" automatizado en tiempo real para ventas y
+                presupuesto propio, más material POP y presupuesto para motivar a los gestores con incentivos inmediatos
+                durante las capacitaciones.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════ SLIDE 6 · CIERRE ══════════ -->
+      <div class="slide slide-section bg-blue" data-label="Cierre">
+        <div class="section-label">Cierre del Informe</div>
+        <h2 class="section-title">Hitos Alcanzados y Siguientes Pasos</h2>
+        <div style="margin-top:30px; max-width:760px">
+          <ul class="check-list" style="gap:12px">
+            <li style="color:rgba(255,255,255,.85); font-size:.95rem">Integración total de datos reales de cierres para
+              <strong>Mayo y Junio de 2026</strong>.</li>
+            <li style="color:rgba(255,255,255,.85); font-size:.95rem">Consolidación del mapa de distribución geográfica
+              con 373 visitas localizadas.</li>
+            <li style="color:rgba(255,255,255,.85); font-size:.95rem">Cruce de planta Serdán (26 cortes) vs. asesores
+              capacitados: cobertura mensual calculada (48 % → 27 %).</li>
+            <li style="color:rgba(255,255,255,.85); font-size:.95rem">Estrategia 2S recibida de Daniela Saldarriaga:
+              objetivo, iniciativas y organigrama por zonas.</li>
+            <li style="color:rgba(255,255,255,.85); font-size:.95rem">Pendiente: acordar con Orlando y Daniela el
+              cronograma y los indicadores numéricos del 2S.</li>
+          </ul>
+        </div>
+        <div style="margin-top:40px">
+          <img src="../assets/logos/Logo_transparente.png" alt="Xuma" style="height:36px; opacity:.6" />
+        </div>
+      </div>
+
+    </div><!-- #scaler -->
+  </div><!-- #app -->
+
+  <div id="nav"></div>
+
+  <!-- Leaflet JS (vendorizado, sin CDN) -->
+  <script src="../core/leaflet/leaflet.js"></script>
+
+  <!-- Project Data and Scripts -->
+  <script src="../core/icons.js"></script>
+  <script src="data_retail.js"></script>
+  <script src="municipalities_geojson.js"></script>
+  <script src="../core/deck-engine.js"></script>
+  <script src="app_retail.js"></script>
 
 </body>
+
 </html>

@@ -179,8 +179,21 @@ body {
 .cover-title span { color: var(--green); }
 .cover-subtitle {
   font-size: 1.15rem; font-weight: 400; color: rgba(255,255,255,.65);
-  max-width: 560px; line-height: 1.55; margin-bottom: 48px;
+  max-width: 560px; line-height: 1.55; margin-bottom: 26px;
 }
+/* Bloque de créditos: separado del subtítulo para que la atribución no se lea
+   como una cláusula más de la misma oración. Isaac va primero dentro de
+   "Contribuyentes" (con más detalle que Kevin) por ser el más activo de los
+   dos; "Contribuyentes" en vez de "apoyo" para que se lea como coautoría de
+   conocimiento, no como un rol secundario/decorativo. */
+.cover-credits { display: flex; align-items: flex-start; gap: 28px; flex-wrap: wrap; margin-bottom: 44px; max-width: 640px; }
+.cover-credit-group { display: flex; flex-direction: column; gap: 5px; }
+.cover-credit-role {
+  font-size: .64rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--green);
+}
+.cover-credit-name { font-size: .86rem; font-weight: 700; color: var(--white); line-height: 1.5; }
+.cover-credit-detail { font-size: .78rem; font-weight: 500; color: rgba(255,255,255,.45); }
+.cover-credit-divider { width: 1px; align-self: stretch; background: rgba(255,255,255,.15); margin-top: 3px; }
 .cover-chips { display: flex; gap: 12px; flex-wrap: wrap; }
 .cover-chip {
   background: rgba(90,226,128,.15);
@@ -235,7 +248,10 @@ body {
 }
 .slide-content .s-header {
   background: var(--blue);
-  padding: 22px 60px;
+  /* padding-left usa --home-clearance (calculado en scaleSlider) para que
+     #home-btn, fijo al viewport real, nunca tape el inicio del título en
+     pantallas angostas — mismo patrón que --chrome-clearance para #nav. */
+  padding: 22px 60px 22px max(60px, var(--home-clearance, 60px));
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -301,6 +317,15 @@ tbody tr:hover { background: #f0f2fc; }
 tbody td { padding: 9px 14px; color: var(--dark); font-weight: 500; }
 tbody td.r { text-align: right; font-variant-numeric: tabular-nums; }
 tbody tr.total td { font-weight: 800; background: #eeedf9; color: var(--blue); }
+/* Variante compacta, opt-in por clase — para tablas dentro de slides muy cargadas
+   de contenido, sin afectar el resto de tablas del deck. */
+table.tbl-compact { font-size: .74rem; }
+table.tbl-compact thead th { padding: 5px 12px; }
+table.tbl-compact tbody td { padding: 4px 12px; }
+.chart-wrap.chart-compact .bar-row { margin-bottom: 3px; }
+.chart-wrap.chart-compact .bar-track { height: 16px; }
+.chart-wrap.chart-compact .bar-label { font-size: .68rem; width: 74px; }
+.chart-wrap.chart-compact .bar-val { font-size: .64rem; }
 .badge {
   display: inline-block; padding: 2px 8px; border-radius: 10px;
   font-size: .68rem; font-weight: 700;
@@ -355,6 +380,7 @@ tbody tr.total td { font-weight: 800; background: #eeedf9; color: var(--blue); }
 ul.check-list { list-style: none; display: flex; flex-direction: column; gap: 7px; }
 ul.check-list li { position: relative; padding-left: 20px; font-size: .82rem; line-height: 1.45; color: var(--dark); font-weight: 500; }
 ul.check-list li::before { content: '✓'; position: absolute; left: 0; top: 1px; color: var(--teal); font-weight: 800; font-size: .85rem; }
+.slide-section.bg-teal .check-list li::before { color: var(--dark); }
 
 /* ── Pendiente tag ───────────────────────────────────────── */
 .pend {
@@ -425,6 +451,9 @@ ul.check-list li::before { content: '✓'; position: absolute; left: 0; top: 1px
 
 .badge { transition: transform .2s; }
 
+/* ── Iconos Lucide inline (ver core/icons.js) ────────────────── */
+.lucide-ico { color: currentColor; }
+
 /* ── Slide Estrategia: pestañas + iniciativas expandibles ─────── */
 .strategy-tabs { display: flex; gap: 6px; }
 .strategy-tab {
@@ -450,6 +479,18 @@ ul.check-list li::before { content: '✓'; position: absolute; left: 0; top: 1px
 .tele-pane { display: none; }
 .tele-pane.active { display: block; animation: panelIn .35s ease backwards; }
 
+/* Grupo de pestañas propio de la slide Contactabilidad (mismo look que .tele-tab,
+   pero con su propia clase para que su querySelectorAll no interfiera con Telefonía). */
+.ctb-tab {
+  font-family: 'Raleway', sans-serif; font-size: .72rem; font-weight: 700;
+  padding: 6px 14px; border-radius: 20px; border: 1px solid var(--gray2);
+  background: var(--white); color: var(--gray3); cursor: pointer; transition: all .2s;
+}
+.ctb-tab:hover { border-color: var(--teal); color: var(--teal); }
+.ctb-tab.active { background: var(--blue); border-color: var(--blue); color: var(--white); }
+.ctb-pane { display: none; }
+.ctb-pane.active { display: block; animation: panelIn .35s ease backwards; }
+
 /* ── Pestañas propias de Proyección (mismo patrón, otra clase) ──── */
 .proy-tab {
   font-family: 'Raleway', sans-serif; font-size: .72rem; font-weight: 700;
@@ -460,6 +501,74 @@ ul.check-list li::before { content: '✓'; position: absolute; left: 0; top: 1px
 .proy-tab.active { background: var(--blue); border-color: var(--blue); color: var(--white); }
 .proy-pane { display: none; }
 .proy-pane.active { display: block; animation: panelIn .35s ease backwards; }
+
+/* ── Pestañas de filtro en Detalle de Proyectos (Innovación) — mismo patrón,
+   clase propia (no filtra pane completos, solo oculta/muestra tarjetas) ── */
+.det-tab {
+  font-family: 'Raleway', sans-serif; font-size: .68rem; font-weight: 700;
+  padding: 5px 12px; border-radius: 20px; border: 1px solid var(--gray2);
+  background: var(--white); color: var(--gray3); cursor: pointer; transition: all .2s; white-space: nowrap;
+}
+.det-tab:hover { border-color: var(--teal); color: var(--teal); }
+.det-tab.active { background: var(--blue); border-color: var(--blue); color: var(--white); }
+
+/* ── Red de Proyectos (Detalle de Proyectos, Innovación) — nodos por
+   categoría + conexiones reales (familia/vinculadoA), no un grafo inventado. ── */
+.red-wrap {
+  position: relative; flex: 1; min-height: 230px; border-radius: 12px; overflow: hidden;
+  background: linear-gradient(160deg, var(--blue) 0%, #0d016a 55%, #04003a 100%);
+}
+.red-canvas { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; }
+.red-content { position: absolute; inset: 0; z-index: 1; }
+.red-row-label {
+  position: absolute; left: 12px; transform: translateY(-50%);
+  font-size: .58rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,.35);
+}
+.red-node {
+  position: absolute; width: 28px; height: 28px; margin: -14px 0 0 -14px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 2;
+  background: rgba(255,255,255,.08); border: 1.5px solid rgba(255,255,255,.35); color: rgba(255,255,255,.85);
+  transition: transform .25s ease, opacity .25s ease, box-shadow .25s ease;
+}
+.red-node:hover { transform: scale(1.15); color: var(--white); }
+.red-node.dimmed { opacity: .25; }
+.red-node.cat-fundacion { border-color: var(--teal); }
+.red-node.cat-produccion { border-color: var(--green); }
+.red-node.cat-desarrollo { border-color: #ffd166; }
+.red-node.active { transform: scale(1.3); color: var(--blue); }
+.red-node.cat-fundacion.active { background: var(--teal); box-shadow: 0 0 0 6px rgba(0,205,147,.2), 0 0 22px rgba(0,205,147,.65); }
+.red-node.cat-produccion.active { background: var(--green); box-shadow: 0 0 0 6px rgba(90,226,128,.2), 0 0 22px rgba(90,226,128,.65); }
+.red-node.cat-desarrollo.active { background: #ffd166; box-shadow: 0 0 0 6px rgba(255,209,102,.2), 0 0 22px rgba(255,209,102,.65); }
+.red-node-label {
+  position: absolute; transform: translate(-50%, 20px); pointer-events: none; z-index: 2;
+  font-size: .56rem; font-weight: 700; color: rgba(255,255,255,.55); white-space: normal; text-align: center;
+  max-width: 74px; line-height: 1.2;
+}
+.red-node-label.active { color: var(--white); font-weight: 800; }
+.red-node-label.dimmed { opacity: .25; }
+
+.red-info { margin-top: 10px; min-height: 92px; }
+.red-info-empty {
+  font-size: .74rem; color: var(--gray3); text-align: center; line-height: 1.7;
+  padding: 14px 10px; border: 1px dashed var(--gray2); border-radius: 10px;
+}
+.red-info-title { font-size: .8rem; font-weight: 800; color: var(--blue); display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
+.red-info-badge-row { margin-bottom: 6px; }
+.red-info-text { font-size: .74rem; line-height: 1.55; color: var(--dark); margin-bottom: 8px; }
+.red-info-hint {
+  display: flex; align-items: center; gap: 5px; font-size: .62rem; font-weight: 700;
+  color: var(--teal); background: rgba(0,205,147,.08); border-radius: 8px; padding: 6px 9px;
+}
+.red-info-chips { display: flex; gap: 5px; flex-wrap: wrap; }
+.red-info-stats { display: flex; gap: 16px; margin-bottom: 8px; flex-wrap: wrap; }
+.red-info-stat-label { font-size: .58rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--gray3); }
+.red-info-stat-val { font-size: .72rem; font-weight: 700; color: var(--blue); }
+.red-info-pendiente {
+  margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--gray2);
+  font-size: .68rem; line-height: 1.5; color: var(--dark);
+}
+.red-info-pendiente strong { color: var(--warn); }
+.red-info-fuente { margin-top: 8px; font-size: .58rem; color: var(--gray3); line-height: 1.4; }
 
 .ini-card {
   border: 1px solid var(--gray2); border-radius: 12px; padding: 10px 14px;
@@ -481,12 +590,35 @@ ul.check-list li::before { content: '✓'; position: absolute; left: 0; top: 1px
 .res-chip {
   font-size: .68rem; font-weight: 600; color: var(--blue);
   background: rgba(18,1,128,.06); border: 1px solid rgba(18,1,128,.15);
-  padding: 5px 11px; border-radius: 20px;
+  padding: 5px 11px; border-radius: 20px; transition: all .2s ease;
+}
+/* Resalta, en el panel de Tecnologías/Metodologías, los chips que coinciden
+   con el proyecto seleccionado en la Red de Proyectos. */
+.res-chip.res-chip-match {
+  background: var(--teal); border-color: var(--teal); color: var(--white); font-weight: 800;
+  box-shadow: 0 0 0 3px rgba(0,205,147,.18);
 }
 
 /* ── Mini tarjetas expandibles (iniciativas 1S) ────────────────── */
 .mini-grid { display: grid; gap: 8px; max-height: 300px; overflow-y: auto; padding-right: 2px; }
 .mini-grid-3 { grid-template-columns: repeat(3, 1fr); }
+.mini-grid-4 { grid-template-columns: repeat(4, 1fr); }
+/* Tarjetas de "Detalle de Proyectos" (Innovación) — más compactas que el
+   patrón base de .mini-card, para que las 13 quepan sin scroll de página. */
+.det-card.mini-card { padding: 6px 9px; }
+.det-card .mini-card-top { margin-bottom: 3px; }
+.det-card .mini-card-title { font-size: .67rem; line-height: 1.2; margin-bottom: 2px; }
+.det-card .mini-card-stat { font-size: .6rem; }
+.det-card .mini-card-more { font-size: .56rem; margin-top: 3px; }
+
+/* Panel colapsable de tecnologías/metodologías — cerrado por defecto para
+   que la slide quepa en una sola pantalla sin scroll; se expande solo si el
+   presentador lo pide. */
+.det-stacks-body { display: none; margin-top: 0; }
+.det-stacks-body.open { display: block; margin-top: 10px; max-height: 220px; overflow-y: auto; }
+.det-stacks-toggle { cursor: pointer; display: flex; align-items: center; justify-content: space-between; }
+.det-stacks-chev { color: var(--gray3); transition: transform .2s ease; }
+.det-stacks-chev.open { transform: rotate(180deg); }
 .mini-card {
   border: 1px solid var(--gray2); border-radius: 10px; padding: 9px 11px;
   cursor: pointer; transition: border-color .2s, background .2s; align-self: start;
@@ -577,3 +709,272 @@ ul.check-list li::before { content: '✓'; position: absolute; left: 0; top: 1px
 }
 .ig-caption strong { font-weight: 800; }
 .ig-tag { color: var(--blue); font-weight: 700; }
+
+/* ── Línea de tiempo "Multiverso" (Innovación) ─────────────────
+   Fondo oscuro tipo espacio, 3 hilos curvos (uno por categoría)
+   dibujados en canvas, nodos flotantes posicionados sobre cada
+   curva, tarjeta de detalle flotante junto al nodo seleccionado. */
+#slide-timeline .s-body {
+  background: linear-gradient(160deg, var(--blue) 0%, #0d016a 55%, #04003a 100%);
+  /* padding-bottom usa --chrome-clearance (igual que el resto de slides) para que
+     el #nav fijo al viewport nunca tape la leyenda de categorías — antes este
+     override fijo (16px) pisaba esa reserva por completo. */
+  padding: 16px 30px var(--chrome-clearance, 96px);
+  overflow: hidden;
+}
+.timeline-wrap { position: relative; flex: 1; min-height: 0; }
+/* width/height:100% explícitos: un <canvas> es un elemento "reemplazado" — con
+   solo position:absolute;inset:0, el navegador puede usar sus atributos width/
+   height (la resolución del buffer, fijada en JS) como su caja CSS en vez de
+   estirarlo al tamaño real del padre. Eso desalineaba las líneas dibujadas
+   respecto a los nodos HTML posicionados en % de .timeline-wrap. */
+.timeline-canvas { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; }
+.timeline-content { position: absolute; inset: 0; z-index: 1; }
+
+/* Fondos de zona 1S/2S — horizontales, porque el tiempo ahora corre vertical
+   (arriba = reciente, abajo = antiguo). pointer-events:none: si no, el clic
+   "de fondo" para cerrar la selección (ver clearSelection) choca contra
+   estos divs en vez de llegar a .timeline-content. */
+.vtl-zone-bg { position: absolute; left: 0; right: 0; z-index: 0; pointer-events: none; }
+.vtl-zone-bg.zone-1s { background: linear-gradient(180deg, rgba(0,205,147,0), rgba(0,205,147,.05)); }
+.vtl-zone-bg.zone-2s { background: linear-gradient(180deg, rgba(90,226,128,.04), rgba(255,107,53,.04)); }
+
+/* Marca de agua de semestre — apenas visible, dentro del margen de 4% sin
+   columnas (right:4px), centrada en su banda de zona (1S/2S). */
+.vtl-semester-watermark {
+  position: absolute; left: 4px; transform: translateY(-50%);
+  writing-mode: vertical-rl; text-orientation: mixed;
+  font-size: 1rem; font-weight: 800; letter-spacing: .3em; text-transform: uppercase;
+  color: rgba(255,255,255,.06); pointer-events: none; white-space: nowrap; z-index: 0;
+}
+
+/* Ancla del dato real más antiguo — fija al margen izquierdo (mismo lado que
+   la marca de agua de semestre), separada de las columnas y sin depender de
+   con cuál columna coincida su fecha real. */
+.vtl-bookend-bottom {
+  position: absolute; left: 14px; transform: translateY(-100%); z-index: 2; text-align: left; pointer-events: none;
+  padding: 5px 10px; background: rgba(4,0,58,.92); border: 1px solid rgba(255,255,255,.16); border-radius: 10px; white-space: nowrap;
+}
+.vtl-bookend-bottom .bookend-label {
+  font-size: .56rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--green);
+}
+.vtl-bookend-bottom .bookend-date { font-size: .68rem; font-weight: 700; color: rgba(255,255,255,.85); }
+
+/* Líneas de mes (1° de cada mes en el rango de datos) — más discretas que
+   .vtl-hoy-line (Hoy / Inicio 2S), solo para ubicar el mes de cada nodo. */
+.vtl-month-line {
+  position: absolute; left: 1%; right: 1%; height: 1px; pointer-events: none; z-index: 1;
+  background: repeating-linear-gradient(90deg, rgba(255,255,255,.10) 0 4px, transparent 4px 10px);
+}
+.vtl-month-label {
+  position: absolute; right: 14px; transform: translateY(-100%); pointer-events: none;
+  font-size: .56rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+  color: rgba(255,255,255,.42); background: rgba(4,0,58,.5); padding: 2px 7px; border-radius: 8px; white-space: nowrap;
+}
+
+.vtl-hoy-line {
+  position: absolute; left: 1%; right: 1%; height: 1px; pointer-events: none;
+  background: repeating-linear-gradient(90deg, rgba(255,255,255,.25) 0 6px, transparent 6px 12px);
+  z-index: 1;
+}
+.timeline-hoy-label {
+  /* right:14px (no left) — mismo lado que .vtl-month-label, para que todas las
+     referencias horizontales (Hoy, Inicio 2S, 01 Jun, 01 May...) queden
+     alineadas en una sola columna vertical, en vez de una a la izquierda y
+     otras a la derecha. */
+  position: absolute; right: 14px; transform: translateY(-100%); pointer-events: none;
+  font-size: .56rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase;
+  color: rgba(255,255,255,.6); background: rgba(4,0,58,.7); padding: 2px 7px; border-radius: 10px; white-space: nowrap;
+}
+.timeline-hoy-label-now { color: var(--blue); background: var(--green); }
+
+.timeline-node {
+  position: absolute; width: 26px; height: 26px; margin: -13px 0 0 -13px; border-radius: 50%; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; z-index: 3;
+  background: rgba(255,255,255,.1); border: 1.5px solid rgba(255,255,255,.3);
+  color: rgba(255,255,255,.8); transition: transform .25s ease, box-shadow .25s ease, opacity .3s ease;
+  animation: nodeBreathe 3.2s ease-in-out infinite;
+}
+@keyframes nodeBreathe {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255,255,255,.12); }
+  50% { box-shadow: 0 0 0 6px rgba(255,255,255,.05); }
+}
+.timeline-node.cat-iniciacion { border-color: rgba(151,140,255,.85); }
+.timeline-node.cat-construccion { border-color: rgba(255,209,102,.85); }
+.timeline-node.cat-piloto { border-color: rgba(255,107,53,.85); }
+.timeline-node.cat-produccion { border-color: rgba(90,226,128,.85); }
+.timeline-node:hover { transform: scale(1.15); color: var(--white); }
+.timeline-node.dimmed { opacity: .3; }
+.timeline-node.active { color: var(--blue); transform: scale(1.2); animation: none; }
+.timeline-node.cat-iniciacion.active { background: #978cff; border-color: #978cff; box-shadow: 0 0 0 6px rgba(151,140,255,.22), 0 0 28px rgba(151,140,255,.7); }
+.timeline-node.cat-construccion.active { background: #ffd166; border-color: #ffd166; box-shadow: 0 0 0 6px rgba(255,209,102,.22), 0 0 28px rgba(255,209,102,.7); }
+.timeline-node.cat-piloto.active { background: var(--warn); border-color: var(--warn); box-shadow: 0 0 0 6px rgba(255,107,53,.22), 0 0 28px rgba(255,107,53,.7); }
+.timeline-node.cat-produccion.active { background: var(--green); border-color: var(--green); box-shadow: 0 0 0 6px rgba(90,226,128,.22), 0 0 28px rgba(90,226,128,.7); }
+
+/* Nodo marcado como "hito" (`hito:true` en data_innovacion.js): se ve
+   permanentemente encendido con su propio color de fase — antes solo el
+   resplandor del canvas (drawHitoGlow) sugería un logro, pero el círculo en
+   sí seguía sin relleno hasta hacer clic (estado .active), dando la
+   impresión de un círculo "apagado" bajo un halo dorado que además no
+   coincidía con su color real. Más tenue que .active para no confundirse
+   con la selección activa. */
+/* Alpha alta (no .4): a esa opacidad, la línea de la columna (dibujada en el
+   canvas, DETRÁS del nodo en z-index) se transparentaba a través del círculo
+   y parecía atravesarlo en vez de quedar oculta detrás de un nodo sólido. */
+/* color:var(--blue) en las 4 — mismo criterio que .active: los 4 colores de
+   fase son claros/vivos, un ícono blanco se pierde sobre ellos (se notó en
+   el verde de Producción). Azul marino oscuro da buen contraste en todos. */
+.timeline-node.hito-lit { color: var(--blue); }
+.timeline-node.hito-lit.cat-iniciacion { background: rgba(151,140,255,.88); }
+.timeline-node.hito-lit.cat-construccion { background: rgba(255,209,102,.88); }
+.timeline-node.hito-lit.cat-piloto { background: rgba(255,107,53,.88); }
+.timeline-node.hito-lit.cat-produccion { background: rgba(90,226,128,.88); }
+
+/* Insignia de "pendiente" sobre el nodo — reemplaza la flecha dibujada en
+   canvas (drawPendingTails, retirada): más legible, con tooltip nativo del
+   texto real del pendiente y un pulso sutil que la distingue sin gritar. */
+.timeline-pending-badge {
+  /* Ámbar (#ffd166, el mismo de "En Construcción"), no el naranja de alerta
+     (--warn): un pendiente documentado es avance normal, no una urgencia. */
+  position: absolute; top: -6px; right: -6px; width: 15px; height: 15px; border-radius: 50%;
+  background: rgba(4,0,58,.95); border: 1.5px solid #ffd166; color: #ffd166;
+  display: flex; align-items: center; justify-content: center; z-index: 4;
+  animation: pendingPulse 2.6s ease-in-out infinite;
+}
+@keyframes pendingPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255,209,102,.5); }
+  50%      { box-shadow: 0 0 0 5px rgba(255,209,102,0); }
+}
+.timeline-node.dimmed .timeline-pending-badge { opacity: .2; animation: none; }
+
+.timeline-node-cap {
+  /* max-width + line-clamp: con 13 columnas de ~86px, un nombre largo sin
+     freno (antes white-space:nowrap) podía invadir la etiqueta de la columna
+     vecina cuando dos nodos caían a alturas similares. */
+  position: absolute; top: 44px; left: 50%; transform: translateX(-50%);
+  max-width: 80px; white-space: normal; text-align: center; line-height: 1.25;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+  font-size: .58rem; font-weight: 700; color: rgba(255,255,255,.55); pointer-events: none;
+  opacity: 0; transition: opacity .2s ease;
+}
+.timeline-node:hover .timeline-node-cap, .timeline-node.active .timeline-node-cap { opacity: 1; color: var(--white); }
+
+/* Punto de una etapa ANTERIOR de un proyecto/columna (ver drawStageSteps en
+   JS) — más chico que el nodo actual, pero clicable: cada fase puede abrir
+   el detalle de su propio proyecto (útil en columnas fusionadas como el
+   DataCenter, donde cada punto es una fase de un proyecto distinto). */
+.timeline-stage-dot {
+  position: absolute; width: 8px; height: 8px; margin: -4px 0 0 -4px; border-radius: 50%;
+  border: 1px solid rgba(255,255,255,.5); padding: 0; cursor: pointer; z-index: 2; opacity: .9;
+  transition: opacity .2s ease, transform .2s ease;
+}
+.timeline-stage-dot:hover { opacity: 1; transform: scale(1.4); }
+.timeline-stage-dot.dimmed { opacity: .15; }
+.timeline-stage-dot.cat-iniciacion { background: #978cff; }
+.timeline-stage-dot.cat-construccion { background: #ffd166; }
+.timeline-stage-dot.cat-piloto { background: var(--warn); }
+.timeline-stage-dot.cat-produccion { background: var(--green); }
+
+/* Puntos con ícono (columnas fusionadas, ej. DataCenter diseño+implementación):
+   más grandes que el punto liso, para que quepa el ícono de a qué sección
+   pertenecen dentro de la misma línea continua. */
+.timeline-stage-dot.stage-dot-icon {
+  width: 16px; height: 16px; margin: -8px 0 0 -8px; border-width: 1.5px;
+  display: flex; align-items: center; justify-content: center; color: var(--blue);
+}
+.timeline-stage-dot.stage-dot-icon:hover { transform: scale(1.25); }
+
+/* Etiqueta de "hito real" (ver drawHitoSparks en JS) — posicionada en px por
+   positionNodesInPixels, arriba-izquierda del nodo (crece hacia la izquierda,
+   lejos del racimo de nodos y del inicio de la franja "zona DataCenter" que
+   se extiende hacia la derecha desde este punto). */
+.timeline-hito-label {
+  position: absolute; transform: translate(-100%, -100%); white-space: nowrap; z-index: 3; pointer-events: none;
+  font-size: .58rem; font-weight: 800; color: #ffb47a;
+  background: rgba(60,20,4,.6); border: 1px solid rgba(255,107,53,.35);
+  padding: 3px 8px; border-radius: 10px;
+}
+
+.timeline-legend { position: absolute; left: 14px; top: 8px; z-index: 2; display: flex; gap: 14px; pointer-events: none; }
+.timeline-legend-item { display: flex; align-items: center; gap: 5px; font-size: .6rem; font-weight: 700; color: rgba(255,255,255,.6); }
+.timeline-legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+/* Pie de columna: icono + nombre corto del proyecto, fijo debajo de la banda
+   de tiempo (no se mueve con las etapas) — es la identidad de la columna. */
+.vtl-col-footer {
+  position: absolute; top: 91%; transform: translateX(-50%); z-index: 3;
+  display: flex; flex-direction: column; align-items: center; gap: 2px; width: 68px;
+  background: none; border: none; cursor: pointer; padding: 2px; opacity: .8;
+  transition: opacity .2s ease, transform .2s ease;
+}
+.vtl-col-footer:hover, .vtl-col-footer.active { opacity: 1; transform: translateX(-50%) scale(1.08); }
+.vtl-col-footer.dimmed { opacity: .25; }
+.vtl-col-footer .vtl-col-ico { color: rgba(255,255,255,.75); }
+.vtl-col-footer.cat-iniciacion .vtl-col-ico { color: #978cff; }
+.vtl-col-footer.cat-construccion .vtl-col-ico { color: #ffd166; }
+.vtl-col-footer.cat-piloto .vtl-col-ico { color: var(--warn); }
+.vtl-col-footer.cat-produccion .vtl-col-ico { color: var(--green); }
+.vtl-col-footer .vtl-col-label {
+  font-size: .56rem; font-weight: 700; color: rgba(255,255,255,.7); text-align: center;
+  line-height: 1.2; max-width: 76px; overflow: hidden; text-overflow: ellipsis;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+}
+
+/* ── Panel lateral de detalle (reemplaza la tarjeta flotante) ──
+   Fijo al lado derecho, se desliza al abrir/cerrar — no compite
+   visualmente con el "universo" de nodos y curvas. */
+.timeline-sidepanel {
+  /* right:80px (no 0) — #next-btn es fixed al viewport real con z-index:999,
+     fuera del contexto de apilamiento del lienzo escalado (#scaler tiene
+     transform, que crea su propio stacking context) — ningún z-index interno
+     puede ponerse por encima de él, así que el panel simplemente no invade
+     esa franja en vez de competir por z-index. */
+  position: absolute; top: 0; right: 80px; bottom: 0; width: 340px; z-index: 4;
+  background: rgba(8,3,58,.96); border-left: 1px solid rgba(255,255,255,.16);
+  padding: 18px 18px 18px 20px; backdrop-filter: blur(12px);
+  box-shadow: -12px 0 32px rgba(0,0,0,.4); border-radius: 10px 0 0 10px;
+  /* calc(100% + 80px) solo despejaba hasta el borde de .timeline-wrap, pero el
+     recorte real (overflow:hidden) está más afuera, en #slide-timeline .s-body
+     (que tiene su propio padding lateral) — por eso quedaba un remanente
+     visible. Se agrega margen extra (+80px) para despejar también ese padding. */
+  transform: translateX(calc(100% + 160px)); transition: transform .32s cubic-bezier(.4,0,.2,1);
+  overflow-y: auto; pointer-events: none;
+}
+.timeline-sidepanel.open { transform: translateX(0); pointer-events: auto; }
+.timeline-sidepanel .tf-close {
+  position: absolute; top: 12px; right: 14px; background: none; border: none; cursor: pointer;
+  color: rgba(255,255,255,.5); font-size: 1.1rem; line-height: 1; padding: 4px;
+}
+.timeline-sidepanel .tf-close:hover { color: var(--white); }
+.timeline-sidepanel h3 { color: var(--white); border: none; padding: 0; margin: 0 26px 10px 0; font-size: .92rem; display: flex; align-items: center; gap: 8px; }
+.timeline-sidepanel .tf-stats { display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; }
+.timeline-sidepanel .tf-stat { background: rgba(255,255,255,.06); border-radius: 8px; padding: 7px 10px; }
+.timeline-sidepanel .tf-stat-label { font-size: .56rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: rgba(255,255,255,.5); }
+.timeline-sidepanel .tf-stat-val { font-size: .76rem; font-weight: 800; color: var(--green); line-height: 1.3; }
+.timeline-sidepanel .tf-resumen { font-size: .74rem; color: rgba(255,255,255,.85); line-height: 1.55; margin-bottom: 10px; }
+.timeline-sidepanel .tf-section-label {
+  font-size: .58rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase;
+  color: rgba(255,255,255,.45); margin: 12px 0 6px;
+}
+.timeline-sidepanel .check-list li { color: rgba(255,255,255,.85); font-size: .7rem; }
+.timeline-sidepanel .check-list li::before { color: var(--green); }
+
+/* Mini-línea vertical de etapas dentro del panel: la propia columna del
+   proyecto, resumida — de más antigua (arriba) a más reciente (abajo). */
+.tf-mini-timeline { display: flex; flex-direction: column; margin-bottom: 4px; }
+.tf-mini-stage { display: flex; align-items: center; gap: 8px; }
+.tf-mini-dot { width: 10px; height: 10px; border-radius: 50%; flex: none; }
+.tf-mini-stage.cat-iniciacion .tf-mini-dot { background: #978cff; }
+.tf-mini-stage.cat-construccion .tf-mini-dot { background: #ffd166; }
+.tf-mini-stage.cat-piloto .tf-mini-dot { background: var(--warn); }
+.tf-mini-stage.cat-produccion .tf-mini-dot { background: var(--green); }
+/* Punto con ícono (columnas fusionadas, ej. DataCenter diseño+implementación):
+   más grande para que quepa el ícono de a qué sección pertenece cada etapa. */
+.tf-mini-dot.tf-mini-dot-icon {
+  width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; color: var(--blue);
+}
+.tf-mini-fase { font-size: .68rem; font-weight: 700; color: rgba(255,255,255,.85); }
+.tf-mini-fecha { font-size: .6rem; color: rgba(255,255,255,.5); }
+.tf-mini-connector { width: 1px; height: 12px; background: rgba(255,255,255,.2); margin-left: 5px; }
+.timeline-sidepanel .tf-pendiente { margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,.12); font-size: .68rem; color: rgba(255,255,255,.7); }
+.timeline-sidepanel .tf-fuente { font-size: .58rem; color: rgba(255,255,255,.4); margin-top: 10px; }

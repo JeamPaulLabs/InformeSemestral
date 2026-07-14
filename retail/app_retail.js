@@ -153,34 +153,34 @@ function renderFormacion() {
   const bestPlantaPct = (RETAIL_DATA.visitas[0].asesores / RETAIL_DATA.ventas.cp[0].gestores * 100).toFixed(1);
 
   el.innerHTML = `
-    <div class="kpi-grid">
-      <div class="kpi-card">
+    <div class="kpi-grid" style="gap:12px">
+      <div class="kpi-card" style="padding:10px 16px">
         <div class="kpi-label">Visitas Realizadas 1S</div>
         <div class="kpi-val">${fmt(totalVisitas)}</div>
         <div class="kpi-sub">Enero - Junio 2026</div>
       </div>
-      <div class="kpi-card green">
+      <div class="kpi-card green" style="padding:10px 16px">
         <div class="kpi-label">Mejor Mes (Visitas)</div>
         <div class="kpi-val">${bestMonth.visitas}</div>
         <div class="kpi-sub">${bestMonth.mes} · ${bestMonth.asesores} asesores capacitados</div>
       </div>
-      <div class="kpi-card green">
+      <div class="kpi-card green" style="padding:10px 16px">
         <div class="kpi-label">Cobertura Planta (Ene)</div>
         <div class="kpi-val">${bestPlantaPct.replace('.', ',')}%</div>
         <div class="kpi-sub">71 de 147 gestores activos</div>
       </div>
-      <div class="kpi-card warn">
+      <div class="kpi-card warn" style="padding:10px 16px">
         <div class="kpi-label">Variación Ene → Jun</div>
         <div class="kpi-val">${dropPct} %</div>
         <div class="kpi-sub">${eneVisits} visitas → ${junVisits} visitas</div>
       </div>
     </div>
 
-    <div class="two-col">
-      <div class="panel">
-        <h3>📅 Visitas, asesores capacitados y PDV por mes</h3>
+    <div class="two-col" style="gap:14px">
+      <div class="panel" style="padding:12px 16px">
+        <h3 style="margin-bottom:6px; padding-bottom:5px">${icon('calendar')} Visitas, asesores capacitados y PDV por mes</h3>
         <div class="tbl-wrap" style="margin-top:0">
-          <table>
+          <table class="tbl-compact">
             <thead>
               <tr>
                 <th>Mes</th>
@@ -215,15 +215,15 @@ function renderFormacion() {
             </tbody>
           </table>
         </div>
-        <div style="font-size:.62rem; color:var(--gray3); margin-top:8px; line-height:1.4">
+        <div style="font-size:.6rem; color:var(--gray3); margin-top:6px; line-height:1.35">
           * Asesores únicos con al menos una visita en el mes. Tipos de capacitación: Inicial 44 % · Portafolio 40 % · Recapacitación 9 % · Acompañamiento 7 %.<br>
           ** Planta activa calculada basándose en gestores comerciales con actividad transaccional registrados en el "Como vamos" (cierres mensuales).
         </div>
       </div>
 
-      <div class="panel">
-        <h3>📉 Evolución de visitas por mes</h3>
-        <div class="chart-wrap" style="margin-top:8px">
+      <div class="panel" style="padding:12px 16px">
+        <h3 style="margin-bottom:6px; padding-bottom:5px">${icon('trending-down')} Evolución de visitas por mes</h3>
+        <div class="chart-wrap chart-compact" style="margin-top:4px">
           ${RETAIL_DATA.visitas.map(v => {
             const pct = (v.visitas / bestMonth.visitas * 100).toFixed(0) + '%';
             const colorClass = (v.mes === 'May' || v.mes === 'Jun') ? 'warn' : 'teal';
@@ -239,8 +239,8 @@ function renderFormacion() {
             `;
           }).join('')}
         </div>
-        <div class="alert alert-warn" style="margin-top:14px">
-          <span class="ico">⚠️</span>
+        <div class="alert alert-warn" style="margin-top:8px; padding:8px 14px">
+          <span class="ico">${icon('alert-triangle')}</span>
           <span>La formación se estabilizó en ~75 visitas/mes hasta abril y <strong>cayó a la mitad en mayo-junio</strong>. Los PDV visitados bajaron de 56 a 14 (-75 %). Causa: contracción comercial y de planta activa en PDV.</span>
         </div>
       </div>
@@ -258,7 +258,7 @@ function renderMapaSlide() {
         <div id="map-container" style="width: 100%; height: 100%"></div>
       </div>
       <div class="panel" style="max-height: 500px; display: flex; flex-direction: column;">
-        <h3 style="margin-top: 0">📍 Visitas de Formación por Zona</h3>
+        <h3 style="margin-top: 0">${icon('map-pin')} Visitas de Formación por Zona</h3>
         <div class="tbl-wrap" style="margin-top: 0; flex-grow: 1; overflow-y: auto;">
           <table>
             <thead>
@@ -278,7 +278,7 @@ function renderMapaSlide() {
           </table>
         </div>
         <div class="alert alert-info" style="margin-top: 12px; margin-bottom: 0;">
-          <span class="ico">📌</span>
+          <span class="ico">${icon('pin')}</span>
           <span>Bogotá Centro, Sur y Occidente concentran el 61% de las visitas. Tunja, Bucaramanga y Soacha lideran en cobertura regional.</span>
         </div>
       </div>
@@ -301,34 +301,34 @@ function renderVentas() {
   const promEfectRS = totalCantadasRS > 0 ? (totalEfectivasRS / totalCantadasRS * 100) : 0;
 
   el.innerHTML = `
-    <div class="kpi-grid">
-      <div class="kpi-card green">
+    <div class="kpi-grid" style="gap:12px">
+      <div class="kpi-card green" style="padding:10px 16px">
         <div class="kpi-label">Ventas CP 1S (Efectivas)</div>
         <div class="kpi-val">${fmt(totalEfectivasCP)}</div>
         <div class="kpi-sub">Total de ${fmt(totalCantadasCP)} cantadas (${promEfectCP.toFixed(1).replace('.', ',')}%)</div>
       </div>
-      <div class="kpi-card green">
+      <div class="kpi-card green" style="padding:10px 16px">
         <div class="kpi-label">Ventas RS 1S (Efectivas)</div>
         <div class="kpi-val">${fmt(totalEfectivasRS)}</div>
         <div class="kpi-sub">Total de ${fmt(totalCantadasRS)} cantadas (${promEfectRS.toFixed(1).replace('.', ',')}%)</div>
       </div>
-      <div class="kpi-card">
+      <div class="kpi-card" style="padding:10px 16px">
         <div class="kpi-label">Pico CP Semestre</div>
         <div class="kpi-val">2.474</div>
         <div class="kpi-sub">Marzo · 135 gestores activos</div>
       </div>
-      <div class="kpi-card warn">
+      <div class="kpi-card warn" style="padding:10px 16px">
         <div class="kpi-label">Ventas CP Mayo + Junio</div>
         <div class="kpi-val">${fmt(RETAIL_DATA.ventas.cp[4].efectivas + RETAIL_DATA.ventas.cp[5].efectivas)}</div>
         <div class="kpi-sub">Reales consolidadas de cierre</div>
       </div>
     </div>
 
-    <div class="two-col">
-      <div class="panel">
-        <h3>🛡️ Cuota Protegida Retail (Como vamos)</h3>
+    <div class="two-col" style="gap:14px">
+      <div class="panel" style="padding:12px 16px">
+        <h3 style="margin-bottom:6px; padding-bottom:5px">${icon('shield')} Cuota Protegida Retail (Como vamos)</h3>
         <div class="tbl-wrap" style="margin-top:0">
-          <table>
+          <table class="tbl-compact">
             <thead>
               <tr>
                 <th>Mes</th>
@@ -368,11 +368,11 @@ function renderVentas() {
         </div>
       </div>
 
-      <div class="panel" style="display:flex; flex-direction:column; justify-content:space-between">
+      <div class="panel" style="display:flex; flex-direction:column; justify-content:space-between; padding:12px 16px">
         <div>
-          <h3>🛵 Rueda Seguro Retail (Como vamos)</h3>
+          <h3 style="margin-bottom:6px; padding-bottom:5px">${icon('bike')} Rueda Seguro Retail (Como vamos)</h3>
           <div class="tbl-wrap" style="margin-top:0">
-            <table>
+            <table class="tbl-compact">
               <thead>
                 <tr>
                   <th>Mes</th>
@@ -404,8 +404,8 @@ function renderVentas() {
             </table>
           </div>
         </div>
-        <div class="alert alert-info" style="margin-top:12px; margin-bottom: 0;">
-          <span class="ico">📌</span>
+        <div class="alert alert-info" style="margin-top:8px; margin-bottom: 0; padding:8px 14px">
+          <span class="ico">${icon('pin')}</span>
           <span><strong>Marzo y Mayo representaron los picos</strong> del canal. La efectividad se mantiene en niveles altos (78 - 84%). Los cierres de Mayo y Junio confirman ventas efectivas consolidadas superiores a 2.100 por mes.</span>
         </div>
       </div>
@@ -417,52 +417,39 @@ function renderCobertura() {
   const el = document.getElementById('cobertura-body');
   if (!el) return;
 
-  // Calculamos la cobertura de PDV visitados vs activos (con gestión en CP)
-  // Ene: visitados 56, gestion 92 -> 60.9%
-  // Feb: visitados 52, gestion 91 -> 57.1%
-  // Mar: visitados 45, gestion 82 -> 54.9%
-  // Abr: visitados 36, gestion 72 -> 50.0%
-  // May: visitados 19, gestion 57 -> 33.3%
-  // Jun: visitados 14, gestion 52 -> 26.9%
-
-  const coberData = [
-    { mes: 'Ene', gestion: 92, visitas: 56, pct: 60.9 },
-    { mes: 'Feb', gestion: 91, visitas: 52, pct: 57.1 },
-    { mes: 'Mar', gestion: 82, visitas: 45, pct: 54.9 },
-    { mes: 'Abr', gestion: 72, visitas: 36, pct: 50.0 },
-    { mes: 'May', gestion: 57, visitas: 19, pct: 33.3 },
-    { mes: 'Jun', gestion: 52, visitas: 14, pct: 26.9 }
-  ];
+  // Cobertura de PDV visitados vs. activos (con gestión en CP) — datos en
+  // data_retail.js como COBERTURA_PDV.
 
   el.innerHTML = `
-    <div class="kpi-grid">
-      <div class="kpi-card">
+    <div style="display:flex; flex-direction:column; gap:12px">
+    <div class="kpi-grid" style="gap:12px">
+      <div class="kpi-card" style="padding:8px 16px">
         <div class="kpi-label">PDV con gestión promedio</div>
-        <div class="kpi-val">${(coberData.reduce((s,d)=>s+d.gestion,0)/6).toFixed(0)}</div>
+        <div class="kpi-val">${(COBERTURA_PDV.reduce((s,d)=>s+d.gestion,0)/6).toFixed(0)}</div>
         <div class="kpi-sub">Total PDV activos en CP</div>
       </div>
-      <div class="kpi-card green">
+      <div class="kpi-card green" style="padding:8px 16px">
         <div class="kpi-label">Mejor Cobertura PDV</div>
         <div class="kpi-val">60,9 %</div>
         <div class="kpi-sub">Enero · 56 de 92 PDV visitados</div>
       </div>
-      <div class="kpi-card warn">
+      <div class="kpi-card warn" style="padding:8px 16px">
         <div class="kpi-label">Cobertura Junio</div>
         <div class="kpi-val">26,9 %</div>
         <div class="kpi-sub">14 de 52 PDV activos visitados</div>
       </div>
-      <div class="kpi-card">
+      <div class="kpi-card" style="padding:8px 16px">
         <div class="kpi-label">Visitas de formación 1S</div>
         <div class="kpi-val">373</div>
         <div class="kpi-sub">Capacitando asesores de venta</div>
       </div>
     </div>
 
-    <div class="two-col">
-      <div class="panel">
-        <h3>🗺️ Cobertura de formación en Puntos de Venta (PDV)</h3>
+    <div class="two-col" style="gap:14px">
+      <div class="panel" style="padding:12px 16px">
+        <h3 style="margin-bottom:6px; padding-bottom:5px">${icon('map')} Cobertura de formación en Puntos de Venta (PDV)</h3>
         <div class="tbl-wrap" style="margin-top:0">
-          <table>
+          <table class="tbl-compact">
             <thead>
               <tr>
                 <th>Mes</th>
@@ -472,7 +459,7 @@ function renderCobertura() {
               </tr>
             </thead>
             <tbody>
-              ${coberData.map(d => {
+              ${COBERTURA_PDV.map(d => {
                 const bType = d.pct >= 55 ? 'g' : d.pct >= 40 ? 'y' : 'r';
                 return `
                   <tr>
@@ -488,10 +475,10 @@ function renderCobertura() {
         </div>
       </div>
 
-      <div class="panel">
-        <h3>🏬 Universo de PDV y cobertura real por aliado (1S)</h3>
+      <div class="panel" style="padding:12px 16px">
+        <h3 style="margin-bottom:6px; padding-bottom:5px">${icon('store')} Universo de PDV y cobertura real por aliado (1S)</h3>
         <div class="tbl-wrap" style="margin-top:0">
-          <table>
+          <table class="tbl-compact">
             <thead>
               <tr>
                 <th>Aliado</th>
@@ -540,42 +527,49 @@ function renderCobertura() {
             </tbody>
           </table>
         </div>
-        <div style="font-size:.62rem; color:var(--gray3); margin-top:6px">* Universo = PDV físicos distintos observados en los 26 cortes semanales "Como vamos" del semestre (no hay maestro de puntos entregado; a validar con Daniela). Coberturas &gt;100 % indican PDV que Formación visitó con nombre distinto al registrado en Como vamos ese corte, o puntos sin gestión comercial activa ese mes.</div>
-        <div class="alert alert-warn" style="margin-top:10px; margin-bottom: 0;">
-          <span class="ico">🔎</span>
-          <span><strong>Hallazgo:</strong> el parque de PDV con gestión activa se contrajo 43 % (92→52) y la cobertura mensual cayó de 61 % a 27 %, pero Éxito y Cencosud muestran cobertura acumulada &gt;100 % en el semestre: Formación llega a más puntos de los que hoy tienen venta activa.</span>
-        </div>
-        <div class="alert alert-info" style="margin-top:8px; margin-bottom: 0;">
-          <span class="ico">🏢</span>
-          <span><strong>Sobre "Serdán" (90 visitas):</strong> es la empresa que provee promotores a ambos canales, no un aliado. Cruzando cédula del asesor contra planta Retail y financiadores Tradicional: 33 son puras Retail+Tradicional, 33 sedes/roles internos de Serdán (no PDV) y 14 con cédula activa en ambos canales — <strong>esas 14 se contaron para los dos canales</strong>. Total atribuido: <strong>24 visitas a Retail</strong> y <strong>47 a Tradicional</strong>.</span>
-        </div>
-        <div class="panel" style="margin-top:10px; padding:12px 16px; box-shadow:none; border:1px solid var(--gray2)">
-          <div style="font-size:.68rem; font-weight:800; color:var(--blue); letter-spacing:.06em; margin-bottom:8px">🏷️ TIPO DE PUNTO VISITADO EN LAS 90 "SERDÁN" (independiente del canal)</div>
-          <div style="display:flex; gap:10px; flex-wrap:wrap">
-            <div style="flex:1; min-width:120px; text-align:center; background:var(--gray1); border-radius:8px; padding:8px">
-              <div style="font-weight:800; font-size:1rem; color:var(--teal)">37</div>
-              <div style="font-size:.62rem; color:var(--gray3)">PDV físico</div>
-            </div>
-            <div style="flex:1; min-width:120px; text-align:center; background:var(--gray1); border-radius:8px; padding:8px">
-              <div style="font-weight:800; font-size:1rem; color:var(--blue)">23</div>
-              <div style="font-size:.62rem; color:var(--gray3)">Sede Serdán</div>
-            </div>
-            <div style="flex:1; min-width:120px; text-align:center; background:var(--gray1); border-radius:8px; padding:8px">
-              <div style="font-weight:800; font-size:1rem; color:var(--warn)">20</div>
-              <div style="font-size:.62rem; color:var(--gray3)">Rol itinerante</div>
-            </div>
-            <div style="flex:1; min-width:120px; text-align:center; background:var(--gray1); border-radius:8px; padding:8px">
-              <div style="font-weight:800; font-size:1rem; color:var(--blue)">6</div>
-              <div style="font-size:.62rem; color:var(--gray3)">Oficina SAC</div>
-            </div>
-            <div style="flex:1; min-width:120px; text-align:center; background:var(--gray1); border-radius:8px; padding:8px">
-              <div style="font-weight:800; font-size:1rem; color:var(--gray3)">4</div>
-              <div style="font-size:.62rem; color:var(--gray3)">Supervisión</div>
-            </div>
-          </div>
-          <div style="font-size:.6rem; color:var(--gray3); margin-top:6px">Solo el 41 % de las visitas "Serdán" fueron a un punto de venta físico; el resto son sedes administrativas, cobertura itinerante, oficinas SAC zonales o supervisión — actividad real de formación, pero que no suma a la cobertura de PDV.</div>
-        </div>
+        <div style="font-size:.6rem; color:var(--gray3); margin-top:5px">* Universo = PDV físicos distintos observados en los 26 cortes semanales "Como vamos" del semestre (no hay maestro de puntos entregado; a validar con Daniela). Coberturas &gt;100 % indican PDV que Formación visitó con nombre distinto al registrado en Como vamos ese corte, o puntos sin gestión comercial activa ese mes.</div>
       </div>
+    </div>
+
+    <div style="display:flex; flex-direction:column; gap:6px">
+    <div class="alert alert-warn" style="margin-bottom: 0; padding:7px 14px">
+      <span class="ico">${icon('search')}</span>
+      <span><strong>Hallazgo:</strong> el parque de PDV con gestión activa se contrajo 43 % (92→52) y la cobertura mensual cayó de 61 % a 27 %, pero Éxito y Cencosud muestran cobertura acumulada &gt;100 % en el semestre: Formación llega a más puntos de los que hoy tienen venta activa.</span>
+    </div>
+
+    <div class="two-col" style="gap:10px">
+      <div class="alert alert-info" style="margin-bottom: 0; padding:6px 14px">
+        <span class="ico">${icon('building-2')}</span>
+        <span><strong>Sobre "Serdán" (90 visitas):</strong> empresa que provee promotores a ambos canales, no un aliado. De las 90: 33 puras Retail+Tradicional, 33 sedes/roles internos (no PDV) y 14 con cédula activa en ambos canales <strong>(contadas en los dos)</strong>. Total atribuido: <strong>24 a Retail</strong> y <strong>47 a Tradicional</strong>.</span>
+      </div>
+      <div class="panel" style="padding:6px 14px; box-shadow:none; border:1px solid var(--gray2)">
+        <div style="font-size:.64rem; font-weight:800; color:var(--blue); letter-spacing:.05em; margin-bottom:6px">${icon('tag', { size: 13 })} TIPO DE PUNTO VISITADO EN LAS 90 "SERDÁN"</div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap">
+          <div style="flex:1; min-width:85px; text-align:center; background:var(--gray1); border-radius:8px; padding:5px">
+            <div style="font-weight:800; font-size:.9rem; color:var(--teal)">37</div>
+            <div style="font-size:.58rem; color:var(--gray3)">PDV físico</div>
+          </div>
+          <div style="flex:1; min-width:85px; text-align:center; background:var(--gray1); border-radius:8px; padding:5px">
+            <div style="font-weight:800; font-size:.9rem; color:var(--blue)">23</div>
+            <div style="font-size:.58rem; color:var(--gray3)">Sede Serdán</div>
+          </div>
+          <div style="flex:1; min-width:85px; text-align:center; background:var(--gray1); border-radius:8px; padding:5px">
+            <div style="font-weight:800; font-size:.9rem; color:var(--warn)">20</div>
+            <div style="font-size:.58rem; color:var(--gray3)">Itinerante</div>
+          </div>
+          <div style="flex:1; min-width:85px; text-align:center; background:var(--gray1); border-radius:8px; padding:5px">
+            <div style="font-weight:800; font-size:.9rem; color:var(--blue)">6</div>
+            <div style="font-size:.58rem; color:var(--gray3)">Ofic. SAC</div>
+          </div>
+          <div style="flex:1; min-width:85px; text-align:center; background:var(--gray1); border-radius:8px; padding:5px">
+            <div style="font-weight:800; font-size:.9rem; color:var(--gray3)">4</div>
+            <div style="font-size:.58rem; color:var(--gray3)">Supervisión</div>
+          </div>
+        </div>
+        <div style="font-size:.58rem; color:var(--gray3); margin-top:5px">Solo el 41 % fue a un PDV físico; el resto es actividad real de formación que no suma a cobertura de PDV.</div>
+      </div>
+    </div>
+    </div>
     </div>
   `;
 }

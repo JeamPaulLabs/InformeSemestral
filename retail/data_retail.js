@@ -137,3 +137,15 @@ const RETAIL_DATA = {
   { "name": "Facatativá", "lat": 4.8136, "lon": -74.3541, "visits": 6 }
 ]
 };
+
+// Cobertura de PDV visitados vs. PDV con gestión activa en CP, por mes.
+// Ene: visitados 56, gestión 92 -> 60,9 % · Feb: 52/91 -> 57,1 % · Mar: 45/82 -> 54,9 %
+// Abr: 36/72 -> 50,0 % · May: 19/57 -> 33,3 % · Jun: 14/52 -> 26,9 %
+const COBERTURA_PDV = [
+  { mes: 'Ene', gestion: 92, visitas: 56, pct: 60.9 },
+  { mes: 'Feb', gestion: 91, visitas: 52, pct: 57.1 },
+  { mes: 'Mar', gestion: 82, visitas: 45, pct: 54.9 },
+  { mes: 'Abr', gestion: 72, visitas: 36, pct: 50.0 },
+  { mes: 'May', gestion: 57, visitas: 19, pct: 33.3 },
+  { mes: 'Jun', gestion: 52, visitas: 14, pct: 26.9 },
+];

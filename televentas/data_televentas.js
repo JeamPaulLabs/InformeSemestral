@@ -161,25 +161,25 @@ const INICIATIVAS_1S = [
    comerciales, ya usadas en "Evidencias"). Cada tema lleva un ícono representativo
    de su contenido — no es una foto del evento, es una identidad visual por tema. */
 const CAPACITACIONES_1S = [
-  { tema: 'Socialización y Alineación de Estándares de Calidad Comercial', mes: 'Ene', ico: '🧭' },
-  { tema: 'Estandarización del Protocolo de Cierre Comercial ("Gracias por la información")', mes: 'Feb', ico: '🤝' },
-  { tema: 'Fortalecimiento de Conocimientos del Producto Cuota Protegida', mes: 'Feb', ico: '🛡️' },
-  { tema: 'Aplicación Correcta de la Cláusula de Cobro y Autorizaciones', mes: 'Mar', ico: '📄' },
-  { tema: 'Implementación de Herramientas de Apoyo para la Gestión Comercial', mes: 'Abr', ico: '🛠️' },
-  { tema: 'Estandarización del Guion Comercial Aprobado', mes: 'Abr', ico: '📜' },
-  { tema: 'Actualización Comercial del Producto Plan Combo Vida', mes: 'May', ico: '❤️' },
-  { tema: 'Técnicas Efectivas para el Manejo de Objeciones Comerciales', mes: 'May', ico: '🎯' },
-  { tema: 'Lineamientos para la Correcta Aplicación del Guion Comercial y Control de Modificaciones', mes: 'May', ico: '📋' },
-  { tema: 'Fortalecimiento del Cumplimiento de los Lineamientos Operativos y de Calidad', mes: 'Jun', ico: '✅' },
+  { tema: 'Socialización y Alineación de Estándares de Calidad Comercial', mes: 'Ene', ico: icon('compass', { size: 20 }) },
+  { tema: 'Estandarización del Protocolo de Cierre Comercial ("Gracias por la información")', mes: 'Feb', ico: icon('handshake', { size: 20 }) },
+  { tema: 'Fortalecimiento de Conocimientos del Producto Cuota Protegida', mes: 'Feb', ico: icon('shield', { size: 20 }) },
+  { tema: 'Aplicación Correcta de la Cláusula de Cobro y Autorizaciones', mes: 'Mar', ico: icon('file-text', { size: 20 }) },
+  { tema: 'Implementación de Herramientas de Apoyo para la Gestión Comercial', mes: 'Abr', ico: icon('wrench', { size: 20 }) },
+  { tema: 'Estandarización del Guion Comercial Aprobado', mes: 'Abr', ico: icon('scroll-text', { size: 20 }) },
+  { tema: 'Actualización Comercial del Producto Plan Combo Vida', mes: 'May', ico: icon('heart', { size: 20 }) },
+  { tema: 'Técnicas Efectivas para el Manejo de Objeciones Comerciales', mes: 'May', ico: icon('target', { size: 20 }) },
+  { tema: 'Lineamientos para la Correcta Aplicación del Guion Comercial y Control de Modificaciones', mes: 'May', ico: icon('clipboard-list', { size: 20 }) },
+  { tema: 'Fortalecimiento del Cumplimiento de los Lineamientos Operativos y de Calidad', mes: 'Jun', ico: icon('circle-check', { size: 20 }) },
 ];
 
 /* ── Estrategia 2S: iniciativas propuestas (slide Estrategia) ─── */
 const ESTRATEGIA_INICIATIVAS = [
-  { color: 'teal', ico: '🎓', titulo: 'School Master Comercial', resumen: 'Acompañamiento 1-a-1 para baja conversión en CP.',
+  { color: 'teal', ico: icon('graduation-cap', { size: 20 }), titulo: 'School Master Comercial', resumen: 'Acompañamiento 1-a-1 para baja conversión en CP.',
     detalle: 'Diagnóstico individual de dificultades, talleres guiados en la Universidad ILAO y seguimiento cercano por asesor.' },
-  { color: 'blue', ico: '🏆', titulo: 'Modelado de Top Performers', resumen: 'Replicar las técnicas de Jesús, Melissa y Luisa.',
+  { color: 'blue', ico: icon('trophy', { size: 20 }), titulo: 'Modelado de Top Performers', resumen: 'Replicar las técnicas de Jesús, Melissa y Luisa.',
     detalle: 'Documentar sus argumentos de manejo de objeciones y transferir esas habilidades al resto del equipo vía sesiones cortas.' },
-  { color: 'warn', ico: '🧠', titulo: 'Desarrollo Emocional (Gestión Humana)', resumen: 'Resiliencia y manejo del estrés del equipo.',
+  { color: 'warn', ico: icon('brain', { size: 20 }), titulo: 'Desarrollo Emocional (Gestión Humana)', resumen: 'Resiliencia y manejo del estrés del equipo.',
     detalle: 'Talleres presenciales y dinámicas fuera de la oficina en habilidades blandas, tolerancia a la frustración y manejo de objeciones.' },
 ];
 

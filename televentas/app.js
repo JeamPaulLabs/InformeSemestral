@@ -75,34 +75,34 @@ function renderVentas() {
   const brecha    = Math.round((3000 - ultimoMes) / ultimoMes * 100);
 
   el.innerHTML = `
-    <div class="kpi-grid">
-      <div class="kpi-card">
+    <div class="kpi-grid" style="gap:12px">
+      <div class="kpi-card" style="padding:10px 16px">
         <div class="kpi-label">Pólizas liquidadas (1S completo)</div>
         <div class="kpi-val">${fmt(totalLiq)}</div>
         <div class="kpi-sub">Liquidación Martha · cifra oficial ene–jun</div>
       </div>
-      <div class="kpi-card green">
+      <div class="kpi-card green" style="padding:10px 16px">
         <div class="kpi-label">Ventas 1S (operativo ene–jun)</div>
         <div class="kpi-val">${fmt(totalOp)}</div>
         <div class="kpi-sub">Promedio 1.858/mes</div>
       </div>
-      <div class="kpi-card">
+      <div class="kpi-card" style="padding:10px 16px">
         <div class="kpi-label">Asesores en equipo</div>
         <div class="kpi-val">${DATA.asesores[0]} → ${Math.max(...DATA.asesores)} → ${DATA.asesores[DATA.asesores.length-1]}</div>
         <div class="kpi-sub">Ene · Pico (abr–may) · Jun</div>
       </div>
-      <div class="kpi-card warn">
+      <div class="kpi-card warn" style="padding:10px 16px">
         <div class="kpi-label">Brecha vs. meta 3.000/mes</div>
         <div class="kpi-val">+${brecha} %</div>
         <div class="kpi-sub">Crecimiento necesario sobre junio (${fmt(ultimoMes)}) · mejor mes: ${fmt(maxMes)}</div>
       </div>
     </div>
 
-    <div class="two-col">
-      <div class="panel">
-        <h3>📊 Pólizas vendidas vs. meta Escala 1</h3>
+    <div class="two-col" style="gap:14px">
+      <div class="panel" style="padding:12px 16px">
+        <h3 style="margin-bottom:6px; padding-bottom:5px">${icon('bar-chart-3')} Pólizas vendidas vs. meta Escala 1</h3>
         <div class="tbl-wrap" style="margin-top:0">
-          <table>
+          <table class="tbl-compact">
             <thead><tr>
               <th>Mes</th><th class="r">Pólizas</th><th class="r">Meta E1</th>
               <th class="r">Cumpli­miento</th><th class="r">Asesores</th>
@@ -127,9 +127,9 @@ function renderVentas() {
         </div>
       </div>
 
-      <div class="panel">
-        <h3>📈 Evolución pólizas por mes</h3>
-        <div class="chart-wrap" style="margin-top:8px">
+      <div class="panel" style="padding:12px 16px">
+        <h3 style="margin-bottom:6px; padding-bottom:5px">${icon('trending-up')} Evolución pólizas por mes</h3>
+        <div class="chart-wrap chart-compact" style="margin-top:4px">
           ${DATA.meses.map((m,i) => {
             const v = DATA.ventasLiq[i];
             if (v == null) return `
@@ -152,7 +152,7 @@ function renderVentas() {
           }).join('')}
         </div>
         <div class="alert alert-info" style="margin-top:16px">
-          <span class="ico">💡</span>
+          <span class="ico">${icon('lightbulb')}</span>
           <span>Abr–May: el equipo creció 33 % (15→20 asesores) para sostener una meta 27 % más alta (~2.580). La productividad individual bajó de 149,7 a 109,3 pólizas/asesor mientras el equipo nuevo se consolidaba — la curva de aprendizaje de esos ingresos es la oportunidad de mejora más clara para el 2S.</span>
         </div>
       </div>
@@ -222,7 +222,7 @@ function renderBases() {
     </div>
 
     <div class="alert alert-warn">
-      <span class="ico">⚠️</span>
+      <span class="ico">${icon('alert-triangle')}</span>
       <span><strong>Hallazgo clave:</strong> En el 2° trimestre el rechazo subió al 63–76 %. El 78 % del descarte del semestre es "registro enviado anteriormente" (49 %) + "producto ya activo" (29 %) → bases repetidas y clientes ya convertidos. No es un problema de calidad de datos, es un problema de depuración de origen.</span>
     </div>`;
 }
@@ -243,7 +243,7 @@ function renderCampanas() {
   el.innerHTML = `
     <div class="two-col">
       <div class="panel">
-        <h3>🎯 Eficiencia por campaña (consolidado ene–jun)</h3>
+        <h3>${icon('target')} Eficiencia por campaña (consolidado ene–jun)</h3>
         <div class="tbl-wrap" style="margin-top:0">
           <table>
             <thead><tr>
@@ -263,13 +263,13 @@ function renderCampanas() {
         </div>
         <div style="font-size:.6rem; color:var(--gray3); margin-top:4px">* Solo activa en enero (base de clientes satisfechos, campaña puntual, no recurrente).</div>
         <div class="alert alert-info" style="margin-top:10px">
-          <span class="ico">💡</span>
+          <span class="ico">${icon('lightbulb')}</span>
           <span>En el semestre completo, "Bienvenidas Cuota Protegida" genera el 62 % de las ventas (6.881 de 11.146) con solo el 13 % de los registros.</span>
         </div>
       </div>
 
       <div class="panel">
-        <h3>📋 Perfil de conversión por campaña</h3>
+        <h3>${icon('clipboard-list')} Perfil de conversión por campaña</h3>
         ${CAMPANAS.map(c=>`
           <div class="bar-row" style="margin-bottom:14px; flex-direction:column; align-items:flex-start; gap:4px">
             <div style="font-size:.78rem; font-weight:700; color:var(--blue)">${c.nombre}</div>
@@ -280,7 +280,7 @@ function renderCampanas() {
             </div>
           </div>`).join('')}
         <div class="alert alert-warn" style="margin-top:8px">
-          <span class="ico">🔴</span>
+          <span class="ico">${icon('alert-circle')}</span>
           <span>"Masiva Voluntarios" consume grandes volúmenes de base con conversión &lt;1 %. Revisar viabilidad.</span>
         </div>
       </div>
@@ -316,9 +316,9 @@ function renderAsesores() {
 
   el.innerHTML = `
     <div class="two-col" style="grid-template-columns:1.5fr 1fr">
-      <div class="panel">
-        <h3>👥 Equipo completo · pólizas liquidadas por mes (${ASESORES.length} asesores)</h3>
-        <div class="tbl-wrap" style="margin-top:0; max-height:520px; overflow-y:auto">
+      <div class="panel" style="padding:14px 18px">
+        <h3 style="margin-bottom:8px; padding-bottom:6px">${icon('users')} Equipo completo · pólizas liquidadas por mes (${ASESORES.length} asesores)</h3>
+        <div class="tbl-wrap" style="margin-top:0; max-height:460px; overflow-y:auto">
           <table style="font-size:.66rem">
             <thead><tr>
               <th class="r">#</th><th>Asesor</th>
@@ -329,55 +329,55 @@ function renderAsesores() {
           </table>
         </div>
         <div style="display:flex; gap:16px; margin-top:8px; font-size:.64rem; color:var(--gray3)">
-          <span>⭐ Top 5 del semestre</span>
+          <span>${icon('star', { size: 14 })} Top 5 del semestre</span>
           <span style="color:#c44a1a">rojo = por debajo de la meta E1 del mes</span>
           <span>— = sin liquidación ese mes</span>
         </div>
       </div>
 
-      <div class="panel" style="display:flex; flex-direction:column">
-        <h3>📌 Lectura del equipo</h3>
+      <div class="panel" style="display:flex; flex-direction:column; padding:14px 18px">
+        <h3 style="margin-bottom:8px; padding-bottom:6px">${icon('pin')} Lectura del equipo</h3>
 
         <!-- Sección: Roster por mes -->
-        <div class="asesores-section">
-          <div class="asesores-section-label">👥 Asesores activos por mes</div>
+        <div class="asesores-section" style="margin-bottom:10px">
+          <div class="asesores-section-label" style="margin-bottom:5px">${icon('users', { size: 14 })} Asesores activos por mes</div>
           <div style="display:flex; align-items:flex-end; gap:8px; flex-wrap:wrap">
             ${['Ene','Feb','Mar','Abr','May','Jun'].map((m,i)=>{
               const n = ROSTER.rosterPorMes[i];
               const fill = n >= 20 ? 'var(--teal)' : n >= 17 ? 'var(--blue)' : 'var(--gray2)';
               return `<div style="text-align:center">
-                <div style="width:34px;height:34px;border-radius:9px;background:${fill};color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.82rem;margin:0 auto 3px">${n}</div>
-                <div style="font-size:.6rem;color:var(--gray3);font-weight:600">${m}</div>
+                <div style="width:28px;height:28px;border-radius:8px;background:${fill};color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.74rem;margin:0 auto 2px">${n}</div>
+                <div style="font-size:.58rem;color:var(--gray3);font-weight:600">${m}</div>
               </div>`;
             }).join('')}
           </div>
         </div>
 
         <!-- Sección: Hallazgo top 5 -->
-        <div class="asesores-section">
-          <div class="alert alert-info" style="margin:0">
-            <span class="ico">⭐</span>
+        <div class="asesores-section" style="margin-bottom:10px">
+          <div class="alert alert-info" style="margin:0; padding:8px 14px">
+            <span class="ico">${icon('star')}</span>
             <span>El top 5 aporta <strong>4.279 pólizas (37 %)</strong> del semestre y los 3 primeros recibieron <strong>meta premium (150)</strong> en junio. Jesús Cortés nunca bajó de 197.</span>
           </div>
         </div>
 
         <!-- Sección: Incentivos extras -->
         <div class="asesores-section" style="margin-bottom:0">
-          <div class="asesores-section-label">💰 Incentivos extras pagados 1S</div>
+          <div class="asesores-section-label" style="margin-bottom:5px">${icon('coins', { size: 14 })} Incentivos extras pagados 1S</div>
           <div class="tbl-wrap" style="margin-top:0">
-            <table style="font-size:.66rem">
+            <table class="tbl-compact">
               <thead><tr><th>Mes</th><th class="r">Eventos</th><th>Detalle</th></tr></thead>
               <tbody>
                 ${INCENTIVOS_EXTRAS.map(ie=>`
                   <tr>
                     <td><strong>${ie.mes}</strong></td>
                     <td class="r">${ie.eventos}</td>
-                    <td style="font-size:.62rem; color:var(--gray3)">${ie.nota}</td>
+                    <td style="font-size:.6rem; color:var(--gray3)">${ie.nota}</td>
                   </tr>`).join('')}
                 <tr class="total">
                   <td>Total</td>
                   <td class="r">${INCENTIVOS_EXTRAS.reduce((s,d)=>s+d.eventos,0)}</td>
-                  <td style="font-size:.62rem">41 eventos de incentivo en el semestre</td>
+                  <td style="font-size:.6rem">41 eventos de incentivo en el semestre</td>
                 </tr>
               </tbody>
             </table>
@@ -398,11 +398,11 @@ function renderIniciativas() {
   el.innerHTML = `
     <div class="panel">
       <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px">
-        <h3 style="margin:0; border:none; padding:0">🚀 Lo ejecutado en el 1S, según Martha Carvajal</h3>
+        <h3 style="margin:0; border:none; padding:0">${icon('rocket')} Lo ejecutado en el 1S, según Martha Carvajal</h3>
         <div class="strategy-tabs">
-          <button class="strategy-tab active" data-tab="niniciativas" onclick="iniciativasTab('niniciativas')">🎯 Iniciativas</button>
-          <button class="strategy-tab" data-tab="ncap" onclick="iniciativasTab('ncap')">🎓 Capacitaciones</button>
-          <button class="strategy-tab" data-tab="nproc" onclick="iniciativasTab('nproc')">🔍 Monitoreo y procesos</button>
+          <button class="strategy-tab active" data-tab="niniciativas" onclick="iniciativasTab('niniciativas')">${icon('target', { size: 14 })} Iniciativas</button>
+          <button class="strategy-tab" data-tab="ncap" onclick="iniciativasTab('ncap')">${icon('graduation-cap', { size: 14 })} Capacitaciones</button>
+          <button class="strategy-tab" data-tab="nproc" onclick="iniciativasTab('nproc')">${icon('search', { size: 14 })} Monitoreo y procesos</button>
         </div>
       </div>
 
@@ -449,7 +449,7 @@ function renderIniciativas() {
       <!-- TAB: Capacitaciones (agrupadas por mes) -->
       <div class="strategy-pane" id="pane-ncap">
         <div class="alert alert-info" style="margin-bottom:10px">
-          <span class="ico">🎓</span>
+          <span class="ico">${icon('graduation-cap')}</span>
           <span><strong>10 capacitaciones</strong> ejecutadas por Xuma durante el semestre — al menos una por mes. Sin fotos del evento: el ícono representa el tema de cada una.</span>
         </div>
         <div class="cap-months">
@@ -475,13 +475,13 @@ function renderIniciativas() {
       <div class="strategy-pane" id="pane-nproc">
         <div class="two-col">
           <div>
-            <div class="asesores-section-label">🔍 Monitoreo y acompañamiento</div>
+            <div class="asesores-section-label">${icon('search', { size: 14 })} Monitoreo y acompañamiento</div>
             <div style="display:flex; flex-direction:column; gap:6px">
               ${[
-                ['📞','Monitoreo semanal en vivo','Objeciones, tipificación y corrección inmediata','Se revisa en vivo cómo el asesor debate objeciones, si tipifica correctamente y se corrigen errores al momento.'],
-                ['🔁','Monitoreos ocasionales','Contrastan tipificación vs. la llamada real','Auditorías puntuales en algunos meses para verificar que la tipificación registrada coincida con lo que pasó en la llamada.'],
-                ['🧯','Kit de emergencia','Manual de objeciones desde "no interesado"','Se revisan las llamadas tipificadas "no interesado" para nutrir un manual de objeciones que guía al asesor hacia el cierre.'],
-                ['📊','Revisión semanal por asesor','Avance, proyección y KPI faltante','Seguimiento individual: cómo va cada asesor, a qué % se proyecta y qué le falta para su meta.'],
+                [icon('phone'),'Monitoreo semanal en vivo','Objeciones, tipificación y corrección inmediata','Se revisa en vivo cómo el asesor debate objeciones, si tipifica correctamente y se corrigen errores al momento.'],
+                [icon('repeat'),'Monitoreos ocasionales','Contrastan tipificación vs. la llamada real','Auditorías puntuales en algunos meses para verificar que la tipificación registrada coincida con lo que pasó en la llamada.'],
+                [icon('life-buoy'),'Kit de emergencia','Manual de objeciones desde "no interesado"','Se revisan las llamadas tipificadas "no interesado" para nutrir un manual de objeciones que guía al asesor hacia el cierre.'],
+                [icon('bar-chart-3'),'Revisión semanal por asesor','Avance, proyección y KPI faltante','Seguimiento individual: cómo va cada asesor, a qué % se proyecta y qué le falta para su meta.'],
               ].map((it,idx)=>`
                 <div class="ini-card" onclick="toggleCard('mon-detalle-${idx}','mon-chevron-${idx}')">
                   <div class="ini-head">
@@ -497,13 +497,13 @@ function renderIniciativas() {
             </div>
           </div>
           <div>
-            <div class="asesores-section-label" style="color:var(--teal)">⚙️ Cambios de proceso (Xuma)</div>
+            <div class="asesores-section-label" style="color:var(--teal)">${icon('settings', { size: 14 })} Cambios de proceso (Xuma)</div>
             <div style="display:flex; flex-direction:column; gap:6px">
               ${[
-                ['⏳','Exclusiones del seguro','Menor carencia + coberturas adicionales','Se ajustaron las exclusiones dando más beneficios y menor tiempo de carencia, con el guion actualizado para incorporar la nueva asistencia.'],
-                ['👋','Bienvenida autogestión','Trato preferencial y medición de experiencia','Bienvenida exclusiva para clientes que obtuvieron el crédito por autogestión, conociendo cómo perciben esta nueva forma de crédito.'],
-                ['🗣️','Frase de aclaración obligatoria','El asesor deja explícito que es un seguro','Cuando el usuario cree que es solo información, el asesor debe aclarar que se está ofreciendo un seguro, para una venta más transparente.'],
-                ['🎯','Segmentación y contactabilidad','Por localidad/edad + control de spam/DID','Cargues priorizados según mayor presencia de ventas por localidad o edad, y barrido de contactos sin respuesta más cambio de DID si el número marca como spam.'],
+                [icon('hourglass'),'Exclusiones del seguro','Menor carencia + coberturas adicionales','Se ajustaron las exclusiones dando más beneficios y menor tiempo de carencia, con el guion actualizado para incorporar la nueva asistencia.'],
+                [icon('hand'),'Bienvenida autogestión','Trato preferencial y medición de experiencia','Bienvenida exclusiva para clientes que obtuvieron el crédito por autogestión, conociendo cómo perciben esta nueva forma de crédito.'],
+                [icon('megaphone'),'Frase de aclaración obligatoria','El asesor deja explícito que es un seguro','Cuando el usuario cree que es solo información, el asesor debe aclarar que se está ofreciendo un seguro, para una venta más transparente.'],
+                [icon('target'),'Segmentación y contactabilidad','Por localidad/edad + control de spam/DID','Cargues priorizados según mayor presencia de ventas por localidad o edad, y barrido de contactos sin respuesta más cambio de DID si el número marca como spam.'],
               ].map((it,idx)=>`
                 <div class="ini-card" onclick="toggleCard('proc-detalle-${idx}','proc-chevron-${idx}')">
                   <div class="ini-head">
@@ -546,33 +546,40 @@ function renderContactab() {
   if (!el) return;
 
   el.innerHTML = `
-    <div class="kpi-grid">
-      <div class="kpi-card green">
+    <div style="display:flex; flex-direction:column; gap:8px">
+    <div class="kpi-grid" style="gap:12px">
+      <div class="kpi-card green" style="padding:8px 16px">
         <div class="kpi-label">Contactabilidad promedio (1S)</div>
         <div class="kpi-val">40,4 %</div>
         <div class="kpi-sub">129.696 contactos en el semestre</div>
       </div>
-      <div class="kpi-card green">
+      <div class="kpi-card green" style="padding:8px 16px">
         <div class="kpi-label">Pico: mayo</div>
         <div class="kpi-val">63,8 %</div>
-        <div class="kpi-sub">Jun: 49,1 % (con +15 % de volumen gestionado)</div>
+        <div class="kpi-sub">Jun: 49,1 % (+15 % volumen)</div>
       </div>
-      <div class="kpi-card">
+      <div class="kpi-card" style="padding:8px 16px">
         <div class="kpi-label">Efectividad prom./contacto</div>
         <div class="kpi-val">8,6 %</div>
-        <div class="kpi-sub">Promedio ene–jun (estable 6,7–10,3 %)</div>
+        <div class="kpi-sub">Promedio ene–jun (6,7–10,3 %)</div>
       </div>
-      <div class="kpi-card warn">
+      <div class="kpi-card warn" style="padding:8px 16px">
         <div class="kpi-label">Contestador (semestre)</div>
         <div class="kpi-val">~54 %</div>
         <div class="kpi-sub">Principal causa de no contacto</div>
       </div>
     </div>
 
-    <div class="two-col">
-      <div class="panel">
-        <h3>📞 Contactabilidad por mes</h3>
-        <div class="chart-wrap">
+    <div class="ctb-tabs" style="display:flex; gap:8px; margin-bottom:2px">
+      <button class="ctb-tab active" data-tab="mes" onclick="contactabTab('mes')">${icon('phone', { size: 14 })} Por mes</button>
+      <button class="ctb-tab" data-tab="campana" onclick="contactabTab('campana')">${icon('link', { size: 14 })} Por campaña</button>
+    </div>
+
+    <div class="ctb-pane active" id="ctb-pane-mes">
+    <div class="two-col" style="gap:10px">
+      <div class="panel" style="padding:8px 16px">
+        <h3 style="margin-bottom:6px; padding-bottom:5px">${icon('phone')} Contactabilidad por mes</h3>
+        <div class="chart-wrap chart-compact">
           ${DATA.meses.map((m,i)=>{
             const pct = DATA.contactabilidad[i].toFixed(0)+'%';
             return `
@@ -587,10 +594,10 @@ function renderContactab() {
         </div>
       </div>
 
-      <div class="panel">
-        <h3>💡 Efectividad sobre contactados</h3>
+      <div class="panel" style="padding:8px 16px">
+        <h3 style="margin-bottom:6px; padding-bottom:5px">${icon('lightbulb')} Efectividad sobre contactados</h3>
         <div class="tbl-wrap" style="margin-top:0">
-          <table>
+          <table class="tbl-compact">
             <thead><tr>
               <th>Mes</th><th class="r">Contactados</th>
               <th class="r">Ventas</th><th class="r">Efect.</th>
@@ -606,17 +613,20 @@ function renderContactab() {
             </tbody>
           </table>
         </div>
-        <div class="alert alert-info" style="margin-top:12px">
-          <span class="ico">📌</span>
-          <span>La mejora en contactabilidad es la mayor palanca disponible: pasar de 20 % (ene) a 64 % (may) <em>sin cambiar la base</em> generó +21 % más ventas. <strong>Oportunidad detectada (Isaac):</strong> aún no existe análisis por franja horaria — tablero propuesto para el 2S.</span>
-        </div>
       </div>
     </div>
 
-    <div class="panel">
-      <h3>🔗 Cruce con campañas: el mix explica gran parte de la mejora</h3>
+    <div class="alert alert-info" style="margin-top:10px; padding:8px 14px">
+      <span class="ico">${icon('pin')}</span>
+      <span>Pasar de 20 % (ene) a 64 % (may) <em>sin cambiar la base</em> generó +21 % más ventas — la mayor palanca disponible. <strong>Oportunidad (Isaac):</strong> falta análisis por franja horaria, tablero propuesto para el 2S.</span>
+    </div>
+    </div>
+
+    <div class="ctb-pane" id="ctb-pane-campana">
+    <div class="panel" style="padding:12px 16px">
+      <h3 style="margin-bottom:8px; padding-bottom:6px">${icon('link')} Cruce con campañas: el mix explica gran parte de la mejora</h3>
       <div class="tbl-wrap" style="margin-top:0">
-        <table style="font-size:.78rem">
+        <table class="tbl-compact">
           <thead><tr>
             <th>Campaña</th><th class="r">Contactabilidad</th>
             <th class="r">Conv./contacto</th><th class="r">Perfil</th>
@@ -633,10 +643,18 @@ function renderContactab() {
         </table>
       </div>
       <div class="alert alert-info" style="margin-top:10px">
-        <span class="ico">💡</span>
+        <span class="ico">${icon('lightbulb')}</span>
         <span>No es solo el calendario: la contactabilidad global sube o baja según <strong>qué campaña domina la base ese mes</strong>. Bienvenidas CP (79 %) y Autogestión (71 %) contactan mucho mejor que Masiva Voluntarios (17 %) porque son bases más "tibias" (clientes recién vinculados o autogestionados), no números fríos re-marcados. Detalle completo por campaña en la slide "Campañas".</span>
       </div>
+    </div>
+    </div>
     </div>`;
+}
+
+function contactabTab(name) {
+  document.querySelectorAll('.ctb-tab').forEach(b => b.classList.toggle('active', b.dataset.tab === name));
+  document.querySelectorAll('.ctb-pane').forEach(p => p.classList.remove('active'));
+  document.getElementById(`ctb-pane-${name}`).classList.add('active');
 }
 
 /* Slide: Infraestructura telefónica Tigo vs. Movistar
@@ -651,39 +669,39 @@ function renderTelefonia() {
     { op: 'Movistar', tag: 'backup', llamadas: 448057, contactos: 114901, contactab: 25.6, caidas: 15.1, ventas: 6370, cls: 'warn' },
   ];
   el.innerHTML = `
-    <div class="kpi-grid">
-      <div class="kpi-card">
+    <div class="kpi-grid" style="gap:12px">
+      <div class="kpi-card" style="padding:10px 16px">
         <div class="kpi-label">Llamadas analizadas</div>
         <div class="kpi-val">628.406</div>
         <div class="kpi-sub">13.516 teléfonos · 972 barrios de Bogotá</div>
       </div>
-      <div class="kpi-card green">
+      <div class="kpi-card green" style="padding:10px 16px">
         <div class="kpi-label">Contactabilidad telefónica</div>
         <div class="kpi-val">38,9 %</div>
         <div class="kpi-sub">Consistente con el 40,4 % operativo del 1S</div>
       </div>
-      <div class="kpi-card warn">
+      <div class="kpi-card warn" style="padding:10px 16px">
         <div class="kpi-label">Caídas de troncal</div>
         <div class="kpi-val">69.740</div>
         <div class="kpi-sub">11,1 % de las llamadas se pierden por infraestructura</div>
       </div>
-      <div class="kpi-card warn">
+      <div class="kpi-card warn" style="padding:10px 16px">
         <div class="kpi-label">Fallas de red Movistar</div>
         <div class="kpi-val">17,1 %</div>
         <div class="kpi-sub">Congestión 9,96 % + rechazo 7,13 % (Tigo: 0,86 %)</div>
       </div>
     </div>
 
-    <div class="tele-tabs" style="display:flex; gap:8px; margin:14px 0 10px">
-      <button class="tele-tab active" data-tab="resumen" onclick="telefoniaTab('resumen')">📡 Tigo vs. Movistar</button>
-      <button class="tele-tab" data-tab="zonas" onclick="telefoniaTab('zonas')">📍 Zonas críticas por barrio</button>
+    <div class="tele-tabs" style="display:flex; gap:8px; margin:10px 0 8px">
+      <button class="tele-tab active" data-tab="resumen" onclick="telefoniaTab('resumen')">${icon('radio-tower', { size: 14 })} Tigo vs. Movistar</button>
+      <button class="tele-tab" data-tab="zonas" onclick="telefoniaTab('zonas')">${icon('map-pin', { size: 14 })} Zonas críticas por barrio</button>
     </div>
 
     <div class="tele-pane active" id="tele-pane-resumen">
-    <div class="two-col">
-      <div class="panel">
-        <h3>📡 Tigo vs. Movistar · volumen, contacto y caídas</h3>
-        <div style="display:flex; flex-direction:column; gap:16px; margin-top:4px">
+    <div class="two-col" style="gap:14px">
+      <div class="panel" style="padding:12px 16px">
+        <h3 style="margin-bottom:6px; padding-bottom:5px">${icon('radio-tower')} Tigo vs. Movistar · volumen, contacto y caídas</h3>
+        <div style="display:flex; flex-direction:column; gap:12px; margin-top:2px">
           ${OPS.map(o=>`
             <div>
               <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:5px">
@@ -706,14 +724,14 @@ function renderTelefonia() {
               </div>
             </div>`).join('')}
         </div>
-        <div class="alert alert-warn" style="margin-top:14px">
-          <span class="ico">🔴</span>
+        <div class="alert alert-warn" style="margin-top:10px; padding:8px 14px">
+          <span class="ico">${icon('alert-circle')}</span>
           <span>El <strong>backup (Movistar) carga el 71 % del tráfico</strong> con la peor red: pierde 17 de cada 100 llamadas por congestión o rechazo de troncal, frente a 0,86 % en Tigo.</span>
         </div>
       </div>
 
-      <div class="panel">
-        <h3>🔗 Potencial de recuperación (si las caídas se cursan por Tigo)</h3>
+      <div class="panel" style="padding:12px 16px">
+        <h3 style="margin-bottom:6px; padding-bottom:5px">${icon('link')} Potencial de recuperación (si las caídas se cursan por Tigo)</h3>
         <div style="display:flex; align-items:stretch; gap:8px; margin:10px 0 6px">
           ${[
             ['Hoy', '69.740', 'caídas de troncal (backup Movistar)'],
@@ -730,12 +748,12 @@ function renderTelefonia() {
         <div style="font-size:.6rem; color:var(--gray3); text-align:center; margin-bottom:10px">Estimación con la efectividad del semestre; validar con Isaac el período de la muestra.</div>
 
         <div class="alert alert-info" style="margin-bottom:0">
-          <span class="ico">📌</span>
+          <span class="ico">${icon('pin')}</span>
           <span>El "no contacto" operativo (59,9 % del gestionado) tiene causa técnica: parte son llamadas que <strong>nunca se cursaron</strong> por fallas de red — el mismo insumo que luego se descarta como "re-enviado".</span>
         </div>
 
         <div style="margin-top:12px">
-          <div style="font-size:.68rem; font-weight:800; color:var(--blue); letter-spacing:.06em; margin-bottom:6px">📋 ACCIONES PROPUESTAS (frente tecnológico 2S)</div>
+          <div style="font-size:.68rem; font-weight:800; color:var(--blue); letter-spacing:.06em; margin-bottom:6px">${icon('clipboard-list', { size: 14 })} ACCIONES PROPUESTAS (frente tecnológico 2S)</div>
           <ul class="check-list" style="gap:5px">
             <li style="font-size:.72rem">Rebalancear troncales hacia Tigo en zonas periféricas (San Cristóbal, Ciudad Bolívar)</li>
             <li style="font-size:.72rem">Auditoría formal a Movistar: códigos 34 (congestión) y 21 (rechazo)</li>
@@ -748,7 +766,7 @@ function renderTelefonia() {
 
     <div class="tele-pane" id="tele-pane-zonas">
     <div class="panel">
-      <h3>📍 Zonas críticas de Bogotá · fallas de red por barrio</h3>
+      <h3>${icon('map-pin')} Zonas críticas de Bogotá · fallas de red por barrio</h3>
       <div class="two-col" style="gap:16px">
         <div>
           <div style="font-size:.72rem; font-weight:800; color:var(--blue); margin-bottom:6px">San Cristóbal — 32.619 llamadas <span style="font-weight:600; color:var(--gray3)">(Tigo 71,9 % contacto · Movistar 24,1 % contacto)</span></div>
@@ -795,7 +813,7 @@ function renderDescarte() {
   el.innerHTML = `
     <div class="two-col">
       <div class="panel">
-        <h3>🚫 Motivos de rechazo de base (semestre ene–jun)</h3>
+        <h3>${icon('ban')} Motivos de rechazo de base (semestre ene–jun)</h3>
         <div class="chart-wrap">
           ${DESCARTE_MOTIVOS.map(d=>`
             <div class="bar-row">
@@ -807,13 +825,13 @@ function renderDescarte() {
             </div>`).join('')}
         </div>
         <div class="alert alert-warn" style="margin-top:16px">
-          <span class="ico">🔴</span>
+          <span class="ico">${icon('alert-circle')}</span>
           <span>El 78 % del descarte es estructural: bases repetidas + producto activo. <strong>Isaac lo confirma:</strong> se gestionan registros contingentes por falta de insumo oportuno, y al llegar el insumo real la mayoría ya tiene el producto o fue re-enviada en el mismo período (&lt;1 mes).</span>
         </div>
       </div>
 
       <div class="panel">
-        <h3>📆 Evolución del rechazo de base</h3>
+        <h3>${icon('calendar-days')} Evolución del rechazo de base</h3>
         <div class="tbl-wrap" style="margin-top:0">
           <table>
             <thead><tr>
@@ -832,7 +850,7 @@ function renderDescarte() {
           </table>
         </div>
         <div class="panel" style="margin-top:14px; border-left:4px solid var(--teal); padding:14px 16px; box-shadow:none">
-          <h3 style="border:none; padding:0; margin-bottom:8px; color:var(--teal)">💡 Recomendaciones de mejora</h3>
+          <h3 style="border:none; padding:0; margin-bottom:8px; color:var(--teal)">${icon('lightbulb')} Recomendaciones de mejora</h3>
           <ul class="check-list">
             <li>Implementar deduplicación de contratos antes del envío de la base</li>
             <li>Excluir automáticamente clientes con producto activo (CP / Microseguro)</li>
@@ -853,39 +871,39 @@ function renderProyeccion() {
   const metaAgregJun   = METAS_JUN.reduce((s,a)=>s+a.e1,0);
 
   el.innerHTML = `
-    <div class="kpi-grid">
-      <div class="kpi-card">
+    <div class="kpi-grid" style="gap:12px">
+      <div class="kpi-card" style="padding:8px 16px">
         <div class="kpi-label">Meta mensual objetivo</div>
         <div class="kpi-val">3.000</div>
         <div class="kpi-sub">Pólizas / mes</div>
       </div>
-      <div class="kpi-card warn">
+      <div class="kpi-card warn" style="padding:8px 16px">
         <div class="kpi-label">Registros requeridos (estimado)</div>
         <div class="kpi-val">~245K</div>
         <div class="kpi-sub">Con indicadores históricos ene–jun</div>
       </div>
-      <div class="kpi-card green">
+      <div class="kpi-card green" style="padding:8px 16px">
         <div class="kpi-label">Palanca principal</div>
         <div class="kpi-val">Base limpia</div>
         <div class="kpi-sub">Reducir rechazo del 60 % del semestre</div>
       </div>
-      <div class="kpi-card">
+      <div class="kpi-card" style="padding:8px 16px">
         <div class="kpi-label">Meta agregada equipo Jun</div>
         <div class="kpi-val">${fmt(metaAgregJun)}</div>
         <div class="kpi-sub">${totalEquipoJun} asesores activos · E1 diferenciada</div>
       </div>
     </div>
 
-    <div class="proy-tabs" style="display:flex; gap:8px; margin:14px 0 10px">
-      <button class="proy-tab active" data-tab="calc" onclick="proyeccionTab('calc')">🧮 Cálculo histórico</button>
-      <button class="proy-tab" data-tab="escenario" onclick="proyeccionTab('escenario')">🚀 Escenario recomendado</button>
+    <div class="proy-tabs" style="display:flex; gap:8px; margin:8px 0 6px">
+      <button class="proy-tab active" data-tab="calc" onclick="proyeccionTab('calc')">${icon('calculator', { size: 14 })} Cálculo histórico</button>
+      <button class="proy-tab" data-tab="escenario" onclick="proyeccionTab('escenario')">${icon('rocket', { size: 14 })} Escenario recomendado</button>
     </div>
 
     <div class="proy-pane active" id="proy-pane-calc">
-      <div class="panel">
-        <h3>🧮 Cálculo con indicadores históricos (semestre ene–jun)</h3>
+      <div class="panel" style="padding:14px 18px">
+        <h3 style="margin-bottom:8px; padding-bottom:6px">${icon('calculator')} Cálculo con indicadores históricos (semestre ene–jun)</h3>
         <div class="tbl-wrap" style="margin-top:0">
-          <table>
+          <table class="tbl-compact">
             <thead><tr><th>Parámetro</th><th class="r">Valor histórico</th><th class="r">Insumo para 3.000</th></tr></thead>
             <tbody>
               <tr><td>Meta ventas/mes</td><td class="r">—</td><td class="r"><strong>3.000</strong></td></tr>
@@ -893,22 +911,22 @@ function renderProyeccion() {
               <tr><td>Contactabilidad</td><td class="r">40,4 %</td><td class="r">÷ 40,4 % = <strong>86.427</strong> gestionados</td></tr>
               <tr><td>% Gestión sobre aptos</td><td class="r">88,3 %</td><td class="r">÷ 88,3 % = <strong>97.902</strong> aptos</td></tr>
               <tr><td>% Aptos (1–rechazo)</td><td class="r">39,9 %</td><td class="r">÷ 39,9 % = <strong>~245.500</strong> recibidos</td></tr>
-              <tr class="total"><td colspan="2">📦 Registros mínimos requeridos/mes</td><td class="r">235.000–260.000</td></tr>
+              <tr class="total"><td colspan="2">${icon('package')} Registros mínimos requeridos/mes</td><td class="r">235.000–260.000</td></tr>
             </tbody>
           </table>
         </div>
 
         <!-- ESQUEMA DE COMISIONES RESUMEN -->
-        <div style="margin-top:14px">
-          <div style="font-size:.72rem; font-weight:800; color:var(--blue); letter-spacing:.06em; margin-bottom:8px">ESQUEMA COMISIONES 1S — EVOLUCIÓN</div>
-          <div style="display:flex; flex-direction:column; gap:4px">
+        <div style="margin-top:10px">
+          <div style="font-size:.7rem; font-weight:800; color:var(--blue); letter-spacing:.06em; margin-bottom:5px">ESQUEMA COMISIONES 1S — EVOLUCIÓN</div>
+          <div style="display:flex; flex-direction:column; gap:2px">
             ${ESQUEMA_MESES.map(e=>{
               const hasVolante = e.volante ? `<span style="color:var(--teal);font-weight:700"> + Volante ${e.volante} pól.</span>` : '';
               const bgCol = e.novedades.includes('sube')||e.novedades.includes('diferenciadas')||e.novedades.includes('Volante') ? 'rgba(0,205,147,.08)' : 'transparent';
-              return `<div style="display:flex;gap:8px;align-items:baseline;font-size:.71rem;padding:3px 6px;border-radius:6px;background:${bgCol}">
+              return `<div style="display:flex;gap:8px;align-items:baseline;font-size:.68rem;padding:2px 6px;border-radius:6px;background:${bgCol}">
                 <span style="font-weight:800;color:var(--blue);min-width:28px">${e.mes}</span>
                 <span>E1 <strong>${e.e1meta}</strong> pol. con bonificación base${hasVolante}</span>
-                ${e.novedades!=='Sin cambios'?`<span style="color:var(--gray3);font-style:italic;font-size:.66rem">← ${e.novedades}</span>`:''}
+                ${e.novedades!=='Sin cambios'?`<span style="color:var(--gray3);font-style:italic;font-size:.64rem">← ${e.novedades}</span>`:''}
               </div>`;
             }).join('')}
           </div>
@@ -917,37 +935,37 @@ function renderProyeccion() {
     </div>
 
     <div class="proy-pane" id="proy-pane-escenario">
-      <div class="panel">
-        <h3>🚀 Escenario con base depurada (recomendado)</h3>
+      <div class="panel" style="padding:8px 16px">
+        <h3 style="margin-bottom:3px; padding-bottom:3px">${icon('rocket')} Escenario con base depurada (recomendado)</h3>
 
         <!-- Flujo de 3 pasos -->
-        <div style="display:flex; align-items:stretch; gap:8px; margin:12px 0">
+        <div style="display:flex; align-items:stretch; gap:8px; margin:4px 0">
           ${[
             ['Paso 1 · Depurar', '60 % → 35 %', 'de rechazo, excluyendo re-envíos y producto activo'],
             ['Paso 2 · Aptos', '64K → 110K', 'registros aptos/mes con los mismos ~170K recibidos'],
             ['Paso 3 · Ventas', '≈ 3.760', 'ventas/mes potenciales — supera la meta de 3.000'],
           ].map(([paso, cifra, det], i)=>`
-            ${i>0?'<div style="align-self:center; color:var(--teal); font-weight:800; font-size:1.2rem; flex-shrink:0">→</div>':''}
-            <div style="flex:1; display:flex; flex-direction:column; justify-content:center; background:rgba(0,205,147,.07); border:1px solid rgba(0,205,147,.3); border-radius:10px; padding:12px 10px; text-align:center; min-height:96px">
-              <div style="font-size:.62rem; font-weight:800; color:var(--teal); letter-spacing:.05em; text-transform:uppercase; margin-bottom:4px">${paso}</div>
-              <div style="font-size:1.15rem; font-weight:800; color:var(--blue); line-height:1; margin-bottom:5px">${cifra}</div>
-              <div style="font-size:.62rem; color:var(--gray3); line-height:1.4">${det}</div>
+            ${i>0?'<div style="align-self:center; color:var(--teal); font-weight:800; font-size:1.1rem; flex-shrink:0">→</div>':''}
+            <div style="flex:1; display:flex; flex-direction:column; justify-content:center; background:rgba(0,205,147,.07); border:1px solid rgba(0,205,147,.3); border-radius:10px; padding:6px 10px; text-align:center; min-height:60px">
+              <div style="font-size:.58rem; font-weight:800; color:var(--teal); letter-spacing:.05em; text-transform:uppercase; margin-bottom:2px">${paso}</div>
+              <div style="font-size:.98rem; font-weight:800; color:var(--blue); line-height:1; margin-bottom:2px">${cifra}</div>
+              <div style="font-size:.58rem; color:var(--gray3); line-height:1.25">${det}</div>
             </div>`).join('')}
         </div>
-        <div style="font-size:.64rem; color:var(--gray3); text-align:center; margin-bottom:10px">Premisas del cálculo: 88 % gestión · 45 % contactabilidad · 8,6 % conversión (históricos 1S)</div>
+        <div style="font-size:.6rem; color:var(--gray3); text-align:center; margin-bottom:4px">Premisas del cálculo: 88 % gestión · 45 % contactabilidad · 8,6 % conversión (históricos 1S)</div>
 
         <!-- Notas complementarias -->
-        <ul class="check-list" style="gap:6px">
-          <li style="font-size:.72rem"><strong>Validado por Isaac:</strong> la deduplicación en origen es viable (registro del distribuidor + validación de fuentes). Su meta de corto plazo: rechazo <strong>≤ 50 %</strong> como escalón intermedio hacia el 35 %.</li>
-          <li style="font-size:.72rem">Priorizar <strong>Bienvenidas CP</strong> y <strong>Autogestión</strong> (conversión 17–33 % sobre contacto) reduce el volumen necesario a la mitad.</li>
-          <li style="font-size:.72rem">Capacidad del equipo: meta agregada jun = <strong>${fmt(metaAgregJun)} pólizas</strong> (${totalEquipoJun} asesores, ${Math.round(metaAgregJun/totalEquipoJun)} pol/asesor). Para 3.000 → <strong>~150 pol/asesor con 20 asesores</strong>.</li>
+        <ul class="check-list" style="gap:2px">
+          <li style="font-size:.68rem"><strong>Validado por Isaac:</strong> la deduplicación en origen es viable (registro del distribuidor + validación de fuentes). Su meta de corto plazo: rechazo <strong>≤ 50 %</strong> como escalón intermedio hacia el 35 %.</li>
+          <li style="font-size:.68rem">Priorizar <strong>Bienvenidas CP</strong> y <strong>Autogestión</strong> (conversión 17–33 % sobre contacto) reduce el volumen necesario a la mitad.</li>
+          <li style="font-size:.68rem">Capacidad del equipo: meta agregada jun = <strong>${fmt(metaAgregJun)} pólizas</strong> (${totalEquipoJun} asesores, ${Math.round(metaAgregJun/totalEquipoJun)} pol/asesor). Para 3.000 → <strong>~150 pol/asesor con 20 asesores</strong>.</li>
         </ul>
 
         <!-- KPIs propuestos 2S -->
-        <div style="margin-top:12px">
-          <div style="font-size:.68rem; font-weight:800; color:var(--blue); letter-spacing:.06em; margin-bottom:6px">📏 KPIs PROPUESTOS PARA EL SEGUIMIENTO 2S</div>
+        <div style="margin-top:4px">
+          <div style="font-size:.64rem; font-weight:800; color:var(--blue); letter-spacing:.06em; margin-bottom:2px">${icon('ruler', { size: 14 })} KPIs PROPUESTOS PARA EL SEGUIMIENTO 2S</div>
           <div class="tbl-wrap" style="margin-top:0">
-            <table style="font-size:.68rem">
+            <table class="tbl-compact">
               <thead><tr><th>KPI</th><th>Fórmula</th><th class="r">Meta 2S</th></tr></thead>
               <tbody>
                 ${[
@@ -967,8 +985,8 @@ function renderProyeccion() {
           </div>
         </div>
 
-        <div class="alert alert-info" style="margin-top:12px">
-          <span class="ico">📌</span>
+        <div class="alert alert-info" style="margin-top:4px; padding:5px 14px">
+          <span class="ico">${icon('pin')}</span>
           <span>El camino a 3.000 pasa más por <strong>calidad y depuración de base</strong> que por aumentar el volumen bruto de registros. Cálculo con semestre completo (ene–jun); falta solo la liquidación de junio.</span>
         </div>
       </div>
@@ -989,11 +1007,11 @@ function renderEstrategia() {
   el.innerHTML = `
     <div class="panel">
       <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px">
-        <h3 style="margin:0; border:none; padding:0">🎯 Estrategia Comercial 2S 2026</h3>
+        <h3 style="margin:0; border:none; padding:0">${icon('target')} Estrategia Comercial 2S 2026</h3>
         <div class="strategy-tabs">
-          <button class="strategy-tab active" data-tab="ini" onclick="estrategiaTab('ini')">💡 Iniciativas</button>
-          <button class="strategy-tab" data-tab="cron" onclick="estrategiaTab('cron')">📅 Cronograma</button>
-          <button class="strategy-tab" data-tab="kpi" onclick="estrategiaTab('kpi')">📈 KPIs</button>
+          <button class="strategy-tab active" data-tab="ini" onclick="estrategiaTab('ini')">${icon('lightbulb', { size: 14 })} Iniciativas</button>
+          <button class="strategy-tab" data-tab="cron" onclick="estrategiaTab('cron')">${icon('calendar', { size: 14 })} Cronograma</button>
+          <button class="strategy-tab" data-tab="kpi" onclick="estrategiaTab('kpi')">${icon('trending-up', { size: 14 })} KPIs</button>
         </div>
       </div>
 
@@ -1014,11 +1032,11 @@ function renderEstrategia() {
             </div>`).join('')}
         </div>
         <div style="margin-top:12px; padding-top:10px; border-top:1px solid var(--gray2)">
-          <div style="font-size:.68rem; font-weight:800; color:var(--blue); letter-spacing:.05em; text-transform:uppercase; margin-bottom:6px">👥 Recursos clave requeridos</div>
+          <div style="font-size:.68rem; font-weight:800; color:var(--blue); letter-spacing:.05em; text-transform:uppercase; margin-bottom:6px">${icon('users', { size: 14 })} Recursos clave requeridos</div>
           <div style="display:flex; gap:8px; flex-wrap:wrap">
-            <span class="res-chip">➕ 3 asesores nuevos en julio (→23 en operación)</span>
-            <span class="res-chip">💻 CRM con validaciones automáticas</span>
-            <span class="res-chip">🧹 Bases limpias contra producto ya activo (Vanti)</span>
+            <span class="res-chip">${icon('plus', { size: 14 })} 3 asesores nuevos en julio (→23 en operación)</span>
+            <span class="res-chip">${icon('laptop', { size: 14 })} CRM con validaciones automáticas</span>
+            <span class="res-chip">${icon('sparkles', { size: 14 })} Bases limpias contra producto ya activo (Vanti)</span>
           </div>
         </div>
       </div>
