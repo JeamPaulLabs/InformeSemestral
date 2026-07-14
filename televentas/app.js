@@ -425,8 +425,8 @@ function renderAutogestion() {
       </div>
 
       <div class="panel" style="padding:12px 16px">
-        <h3 style="margin-bottom:6px; padding-bottom:5px">${icon('trending-up')} Conversión por mes</h3>
-        <div class="chart-wrap chart-compact" style="margin-top:4px">
+        <h3 style="margin-bottom:4px; padding-bottom:5px">${icon('trending-up')} Conversión por mes</h3>
+        <div class="chart-wrap chart-compact" style="margin-top:2px">
           ${AUTOGESTION_MESES.map(m => {
             const pct = (m.efect / maxEfect * 100).toFixed(1) + '%';
             return `
@@ -439,13 +439,26 @@ function renderAutogestion() {
               </div>`;
           }).join('')}
         </div>
-        <div class="alert alert-info" style="margin-top:8px; padding:7px 12px">
-          <span class="ico">${icon('lightbulb')}</span>
-          <span style="font-size:.72rem"><strong>¿Qué es Autogestión?</strong> Clientes que solicitan su financiación directo en la plataforma de Vanti, la mayoría sin ayuda de un asesor — llegan ya decididos, solo falta contactarlos y cerrar.</span>
+
+        <div style="font-size:.6rem; font-weight:700; color:var(--gray3); text-transform:uppercase; letter-spacing:.03em; margin:10px 0 6px">${icon('compass', {size:12})} Qué cambió en la gestión</div>
+        <div style="display:flex; align-items:stretch; gap:3px">
+          ${[
+            ['users',     'Ene–25 mar', 'Todos gestionan', 'Excel manual, sin línea de tiempo'],
+            ['user-plus', '26 mar',     'Foco: 3 asesores', 'Equipo dedicado a Autogestión'],
+            ['repeat',    'Abr–may',    'Sobremarcación (OCM)', 'Mínima agresividad, más contacto efectivo'],
+            ['user-plus', 'Jun',        '+1 asesor (4)', 'Sostiene el mayor volumen del semestre'],
+          ].map(([ic,fecha,titulo,det],i)=>`
+            ${i>0?'<div style="align-self:center; color:var(--teal); font-weight:800; font-size:.9rem; flex-shrink:0">→</div>':''}
+            <div style="flex:1; background:rgba(0,205,147,.07); border:1px solid rgba(0,205,147,.25); border-radius:8px; padding:6px 4px; text-align:center">
+              <div style="color:var(--teal)">${icon(ic,{size:15})}</div>
+              <div style="font-size:.56rem; font-weight:800; color:var(--gray3); margin-top:2px">${fecha}</div>
+              <div style="font-size:.62rem; font-weight:700; color:var(--blue); margin-top:1px; line-height:1.15">${titulo}</div>
+              <div style="font-size:.54rem; color:var(--gray3); margin-top:2px; line-height:1.15">${det}</div>
+            </div>`).join('')}
         </div>
-        <div class="alert alert-info" style="margin-top:6px; padding:7px 12px">
-          <span class="ico">${icon('target')}</span>
-          <span style="font-size:.72rem"><strong>Estrategia de cargue en la OCM:</strong> hasta el 25 de marzo, todos los asesores gestionaban esta base junto con las demás. Desde el <strong>26 de marzo</strong> se focalizó en <strong>3 asesores dedicados</strong>, y a <strong>mediados de junio se sumó un 4°</strong> para sostener el volumen creciente (4.968 registros en jun, el más alto del semestre). El dip de Mar–Abr (17–21 %) coincide con el arranque y ramp-up del equipo focalizado bajo mayor volumen; May (33,0 %) muestra al equipo ya consolidado, y Jun sostiene 29,2 % pese a duplicar el volumen de May. <strong>Todos los meses superaron ampliamente el 8,6 % promedio del canal.</strong></span>
+        <div class="alert alert-info" style="margin-top:8px; padding:6px 12px">
+          <span class="ico">${icon('lightbulb', {size:14})}</span>
+          <span style="font-size:.66rem">Base ya decidida a comprar (autogestión en la plataforma Vanti) + mejoras de gestión ⇒ <strong>3× la conversión promedio del canal, todos los meses.</strong></span>
         </div>
       </div>
     </div>`;
