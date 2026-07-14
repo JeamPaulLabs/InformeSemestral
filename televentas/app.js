@@ -415,23 +415,34 @@ function renderBases() {
 
       <div class="panel" style="padding:8px 16px">
         <h3 style="margin-bottom:4px; padding-bottom:4px">${icon('trending-down')} Embudo de la gestión · de la base a la venta (semestre)</h3>
-        <div style="display:flex; flex-direction:column; gap:4px; margin-top:4px">
-          ${funnel.map((f,i) => `
-            <div style="display:flex; align-items:center; gap:8px">
-              <div style="flex:1; background:${i===funnel.length-1 ? 'rgba(0,205,147,.12)' : 'var(--gray1)'}; border:1px solid ${i===funnel.length-1 ? 'rgba(0,205,147,.4)' : 'var(--gray2)'}; border-radius:8px; padding:5px 12px; display:flex; justify-content:space-between; align-items:baseline">
-                <div>
-                  <div style="font-size:.72rem; font-weight:800; color:var(--blue)">${f.label}</div>
-                  <div style="font-size:.58rem; color:var(--gray3)">${f.nota}</div>
-                </div>
+        <div style="display:flex; flex-direction:column; margin-top:6px">
+          ${(() => {
+            // Anchos visuales (escala raíz cuadrada con mínimo, para que la
+            // última etapa no desaparezca: 13.917 es el 1,5 % de 912.083).
+            const widths = [100, 64, 60, 40, 28, 20]; // top de cada etapa + bottom final
+            const colors = ['#120180', '#1d02b8', '#00CD93', '#2ed9a4', '#5AE280'];
+            const darkText = [false, false, true, true, true];
+            return funnel.map((f,i) => {
+              const wTop = widths[i], wBot = widths[i+1];
+              const clip = `polygon(${(100-wTop)/2}% 0, ${(100+wTop)/2}% 0, ${(100+wBot)/2}% 100%, ${(100-wBot)/2}% 100%)`;
+              return `
+              <div style="display:grid; grid-template-columns: 1fr 200px 1fr; align-items:center; gap:10px">
                 <div style="text-align:right">
-                  <div style="font-size:.94rem; font-weight:800; color:${i===funnel.length-1 ? 'var(--teal)' : 'var(--dark)'}">${fmt(f.val)}</div>
-                  ${f.pct !== null ? `<div style="font-size:.58rem; color:var(--gray3)">${f.pct} % del paso anterior</div>` : ''}
+                  <div style="font-size:.7rem; font-weight:800; color:var(--blue); line-height:1.15">${f.label}</div>
+                  <div style="font-size:.56rem; color:var(--gray3); line-height:1.2">${f.nota}</div>
                 </div>
-              </div>
-            </div>
-            ${i < funnel.length-1 ? '<div style="text-align:center; color:var(--teal); font-weight:800; font-size:.7rem; line-height:.7">↓</div>' : ''}
-          `).join('')}
+                <div style="height:56px; position:relative">
+                  <div style="position:absolute; inset:0; background:${colors[i]}; clip-path:${clip}"></div>
+                  <div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:.76rem; font-weight:800; color:${darkText[i] ? 'var(--blue)' : '#fff'}">${fmt(f.val)}</div>
+                </div>
+                <div style="text-align:left; font-size:.62rem; color:var(--gray3)">
+                  ${f.pct !== null ? `<strong style="color:var(--teal)">${f.pct} %</strong> del paso anterior` : '100 % · punto de partida'}
+                </div>
+              </div>`;
+            }).join('');
+          })()}
         </div>
+        <div style="font-size:.54rem; color:var(--gray3); margin-top:4px; text-align:center">Ancho del embudo en escala visual (no lineal) — los valores y porcentajes son los reales.</div>
       </div>
     </div>
 
