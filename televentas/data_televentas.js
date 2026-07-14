@@ -26,6 +26,10 @@ const DATA = {
   metaVantiVOL:    [498,    194,   371,    621,    221,    289],
   metaXumaCP:      [1703,   1670,  1670,   2500,   2100,   2000],  // meta Xuma por producto
   metaXumaVOL:     [429,    500,   500,    500,    500,    500],
+  // Ventas reales por producto (Reporte Ilio, Televentas + ALTA TRANSACCIONAL,
+  // pivot "Cuenta de asesor" — verificado: CP+VOL = ventasLiq exacto cada mes).
+  ventasCP:        [1689,   1819,  1901,   1816,   1568,   1741],  // Cuota Protegida
+  ventasVOL:       [556,    555,   530,    551,    618,    573],   // Plan Combo Vida
   cumplE1:         [110.9,  118.1, 109.3,  91.5,   84.9,   85.5],
   asesores:        [15,     17,    18,     20,      20,     21],
   promPolizas:     [149.7,  139.6, 135.1,  118.3,  109.3,  110.2],

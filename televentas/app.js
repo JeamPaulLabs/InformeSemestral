@@ -137,28 +137,30 @@ function renderVentas() {
 
         <div class="vtas-pane" id="vtas-pane-vanti">
           <div class="tbl-wrap" style="margin-top:0">
-            <table class="tbl-compact">
+            <table class="tbl-compact" style="font-size:.66rem">
               <thead><tr>
-                <th>Mes</th><th class="r">Meta CP</th><th class="r">Meta VOL</th>
-                <th class="r">Meta Total</th><th class="r">Pólizas</th><th class="r">Cumpli­miento</th>
+                <th>Mes</th><th class="r">Meta CP</th><th class="r">Vtas CP</th><th class="r">Cumpl. CP</th>
+                <th class="r">Meta VOL</th><th class="r">Vtas VOL</th><th class="r">Cumpl. VOL</th>
               </tr></thead>
               <tbody>
                 ${DATA.meses.map((m,i) => `
                   <tr>
                     <td><strong>${m}</strong></td>
                     <td class="r">${fmt(DATA.metaVantiCP[i])}</td>
+                    <td class="r">${fmt(DATA.ventasCP[i])}</td>
+                    <td class="r">${pctBadge(Math.round(DATA.ventasCP[i]/DATA.metaVantiCP[i]*100))}</td>
                     <td class="r">${fmt(DATA.metaVantiVOL[i])}</td>
-                    <td class="r">${fmt(DATA.metaVanti[i])}</td>
-                    <td class="r">${fmt(DATA.ventasLiq[i])}</td>
-                    <td class="r">${pctBadge(Math.round(DATA.ventasLiq[i]/DATA.metaVanti[i]*100))}</td>
+                    <td class="r">${fmt(DATA.ventasVOL[i])}</td>
+                    <td class="r">${pctBadge(Math.round(DATA.ventasVOL[i]/DATA.metaVantiVOL[i]*100))}</td>
                   </tr>`).join('')}
                 <tr class="total">
                   <td>Total</td>
                   <td class="r">${fmt(DATA.metaVantiCP.reduce((a,b)=>a+b,0))}</td>
+                  <td class="r">${fmt(DATA.ventasCP.reduce((a,b)=>a+b,0))}</td>
+                  <td class="r">${pctBadge(Math.round(DATA.ventasCP.reduce((a,b)=>a+b,0)/DATA.metaVantiCP.reduce((a,b)=>a+b,0)*100))}</td>
                   <td class="r">${fmt(DATA.metaVantiVOL.reduce((a,b)=>a+b,0))}</td>
-                  <td class="r">${fmt(totalMetaVanti)}</td>
-                  <td class="r">${fmt(totalLiq)}</td>
-                  <td class="r">${pctBadge(Math.round(totalLiq/totalMetaVanti*100))}</td>
+                  <td class="r">${fmt(DATA.ventasVOL.reduce((a,b)=>a+b,0))}</td>
+                  <td class="r">${pctBadge(Math.round(DATA.ventasVOL.reduce((a,b)=>a+b,0)/DATA.metaVantiVOL.reduce((a,b)=>a+b,0)*100))}</td>
                 </tr>
               </tbody>
             </table>
@@ -167,28 +169,30 @@ function renderVentas() {
 
         <div class="vtas-pane" id="vtas-pane-xuma">
           <div class="tbl-wrap" style="margin-top:0">
-            <table class="tbl-compact">
+            <table class="tbl-compact" style="font-size:.66rem">
               <thead><tr>
-                <th>Mes</th><th class="r">Meta CP</th><th class="r">Meta VOL</th>
-                <th class="r">Meta Total</th><th class="r">Pólizas</th><th class="r">Cumpli­miento</th>
+                <th>Mes</th><th class="r">Meta CP</th><th class="r">Vtas CP</th><th class="r">Cumpl. CP</th>
+                <th class="r">Meta VOL</th><th class="r">Vtas VOL</th><th class="r">Cumpl. VOL</th>
               </tr></thead>
               <tbody>
                 ${DATA.meses.map((m,i) => `
                   <tr>
                     <td><strong>${m}</strong></td>
                     <td class="r">${fmt(DATA.metaXumaCP[i])}</td>
+                    <td class="r">${fmt(DATA.ventasCP[i])}</td>
+                    <td class="r">${pctBadge(Math.round(DATA.ventasCP[i]/DATA.metaXumaCP[i]*100))}</td>
                     <td class="r">${fmt(DATA.metaXumaVOL[i])}</td>
-                    <td class="r">${fmt(DATA.metaXuma[i])}</td>
-                    <td class="r">${fmt(DATA.ventasLiq[i])}</td>
-                    <td class="r">${pctBadge(Math.round(DATA.ventasLiq[i]/DATA.metaXuma[i]*100))}</td>
+                    <td class="r">${fmt(DATA.ventasVOL[i])}</td>
+                    <td class="r">${pctBadge(Math.round(DATA.ventasVOL[i]/DATA.metaXumaVOL[i]*100))}</td>
                   </tr>`).join('')}
                 <tr class="total">
                   <td>Total</td>
                   <td class="r">${fmt(DATA.metaXumaCP.reduce((a,b)=>a+b,0))}</td>
+                  <td class="r">${fmt(DATA.ventasCP.reduce((a,b)=>a+b,0))}</td>
+                  <td class="r">${pctBadge(Math.round(DATA.ventasCP.reduce((a,b)=>a+b,0)/DATA.metaXumaCP.reduce((a,b)=>a+b,0)*100))}</td>
                   <td class="r">${fmt(DATA.metaXumaVOL.reduce((a,b)=>a+b,0))}</td>
-                  <td class="r">${fmt(totalMetaXuma)}</td>
-                  <td class="r">${fmt(totalLiq)}</td>
-                  <td class="r">${pctBadge(Math.round(totalLiq/totalMetaXuma*100))}</td>
+                  <td class="r">${fmt(DATA.ventasVOL.reduce((a,b)=>a+b,0))}</td>
+                  <td class="r">${pctBadge(Math.round(DATA.ventasVOL.reduce((a,b)=>a+b,0)/DATA.metaXumaVOL.reduce((a,b)=>a+b,0)*100))}</td>
                 </tr>
               </tbody>
             </table>
@@ -257,20 +261,23 @@ function vtasRenderChart(tab) {
     return;
   }
 
-  const cp  = tab === 'vanti' ? DATA.metaVantiCP  : DATA.metaXumaCP;
-  const vol = tab === 'vanti' ? DATA.metaVantiVOL : DATA.metaXumaVOL;
+  const metaCP  = tab === 'vanti' ? DATA.metaVantiCP  : DATA.metaXumaCP;
+  const metaVOL = tab === 'vanti' ? DATA.metaVantiVOL : DATA.metaXumaVOL;
+  const cp  = DATA.ventasCP;
+  const vol = DATA.ventasVOL;
   const maxTotal = Math.max(...DATA.meses.map((_,i) => cp[i] + vol[i]));
   const totalCP  = cp.reduce((a,b)=>a+b,0);
   const totalVOL = vol.reduce((a,b)=>a+b,0);
-  const totalMeta = totalCP + totalVOL;
-  const totalLiq = DATA.ventasLiq.filter(v => v != null).reduce((a,b)=>a+b,0);
-  const cumplTotal = Math.round(totalLiq / totalMeta * 100);
+  const totalMetaCP  = metaCP.reduce((a,b)=>a+b,0);
+  const totalMetaVOL = metaVOL.reduce((a,b)=>a+b,0);
+  const cumplCP  = Math.round(totalCP  / totalMetaCP  * 100);
+  const cumplVOL = Math.round(totalVOL / totalMetaVOL * 100);
 
-  title.innerHTML = `${icon('trending-up')} Crecimiento de meta por producto (${tab === 'vanti' ? 'Vanti' : 'Xuma'})`;
+  title.innerHTML = `${icon('trending-up')} Ventas reales por producto (${tab === 'vanti' ? 'Vanti' : 'Xuma'})`;
   body.innerHTML = `
     <div style="display:flex; gap:14px; font-size:.62rem; color:var(--gray3); margin-bottom:6px">
-      <span><span style="display:inline-block; width:8px; height:8px; border-radius:2px; background:var(--teal); margin-right:4px"></span>CP</span>
-      <span><span style="display:inline-block; width:8px; height:8px; border-radius:2px; background:var(--green); margin-right:4px"></span>VOL</span>
+      <span><span style="display:inline-block; width:8px; height:8px; border-radius:2px; background:var(--teal); margin-right:4px"></span>Cuota Protegida</span>
+      <span><span style="display:inline-block; width:8px; height:8px; border-radius:2px; background:var(--green); margin-right:4px"></span>Combo Vida</span>
     </div>
     ${DATA.meses.map((m,i) => {
       const total = cp[i] + vol[i];
@@ -289,7 +296,9 @@ function vtasRenderChart(tab) {
   `;
   document.querySelectorAll('#vtas-chart-body [data-w]').forEach(el => { el.style.width = el.dataset.w; });
 
-  obs.innerHTML = `<span class="ico">${icon('trophy')}</span><span><strong>${tab === 'vanti' ? 'Vanti' : 'Xuma'}:</strong> meta semestral de <strong>${fmt(totalMeta)}</strong> pólizas (${fmt(totalCP)} CP + ${fmt(totalVOL)} VOL) — el equipo cerró el semestre en <strong>${cumplTotal} %</strong> de cumplimiento.</span>`;
+  const mejor = cumplCP >= cumplVOL ? 'Cuota Protegida' : 'Combo Vida';
+  const mejorPct = Math.max(cumplCP, cumplVOL);
+  obs.innerHTML = `<span class="ico">${icon('trophy')}</span><span><strong>${tab === 'vanti' ? 'Vanti' : 'Xuma'}:</strong> <strong>${fmt(totalCP)}</strong> pólizas de Cuota Protegida (${cumplCP} % de meta) y <strong>${fmt(totalVOL)}</strong> de Combo Vida (${cumplVOL} % de meta) — ${mejor} lidera el cumplimiento con ${mejorPct} %.</span>`;
 }
 
 function vtasTab(name) {
