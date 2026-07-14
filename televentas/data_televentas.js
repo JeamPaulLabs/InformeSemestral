@@ -13,6 +13,7 @@ const DATA = {
   rechazados:      [99241,  48185, 60998,  114123, 116691, 109130],
   aptos:           [102168, 46733, 73899,  38988,  37644,  64283],
   pctRechazo:      [49.27,  50.76, 45.22,  74.54,  75.61,  62.93],
+  gestionados:     [102168, 46426, 60402,  31039,  37642,  43410],  // aptos efectivamente gestionados (Manager_Performance §2)
   contactados:     [21204,  19832, 27138,  16200,  24031,  21291],
   contactabilidad: [20.75,  42.72, 44.93,  52.19,  63.84,  49.05],
   efectividad:     [7.96,   10.31, 6.73,   9.56,   8.49,   9.39],

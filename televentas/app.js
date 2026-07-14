@@ -340,15 +340,17 @@ function renderBases() {
   const totalRec  = DATA.registros.reduce((a,b)=>a+b,0);
   const totalRech = DATA.rechazados.reduce((a,b)=>a+b,0);
   const totalApt  = DATA.aptos.reduce((a,b)=>a+b,0);
+  const totalGest = DATA.gestionados.reduce((a,b)=>a+b,0);
   const totalCont = DATA.contactados.reduce((a,b)=>a+b,0);
   const totalLiq  = DATA.ventasLiq.reduce((a,b)=>a+b,0);
   const pctRechProm = Math.round(totalRech/totalRec*100);
 
   const funnel = [
-    { label: 'Registros recibidos', val: totalRec,  pct: null,                              nota: 'Bases enviadas por Vanti (Power BI)' },
-    { label: 'Aptos para gestión',  val: totalApt,  pct: Math.round(totalApt/totalRec*100), nota: 'Tras depuración y descarte' },
-    { label: 'Contactados',         val: totalCont, pct: Math.round(totalCont/totalApt*100),nota: 'Clientes con contacto efectivo' },
-    { label: 'Ventas (liquidación)',val: totalLiq,  pct: Math.round(totalLiq/totalCont*100),nota: 'Cifra oficial — misma del slide Ventas' },
+    { label: 'Registros recibidos', val: totalRec,  pct: null,                               nota: 'Bases enviadas por Vanti (Power BI)' },
+    { label: 'Aptos para gestión',  val: totalApt,  pct: Math.round(totalApt/totalRec*100),  nota: 'Tras depuración y descarte' },
+    { label: 'Gestionados',         val: totalGest, pct: Math.round(totalGest/totalApt*100), nota: 'Registros efectivamente marcados por el equipo' },
+    { label: 'Contactados',         val: totalCont, pct: Math.round(totalCont/totalGest*100),nota: 'Clientes con contacto efectivo' },
+    { label: 'Ventas (liquidación)',val: totalLiq,  pct: Math.round(totalLiq/totalCont*100), nota: 'Cifra oficial — misma del slide Ventas' },
   ];
 
   el.innerHTML = `
@@ -379,13 +381,14 @@ function renderBases() {
       <div class="panel" style="padding:8px 16px">
         <h3 style="margin-bottom:4px; padding-bottom:4px">${icon('calendar')} Volumen y calidad de base por mes</h3>
         <div class="tbl-wrap" style="margin-top:0">
-          <table class="tbl-compact">
+          <table class="tbl-compact" style="font-size:.7rem">
             <thead><tr>
               <th>Mes</th>
               <th class="r">Recibidos</th>
               <th class="r">Rechazados</th>
               <th class="r">% Rechazo</th>
               <th class="r">Aptos</th>
+              <th class="r">Ventas</th>
             </tr></thead>
             <tbody>
               ${DATA.meses.map((m,i) => `
@@ -395,6 +398,7 @@ function renderBases() {
                   <td class="r">${fmt(DATA.rechazados[i])}</td>
                   <td class="r">${badge(Math.round(DATA.pctRechazo[i]) + ' %', DATA.pctRechazo[i]>65?'r':DATA.pctRechazo[i]>50?'y':'g')}</td>
                   <td class="r">${fmt(DATA.aptos[i])}</td>
+                  <td class="r"><strong>${fmt(DATA.ventasLiq[i])}</strong></td>
                 </tr>`).join('')}
               <tr class="total">
                 <td>Total</td>
@@ -402,6 +406,7 @@ function renderBases() {
                 <td class="r">${fmt(totalRech)}</td>
                 <td class="r">${pctRechProm} %</td>
                 <td class="r">${fmt(totalApt)}</td>
+                <td class="r">${fmt(totalLiq)}</td>
               </tr>
             </tbody>
           </table>
@@ -409,7 +414,7 @@ function renderBases() {
       </div>
 
       <div class="panel" style="padding:8px 16px">
-        <h3 style="margin-bottom:4px; padding-bottom:4px">${icon('trending-down')} De la base a la venta (semestre)</h3>
+        <h3 style="margin-bottom:4px; padding-bottom:4px">${icon('trending-down')} Embudo de la gestión · de la base a la venta (semestre)</h3>
         <div style="display:flex; flex-direction:column; gap:4px; margin-top:4px">
           ${funnel.map((f,i) => `
             <div style="display:flex; align-items:center; gap:8px">
