@@ -20,8 +20,12 @@ const DATA = {
   ventasLiq:       [2245,   2374,  2431,   2367,   2186,   2314],  // liquidación Martha (semestre completo)
   metaE1:          [2025,   2010,  2225,   2586,   2576,   2707],
   metaE2:          [2430,   2412,  2670,   3104,   3097,   1884],
-  metaVanti:       [1695,   1391,  1568,   1818,   1452,   1520],  // metas por origen
-  metaXuma:        [2170,   2170,  2170,   3000,   2700,   2600],
+  metaVanti:       [1695,   1391,  1568,   1818,   1452,   1520],  // metas por origen (= CP + VOL)
+  metaXuma:        [2132,   2170,  2170,   3000,   2600,   2500],
+  metaVantiCP:     [1197,   1197,  1197,   1197,   1231,   1231],  // meta Vanti por producto
+  metaVantiVOL:    [498,    194,   371,    621,    221,    289],
+  metaXumaCP:      [1703,   1670,  1670,   2500,   2100,   2000],  // meta Xuma por producto
+  metaXumaVOL:     [429,    500,   500,    500,    500,    500],
   cumplE1:         [110.9,  118.1, 109.3,  91.5,   84.9,   85.5],
   asesores:        [15,     17,    18,     20,      20,     21],
   promPolizas:     [149.7,  139.6, 135.1,  118.3,  109.3,  110.2],

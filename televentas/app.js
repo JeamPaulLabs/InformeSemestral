@@ -139,21 +139,25 @@ function renderVentas() {
           <div class="tbl-wrap" style="margin-top:0">
             <table class="tbl-compact">
               <thead><tr>
-                <th>Mes</th><th class="r">Pólizas</th><th class="r">Meta Vanti</th>
-                <th class="r">Cumpli­miento</th>
+                <th>Mes</th><th class="r">Meta CP</th><th class="r">Meta VOL</th>
+                <th class="r">Meta Total</th><th class="r">Pólizas</th><th class="r">Cumpli­miento</th>
               </tr></thead>
               <tbody>
                 ${DATA.meses.map((m,i) => `
                   <tr>
                     <td><strong>${m}</strong></td>
-                    <td class="r">${fmt(DATA.ventasLiq[i])}</td>
+                    <td class="r">${fmt(DATA.metaVantiCP[i])}</td>
+                    <td class="r">${fmt(DATA.metaVantiVOL[i])}</td>
                     <td class="r">${fmt(DATA.metaVanti[i])}</td>
+                    <td class="r">${fmt(DATA.ventasLiq[i])}</td>
                     <td class="r">${pctBadge(Math.round(DATA.ventasLiq[i]/DATA.metaVanti[i]*100))}</td>
                   </tr>`).join('')}
                 <tr class="total">
                   <td>Total</td>
-                  <td class="r">${fmt(totalLiq)}</td>
+                  <td class="r">${fmt(DATA.metaVantiCP.reduce((a,b)=>a+b,0))}</td>
+                  <td class="r">${fmt(DATA.metaVantiVOL.reduce((a,b)=>a+b,0))}</td>
                   <td class="r">${fmt(totalMetaVanti)}</td>
+                  <td class="r">${fmt(totalLiq)}</td>
                   <td class="r">${pctBadge(Math.round(totalLiq/totalMetaVanti*100))}</td>
                 </tr>
               </tbody>
@@ -165,21 +169,25 @@ function renderVentas() {
           <div class="tbl-wrap" style="margin-top:0">
             <table class="tbl-compact">
               <thead><tr>
-                <th>Mes</th><th class="r">Pólizas</th><th class="r">Meta Xuma</th>
-                <th class="r">Cumpli­miento</th>
+                <th>Mes</th><th class="r">Meta CP</th><th class="r">Meta VOL</th>
+                <th class="r">Meta Total</th><th class="r">Pólizas</th><th class="r">Cumpli­miento</th>
               </tr></thead>
               <tbody>
                 ${DATA.meses.map((m,i) => `
                   <tr>
                     <td><strong>${m}</strong></td>
-                    <td class="r">${fmt(DATA.ventasLiq[i])}</td>
+                    <td class="r">${fmt(DATA.metaXumaCP[i])}</td>
+                    <td class="r">${fmt(DATA.metaXumaVOL[i])}</td>
                     <td class="r">${fmt(DATA.metaXuma[i])}</td>
+                    <td class="r">${fmt(DATA.ventasLiq[i])}</td>
                     <td class="r">${pctBadge(Math.round(DATA.ventasLiq[i]/DATA.metaXuma[i]*100))}</td>
                   </tr>`).join('')}
                 <tr class="total">
                   <td>Total</td>
-                  <td class="r">${fmt(totalLiq)}</td>
+                  <td class="r">${fmt(DATA.metaXumaCP.reduce((a,b)=>a+b,0))}</td>
+                  <td class="r">${fmt(DATA.metaXumaVOL.reduce((a,b)=>a+b,0))}</td>
                   <td class="r">${fmt(totalMetaXuma)}</td>
+                  <td class="r">${fmt(totalLiq)}</td>
                   <td class="r">${pctBadge(Math.round(totalLiq/totalMetaXuma*100))}</td>
                 </tr>
               </tbody>
@@ -189,8 +197,8 @@ function renderVentas() {
       </div>
 
       <div class="panel" style="padding:12px 16px">
-        <h3 style="margin-bottom:6px; padding-bottom:5px">${icon('trending-up')} Evolución pólizas por mes</h3>
-        <div class="chart-wrap chart-compact" style="margin-top:4px">
+        <h3 style="margin-bottom:6px; padding-bottom:5px" id="vtas-chart-title">${icon('trending-up')} Evolución pólizas por mes</h3>
+        <div class="chart-wrap chart-compact" style="margin-top:4px" id="vtas-chart-body">
           ${DATA.meses.map((m,i) => {
             const v = DATA.ventasLiq[i];
             if (v == null) return `
@@ -212,18 +220,83 @@ function renderVentas() {
               </div>`;
           }).join('')}
         </div>
-        <div class="alert alert-info" style="margin-top:16px">
-          <span class="ico">${icon('lightbulb')}</span>
-          <span>Abr–May: el equipo creció 33 % (15→20 asesores) para sostener una meta 27 % más alta (~2.580). La productividad individual bajó de 149,7 a 109,3 pólizas/asesor mientras el equipo nuevo se consolidaba — la curva de aprendizaje de esos ingresos es la oportunidad de mejora más clara para el 2S.</span>
+        <div class="alert alert-info" style="margin-top:16px" id="vtas-chart-obs">
+          <span class="ico">${icon('trophy')}</span>
+          <span>El equipo creció 33 % (15→20 asesores) sosteniendo una meta 27 % más alta. Resultado: <strong>13.917 pólizas vendidas en el semestre</strong>, con junio ya recuperando ritmo tras el ajuste de abril-mayo.</span>
         </div>
       </div>
     </div>`;
+
+  vtasRenderChart('e1');
+}
+
+/* Gráfica de la derecha en Ventas: cambia según la pestaña activa.
+   Escala 1 = total real por mes; Vanti/Xuma = composición de la META
+   por producto (CP vs VOL) — no hay venta real desagregada por producto
+   hoy, solo el total (DATA.ventasLiq), por eso aquí se grafica meta. */
+function vtasRenderChart(tab) {
+  const title = document.getElementById('vtas-chart-title');
+  const body = document.getElementById('vtas-chart-body');
+  const obs = document.getElementById('vtas-chart-obs');
+  if (!title || !body) return;
+
+  if (tab === 'e1') {
+    title.innerHTML = `${icon('trending-up')} Evolución pólizas por mes`;
+    body.innerHTML = DATA.meses.map((m,i) => {
+      const v = DATA.ventasLiq[i];
+      const pct = (v / Math.max(...DATA.ventasLiq) * 100).toFixed(1) + '%';
+      return `
+        <div class="bar-row">
+          <span class="bar-label">${m}</span>
+          <div class="bar-track"><div class="bar-fill ${DATA.cumplE1[i]>=100?'teal':''}" data-w="${pct}" style="width:0"></div></div>
+          <span class="bar-val">${fmt(v)}</span>
+        </div>`;
+    }).join('');
+    obs.innerHTML = `<span class="ico">${icon('trophy')}</span><span>El equipo creció 33 % (15→20 asesores) sosteniendo una meta 27 % más alta. Resultado: <strong>13.917 pólizas vendidas en el semestre</strong>, con junio ya recuperando ritmo tras el ajuste de abril-mayo.</span>`;
+    document.querySelectorAll('#vtas-chart-body [data-w]').forEach(el => { el.style.width = el.dataset.w; });
+    return;
+  }
+
+  const cp  = tab === 'vanti' ? DATA.metaVantiCP  : DATA.metaXumaCP;
+  const vol = tab === 'vanti' ? DATA.metaVantiVOL : DATA.metaXumaVOL;
+  const maxTotal = Math.max(...DATA.meses.map((_,i) => cp[i] + vol[i]));
+  const totalCP  = cp.reduce((a,b)=>a+b,0);
+  const totalVOL = vol.reduce((a,b)=>a+b,0);
+  const totalMeta = totalCP + totalVOL;
+  const totalLiq = DATA.ventasLiq.filter(v => v != null).reduce((a,b)=>a+b,0);
+  const cumplTotal = Math.round(totalLiq / totalMeta * 100);
+
+  title.innerHTML = `${icon('trending-up')} Crecimiento de meta por producto (${tab === 'vanti' ? 'Vanti' : 'Xuma'})`;
+  body.innerHTML = `
+    <div style="display:flex; gap:14px; font-size:.62rem; color:var(--gray3); margin-bottom:6px">
+      <span><span style="display:inline-block; width:8px; height:8px; border-radius:2px; background:var(--teal); margin-right:4px"></span>CP</span>
+      <span><span style="display:inline-block; width:8px; height:8px; border-radius:2px; background:var(--green); margin-right:4px"></span>VOL</span>
+    </div>
+    ${DATA.meses.map((m,i) => {
+      const total = cp[i] + vol[i];
+      const cpPct  = (cp[i]  / maxTotal * 100).toFixed(1) + '%';
+      const volPct = (vol[i] / maxTotal * 100).toFixed(1) + '%';
+      return `
+        <div class="bar-row">
+          <span class="bar-label">${m}</span>
+          <div class="bar-track" style="display:flex; overflow:hidden">
+            <div class="bar-fill teal" data-w="${cpPct}" style="width:0"></div>
+            <div class="bar-fill" data-w="${volPct}" style="width:0; background:var(--green)"></div>
+          </div>
+          <span class="bar-val">${fmt(total)}</span>
+        </div>`;
+    }).join('')}
+  `;
+  document.querySelectorAll('#vtas-chart-body [data-w]').forEach(el => { el.style.width = el.dataset.w; });
+
+  obs.innerHTML = `<span class="ico">${icon('trophy')}</span><span><strong>${tab === 'vanti' ? 'Vanti' : 'Xuma'}:</strong> meta semestral de <strong>${fmt(totalMeta)}</strong> pólizas (${fmt(totalCP)} CP + ${fmt(totalVOL)} VOL) — el equipo cerró el semestre en <strong>${cumplTotal} %</strong> de cumplimiento.</span>`;
 }
 
 function vtasTab(name) {
   document.querySelectorAll('.vtas-tab').forEach(b => b.classList.toggle('active', b.dataset.tab === name));
   document.querySelectorAll('.vtas-pane').forEach(p => p.classList.remove('active'));
   document.getElementById(`vtas-pane-${name}`).classList.add('active');
+  vtasRenderChart(name);
 }
 
 /* Slide: Bases recibidas */
