@@ -445,7 +445,7 @@ function renderAutogestion() {
         </div>
         <div class="alert alert-info" style="margin-top:6px; padding:7px 12px">
           <span class="ico">${icon('target')}</span>
-          <span style="font-size:.72rem"><strong>Por qué May y Feb fueron los mejores meses</strong> (33,0 % y 32,4 %): el volumen aún era bajo (171–872 aptos/mes) y el equipo daba seguimiento cercano a cada caso. En Mar–Abr, al triplicarse el volumen, la conversión bajó a 17–21 %. Jun recuperó a 29 % ya con 1.521 aptos — el equipo absorbió el crecimiento. <strong>Todos los meses superaron ampliamente el 8,6 % promedio del canal.</strong></span>
+          <span style="font-size:.72rem"><strong>Estrategia de cargue en la OCM:</strong> hasta el 25 de marzo, todos los asesores gestionaban esta base junto con las demás. Desde el <strong>26 de marzo</strong> se focalizó en <strong>3 asesores dedicados</strong>, y a <strong>mediados de junio se sumó un 4°</strong> para sostener el volumen creciente (4.968 registros en jun, el más alto del semestre). El dip de Mar–Abr (17–21 %) coincide con el arranque y ramp-up del equipo focalizado bajo mayor volumen; May (33,0 %) muestra al equipo ya consolidado, y Jun sostiene 29,2 % pese a duplicar el volumen de May. <strong>Todos los meses superaron ampliamente el 8,6 % promedio del canal.</strong></span>
         </div>
       </div>
     </div>`;

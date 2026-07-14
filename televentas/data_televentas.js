@@ -99,7 +99,10 @@ const CAMPANAS = [
 /* ── AUTOGESTIÓN · histórico mensual (Manager_Performance_2026.md §2) ──
    Base: clientes que solicitan financiación por la plataforma de Vanti,
    la mayoría sin intervención de un asesor. Meta ideal Vanti: 20 % de
-   conversión sobre contacto mes a mes. efect = ventas/contactados. */
+   conversión sobre contacto mes a mes. efect = ventas/contactados.
+   Estrategia de cargue en la OCM: hasta el 25 mar todos los asesores
+   gestionaban esta base; desde el 26 mar se focalizó en 3 asesores
+   dedicados, y a mediados de jun se sumó un 4°. */
 const AUTOGESTION_MESES = [
   { mes: 'Ene', registros: 294,   aptos: 173,   contactados: 140, contactab: 80.92, efect: 30.71, ventas: 43  },
   { mes: 'Feb', registros: 406,   aptos: 171,   contactados: 139, contactab: 81.29, efect: 32.37, ventas: 45  },
