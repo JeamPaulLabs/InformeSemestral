@@ -88,9 +88,12 @@ function goTo(idx, immediate = false) {
     triggerAnimations(idx);
   }
 
-  // Handle Leaflet map resizing when entering Map Slide (idx === 2).
-  // Guardado: Televentas e Innovación no tienen mapa ni definen initMap().
-  if (idx === 2 && typeof initMap === 'function') {
+  // Handle Leaflet map resizing when entering the slide that holds #map-container.
+  // Detectado por contenido, no por índice fijo, porque ese índice cambia según
+  // cómo esté organizado cada deck. Televentas e Innovación no tienen mapa ni
+  // definen initMap(), y los decks con mapa no siempre lo tienen visible al
+  // entrar (puede estar detrás de una pestaña), por eso se busca en toda la slide.
+  if (typeof initMap === 'function' && newSlide.querySelector('#map-container')) {
     initMap();
   }
 }

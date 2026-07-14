@@ -521,6 +521,17 @@ ul.check-list li::before { content: '✓'; position: absolute; left: 0; top: 1px
 .vtas-pane { display: none; }
 .vtas-pane.active { display: block; animation: panelIn .35s ease backwards; }
 
+/* ── Pestañas propias de Cobertura (PDV / Mapa), clase distinta ── */
+.cob-tab {
+  font-family: 'Raleway', sans-serif; font-size: .68rem; font-weight: 700;
+  padding: 5px 12px; border-radius: 20px; border: 1px solid var(--gray2);
+  background: var(--white); color: var(--gray3); cursor: pointer; transition: all .2s;
+}
+.cob-tab:hover { border-color: var(--teal); color: var(--teal); }
+.cob-tab.active { background: var(--blue); border-color: var(--blue); color: var(--white); }
+.cob-pane { display: none; }
+.cob-pane.active { display: block; animation: panelIn .35s ease backwards; }
+
 /* ── Pestañas de filtro en Detalle de Proyectos (Innovación) — mismo patrón,
    clase propia (no filtra pane completos, solo oculta/muestra tarjetas) ── */
 .det-tab {
