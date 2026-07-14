@@ -332,71 +332,113 @@ function vtasTab(name) {
   vtasRenderChart(name);
 }
 
-/* Slide: Bases recibidas */
+/* Slide: Consolidado de las Bases */
 function renderBases() {
   const el = document.getElementById('bases-body');
   if (!el) return;
 
-  const totalRec = DATA.registros.reduce((a,b)=>a+b,0);
+  const totalRec  = DATA.registros.reduce((a,b)=>a+b,0);
   const totalRech = DATA.rechazados.reduce((a,b)=>a+b,0);
-  const pctRechProm = (totalRech/totalRec*100).toFixed(1);
+  const totalApt  = DATA.aptos.reduce((a,b)=>a+b,0);
+  const totalCont = DATA.contactados.reduce((a,b)=>a+b,0);
+  const totalLiq  = DATA.ventasLiq.reduce((a,b)=>a+b,0);
+  const pctRechProm = Math.round(totalRech/totalRec*100);
+
+  const funnel = [
+    { label: 'Registros recibidos', val: totalRec,  pct: null,                              nota: 'Bases enviadas por Vanti (Power BI)' },
+    { label: 'Aptos para gestión',  val: totalApt,  pct: Math.round(totalApt/totalRec*100), nota: 'Tras depuración y descarte' },
+    { label: 'Contactados',         val: totalCont, pct: Math.round(totalCont/totalApt*100),nota: 'Clientes con contacto efectivo' },
+    { label: 'Ventas (liquidación)',val: totalLiq,  pct: Math.round(totalLiq/totalCont*100),nota: 'Cifra oficial — misma del slide Ventas' },
+  ];
 
   el.innerHTML = `
-    <div class="kpi-grid">
-      <div class="kpi-card">
-        <div class="kpi-label">Total registros recibidos (ene–jun)</div>
+    <div class="kpi-grid" style="gap:12px">
+      <div class="kpi-card" style="padding:8px 16px">
+        <div class="kpi-label">Registros recibidos (ene–jun)</div>
         <div class="kpi-val">${fmt(totalRec)}</div>
         <div class="kpi-sub">Fuente: dashboards Power BI</div>
       </div>
-      <div class="kpi-card warn">
+      <div class="kpi-card warn" style="padding:8px 16px">
         <div class="kpi-label">Rechazo promedio de base</div>
-        <div class="kpi-val">${pctRechProm.replace('.',',')} %</div>
-        <div class="kpi-sub">Solo ${(100-parseFloat(pctRechProm)).toFixed(0)} % apto para gestión</div>
+        <div class="kpi-val">${pctRechProm} %</div>
+        <div class="kpi-sub">Solo ${100-pctRechProm} % apto para gestión</div>
       </div>
-      <div class="kpi-card green">
-        <div class="kpi-label">Total aptos (gestionables)</div>
-        <div class="kpi-val">${fmt(DATA.aptos.reduce((a,b)=>a+b,0))}</div>
+      <div class="kpi-card green" style="padding:8px 16px">
+        <div class="kpi-label">Aptos (gestionables)</div>
+        <div class="kpi-val">${fmt(totalApt)}</div>
         <div class="kpi-sub">De ${fmt(totalRec)} recibidos</div>
       </div>
-      <div class="kpi-card">
-        <div class="kpi-label">Ventas 1S (operativo)</div>
-        <div class="kpi-val">11.146</div>
-        <div class="kpi-sub">Promedio 1.858/mes · mejor mes feb (2.044)</div>
+      <div class="kpi-card green" style="padding:8px 16px">
+        <div class="kpi-label">Ventas 1S (liquidación)</div>
+        <div class="kpi-val">${fmt(totalLiq)}</div>
+        <div class="kpi-sub">1 venta por cada ${Math.round(totalRec/totalLiq)} registros recibidos</div>
       </div>
     </div>
 
-    <div class="tbl-wrap">
-      <table>
-        <thead><tr>
-          <th>Mes</th>
-          <th class="r">Recibidos</th>
-          <th class="r">Rechazados</th>
-          <th class="r">% Rechazo</th>
-          <th class="r">Aptos</th>
-        </tr></thead>
-        <tbody>
-          ${DATA.meses.map((m,i) => `
-            <tr>
-              <td><strong>${m}</strong></td>
-              <td class="r">${fmt(DATA.registros[i])}</td>
-              <td class="r">${fmt(DATA.rechazados[i])}</td>
-              <td class="r">${badge(fmtPct(DATA.pctRechazo[i]), DATA.pctRechazo[i]>65?'r':DATA.pctRechazo[i]>50?'y':'g')}</td>
-              <td class="r">${fmt(DATA.aptos[i])}</td>
-            </tr>`).join('')}
-          <tr class="total">
-            <td>Total</td>
-            <td class="r">${fmt(totalRec)}</td>
-            <td class="r">${fmt(totalRech)}</td>
-            <td class="r">${pctRechProm.replace('.',',')} %</td>
-            <td class="r">${fmt(DATA.aptos.reduce((a,b)=>a+b,0))}</td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="two-col" style="gap:14px">
+      <div class="panel" style="padding:8px 16px">
+        <h3 style="margin-bottom:4px; padding-bottom:4px">${icon('calendar')} Volumen y calidad de base por mes</h3>
+        <div class="tbl-wrap" style="margin-top:0">
+          <table class="tbl-compact">
+            <thead><tr>
+              <th>Mes</th>
+              <th class="r">Recibidos</th>
+              <th class="r">Rechazados</th>
+              <th class="r">% Rechazo</th>
+              <th class="r">Aptos</th>
+            </tr></thead>
+            <tbody>
+              ${DATA.meses.map((m,i) => `
+                <tr>
+                  <td><strong>${m}</strong></td>
+                  <td class="r">${fmt(DATA.registros[i])}</td>
+                  <td class="r">${fmt(DATA.rechazados[i])}</td>
+                  <td class="r">${badge(Math.round(DATA.pctRechazo[i]) + ' %', DATA.pctRechazo[i]>65?'r':DATA.pctRechazo[i]>50?'y':'g')}</td>
+                  <td class="r">${fmt(DATA.aptos[i])}</td>
+                </tr>`).join('')}
+              <tr class="total">
+                <td>Total</td>
+                <td class="r">${fmt(totalRec)}</td>
+                <td class="r">${fmt(totalRech)}</td>
+                <td class="r">${pctRechProm} %</td>
+                <td class="r">${fmt(totalApt)}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="panel" style="padding:8px 16px">
+        <h3 style="margin-bottom:4px; padding-bottom:4px">${icon('trending-down')} De la base a la venta (semestre)</h3>
+        <div style="display:flex; flex-direction:column; gap:4px; margin-top:4px">
+          ${funnel.map((f,i) => `
+            <div style="display:flex; align-items:center; gap:8px">
+              <div style="flex:1; background:${i===funnel.length-1 ? 'rgba(0,205,147,.12)' : 'var(--gray1)'}; border:1px solid ${i===funnel.length-1 ? 'rgba(0,205,147,.4)' : 'var(--gray2)'}; border-radius:8px; padding:5px 12px; display:flex; justify-content:space-between; align-items:baseline">
+                <div>
+                  <div style="font-size:.72rem; font-weight:800; color:var(--blue)">${f.label}</div>
+                  <div style="font-size:.58rem; color:var(--gray3)">${f.nota}</div>
+                </div>
+                <div style="text-align:right">
+                  <div style="font-size:.94rem; font-weight:800; color:${i===funnel.length-1 ? 'var(--teal)' : 'var(--dark)'}">${fmt(f.val)}</div>
+                  ${f.pct !== null ? `<div style="font-size:.58rem; color:var(--gray3)">${f.pct} % del paso anterior</div>` : ''}
+                </div>
+              </div>
+            </div>
+            ${i < funnel.length-1 ? '<div style="text-align:center; color:var(--teal); font-weight:800; font-size:.7rem; line-height:.7">↓</div>' : ''}
+          `).join('')}
+        </div>
+      </div>
     </div>
 
-    <div class="alert alert-warn">
-      <span class="ico">${icon('alert-triangle')}</span>
-      <span><strong>Hallazgo clave:</strong> En el 2° trimestre el rechazo subió al 63–76 %. El 78 % del descarte del semestre es "registro enviado anteriormente" (49 %) + "producto ya activo" (29 %) → bases repetidas y clientes ya convertidos. No es un problema de calidad de datos, es un problema de depuración de origen.</span>
+    <div class="two-col" style="gap:10px; margin-top:8px">
+      <div class="alert alert-warn" style="margin-bottom:0; padding:6px 14px">
+        <span class="ico">${icon('alert-triangle')}</span>
+        <span style="font-size:.7rem"><strong>El rechazo se duplicó en el 2° trimestre:</strong> pasó del 45–51 % (ene–mar) al 63–76 % (abr–jun). En abril y mayo, solo 1 de cada 4 registros recibidos fue gestionable.</span>
+      </div>
+      <div class="alert alert-info" style="margin-bottom:0; padding:6px 14px">
+        <span class="ico">${icon('lightbulb')}</span>
+        <span style="font-size:.7rem"><strong>La causa no es calidad de datos:</strong> el 78 % del descarte son registros re-enviados (49 %) y clientes que ya tienen el producto (29 %). La palanca es <strong>depurar la base en origen</strong> antes del envío.</span>
+      </div>
     </div>`;
 }
 
