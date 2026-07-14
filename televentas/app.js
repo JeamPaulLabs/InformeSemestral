@@ -282,7 +282,7 @@ function renderCampanas() {
           </div>`).join('')}
         <div class="alert alert-warn" style="margin-top:8px">
           <span class="ico">${icon('alert-circle')}</span>
-          <span>"Masiva Voluntarios" consume grandes volúmenes de base con conversión &lt;1 %. Revisar viabilidad.</span>
+          <span>"Masiva Voluntarios": conversión 1,9 % vs. benchmark 15 %. Propuesta: segmentar por calidad de base y priorizar contacto en sub-segmentos con potencial &gt;5 %, o pausar y rediseñar screening en 2S.</span>
         </div>
       </div>
     </div>`;
