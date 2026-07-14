@@ -403,7 +403,7 @@ function renderIniciativas() {
   el.innerHTML = `
     <div class="panel">
       <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px">
-        <h3 style="margin:0; border:none; padding:0">${icon('rocket')} Lo ejecutado en el 1S, según Martha Carvajal</h3>
+        <h3 style="margin:0; border:none; padding:0">${icon('rocket')} Lo ejecutado en el 1S</h3>
         <div class="strategy-tabs">
           <button class="strategy-tab active" data-tab="niniciativas" onclick="iniciativasTab('niniciativas')">${icon('target', { size: 14 })} Iniciativas</button>
           <button class="strategy-tab" data-tab="ncap" onclick="iniciativasTab('ncap')">${icon('graduation-cap', { size: 14 })} Capacitaciones</button>
@@ -649,7 +649,7 @@ function renderContactab() {
       </div>
       <div class="alert alert-info" style="margin-top:10px">
         <span class="ico">${icon('lightbulb')}</span>
-        <span>No es solo el calendario: la contactabilidad global sube o baja según <strong>qué campaña domina la base ese mes</strong>. Bienvenidas CP (79 %) y Autogestión (71 %) contactan mucho mejor que Masiva Voluntarios (17 %) porque son bases más "tibias" (clientes recién vinculados o autogestionados), no números fríos re-marcados. Detalle completo por campaña en la slide "Campañas".</span>
+        <span><strong>Clave:</strong> Los números en el calendario cambian según qué tipo de cliente estamos llamando. Cuando trabajamos con gente que ya nos conoce (CP y Autogestión) los contactamos 4-5 veces mejor (71-79 %) que números nuevos en Masiva Voluntarios (17 %). <strong>Implicación:</strong> mejorar contactabilidad no es solo cuestión de horarios — es el tipo de base. Mejor calidad de números = mejores resultados.</span>
       </div>
     </div>
     </div>
