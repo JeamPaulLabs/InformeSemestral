@@ -157,6 +157,52 @@ function renderVentas() {
           <span>Abr–May: el equipo creció 33 % (15→20 asesores) para sostener una meta 27 % más alta (~2.580). La productividad individual bajó de 149,7 a 109,3 pólizas/asesor mientras el equipo nuevo se consolidaba — la curva de aprendizaje de esos ingresos es la oportunidad de mejora más clara para el 2S.</span>
         </div>
       </div>
+    </div>
+
+    <div class="two-col" style="gap:14px; margin-top:14px">
+      <div class="panel" style="padding:12px 16px">
+        <h3 style="margin-bottom:6px; padding-bottom:5px">${icon('target')} Meta Vanti por mes</h3>
+        <div class="tbl-wrap" style="margin-top:0">
+          <table class="tbl-compact">
+            <thead><tr>
+              <th>Mes</th><th class="r">Meta Vanti</th>
+            </tr></thead>
+            <tbody>
+              ${DATA.meses.map((m,i) => `
+                <tr>
+                  <td><strong>${m}</strong></td>
+                  <td class="r">${fmt(DATA.metaVanti[i])}</td>
+                </tr>`).join('')}
+              <tr class="total">
+                <td>Total</td>
+                <td class="r">${fmt(DATA.metaVanti.reduce((a,b)=>a+b,0))}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="panel" style="padding:12px 16px">
+        <h3 style="margin-bottom:6px; padding-bottom:5px">${icon('target')} Meta Xuma por mes</h3>
+        <div class="tbl-wrap" style="margin-top:0">
+          <table class="tbl-compact">
+            <thead><tr>
+              <th>Mes</th><th class="r">Meta Xuma</th>
+            </tr></thead>
+            <tbody>
+              ${DATA.meses.map((m,i) => `
+                <tr>
+                  <td><strong>${m}</strong></td>
+                  <td class="r">${fmt(DATA.metaXuma[i])}</td>
+                </tr>`).join('')}
+              <tr class="total">
+                <td>Total</td>
+                <td class="r">${fmt(DATA.metaXuma.reduce((a,b)=>a+b,0))}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>`;
 }
 
