@@ -50,6 +50,35 @@ function initialSlideFromURL() {
   return Number.isFinite(n) && n >= 0 ? n : 0;
 }
 
+/* ── AUDIENCIA (?audiencia=xuma|vanti en la URL) ──────────────────
+   Filtra qué slides se muestran según a quién va dirigido el informe,
+   sin borrar ni duplicar contenido: cada <div class="slide"> puede
+   llevar data-audience="ambos|xuma|vanti" (por defecto "ambos" si no
+   se especifica). Sin el parámetro en la URL, se ve todo — así los
+   3 decks que no usan esto (Retail/Tradicional/Innovación) no cambian
+   de comportamiento. Debe llamarse DESPUÉS de construir `slides` y
+   ANTES de buildNav(), y filtra NAV_LABELS en paralelo para que los
+   índices sigan alineados con `slides`. */
+function filterSlidesByAudience() {
+  const audiencia = new URLSearchParams(location.search).get('audiencia');
+  if (!audiencia) return;
+
+  const kept = [];
+  const keptLabels = [];
+  slides.forEach((s, i) => {
+    const tag = s.dataset.audience || 'ambos';
+    if (tag === 'ambos' || tag === audiencia) {
+      kept.push(s);
+      if (typeof NAV_LABELS !== 'undefined') keptLabels.push(NAV_LABELS[i]);
+    }
+  });
+  slides = kept;
+  if (typeof NAV_LABELS !== 'undefined') {
+    NAV_LABELS.length = 0;
+    NAV_LABELS.push(...keptLabels);
+  }
+}
+
 /* ── NAVIGATION ─────────────────────────────────────────────── */
 function goTo(idx, immediate = false) {
   if (animating && !immediate) return;

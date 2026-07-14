@@ -21,6 +21,7 @@ let slides = [];
 /* ── INIT ───────────────────────────────────────────────────── */
 document.addEventListener('DOMContentLoaded', () => {
   slides = Array.from(document.querySelectorAll('.slide'));
+  filterSlidesByAudience();
   buildNav();
   scaleSlider();
   window.addEventListener('resize', scaleSlider);
