@@ -92,7 +92,7 @@ const METAS_JUN = [
 const CAMPANAS = [
   { nombre: 'Bienvenidas Cuota Protegida', contactab: '79 %', conv: '19,5 %', perfil: 'Excelente' },
   { nombre: 'Autogestión',                 contactab: '71 %', conv: '26,6 %', perfil: 'Excelente' },
-  { nombre: 'Cuota Protegida Stock',       contactab: '49 %', conv: '4,6 %',  perfil: 'Bajo' },
+  { nombre: 'Cuota Protegida Stock',       contactab: '49 %', conv: '4,6 %',  perfil: 'Moderado' },
   { nombre: 'Masiva Voluntarios',          contactab: '17 %', conv: '1,9 %',  perfil: 'Bajo' },
 ];
 
