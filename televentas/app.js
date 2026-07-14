@@ -79,7 +79,7 @@ function renderVentas() {
       <div class="kpi-card" style="padding:10px 16px">
         <div class="kpi-label">Pólizas liquidadas (1S completo)</div>
         <div class="kpi-val">${fmt(totalLiq)}</div>
-        <div class="kpi-sub">Liquidación Martha · cifra oficial ene–jun</div>
+        <div class="kpi-sub">Cifra oficial ene–jun</div>
       </div>
       <div class="kpi-card green" style="padding:10px 16px">
         <div class="kpi-label">Ventas 1S (operativo ene–jun)</div>
@@ -120,7 +120,8 @@ function renderVentas() {
                 <td>Total</td>
                 <td class="r">${fmt(totalLiq)}</td>
                 <td class="r">${fmt(DATA.metaE1.reduce((a,b,i)=>a+(DATA.ventasLiq[i]!=null?b:0),0))}</td>
-                <td class="r">—</td><td class="r">—</td>
+                <td class="r">${pctBadge(Math.round(totalLiq / DATA.metaE1.reduce((a,b,i)=>a+(DATA.ventasLiq[i]!=null?b:0),0) * 100))}</td>
+                <td class="r">${Math.round(DATA.asesores.reduce((a,b)=>a+b,0) / DATA.asesores.length)}</td>
               </tr>
             </tbody>
           </table>
