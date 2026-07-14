@@ -96,6 +96,20 @@ const CAMPANAS = [
   { nombre: 'Masiva Voluntarios',          contactab: '17 %', conv: '1,9 %',  perfil: 'Bajo' },
 ];
 
+/* ── AUTOGESTIÓN · histórico mensual (Manager_Performance_2026.md §2) ──
+   Base: clientes que solicitan financiación por la plataforma de Vanti,
+   la mayoría sin intervención de un asesor. Meta ideal Vanti: 20 % de
+   conversión sobre contacto mes a mes. efect = ventas/contactados. */
+const AUTOGESTION_MESES = [
+  { mes: 'Ene', registros: 294,   aptos: 173,   contactados: 140, contactab: 80.92, efect: 30.71, ventas: 43  },
+  { mes: 'Feb', registros: 406,   aptos: 171,   contactados: 139, contactab: 81.29, efect: 32.37, ventas: 45  },
+  { mes: 'Mar', registros: 1865,  aptos: 676,   contactados: 506, contactab: 74.85, efect: 17.19, ventas: 87  },
+  { mes: 'Abr', registros: 1950,  aptos: 813,   contactados: 564, contactab: 71.03, efect: 20.74, ventas: 117 },
+  { mes: 'May', registros: 2203,  aptos: 872,   contactados: 661, contactab: 75.80, efect: 32.98, ventas: 218 },
+  { mes: 'Jun', registros: 4968,  aptos: 1521,  contactados: 962, contactab: 63.25, efect: 29.21, ventas: 281 },
+];
+const AUTOGESTION_META_IDEAL = 20; // % conversión sobre contacto, meta ideal Vanti
+
 /* ── TOP ASESORES (pólizas por mes, tablero operativo) ─────── */
 /* Todos los asesores del semestre (liquidación ene–may; jun pendiente).
    meses = pólizas liquidadas · metas = meta Escala 1 del mes. Orden: total desc.

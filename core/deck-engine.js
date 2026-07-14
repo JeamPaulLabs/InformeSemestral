@@ -42,6 +42,13 @@ function scaleSlider() {
   }
 }
 
+/* ── DEEP LINK (?slide=N en la URL, para enlazar directo a un slide
+   desde fuera del portal, ej. botones en un PowerPoint) ─────────── */
+function initialSlideFromURL() {
+  const n = parseInt(new URLSearchParams(location.search).get('slide'), 10);
+  return Number.isFinite(n) && n >= 0 ? n : 0;
+}
+
 /* ── NAVIGATION ─────────────────────────────────────────────── */
 function goTo(idx, immediate = false) {
   if (animating && !immediate) return;

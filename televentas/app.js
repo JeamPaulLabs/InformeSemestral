@@ -8,7 +8,7 @@
 
 /* ── NAV BAR ─────────────────────────────────────────────────── */
 const NAV_LABELS = [
-  'Portada', 'Cap. 1', 'Ventas', 'Bases', 'Campañas', 'Asesores', 'Iniciativas',
+  'Portada', 'Cap. 1', 'Ventas', 'Bases', 'Campañas', 'Autogestión', 'Asesores', 'Iniciativas',
   'Cap. 2', 'Contactab.', 'Telefonía', 'Descarte', 'Proyección', 'Estrategia', 'Evidencias', 'Cierre'
 ];
 
@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
   buildNav();
   scaleSlider();
   window.addEventListener('resize', scaleSlider);
-  goTo(0, true);
+  goTo(initialSlideFromURL(), true);
   document.addEventListener('keydown', onKey);
   document.getElementById('prev-btn').addEventListener('click', prev);
   document.getElementById('next-btn').addEventListener('click', next);
@@ -51,6 +51,7 @@ window.renderSlides = function() {
   renderVentas();
   renderBases();
   renderCampanas();
+  renderAutogestion();
   renderAsesores();
   renderIniciativas();
   renderContactab();
@@ -351,6 +352,100 @@ function renderCampanas() {
         <div class="alert alert-info" style="margin-top:8px">
           <span class="ico">${icon('target')}</span>
           <span>"CP Stock" alcanza 4,6 % de conversión, prácticamente en el objetivo de esta campaña (solo 5 %, no más). Consolidar estrategia de segmentación y mantener volumen controlado para sostener el desempeño en 2S.</span>
+        </div>
+      </div>
+    </div>`;
+}
+
+/* Slide: Autogestión — deep-dive de la campaña con mejor conversión */
+function renderAutogestion() {
+  const el = document.getElementById('autogestion-body');
+  if (!el) return;
+
+  const totalReg   = AUTOGESTION_MESES.reduce((a,b)=>a+b.registros,0);
+  const totalVentas = AUTOGESTION_MESES.reduce((a,b)=>a+b.ventas,0);
+  const totalContactados = AUTOGESTION_MESES.reduce((a,b)=>a+b.contactados,0);
+  const efectProm  = totalVentas / totalContactados * 100;
+  const maxEfect   = Math.max(...AUTOGESTION_MESES.map(m=>m.efect));
+  const mejorMes   = AUTOGESTION_MESES.find(m=>m.efect===maxEfect);
+  const multProm   = efectProm / (DATA.efectividad.reduce((a,b)=>a+b,0)/DATA.efectividad.length);
+
+  el.innerHTML = `
+    <div class="kpi-grid" style="gap:12px">
+      <div class="kpi-card" style="padding:10px 16px">
+        <div class="kpi-label">Registros (1S)</div>
+        <div class="kpi-val">${fmt(totalReg)}</div>
+        <div class="kpi-sub">Solicitudes de financiación autogestionada</div>
+      </div>
+      <div class="kpi-card green" style="padding:10px 16px">
+        <div class="kpi-label">Ventas (1S)</div>
+        <div class="kpi-val">${fmt(totalVentas)}</div>
+        <div class="kpi-sub">${fmtPct(efectProm)} sobre contactados</div>
+      </div>
+      <div class="kpi-card" style="padding:10px 16px">
+        <div class="kpi-label">Mejor mes</div>
+        <div class="kpi-val">${mejorMes.mes}</div>
+        <div class="kpi-sub">${fmtPct(mejorMes.efect)} de conversión</div>
+      </div>
+      <div class="kpi-card green" style="padding:10px 16px">
+        <div class="kpi-label">Vs. promedio general del canal</div>
+        <div class="kpi-val">${multProm.toFixed(1)}×</div>
+        <div class="kpi-sub">Convierte ${multProm.toFixed(1)} veces mejor que el resto de la base</div>
+      </div>
+    </div>
+
+    <div class="two-col" style="gap:14px">
+      <div class="panel" style="padding:12px 16px">
+        <h3 style="margin-bottom:6px; padding-bottom:5px">${icon('bar-chart-3')} Histórico mensual vs. meta ideal Vanti (20 %)</h3>
+        <div class="tbl-wrap" style="margin-top:0">
+          <table class="tbl-compact">
+            <thead><tr>
+              <th>Mes</th><th class="r">Registros</th><th class="r">Contactab.</th>
+              <th class="r">Conversión</th><th class="r">Vs. meta 20 %</th>
+            </tr></thead>
+            <tbody>
+              ${AUTOGESTION_MESES.map(m => `
+                <tr>
+                  <td><strong>${m.mes}</strong></td>
+                  <td class="r">${fmt(m.registros)}</td>
+                  <td class="r">${fmtPct(m.contactab)}</td>
+                  <td class="r">${badge(fmtPct(m.efect), m.efect>=20?'g':'y')}</td>
+                  <td class="r">${pctBadge(Math.round(m.efect/AUTOGESTION_META_IDEAL*100))}</td>
+                </tr>`).join('')}
+              <tr class="total">
+                <td>Total</td>
+                <td class="r">${fmt(totalReg)}</td>
+                <td class="r">${fmtPct(totalContactados/AUTOGESTION_MESES.reduce((a,b)=>a+b.aptos,0)*100)}</td>
+                <td class="r">${badge(fmtPct(efectProm), 'g')}</td>
+                <td class="r">${pctBadge(Math.round(efectProm/AUTOGESTION_META_IDEAL*100))}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="panel" style="padding:12px 16px">
+        <h3 style="margin-bottom:6px; padding-bottom:5px">${icon('trending-up')} Conversión por mes</h3>
+        <div class="chart-wrap chart-compact" style="margin-top:4px">
+          ${AUTOGESTION_MESES.map(m => {
+            const pct = (m.efect / maxEfect * 100).toFixed(1) + '%';
+            return `
+              <div class="bar-row">
+                <span class="bar-label">${m.mes}</span>
+                <div class="bar-track">
+                  <div class="bar-fill ${m.efect>=20?'teal':''}" data-w="${pct}" style="width:0"></div>
+                </div>
+                <span class="bar-val">${fmtPct(m.efect)}</span>
+              </div>`;
+          }).join('')}
+        </div>
+        <div class="alert alert-info" style="margin-top:8px; padding:7px 12px">
+          <span class="ico">${icon('lightbulb')}</span>
+          <span style="font-size:.72rem"><strong>¿Qué es Autogestión?</strong> Clientes que solicitan su financiación directo en la plataforma de Vanti, la mayoría sin ayuda de un asesor — llegan ya decididos, solo falta contactarlos y cerrar.</span>
+        </div>
+        <div class="alert alert-info" style="margin-top:6px; padding:7px 12px">
+          <span class="ico">${icon('target')}</span>
+          <span style="font-size:.72rem"><strong>Por qué May y Feb fueron los mejores meses</strong> (33,0 % y 32,4 %): el volumen aún era bajo (171–872 aptos/mes) y el equipo daba seguimiento cercano a cada caso. En Mar–Abr, al triplicarse el volumen, la conversión bajó a 17–21 %. Jun recuperó a 29 % ya con 1.521 aptos — el equipo absorbió el crecimiento. <strong>Todos los meses superaron ampliamente el 8,6 % promedio del canal.</strong></span>
         </div>
       </div>
     </div>`;

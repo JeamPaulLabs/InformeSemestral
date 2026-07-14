@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
   buildNav();
   scaleSlider();
   window.addEventListener('resize', scaleSlider);
-  goTo(0, true);
+  goTo(initialSlideFromURL(), true);
   document.addEventListener('keydown', onKey);
   document.getElementById('prev-btn').addEventListener('click', prev);
   document.getElementById('next-btn').addEventListener('click', next);
