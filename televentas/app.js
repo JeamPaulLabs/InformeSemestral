@@ -623,7 +623,7 @@ function renderContactab() {
 
     <div class="alert alert-info" style="margin-top:10px; padding:8px 14px">
       <span class="ico">${icon('pin')}</span>
-      <span>Pasar de 20 % (ene) a 64 % (may) <em>sin cambiar la base</em> generó +21 % más ventas — la mayor palanca disponible. <strong>Oportunidad (Isaac):</strong> falta análisis por franja horaria, tablero propuesto para el 2S.</span>
+      <span><strong>Lo importante:</strong> entre enero (20 %) y mayo (64 %) triplicamos la contactabilidad sin cambiar quién llamamos, solo <strong>cómo y cuándo</strong>. Eso nos trajo 21 % más ventas. <strong>Lectura:</strong> el calendario, horarios y estrategia de llamadas son tan poderosos como la base misma. Febrero y junio bajan porque cambia el mix de campañas (vimos esto arriba). En el 2S, Isaac propone seguir con análisis por franja horaria para identificar ventanas óptimas.</span>
     </div>
     </div>
 
