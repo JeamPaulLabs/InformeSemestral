@@ -236,7 +236,7 @@ function renderCampanas() {
   const detalleSemestre = [
     { c: 'Bienvenidas CP',       reg: 114696, ventas: 6881, convSC: '19,5 %', perfil: 'g' },
     { c: 'Autogestión',          reg: 11686,  ventas: 791,  convSC: '26,6 %', perfil: 'g' },
-    { c: 'CP Stock',             reg: 420641, ventas: 3073, convSC: '4,6 %',  perfil: 'r' },
+    { c: 'CP Stock',             reg: 420641, ventas: 3073, convSC: '4,6 %',  perfil: 'y' },
     { c: 'Masiva Voluntarios',   reg: 255138, ventas: 318,  convSC: '1,9 %',  perfil: 'r' },
     { c: 'CP Clientes Satisf.*', reg: 108659, ventas: 79,   convSC: '1,2 %',  perfil: 'r' },
   ];
@@ -283,6 +283,10 @@ function renderCampanas() {
         <div class="alert alert-warn" style="margin-top:8px">
           <span class="ico">${icon('alert-circle')}</span>
           <span>"Masiva Voluntarios": conversión 1,9 % vs. benchmark 15 %. Propuesta: segmentar por calidad de base y priorizar contacto en sub-segmentos con potencial &gt;5 %, o pausar y rediseñar screening en 2S.</span>
+        </div>
+        <div class="alert alert-info" style="margin-top:8px">
+          <span class="ico">${icon('target')}</span>
+          <span>"CP Stock" alcanza 4,6 % de conversión, cercano al ideal de 5 %. Consolidar estrategia de segmentación y mantener volumen controlado para sostener el desempeño en 2S.</span>
         </div>
       </div>
     </div>`;
