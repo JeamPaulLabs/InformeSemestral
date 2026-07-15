@@ -8,8 +8,9 @@
 
 /* ── NAV BAR ─────────────────────────────────────────────────── */
 const NAV_LABELS = [
-  'Portada', 'Cap. 1', 'Ventas', 'Bases', 'Campañas', 'Autogestión', 'Asesores', 'Iniciativas',
-  'Cap. 2', 'Contactab.', 'Telefonía', 'Descarte', 'Proyección', 'Estrategia', 'Evidencias', 'Cierre'
+  'Portada', 'Cap. 1', 'Ventas', 'Bases', 'Campañas', 'Autogestión',
+  'D. Bienvenida', 'D. Stock', 'D. Masiva', 'D. Satisfechos', 'D. Microseguro', 'D. Cancelaciones',
+  'Asesores', 'Iniciativas', 'Cap. 2', 'Contactab.', 'Telefonía', 'Descarte', 'Proyección', 'Estrategia', 'Evidencias', 'Cierre'
 ];
 
 /* ── STATE ──────────────────────────────────────────────────── */
@@ -53,6 +54,12 @@ window.renderSlides = function() {
   renderBases();
   renderCampanas();
   renderAutogestion();
+  renderDetalleBienvenida();
+  renderDetalleStock();
+  renderDetalleVoluntarios();
+  renderDetalleSatisfechos();
+  renderDetalleMicroseguro();
+  renderDetalleCancelaciones();
   renderAsesores();
   renderIniciativas();
   renderContactab();
@@ -1535,4 +1542,418 @@ function openLightbox(src, caption) {
 function closeLightbox() {
   const ov = document.getElementById('lightbox-overlay');
   if (ov) ov.style.display = 'none';
+}
+
+/* ── NUEVAS FUNCIONES DE RENDER DETALLE DE CAMPAÑAS ──────────────── */
+
+function renderDetalleBienvenida() {
+  const data = {
+    kpisBase: [
+      { mes: 'Enero', recibidos: 14772, rechazados: 8485, pctRechazo: '57,4', aptos: 6287, ventas: 1208, pctVentaRec: '19,2' },
+      { mes: 'Febrero', recibidos: 19573, rechazados: 11134, pctRechazo: '56,9', aptos: 8439, ventas: 1435, pctVentaRec: '17,0' },
+      { mes: 'Marzo', recibidos: 21421, rechazados: 13486, pctRechazo: '63,0', aptos: 7935, ventas: 1119, pctVentaRec: '14,1' },
+      { mes: 'Abril', recibidos: 19096, rechazados: 10792, pctRechazo: '56,5', aptos: 8304, ventas: 1086, pctVentaRec: '13,1' },
+      { mes: 'Mayo', recibidos: 20067, rechazados: 13166, pctRechazo: '65,6', aptos: 6901, ventas: 1068, pctVentaRec: '15,5' },
+      { mes: 'Junio', recibidos: 19767, rechazados: 13203, pctRechazo: '66,8', aptos: 6564, ventas: 965, pctVentaRec: '14,7' }
+    ],
+    tipificacionRechazo: [
+      { motivo: 'Cuota Protegida Activa', cant: 35758, pct: '50,9' },
+      { motivo: 'Contrato Repetido', cant: 12760, pct: '18,2' },
+      { motivo: 'Registro Enviado Anteriormente', cant: 7027, pct: '10,0' },
+      { motivo: 'Microseguro Activo', cant: 5916, pct: '8,4' },
+      { motivo: 'Registro Recibido Anteriormente', cant: 4624, pct: '6,6' },
+      { motivo: 'Registro con Localidad Errónea', cant: 1912, pct: '2,7' },
+      { motivo: 'Cédula/Teléfono Repetido', cant: 1070, pct: '1,5' },
+      { motivo: 'Excede límite de edad (>80 años)', cant: 420, pct: '0,6' },
+      { motivo: 'Otros motivos menores', cant: 779, pct: '1,1' }
+    ],
+    tipificacionAptos: [
+      { desc: 'CONTACTO EFECTIVO', cant: 38250, pct: '78,7', isTitle: true },
+      { desc: 'Venta exitosa (CP + Autogestión)', cant: 7672, pct: '15,8' },
+      { desc: 'No interesado por el producto', cant: 14908, pct: '30,7' },
+      { desc: 'Cuelga la llamada', cant: 4822, pct: '9,9' },
+      { desc: 'Agendado / llamada posterior', cant: 2971, pct: '6,1' },
+      { desc: 'No es responsable del pago', cant: 2501, pct: '5,1' },
+      { desc: 'Datos errados / experiencia', cant: 1847, pct: '3,8' },
+      { desc: 'No interesado por el precio', cant: 1126, pct: '2,3' },
+      { desc: 'Otros motivos menores', cant: 2403, pct: '4,9' },
+      { desc: 'NO CONTACTO', cant: 10362, pct: '21,3', isTitle: true },
+      { desc: 'Contestador automático', cant: 6837, pct: '14,1' },
+      { desc: 'No contesta', cant: 2442, pct: '5,0' },
+      { desc: 'Teléfono apagado / fuera de servicio', cant: 1033, pct: '2,1' },
+      { desc: 'Otros no contacto', cant: 50, pct: '0,1' }
+    ],
+    observaciones: [
+      "Esta base tiene la **mayor contactabilidad del canal (78,7 % Semestre)** y una efectividad sobresaliente.",
+      "El descarte principal es **Cuota Protegida Activa (50,9 %)**, lo que indica que el 1S se depuró correctamente contra clientes vigentes antes de lanzar el marcador.",
+      "**Venta Exitosa** representa el **15,8 % de la gestión de leads aptos**, convirtiéndose en el motor de ventas del canal."
+    ]
+  };
+  renderCampanaDeepDive('detalle-bienvenida-body', data);
+}
+
+function renderDetalleStock() {
+  const data = {
+    kpisBase: [
+      { mes: 'Enero', recibidos: 20864, rechazados: 12781, pctRechazo: '61,3', aptos: 8083, ventas: 322, pctVentaRec: '4,0' },
+      { mes: 'Febrero', recibidos: 50266, rechazados: 25419, pctRechazo: '50,6', aptos: 24847, ventas: 441, pctVentaRec: '1,8' },
+      { mes: 'Marzo', recibidos: 69741, rechazados: 41761, pctRechazo: '59,9', aptos: 27980, ventas: 600, pctVentaRec: '2,1' },
+      { mes: 'Abril', recibidos: 82833, rechazados: 53460, pctRechazo: '64,5', aptos: 29373, ventas: 345, pctVentaRec: '1,2' },
+      { mes: 'Mayo', recibidos: 82833, rechazados: 53460, pctRechazo: '64,5', aptos: 29373, ventas: 750, pctVentaRec: '2,6' },
+      { mes: 'Junio', recibidos: 114104, rechazados: 74819, pctRechazo: '65,6', aptos: 39285, ventas: 615, pctVentaRec: '1,6' }
+    ],
+    tipificacionRechazo: [
+      { motivo: 'Registro Enviado Anteriormente', cant: 96218, pct: '36,8' },
+      { motivo: 'Cuota Protegida Activa', cant: 85455, pct: '32,7' },
+      { motivo: 'Registro Recibido Anteriormente', cant: 21047, pct: '8,0' },
+      { motivo: 'Dirección Repetida', cant: 19533, pct: '7,5' },
+      { motivo: 'Microseguro Activo', cant: 13637, pct: '5,2' },
+      { motivo: 'Teléfono Repetido', cant: 7059, pct: '2,7' },
+      { motivo: 'Cédula Repetida', cant: 5053, pct: '1,9' },
+      { motivo: 'Excede límite de edad (>80 años)', cant: 4544, pct: '1,7' },
+      { motivo: 'Otros motivos menores', cant: 9154, pct: '3,5' }
+    ],
+    tipificacionAptos: [
+      { desc: 'CONTACTO EFECTIVO', cant: 67420, pct: '49,4', isTitle: true },
+      { desc: 'Venta exitosa', cant: 3073, pct: '2,3' },
+      { desc: 'No interesado por el producto', cant: 24996, pct: '18,3' },
+      { desc: 'Cuelga la llamada', cant: 14356, pct: '10,5' },
+      { desc: 'No es responsable del pago', cant: 5881, pct: '4,3' },
+      { desc: 'Datos errados / experiencia', cant: 7026, pct: '5,2' },
+      { desc: 'No interesado por el precio', cant: 3063, pct: '2,3' },
+      { desc: 'Agendado / llamada posterior', cant: 2911, pct: '2,1' },
+      { desc: 'Otros motivos menores', cant: 6214, pct: '4,6' },
+      { desc: 'NO CONTACTO', cant: 68940, pct: '50,6', isTitle: true },
+      { desc: 'Contestador automático', cant: 56723, pct: '41,6' },
+      { desc: 'No contesta', cant: 8594, pct: '6,3' },
+      { desc: 'Teléfono apagado / fuera de servicio', cant: 3347, pct: '2,5' },
+      { desc: 'Otros no contacto', cant: 276, pct: '0,2' }
+    ],
+    observaciones: [
+      "CP Stock es la **base de mayor volumen (420.641 registros recibidos)** en el semestre.",
+      "El descarte estructural de **Registro Enviado Anteriormente (36,8 %)** y **Cuota Activa (32,7 %)** suma el **69,5 % del rechazo**, confirmando el agotamiento de la base.",
+      "El no contacto es muy alto (**50,6 %**), impulsado por contestadores automáticos (**41,6 %**), lo que exige depuración telefónica en 2S."
+    ]
+  };
+  renderCampanaDeepDive('detalle-stock-body', data);
+}
+
+function renderDetalleVoluntarios() {
+  const data = {
+    kpisBase: [
+      { mes: 'Enero', recibidos: 55557, rechazados: 4225, pctRechazo: '7,6', aptos: 51332, ventas: 31, pctVentaRec: '0,1' },
+      { mes: 'Febrero', recibidos: 24673, rechazados: 11397, pctRechazo: '46,2', aptos: 13276, ventas: 123, pctVentaRec: '0,9' },
+      { mes: 'Marzo', recibidos: 41870, rechazados: 4562, pctRechazo: '10,9', aptos: 37308, ventas: 21, pctVentaRec: '0,1' },
+      { mes: 'Abril', recibidos: 49232, rechazados: 48734, pctRechazo: '99,0', aptos: 498, ventas: 0, pctVentaRec: '0,0' },
+      { mes: 'Mayo', recibidos: 49232, rechazados: 48734, pctRechazo: '99,0', aptos: 498, ventas: 5, pctVentaRec: '1,0' },
+      { mes: 'Junio', recibidos: 34574, rechazados: 17661, pctRechazo: '51,1', aptos: 16913, ventas: 138, pctVentaRec: '0,8' }
+    ],
+    tipificacionRechazo: [
+      { motivo: 'Registro Enviado Anteriormente', cant: 103678, pct: '76,6' },
+      { motivo: 'Registro Recibido Anteriormente', cant: 11261, pct: '8,3' },
+      { motivo: 'Supera edad para Microseguro (69 años)', cant: 5948, pct: '4,4' },
+      { motivo: 'Excede límite de edad (>69 años)', cant: 4495, pct: '3,3' },
+      { motivo: 'Seguro Voluntario Activo', cant: 2330, pct: '1,7' },
+      { motivo: 'Teléfono Vacío', cant: 2145, pct: '1,6' },
+      { motivo: 'Microseguro Activo', cant: 922, pct: '0,7' },
+      { motivo: 'Otros motivos menores', cant: 4534, pct: '3,4' }
+    ],
+    tipificacionAptos: [
+      { desc: 'CONTACTO EFECTIVO', cant: 16926, pct: '17,0', isTitle: true },
+      { desc: 'Venta exitosa', cant: 318, pct: '0,3' },
+      { desc: 'No interesado por el producto', cant: 6037, pct: '6,1' },
+      { desc: 'Cuelga la llamada', cant: 4035, pct: '4,0' },
+      { desc: 'No es responsable del pago', cant: 1701, pct: '1,7' },
+      { desc: 'No interesado por el precio / datos', cant: 2583, pct: '2,6' },
+      { desc: 'Agendado / llamada posterior', cant: 657, pct: '0,7' },
+      { desc: 'Otros motivos menores', cant: 1595, pct: '1,6' },
+      { desc: 'NO CONTACTO', cant: 82895, pct: '83,0', isTitle: true },
+      { desc: 'Contestador automático', cant: 80769, pct: '80,9' },
+      { desc: 'No contesta', cant: 1640, pct: '1,6' },
+      { desc: 'Teléfono apagado / fuera de servicio', cant: 256, pct: '0,3' },
+      { desc: 'Otros no contacto', cant: 230, pct: '0,2' }
+    ],
+    observaciones: [
+      "Esta base tiene una **contactabilidad crítica muy baja (17,0 %)**, con un rechazo promedio del **53,04 %**.",
+      "El no contacto es el más alto del portafolio (**83,0 %**), impulsado masivamente por **Contestadores (80,9 %)**, lo que indica bases quemadas o números desactualizados.",
+      "En abril y mayo el rechazo llegó al **99 %** porque se enviaron registros duplicados. **Junio mostró recuperación (138 ventas y 4,92 % conversión)** al actualizarse la base."
+    ]
+  };
+  renderCampanaDeepDive('detalle-voluntarios-body', data);
+}
+
+function renderDetalleSatisfechos() {
+  const data = {
+    kpisBase: [
+      { mes: 'Enero', recibidos: 108659, rechazados: 73431, pctRechazo: '67,6', aptos: 35228, ventas: 79, pctVentaRec: '0,2' },
+      { mes: 'Febrero', recibidos: 0, rechazados: 0, pctRechazo: '—', aptos: 0, ventas: 0, pctVentaRec: '—' },
+      { mes: 'Marzo', recibidos: 0, rechazados: 0, pctRechazo: '—', aptos: 0, ventas: 0, pctVentaRec: '—' },
+      { mes: 'Abril', recibidos: 0, rechazados: 0, pctRechazo: '—', aptos: 0, ventas: 0, pctVentaRec: '—' },
+      { mes: 'Mayo', recibidos: 0, rechazados: 0, pctRechazo: '—', aptos: 0, ventas: 0, pctVentaRec: '—' },
+      { mes: 'Junio', recibidos: 0, rechazados: 0, pctRechazo: '—', aptos: 0, ventas: 0, pctVentaRec: '—' }
+    ],
+    tipificacionRechazo: [
+      { motivo: 'Registro Enviado Anteriormente', cant: 43210, pct: '58,8' },
+      { motivo: 'Cuota Protegida Activa / Producto Activo', cant: 22105, pct: '30,1' },
+      { motivo: 'Teléfono Errado / Sin Teléfono', cant: 4120, pct: '5,6' },
+      { motivo: 'NIT de empresa / No apto', cant: 2980, pct: '4,1' },
+      { motivo: 'Otros motivos menores', cant: 1016, pct: '1,4' }
+    ],
+    tipificacionAptos: [
+      { desc: 'CONTACTO EFECTIVO', cant: 6536, pct: '18,6', isTitle: true },
+      { desc: 'Venta exitosa', cant: 79, pct: '1,2' },
+      { desc: 'No interesado por el producto', cant: 3210, pct: '9,1' },
+      { desc: 'Cuelga la llamada / experiencia', cant: 1845, pct: '5,2' },
+      { desc: 'Otros motivos menores', cant: 1402, pct: '4,0' },
+      { desc: 'NO CONTACTO', cant: 28692, pct: '81,4', isTitle: true },
+      { desc: 'Contestador automático', cant: 22104, pct: '62,7' },
+      { desc: 'No contesta / apagado', cant: 6588, pct: '18,7' }
+    ],
+    observaciones: [
+      "Esta base **sólo estuvo activa en enero de 2026** (campaña táctica sobre base histórica de clientes satisfechos).",
+      "Mostró un descarte muy alto (**67,58 %**) y una bajísima efectividad sobre contacto (**1,21 %**), lo que justifica que se haya pausado a partir de febrero.",
+      "El contestador fue el gran bloqueador en enero, consumiendo el **62,7 % de los registros aptos gestionados**."
+    ]
+  };
+  renderCampanaDeepDive('detalle-satisfechos-body', data);
+}
+
+function renderDetalleMicroseguro() {
+  const data = {
+    kpisBase: [
+      { mes: 'Enero', recibidos: 1368, rechazados: 5, pctRechazo: '0,4', aptos: 1363, ventas: 264, pctVentaRec: '19,3' },
+      { mes: 'Febrero', recibidos: 1575, rechazados: 4, pctRechazo: '0,3', aptos: 1571, ventas: 254, pctVentaRec: '16,1' },
+      { mes: 'Marzo', recibidos: 1147, rechazados: 4, pctRechazo: '0,3', aptos: 1143, ventas: 158, pctVentaRec: '13,8' },
+      { mes: 'Abril', recibidos: 1737, rechazados: 2, pctRechazo: '0,1', aptos: 1735, ventas: 135, pctVentaRec: '7,8' },
+      { mes: 'Mayo', recibidos: 1865, rechazados: 3, pctRechazo: '0,2', aptos: 1862, ventas: 287, pctVentaRec: '15,4' },
+      { mes: 'Junio', recibidos: 1705, rechazados: 1, pctRechazo: '0,1', aptos: 1704, ventas: 211, pctVentaRec: '12,4' }
+    ],
+    tipificacionRechazo: [
+      { motivo: 'Microseguro Activo / Ya Posee el Producto', cant: 12, pct: '63,2' },
+      { motivo: 'Registro Enviado Anteriormente', cant: 5, pct: '26,3' },
+      { motivo: 'Otros motivos menores', cant: 2, pct: '10,5' }
+    ],
+    tipificacionAptos: [
+      { desc: 'CONTACTO EFECTIVO', cant: 7400, pct: '78,9', isTitle: true },
+      { desc: 'Venta exitosa', cant: 1309, pct: '14,0' },
+      { desc: 'No interesado por el producto', cant: 2508, pct: '26,8' },
+      { desc: 'Cuelga la llamada', cant: 939, pct: '10,0' },
+      { desc: 'No cumple requisito de edad (>69 años)', cant: 746, pct: '8,0' },
+      { desc: 'Agendado / llamada posterior', cant: 505, pct: '5,4' },
+      { desc: 'No es responsable del pago', cant: 386, pct: '4,1' },
+      { desc: 'Otros motivos menores', cant: 1008, pct: '10,7' },
+      { desc: 'NO CONTACTO', cant: 1978, pct: '21,1', isTitle: true },
+      { desc: 'Contestador automático', cant: 1244, pct: '13,3' },
+      { desc: 'No contesta', cant: 555, pct: '5,9' },
+      { desc: 'Teléfono apagado / fuera de servicio', cant: 161, pct: '1,7' },
+      { desc: 'Otros no contacto', cant: 18, pct: '0,2' }
+    ],
+    observaciones: [
+      "La campaña Microseguro tiene un **nivel de rechazo casi nulo (<1 %)** porque es base ultra-filtrada.",
+      "Muestra una contactabilidad excelente (**78,91 %**) y una conversión sobre contacto muy alta (**17,69 % promedio, llegando a 22,04 % en enero**).",
+      "**Venta Exitosa** es el **14,0 % de la gestión total de Leads**, consolidándose como un canal de gran eficiencia a menor escala."
+    ]
+  };
+  renderCampanaDeepDive('detalle-microseguro-body', data);
+}
+
+function renderDetalleCancelaciones() {
+  const data = {
+    kpisBase: [
+      { mes: 'Enero', recibidos: 1263, rechazados: 198, pctRechazo: '15,7', aptos: 1065, ventas: 4, pctVentaRec: '0,3' },
+      { mes: 'Febrero', recibidos: 0, rechazados: 0, pctRechazo: '—', aptos: 0, ventas: 0, pctVentaRec: '—' },
+      { mes: 'Marzo', recibidos: 0, rechazados: 0, pctRechazo: '—', aptos: 0, ventas: 0, pctVentaRec: '—' },
+      { mes: 'Abril', recibidos: 0, rechazados: 0, pctRechazo: '—', aptos: 0, ventas: 0, pctVentaRec: '—' },
+      { mes: 'Mayo', recibidos: 0, rechazados: 0, pctRechazo: '—', aptos: 0, ventas: 0, pctVentaRec: '—' },
+      { mes: 'Junio', recibidos: 0, rechazados: 0, pctRechazo: '—', aptos: 0, ventas: 0, pctVentaRec: '—' }
+    ],
+    tipificacionRechazo: [
+      { motivo: 'Microseguro Activo', cant: 67, pct: '33,8' },
+      { motivo: 'NIT de empresa', cant: 66, pct: '33,3' },
+      { motivo: 'Registro Enviado Anteriormente', cant: 58, pct: '29,3' },
+      { motivo: 'Cédula Errada', cant: 6, pct: '3,0' },
+      { motivo: 'Nombre Vacío', cant: 1, pct: '0,5' }
+    ],
+    tipificacionAptos: [
+      { desc: 'CONTACTO EFECTIVO', cant: 564, pct: '53,0', isTitle: true },
+      { desc: 'Venta exitosa', cant: 4, pct: '0,4' },
+      { desc: 'No interesado por el producto', cant: 143, pct: '13,4' },
+      { desc: 'Datos errados / experiencia', cant: 188, pct: '17,7' },
+      { desc: 'Cuelga la llamada', cant: 90, pct: '8,5' },
+      { desc: 'No es responsable del pago', cant: 68, pct: '6,4' },
+      { desc: 'Otros motivos menores', cant: 71, pct: '6,7' },
+      { desc: 'NO CONTACTO', cant: 501, pct: '47,0', isTitle: true },
+      { desc: 'Contestador automático', cant: 455, pct: '42,7' },
+      { desc: 'No contesta / apagado', cant: 46, pct: '4,3' }
+    ],
+    observaciones: [
+      "Esta base **sólo estuvo activa en enero de 2026** (campaña táctica sobre solicitudes de cancelaciones previas).",
+      "Mostró una efectividad extremadamente baja (**4 ventas totales, 0,38 % del apto**), lo que sustentó su suspensión inmediata.",
+      "El descarte principal se concentró en **Microseguro Activo (33,8 %)** y **NIT de Empresa (33,3 %)**."
+    ]
+  };
+  renderCampanaDeepDive('detalle-cancelaciones-body', data);
+}
+
+function renderCampanaDeepDive(campanaId, data) {
+  const el = document.getElementById(campanaId);
+  if (!el) return;
+
+  const validKpis = data.kpisBase.filter(k => k.recibidos > 0);
+  const totalRecibidos = validKpis.reduce((a,b)=>a+b.recibidos,0);
+  const totalRechazados = validKpis.reduce((a,b)=>a+b.rechazados,0);
+  const totalAptos = validKpis.reduce((a,b)=>a+b.aptos,0);
+  const totalVentas = validKpis.reduce((a,b)=>a+b.ventas,0);
+  
+  const totalPctRechazo = totalRecibidos > 0 ? (totalRechazados / totalRecibidos * 100).toFixed(1).replace('.', ',') : '—';
+  const totalPctVentaRec = totalAptos > 0 ? (totalVentas / totalAptos * 100).toFixed(1).replace('.', ',') : '—';
+
+  el.innerHTML = `
+    <div class="two-col" style="gap:10px; margin-top:-5px; align-items:start">
+      <!-- Columna Izquierda: Descarte / Rechazo -->
+      <div class="panel" style="padding:6px 12px; display:flex; flex-direction:column; gap:4px; min-height:285px">
+        <h3 style="margin-bottom:2px; padding-bottom:2px; font-size:0.7rem; border-bottom:1px solid var(--gray2); color:var(--blue)">
+          ${icon('alert-circle', {size: 13})} 1. Calidad de Base y Descarte Mensual
+        </h3>
+        <div class="tbl-wrap" style="margin-top:0">
+          <table style="font-size:0.56rem; table-layout:fixed; border-collapse:collapse; width:100%">
+            <colgroup>
+              <col style="width:20%">
+              <col style="width:26%">
+              <col style="width:28%">
+              <col style="width:26%">
+            </colgroup>
+            <thead><tr>
+              <th style="border-right:1px solid rgba(255,255,255,.18); padding:3px 6px">Mes</th>
+              <th class="r" style="border-right:1px solid rgba(255,255,255,.18); padding:3px 6px">Recibidos</th>
+              <th class="r" style="border-right:1px solid rgba(255,255,255,.18); padding:3px 6px">Rechazados</th>
+              <th class="r" style="padding:3px 6px">% Rechazo</th>
+            </tr></thead>
+            <tbody>
+              ${data.kpisBase.map(m=>`
+                <tr>
+                  <td style="border-right:1px solid rgba(0,0,0,.06); padding:2px 6px"><strong>${m.mes}</strong></td>
+                  <td class="r" style="border-right:1px solid rgba(0,0,0,.06); padding:2px 6px">${m.recibidos > 0 ? fmt(m.recibidos) : '—'}</td>
+                  <td class="r" style="border-right:1px solid rgba(0,0,0,.06); padding:2px 6px">${m.recibidos > 0 ? fmt(m.rechazados) : '—'}</td>
+                  <td class="r" style="padding:2px 6px">${m.recibidos > 0 ? m.pctRechazo + ' %' : '—'}</td>
+                </tr>`).join('')}
+              <tr class="total">
+                <td style="border-right:1px solid rgba(0,0,0,.07); padding:3px 6px">Total</td>
+                <td class="r" style="border-right:1px solid rgba(0,0,0,.07); padding:3px 6px">${fmt(totalRecibidos)}</td>
+                <td class="r" style="border-right:1px solid rgba(0,0,0,.07); padding:3px 6px">${fmt(totalRechazados)}</td>
+                <td class="r" style="padding:3px 6px">${totalPctRechazo} %</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 style="margin-bottom:2px; padding-bottom:2px; font-size:0.7rem; margin-top:2px; border-bottom:1px solid var(--gray2); color:var(--blue)">
+          ${icon('filter', {size: 13})} 2. Motivos de Descarte (Acumulado Semestre)
+        </h3>
+        <div class="tbl-wrap" style="margin-top:0; max-height:105px; overflow-y:auto; border:1px solid var(--gray2)">
+          <table style="font-size:0.54rem; table-layout:fixed; border-collapse:collapse; width:100%">
+            <colgroup>
+              <col style="width:68%">
+              <col style="width:20%">
+              <col style="width:12%">
+            </colgroup>
+            <thead><tr>
+              <th style="border-right:1px solid rgba(255,255,255,.18); padding:3px 6px">Motivo</th>
+              <th class="r" style="border-right:1px solid rgba(255,255,255,.18); padding:3px 6px">Regs.</th>
+              <th class="r" style="padding:3px 6px">%</th>
+            </tr></thead>
+            <tbody>
+              ${data.tipificacionRechazo.map(r=>`
+                <tr>
+                  <td style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis; border-right:1px solid rgba(0,0,0,.06); padding:2px 6px" title="${r.motivo}">${r.motivo}</td>
+                  <td class="r" style="border-right:1px solid rgba(0,0,0,.06); padding:2px 6px">${fmt(r.cant)}</td>
+                  <td class="r" style="padding:2px 6px">${r.pct} %</td>
+                </tr>`).join('')}
+              <tr class="total">
+                <td style="border-right:1px solid rgba(0,0,0,.07); padding:3px 6px">Total</td>
+                <td class="r" style="border-right:1px solid rgba(0,0,0,.07); padding:3px 6px">${fmt(totalRechazados)}</td>
+                <td class="r" style="padding:3px 6px">100 %</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Columna Derecha: Gestión / Aptos -->
+      <div class="panel" style="padding:6px 12px; display:flex; flex-direction:column; gap:4px; min-height:285px">
+        <h3 style="margin-bottom:2px; padding-bottom:2px; font-size:0.7rem; border-bottom:1px solid var(--gray2); color:var(--blue)">
+          ${icon('trending-up', {size: 13})} 3. Insumo Apto y Ventas Mensuales
+        </h3>
+        <div class="tbl-wrap" style="margin-top:0">
+          <table style="font-size:0.56rem; table-layout:fixed; border-collapse:collapse; width:100%">
+            <colgroup>
+              <col style="width:20%">
+              <col style="width:26%">
+              <col style="width:28%">
+              <col style="width:26%">
+            </colgroup>
+            <thead><tr>
+              <th style="border-right:1px solid rgba(255,255,255,.18); padding:3px 6px">Mes</th>
+              <th class="r" style="border-right:1px solid rgba(255,255,255,.18); padding:3px 6px">Aptos</th>
+              <th class="r" style="border-right:1px solid rgba(255,255,255,.18); padding:3px 6px">Ventas</th>
+              <th class="r" style="padding:3px 6px">% Conv/Rec.</th>
+            </tr></thead>
+            <tbody>
+              ${data.kpisBase.map(m=>`
+                <tr>
+                  <td style="border-right:1px solid rgba(0,0,0,.06); padding:2px 6px"><strong>${m.mes}</strong></td>
+                  <td class="r" style="border-right:1px solid rgba(0,0,0,.06); padding:2px 6px">${m.recibidos > 0 ? fmt(m.aptos) : '—'}</td>
+                  <td class="r" style="border-right:1px solid rgba(0,0,0,.06); padding:2px 6px">${m.recibidos > 0 ? `<strong>${fmt(m.ventas)}</strong>` : '—'}</td>
+                  <td class="r" style="padding:2px 6px">${m.recibidos > 0 ? m.pctVentaRec + ' %' : '—'}</td>
+                </tr>`).join('')}
+              <tr class="total">
+                <td style="border-right:1px solid rgba(0,0,0,.07); padding:3px 6px">Total</td>
+                <td class="r" style="border-right:1px solid rgba(0,0,0,.07); padding:3px 6px">${fmt(totalAptos)}</td>
+                <td class="r" style="border-right:1px solid rgba(0,0,0,.07); padding:3px 6px"><strong>${fmt(totalVentas)}</strong></td>
+                <td class="r" style="padding:3px 6px">${totalPctVentaRec} %</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 style="margin-bottom:2px; padding-bottom:2px; font-size:0.7rem; margin-top:2px; border-bottom:1px solid var(--gray2); color:var(--blue)">
+          ${icon('clipboard-list', {size: 13})} 4. Tipificación de Leads Aptos (Acumulado Semestre)
+        </h3>
+        <div class="tbl-wrap" style="margin-top:0; max-height:105px; overflow-y:auto; border:1px solid var(--gray2)">
+          <table style="font-size:0.54rem; table-layout:fixed; border-collapse:collapse; width:100%">
+            <colgroup>
+              <col style="width:68%">
+              <col style="width:20%">
+              <col style="width:12%">
+            </colgroup>
+            <thead><tr>
+              <th style="border-right:1px solid rgba(255,255,255,.18); padding:3px 6px">Tipificación</th>
+              <th class="r" style="border-right:1px solid rgba(255,255,255,.18); padding:3px 6px">Regs.</th>
+              <th class="r" style="padding:3px 6px">%</th>
+            </tr></thead>
+            <tbody>
+              ${data.tipificacionAptos.map(r=>`
+                <tr style="${r.isTitle ? 'background:rgba(18,1,128,.04); font-weight:700' : ''}">
+                  <td style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis; border-right:1px solid rgba(0,0,0,.06); padding:2px 6px; ${r.isTitle ? 'color:var(--blue)' : ''}" title="${r.desc}">
+                    ${r.isTitle ? r.desc : '&nbsp;&nbsp;' + r.desc}
+                  </td>
+                  <td class="r" style="border-right:1px solid rgba(0,0,0,.06); padding:2px 6px; ${r.isTitle ? 'color:var(--blue)' : ''}">${fmt(r.cant)}</td>
+                  <td class="r" style="padding:2px 6px; ${r.isTitle ? 'color:var(--blue)' : ''}">${r.pct} %</td>
+                </tr>`).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fila Inferior de Observaciones -->
+    <div class="alert alert-info" style="margin-top:6px; padding:6px 14px; font-size:0.62rem; line-height:1.45; display:flex; flex-direction:column; gap:2px">
+      <div style="font-weight:700; color:var(--blue); display:flex; align-items:center; gap:4px">
+        ${icon('lightbulb', {size: 13})} Observaciones Clave de la Base:
+      </div>
+      <ul style="margin-left:14px; list-style-type:disc; display:flex; flex-direction:column; gap:1px">
+        ${data.observaciones.map(o=>`<li>${o}</li>`).join('')}
+      </ul>
+    </div>
+  `;
 }

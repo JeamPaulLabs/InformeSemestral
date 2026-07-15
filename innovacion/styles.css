@@ -71,13 +71,16 @@ body {
   transform: translateX(-50%);
   z-index: 1000;
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 90vw;
   align-items: center;
-  gap: 10px;
+  gap: 6px 10px;
   background: rgba(18,1,128,.88);
   backdrop-filter: blur(14px);
   border: 1px solid rgba(90,226,128,.25);
-  border-radius: 50px;
-  padding: 10px 20px;
+  border-radius: 30px;
+  padding: 8px 20px;
   box-shadow: 0 8px 32px rgba(0,0,0,.45);
 }
 #nav button {
