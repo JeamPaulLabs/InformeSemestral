@@ -148,7 +148,7 @@ body {
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
-  background: linear-gradient(135deg, #ffffff 0%, #f4f5f9 100%);
+  background: var(--gray1);
   padding: 80px 100px;
   overflow: hidden;
 }
@@ -220,28 +220,44 @@ body {
   overflow: hidden;
 }
 .slide-section.bg-blue {
-  background: linear-gradient(135deg, #ffffff 0%, #f4f5f9 100%);
-  color: var(--dark);
+  background: linear-gradient(135deg, var(--blue) 0%, #0d016a 100%);
+  color: var(--white);
 }
 .slide-section.bg-teal {
-  background: linear-gradient(135deg, #ffffff 0%, #eefbf7 100%);
+  background: linear-gradient(135deg, #00a378 0%, var(--teal) 100%);
+  color: var(--white);
+}
+.slide-section.bg-white {
+  background: var(--gray1);
   color: var(--dark);
+}
+.slide-section.bg-white .section-number {
+  color: rgba(18,1,128,.06);
+}
+.slide-section.bg-white .section-label {
+  color: var(--teal);
+}
+.slide-section.bg-white .section-title {
+  color: var(--blue);
+}
+.slide-section.bg-white .section-desc {
+  color: #555555;
 }
 .section-number {
   font-size: 7rem; font-weight: 900; line-height: 1;
-  color: rgba(18,1,128,.06); margin-bottom: -20px;
+  color: rgba(255,255,255,.1); margin-bottom: -20px;
 }
 .section-label {
   font-size: .78rem; font-weight: 700; letter-spacing: .2em;
-  text-transform: uppercase; color: var(--teal); margin-bottom: 14px;
+  text-transform: uppercase; color: var(--green); margin-bottom: 14px;
 }
 .section-title {
   font-size: 3rem; font-weight: 800; line-height: 1.15;
-  color: var(--blue); max-width: 700px;
+  color: var(--white); max-width: 700px;
 }
 .section-desc {
   margin-top: 20px; font-size: 1.05rem; font-weight: 400;
-  color: #555555; max-width: 580px; line-height: 1.6;
+  color: rgba(255,255,255,.65); max-width: 580px; line-height: 1.6;
 }
 
 /* ── SLIDE · CONTENT BASE ────────────────────────────────── */

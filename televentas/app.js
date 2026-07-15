@@ -556,6 +556,7 @@ function renderAutogestion() {
   const el = document.getElementById('autogestion-body');
   if (!el) return;
 
+  const MESES = ['Ene','Feb','Mar','Abr','May','Jun'];
   const totalReg   = AUTOGESTION_MESES.reduce((a,b)=>a+b.registros,0);
   const totalRech  = AUTOGESTION_MESES.reduce((a,b)=>a+b.rechazo,0);
   const totalVentas = AUTOGESTION_MESES.reduce((a,b)=>a+b.ventas,0);
@@ -563,9 +564,9 @@ function renderAutogestion() {
   const totalAptos = AUTOGESTION_MESES.reduce((a,b)=>a+b.aptos,0);
   const pctRechGral = totalRech / totalReg * 100;
   const efectProm  = totalVentas / totalContactados * 100;
-  const maxEfect   = Math.max(...AUTOGESTION_MESES.map(m=>m.efect));
-  const mejorMes   = AUTOGESTION_MESES.find(m=>m.efect===maxEfect);
+  const maxVentas  = Math.max(...AUTOGESTION_MESES.map(m=>m.ventas));
   const multProm   = efectProm / (DATA.efectividad.reduce((a,b)=>a+b,0)/DATA.efectividad.length);
+  const maxNoVenta = Math.max(...AUTOGESTION_TIPOS.filter(t=>t.nombre!=='Venta exitosa').map(t=>t.total));
 
   el.innerHTML = `
     <div class="kpi-grid" style="gap:12px">
@@ -580,9 +581,9 @@ function renderAutogestion() {
         <div class="kpi-sub">${fmtPct(efectProm)} sobre contactados</div>
       </div>
       <div class="kpi-card" style="padding:10px 16px">
-        <div class="kpi-label">Mejor mes</div>
-        <div class="kpi-val">${mejorMes.mes}</div>
-        <div class="kpi-sub">${fmtPct(mejorMes.efect)} de conversión</div>
+        <div class="kpi-label">Rechazo promedio</div>
+        <div class="kpi-val">${fmtPct(pctRechGral)}</div>
+        <div class="kpi-sub">${fmt(totalRech)} registros descartados en el semestre</div>
       </div>
       <div class="kpi-card green" style="padding:10px 16px">
         <div class="kpi-label">Vs. promedio general del canal</div>
@@ -621,43 +622,80 @@ function renderAutogestion() {
             </tbody>
           </table>
         </div>
+
+        <h3 style="margin:10px 0 4px; padding-bottom:3px; font-size:.68rem">${icon('search', {size:12})} Tipificación de contactos (acumulado 1S)</h3>
+        <div style="display:flex; flex-wrap:wrap; gap:2px 6px">
+          ${AUTOGESTION_TIPOS.map(t => {
+            const ancho = t.nombre==='Venta exitosa'
+              ? Math.round(t.total/(totalContactados+totalRech)*100)
+              : Math.round(t.total/maxNoVenta*80)+10;
+            return `<div style="flex:0 0 48%; display:flex; align-items:center; gap:4px">
+              <span style="flex:0 0 88px; font-size:.55rem; color:var(--gray3); text-align:right; white-space:nowrap; overflow:hidden; text-overflow:ellipsis">${t.nombre}</span>
+              <div style="flex:1; height:10px; background:rgba(0,0,0,.08); border-radius:5px; overflow:hidden">
+                <div style="width:${ancho}%; height:100%; border-radius:5px; background:${t.nombre==='Venta exitosa'?'var(--teal)':'var(--warn)'}"></div>
+              </div>
+              <span style="flex:0 0 38px; font-size:.55rem; font-weight:700; color:var(--blue); text-align:right">${fmt(t.total)}</span>
+            </div>`;
+          }).join('')}
+        </div>
       </div>
 
       <div class="panel" style="padding:12px 16px">
-        <h3 style="margin-bottom:4px; padding-bottom:5px">${icon('trending-up')} Conversión por mes</h3>
-        <div class="chart-wrap chart-compact" style="margin-top:2px">
+        <h3 style="margin-bottom:4px; padding-bottom:5px">${icon('users')} Ventas Autogestión por asesor</h3>
+        <div class="tbl-wrap" style="margin-top:0">
+          <table class="tbl-compact" style="font-size:.66rem">
+            <thead><tr>
+              <th>Asesor</th>${MESES.map(m=>`<th class="r" style="font-size:.6rem">${m}</th>`).join('')}<th class="r" style="font-size:.6rem">Total</th>
+            </tr></thead>
+            <tbody>
+              ${AUTOGESTION_ASESORES.map(a => `
+                <tr>
+                  <td><strong style="font-size:.6rem">${a.nombre}</strong>${a.cuarto?' <span style="display:inline-block;background:var(--teal);color:#04003a;font-size:.5rem;font-weight:800;padding:0 4px;border-radius:3px;line-height:1.4">4ª</span>':''}</td>
+                  ${a.meses.map(v=>`<td class="r" style="font-size:.58rem">${v||'-'}</td>`).join('')}
+                  <td class="r" style="font-size:.6rem;font-weight:800">${a.total}</td>
+                </tr>`).join('')}
+              <tr class="total">
+                <td style="font-size:.6rem">Total 4 asesores</td>
+                ${MESES.map((_,i)=>'<td class="r" style="font-size:.58rem">'+fmt(AUTOGESTION_ASESORES.reduce((s,a)=>s+(a.meses[i]||0),0))+'</td>').join('')}
+                <td class="r" style="font-size:.6rem;font-weight:800">${fmt(AUTOGESTION_ASESORES.reduce((s,a)=>s+a.total,0))}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 style="margin:8px 0 2px; padding-bottom:3px; font-size:.62rem">${icon('trending-up', {size:12})} Crecimiento mensual de ventas</h3>
+        <div class="chart-wrap" style="margin-top:2px; gap:2px">
           ${AUTOGESTION_MESES.map(m => {
-            const pct = (m.efect / maxEfect * 100).toFixed(1) + '%';
+            const pct = (m.ventas / maxVentas * 100).toFixed(1) + '%';
             return `
-              <div class="bar-row">
-                <span class="bar-label">${m.mes}</span>
-                <div class="bar-track">
-                  <div class="bar-fill ${m.efect>=20?'teal':''}" data-w="${pct}" style="width:0"></div>
+              <div class="bar-row" style="gap:4px">
+                <span class="bar-label" style="font-size:.55rem;flex:0 0 22px">${m.mes}</span>
+                <div class="bar-track" style="height:14px">
+                  <div class="bar-fill teal" data-w="${pct}" style="width:0"></div>
                 </div>
-                <span class="bar-val">${fmtPct(m.efect)}</span>
+                <span class="bar-val" style="font-size:.58rem">${fmt(m.ventas)}</span>
               </div>`;
           }).join('')}
         </div>
 
-        <div style="font-size:.6rem; font-weight:700; color:var(--gray3); text-transform:uppercase; letter-spacing:.03em; margin:10px 0 6px">${icon('compass', {size:12})} Qué cambió en la gestión</div>
-        <div style="display:flex; align-items:stretch; gap:3px">
+        <div style="font-size:.55rem; font-weight:700; color:var(--gray3); text-transform:uppercase; letter-spacing:.03em; margin:8px 0 4px">${icon('compass', {size:11})} Qué cambió en la gestión</div>
+        <div style="display:flex; align-items:stretch; gap:2px">
           ${[
-            ['users',     'Ene–25 mar', 'Todos gestionan', 'Excel manual, sin línea de tiempo'],
-            ['user-plus', '26 mar',     'Foco: 3 asesores', 'Equipo dedicado a Autogestión'],
-            ['repeat',    'Abr–may',    'Sobremarcación (OCM)', 'Mínima agresividad, más contacto efectivo'],
-            ['user-plus', 'Jun',        '+1 asesor (4)', 'Sostiene el mayor volumen del semestre'],
-          ].map(([ic,fecha,titulo,det],i)=>`
-            ${i>0?'<div style="align-self:center; color:var(--teal); font-weight:800; font-size:.9rem; flex-shrink:0">→</div>':''}
-            <div style="flex:1; background:rgba(0,205,147,.07); border:1px solid rgba(0,205,147,.25); border-radius:8px; padding:6px 4px; text-align:center">
-              <div style="color:var(--teal)">${icon(ic,{size:15})}</div>
-              <div style="font-size:.56rem; font-weight:800; color:var(--gray3); margin-top:2px">${fecha}</div>
-              <div style="font-size:.62rem; font-weight:700; color:var(--blue); margin-top:1px; line-height:1.15">${titulo}</div>
-              <div style="font-size:.54rem; color:var(--gray3); margin-top:2px; line-height:1.15">${det}</div>
+            ['users',     'Ene–25 mar', 'Todos gestionan'],
+            ['user-plus', '26 mar',     'Foco: 3 asesores'],
+            ['repeat',    'Abr–may',    'Sobremarcación OCM'],
+            ['user-plus', 'Jun',        '+1 asesor (4)'],
+          ].map(([ic,fecha,titulo],i)=>`
+            ${i>0?'<div style="align-self:center; color:var(--teal); font-weight:800; font-size:.7rem; flex-shrink:0">→</div>':''}
+            <div style="flex:1; background:rgba(0,205,147,.07); border:1px solid rgba(0,205,147,.25); border-radius:6px; padding:4px 2px; text-align:center">
+              <div style="color:var(--teal); font-size:.65rem">${icon(ic,{size:12})}</div>
+              <div style="font-size:.5rem; font-weight:800; color:var(--gray3); margin-top:1px">${fecha}</div>
+              <div style="font-size:.55rem; font-weight:700; color:var(--blue); line-height:1.1">${titulo}</div>
             </div>`).join('')}
         </div>
-        <div class="alert alert-info" style="margin-top:8px; padding:6px 12px">
-          <span class="ico">${icon('lightbulb', {size:14})}</span>
-          <span style="font-size:.66rem">Base ya decidida a comprar (autogestión en la plataforma Vanti) + mejoras de gestión ⇒ <strong>3× la conversión promedio del canal, todos los meses.</strong></span>
+        <div class="alert alert-info" style="margin-top:6px; padding:4px 10px">
+          <span class="ico">${icon('lightbulb', {size:12})}</span>
+          <span style="font-size:.6rem">Base ya decidida a comprar + mejoras de gestión ⇒ <strong>3× la conversión promedio del canal.</strong></span>
         </div>
       </div>
     </div>`;
