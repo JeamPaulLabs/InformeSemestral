@@ -113,14 +113,37 @@ const CAMPANAS = [
    gestionaban esta base; desde el 26 mar se focalizó en 3 asesores
    dedicados, y a mediados de jun se sumó un 4°. */
 const AUTOGESTION_MESES = [
-  { mes: 'Ene', registros: 294,   aptos: 173,   contactados: 140, contactab: 80.92, efect: 30.71, ventas: 43  },
-  { mes: 'Feb', registros: 406,   aptos: 171,   contactados: 139, contactab: 81.29, efect: 32.37, ventas: 45  },
-  { mes: 'Mar', registros: 1865,  aptos: 676,   contactados: 506, contactab: 74.85, efect: 17.19, ventas: 87  },
-  { mes: 'Abr', registros: 1950,  aptos: 813,   contactados: 564, contactab: 71.03, efect: 20.74, ventas: 117 },
-  { mes: 'May', registros: 2203,  aptos: 872,   contactados: 661, contactab: 75.80, efect: 32.98, ventas: 218 },
-  { mes: 'Jun', registros: 4968,  aptos: 1521,  contactados: 962, contactab: 63.25, efect: 29.21, ventas: 281 },
+  { mes: 'Ene', registros: 294,   aptos: 173,   contactados: 140, contactab: 80.92, efect: 30.71, ventas: 43,  rechazo: 121, pctRechazo: 41.16 },
+  { mes: 'Feb', registros: 406,   aptos: 171,   contactados: 139, contactab: 81.29, efect: 32.37, ventas: 45,  rechazo: 235, pctRechazo: 57.88 },
+  { mes: 'Mar', registros: 1865,  aptos: 676,   contactados: 506, contactab: 74.85, efect: 17.19, ventas: 87,  rechazo: 1189, pctRechazo: 63.75 },
+  { mes: 'Abr', registros: 1950,  aptos: 813,   contactados: 564, contactab: 71.03, efect: 20.74, ventas: 117, rechazo: 1137, pctRechazo: 58.31 },
+  { mes: 'May', registros: 2203,  aptos: 872,   contactados: 661, contactab: 75.80, efect: 32.98, ventas: 218, rechazo: 1331, pctRechazo: 60.42 },
+  { mes: 'Jun', registros: 4968,  aptos: 1521,  contactados: 962, contactab: 63.25, efect: 29.21, ventas: 281, rechazo: 3447, pctRechazo: 69.38 },
 ];
-const AUTOGESTION_META_IDEAL = 20; // % conversión sobre contacto, meta ideal Vanti
+
+/* ── AUTOGESTIÓN · ventas por asesor (fuente: reporte de ventas.xlsx) ── */
+/* Los 4 asesores focalizados en la base de autogestión. Desde el 26 mar se
+   asignaron 3 asesores dedicados (Jesús, Melissa, Luisa); a mediados de jun
+   se sumó Joelis como 4ª. cuarto = true marca quién ingresó después. */
+const AUTOGESTION_ASESORES = [
+  { nombre: 'Jesús D. Cortés',     meses: [5,3,13,36,101,97], total: 255, cuarto: false },
+  { nombre: 'Melissa P. Orozco',   meses: [5,3,7,18,58,74],  total: 165, cuarto: false },
+  { nombre: 'Luisa L. Percy',      meses: [1,3,7,18,45,64],  total: 138, cuarto: false },
+  { nombre: 'Joelis J. Barros',    meses: [3,6,4,3,0,31],    total: 47,  cuarto: true  },
+];
+
+/* ── AUTOGESTIÓN · tipificación de contactos (reporte de ventas.xlsx) ── */
+/* Top 8 motivos de no-venta + ventas por mes. Ordenado por total descendente. */
+const AUTOGESTION_TIPOS = [
+  { nombre: 'Venta exitosa',          meses: [43,45,87,117,218,281], total: 791 },
+  { nombre: 'No interesado producto', meses: [40,33,165,202,213,382], total: 1035 },
+  { nombre: 'Contestador',            meses: [21,29,127,74,69,442],  total: 762 },
+  { nombre: 'Cuelga llamada',         meses: [16,22,69,83,69,106],   total: 365 },
+  { nombre: 'No contesta',            meses: [10,3,33,119,60,89],    total: 314 },
+  { nombre: 'No resp. pago servicio', meses: [13,7,38,34,57,73],     total: 222 },
+  { nombre: 'Teléfono apagado',       meses: [1,0,10,37,82,26],      total: 156 },
+  { nombre: 'No interesado precio',   meses: [3,4,47,29,21,2],       total: 106 },
+];
 
 /* ── TOP ASESORES (pólizas por mes, tablero operativo) ─────── */
 /* Todos los asesores del semestre (liquidación ene–may; jun pendiente).

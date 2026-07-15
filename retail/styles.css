@@ -148,7 +148,7 @@ body {
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
-  background: linear-gradient(135deg, var(--blue) 0%, #0d016a 45%, #04003a 100%);
+  background: linear-gradient(135deg, #ffffff 0%, #f4f5f9 100%);
   padding: 80px 100px;
   overflow: hidden;
 }
@@ -173,15 +173,15 @@ body {
 .cover-logo { height: 56px; margin-bottom: 56px; }
 .cover-tag {
   font-size: .78rem; font-weight: 700; letter-spacing: .18em;
-  color: var(--green); text-transform: uppercase; margin-bottom: 18px;
+  color: var(--teal); text-transform: uppercase; margin-bottom: 18px;
 }
 .cover-title {
   font-size: 3.6rem; font-weight: 800; line-height: 1.1;
-  color: var(--white); max-width: 720px; margin-bottom: 18px;
+  color: var(--blue); max-width: 720px; margin-bottom: 18px;
 }
-.cover-title span { color: var(--green); }
+.cover-title span { color: var(--teal); }
 .cover-subtitle {
-  font-size: 1.15rem; font-weight: 400; color: rgba(255,255,255,.65);
+  font-size: 1.15rem; font-weight: 400; color: #555555;
   max-width: 560px; line-height: 1.55; margin-bottom: 26px;
 }
 /* Bloque de créditos: separado del subtítulo para que la atribución no se lea
@@ -192,22 +192,22 @@ body {
 .cover-credits { display: flex; align-items: flex-start; gap: 28px; flex-wrap: wrap; margin-bottom: 44px; max-width: 640px; }
 .cover-credit-group { display: flex; flex-direction: column; gap: 5px; }
 .cover-credit-role {
-  font-size: .64rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--green);
+  font-size: .64rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--teal);
 }
-.cover-credit-name { font-size: .86rem; font-weight: 700; color: var(--white); line-height: 1.5; }
-.cover-credit-detail { font-size: .78rem; font-weight: 500; color: rgba(255,255,255,.45); }
-.cover-credit-divider { width: 1px; align-self: stretch; background: rgba(255,255,255,.15); margin-top: 3px; }
+.cover-credit-name { font-size: .86rem; font-weight: 700; color: var(--blue); line-height: 1.5; }
+.cover-credit-detail { font-size: .78rem; font-weight: 500; color: var(--gray3); }
+.cover-credit-divider { width: 1px; align-self: stretch; background: var(--gray2); margin-top: 3px; }
 .cover-chips { display: flex; gap: 12px; flex-wrap: wrap; }
 .cover-chip {
-  background: rgba(90,226,128,.15);
-  border: 1px solid rgba(90,226,128,.35);
-  color: var(--green);
+  background: rgba(0,205,147,.1);
+  border: 1px solid rgba(0,205,147,.3);
+  color: var(--teal);
   font-size: .78rem; font-weight: 700; letter-spacing: .08em;
   padding: 8px 18px; border-radius: 30px;
 }
 .cover-vanti {
   position: absolute; bottom: 40px; right: 60px;
-  font-size: .72rem; font-weight: 600; color: rgba(255,255,255,.35);
+  font-size: .72rem; font-weight: 600; color: rgba(18,1,128,.35);
   letter-spacing: .1em;
 }
 
@@ -220,28 +220,28 @@ body {
   overflow: hidden;
 }
 .slide-section.bg-blue {
-  background: linear-gradient(135deg, var(--blue) 0%, #0d016a 100%);
-  color: var(--white);
+  background: linear-gradient(135deg, #ffffff 0%, #f4f5f9 100%);
+  color: var(--dark);
 }
 .slide-section.bg-teal {
-  background: linear-gradient(135deg, #00a378 0%, var(--teal) 100%);
-  color: var(--white);
+  background: linear-gradient(135deg, #ffffff 0%, #eefbf7 100%);
+  color: var(--dark);
 }
 .section-number {
   font-size: 7rem; font-weight: 900; line-height: 1;
-  color: rgba(255,255,255,.1); margin-bottom: -20px;
+  color: rgba(18,1,128,.06); margin-bottom: -20px;
 }
 .section-label {
   font-size: .78rem; font-weight: 700; letter-spacing: .2em;
-  text-transform: uppercase; color: var(--green); margin-bottom: 14px;
+  text-transform: uppercase; color: var(--teal); margin-bottom: 14px;
 }
 .section-title {
   font-size: 3rem; font-weight: 800; line-height: 1.15;
-  color: var(--white); max-width: 700px;
+  color: var(--blue); max-width: 700px;
 }
 .section-desc {
   margin-top: 20px; font-size: 1.05rem; font-weight: 400;
-  color: rgba(255,255,255,.65); max-width: 580px; line-height: 1.6;
+  color: #555555; max-width: 580px; line-height: 1.6;
 }
 
 /* ── SLIDE · CONTENT BASE ────────────────────────────────── */

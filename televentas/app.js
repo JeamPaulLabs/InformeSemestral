@@ -557,8 +557,11 @@ function renderAutogestion() {
   if (!el) return;
 
   const totalReg   = AUTOGESTION_MESES.reduce((a,b)=>a+b.registros,0);
+  const totalRech  = AUTOGESTION_MESES.reduce((a,b)=>a+b.rechazo,0);
   const totalVentas = AUTOGESTION_MESES.reduce((a,b)=>a+b.ventas,0);
   const totalContactados = AUTOGESTION_MESES.reduce((a,b)=>a+b.contactados,0);
+  const totalAptos = AUTOGESTION_MESES.reduce((a,b)=>a+b.aptos,0);
+  const pctRechGral = totalRech / totalReg * 100;
   const efectProm  = totalVentas / totalContactados * 100;
   const maxEfect   = Math.max(...AUTOGESTION_MESES.map(m=>m.efect));
   const mejorMes   = AUTOGESTION_MESES.find(m=>m.efect===maxEfect);
@@ -590,28 +593,30 @@ function renderAutogestion() {
 
     <div class="two-col" style="gap:14px">
       <div class="panel" style="padding:12px 16px">
-        <h3 style="margin-bottom:6px; padding-bottom:5px">${icon('bar-chart-3')} Histórico mensual vs. meta ideal Vanti (20 %)</h3>
+        <h3 style="margin-bottom:6px; padding-bottom:5px">${icon('bar-chart-3')} Histórico mensual</h3>
         <div class="tbl-wrap" style="margin-top:0">
           <table class="tbl-compact">
             <thead><tr>
-              <th>Mes</th><th class="r">Registros</th><th class="r">Contactab.</th>
-              <th class="r">Conversión</th><th class="r">Vs. meta 20 %</th>
+              <th>Mes</th><th class="r">Registros</th><th class="r">Rechazo</th><th class="r">% Rech.</th>
+              <th class="r">Contactab.</th><th class="r">Conversión</th>
             </tr></thead>
             <tbody>
               ${AUTOGESTION_MESES.map(m => `
                 <tr>
                   <td><strong>${m.mes}</strong></td>
                   <td class="r">${fmt(m.registros)}</td>
+                  <td class="r">${fmt(m.rechazo)}</td>
+                  <td class="r">${fmtPct(m.pctRechazo)}</td>
                   <td class="r">${fmtPct(m.contactab)}</td>
                   <td class="r">${badge(fmtPct(m.efect), m.efect>=20?'g':'y')}</td>
-                  <td class="r">${pctBadge(Math.round(m.efect/AUTOGESTION_META_IDEAL*100))}</td>
                 </tr>`).join('')}
               <tr class="total">
                 <td>Total</td>
                 <td class="r">${fmt(totalReg)}</td>
-                <td class="r">${fmtPct(totalContactados/AUTOGESTION_MESES.reduce((a,b)=>a+b.aptos,0)*100)}</td>
+                <td class="r">${fmt(totalRech)}</td>
+                <td class="r">${fmtPct(pctRechGral)}</td>
+                <td class="r">${fmtPct(totalContactados/totalAptos*100)}</td>
                 <td class="r">${badge(fmtPct(efectProm), 'g')}</td>
-                <td class="r">${pctBadge(Math.round(efectProm/AUTOGESTION_META_IDEAL*100))}</td>
               </tr>
             </tbody>
           </table>
