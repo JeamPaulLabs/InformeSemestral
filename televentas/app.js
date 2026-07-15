@@ -464,31 +464,53 @@ function renderCampanas() {
   if (!el) return;
 
   const detalleSemestre = [
-    { c: 'Bienvenidas CP',       reg: 114696, ventas: 6881, convSC: '19,5 %', perfil: 'g' },
-    { c: 'Autogestión',          reg: 11686,  ventas: 791,  convSC: '26,6 %', perfil: 'g' },
-    { c: 'CP Stock',             reg: 420641, ventas: 3073, convSC: '4,6 %',  perfil: 'y' },
-    { c: 'Masiva Voluntarios',   reg: 255138, ventas: 318,  convSC: '1,9 %',  perfil: 'r' },
-    { c: 'CP Clientes Satisf.*', reg: 108659, ventas: 79,   convSC: '1,2 %',  perfil: 'r' },
+    { c: 'Bienvenidas CP',       reg: 114696, ventas: 6881, contactab: '79 %', convSC: '19,5 %', perfil: 'g' },
+    { c: 'Autogestión',          reg: 11686,  ventas: 791,  contactab: '71 %', convSC: '26,6 %', perfil: 'g' },
+    { c: 'CP Stock',             reg: 420641, ventas: 3073, contactab: '49 %', convSC: '4,6 %',  perfil: 'y' },
+    { c: 'Masiva Voluntarios',   reg: 255138, ventas: 318,  contactab: '17 %', convSC: '1,9 %',  perfil: 'r' },
+    { c: 'CP Clientes Satisf.*', reg: 108659, ventas: 79,   contactab: '19 %', convSC: '1,2 %',  perfil: 'r' },
   ];
+
+  const totalReg    = detalleSemestre.reduce((a, r) => a + r.reg, 0);
+  const totalVentas = detalleSemestre.reduce((a, r) => a + r.ventas, 0);
+  const convGlobal  = ((totalVentas / totalReg) * 100).toFixed(1).replace('.', ',') + ' %';
 
   el.innerHTML = `
     <div class="two-col">
       <div class="panel">
         <h3>${icon('target')} Eficiencia por campaña (consolidado ene–jun)</h3>
         <div class="tbl-wrap" style="margin-top:0">
-          <table>
+          <table style="font-size:.66rem; width:100%; table-layout:fixed; border-collapse:collapse">
+            <colgroup>
+              <col style="width:31%">
+              <col style="width:15%">
+              <col style="width:11%">
+              <col style="width:17%">
+              <col style="width:26%">
+            </colgroup>
             <thead><tr>
-              <th>Campaña</th><th class="r">Registros</th>
-              <th class="r">Ventas</th><th class="r">Conv./contacto</th>
+              <th style="border-right:1px solid rgba(255,255,255,.2)">Campaña</th>
+              <th class="r" style="border-right:1px solid rgba(255,255,255,.2)">Registros</th>
+              <th class="r" style="border-right:1px solid rgba(255,255,255,.2)">Ventas</th>
+              <th class="r" style="border-right:1px solid rgba(255,255,255,.2)">Contactab.</th>
+              <th class="r">Conv. / ctto. aptos</th>
             </tr></thead>
             <tbody>
               ${detalleSemestre.map(r=>`
                 <tr>
-                  <td>${badge(r.c, r.perfil)}</td>
-                  <td class="r">${fmt(r.reg)}</td>
-                  <td class="r"><strong>${fmt(r.ventas)}</strong></td>
-                  <td class="r">${badge(r.convSC, r.perfil)}</td>
+                  <td style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis; border-right:1px solid rgba(0,0,0,.07)">${badge(r.c, r.perfil)}</td>
+                  <td class="r" style="white-space:nowrap; border-right:1px solid rgba(0,0,0,.07)">${fmt(r.reg)}</td>
+                  <td class="r" style="white-space:nowrap; border-right:1px solid rgba(0,0,0,.07)"><strong>${fmt(r.ventas)}</strong></td>
+                  <td class="r" style="white-space:nowrap; border-right:1px solid rgba(0,0,0,.07)">${badge(r.contactab, r.perfil)}</td>
+                  <td class="r" style="white-space:nowrap">${badge(r.convSC, r.perfil)}</td>
                 </tr>`).join('')}
+              <tr class="total">
+                <td style="white-space:nowrap; border-right:1px solid rgba(0,0,0,.07)">Total</td>
+                <td class="r" style="white-space:nowrap; border-right:1px solid rgba(0,0,0,.07)">${fmt(totalReg)}</td>
+                <td class="r" style="white-space:nowrap; border-right:1px solid rgba(0,0,0,.07)">${fmt(totalVentas)}</td>
+                <td class="r" style="white-space:nowrap; border-right:1px solid rgba(0,0,0,.07)">40 %</td>
+                <td class="r" style="white-space:nowrap">8,6 %</td>
+              </tr>
             </tbody>
           </table>
         </div>
