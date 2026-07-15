@@ -1548,13 +1548,18 @@ function closeLightbox() {
 
 function renderDetalleBienvenida() {
   const data = {
+    highlights: [
+      { label: 'CONTACTABILIDAD PROMEDIO', val: '79 %', sub: 'Líder en contactabilidad del canal' },
+      { label: 'VENTAS TOTALES', val: '6.881', sub: 'Aporta el 62% de las ventas de CP' },
+      { label: 'CONVERSIÓN PROMEDIO', val: '19,5 %', sub: 'Alta efectividad comercial sobre contacto' }
+    ],
     kpisBase: [
-      { mes: 'Enero', recibidos: 14772, rechazados: 8485, pctRechazo: '57,4', aptos: 6287, ventas: 1208, pctVentaRec: '19,2' },
-      { mes: 'Febrero', recibidos: 19573, rechazados: 11134, pctRechazo: '56,9', aptos: 8439, ventas: 1435, pctVentaRec: '17,0' },
-      { mes: 'Marzo', recibidos: 21421, rechazados: 13486, pctRechazo: '63,0', aptos: 7935, ventas: 1119, pctVentaRec: '14,1' },
-      { mes: 'Abril', recibidos: 19096, rechazados: 10792, pctRechazo: '56,5', aptos: 8304, ventas: 1086, pctVentaRec: '13,1' },
-      { mes: 'Mayo', recibidos: 20067, rechazados: 13166, pctRechazo: '65,6', aptos: 6901, ventas: 1068, pctVentaRec: '15,5' },
-      { mes: 'Junio', recibidos: 19767, rechazados: 13203, pctRechazo: '66,8', aptos: 6564, ventas: 965, pctVentaRec: '14,7' }
+      { mes: 'Enero', recibidos: 14772, rechazados: 8485, pctRechazo: '57,4', aptos: 6287, contactab: '81,5', ventas: 1208, conversion: '23,6', pctVentaRec: '19,2' },
+      { mes: 'Febrero', recibidos: 19573, rechazados: 11134, pctRechazo: '56,9', aptos: 8439, contactab: '79,0', ventas: 1435, conversion: '21,5', pctVentaRec: '17,0' },
+      { mes: 'Marzo', recibidos: 21421, rechazados: 13486, pctRechazo: '63,0', aptos: 7935, contactab: '78,2', ventas: 1119, conversion: '18,0', pctVentaRec: '14,1' },
+      { mes: 'Abril', recibidos: 19096, rechazados: 10792, pctRechazo: '56,5', aptos: 8304, contactab: '76,1', ventas: 1086, conversion: '17,2', pctVentaRec: '13,1' },
+      { mes: 'Mayo', recibidos: 20067, rechazados: 13166, pctRechazo: '65,6', aptos: 6901, contactab: '83,1', ventas: 1068, conversion: '18,6', pctVentaRec: '15,5' },
+      { mes: 'Junio', recibidos: 19767, rechazados: 13203, pctRechazo: '66,8', aptos: 6564, contactab: '79,9', ventas: 965, conversion: '18,4', pctVentaRec: '14,7' }
     ],
     tipificacionRechazo: [
       { motivo: 'Cuota Protegida Activa', cant: 35758, pct: '50,9' },
@@ -1594,13 +1599,18 @@ function renderDetalleBienvenida() {
 
 function renderDetalleStock() {
   const data = {
+    highlights: [
+      { label: 'VOLUMEN DE REGISTROS', val: '420.641', sub: 'Base de mayor dimensionamiento' },
+      { label: 'VENTAS CONSOLIDADAS', val: '3.073', sub: 'Segundo mayor aportante de ventas' },
+      { label: 'CONVERSIÓN PROMEDIO', val: '4,6 %', sub: 'Cumplimiento de objetivos sobre contacto' }
+    ],
     kpisBase: [
-      { mes: 'Enero', recibidos: 20864, rechazados: 12781, pctRechazo: '61,3', aptos: 8083, ventas: 322, pctVentaRec: '4,0' },
-      { mes: 'Febrero', recibidos: 50266, rechazados: 25419, pctRechazo: '50,6', aptos: 24847, ventas: 441, pctVentaRec: '1,8' },
-      { mes: 'Marzo', recibidos: 69741, rechazados: 41761, pctRechazo: '59,9', aptos: 27980, ventas: 600, pctVentaRec: '2,1' },
-      { mes: 'Abril', recibidos: 82833, rechazados: 53460, pctRechazo: '64,5', aptos: 29373, ventas: 345, pctVentaRec: '1,2' },
-      { mes: 'Mayo', recibidos: 82833, rechazados: 53460, pctRechazo: '64,5', aptos: 29373, ventas: 750, pctVentaRec: '2,6' },
-      { mes: 'Junio', recibidos: 114104, rechazados: 74819, pctRechazo: '65,6', aptos: 39285, ventas: 615, pctVentaRec: '1,6' }
+      { mes: 'Enero', recibidos: 20864, rechazados: 12781, pctRechazo: '61,3', aptos: 8083, contactab: '51,1', ventas: 322, conversion: '7,8', pctVentaRec: '4,0' },
+      { mes: 'Febrero', recibidos: 50266, rechazados: 25419, pctRechazo: '50,6', aptos: 24847, contactab: '36,8', ventas: 441, conversion: '4,8', pctVentaRec: '1,8' },
+      { mes: 'Marzo', recibidos: 69741, rechazados: 41761, pctRechazo: '59,9', aptos: 27980, contactab: '54,4', ventas: 600, conversion: '4,0', pctVentaRec: '2,1' },
+      { mes: 'Abril', recibidos: 82833, rechazados: 53460, pctRechazo: '64,5', aptos: 29373, contactab: '42,9', ventas: 345, conversion: '3,7', pctVentaRec: '1,2' },
+      { mes: 'Mayo', recibidos: 82833, rechazados: 53460, pctRechazo: '64,5', aptos: 29373, contactab: '59,3', ventas: 750, conversion: '4,3', pctVentaRec: '2,6' },
+      { mes: 'Junio', recibidos: 114104, rechazados: 74819, pctRechazo: '65,6', aptos: 39285, contactab: '50,1', ventas: 615, conversion: '5,0', pctVentaRec: '1,6' }
     ],
     tipificacionRechazo: [
       { motivo: 'Registro Enviado Anteriormente', cant: 96218, pct: '36,8' },
@@ -1640,13 +1650,18 @@ function renderDetalleStock() {
 
 function renderDetalleVoluntarios() {
   const data = {
+    highlights: [
+      { label: 'INSUMO APTO TOTAL', val: '119.828', sub: 'Base masiva para gestión del marcador' },
+      { label: 'EFECTIVIDAD EN JUNIO', val: '4,9 %', sub: 'Importante repunte tras actualización de base' },
+      { label: 'VENTAS CONSEGUIDAS', val: '318', sub: 'Aporte incremental constante' }
+    ],
     kpisBase: [
-      { mes: 'Enero', recibidos: 55557, rechazados: 4225, pctRechazo: '7,6', aptos: 51332, ventas: 31, pctVentaRec: '0,1' },
-      { mes: 'Febrero', recibidos: 24673, rechazados: 11397, pctRechazo: '46,2', aptos: 13276, ventas: 123, pctVentaRec: '0,9' },
-      { mes: 'Marzo', recibidos: 41870, rechazados: 4562, pctRechazo: '10,9', aptos: 37308, ventas: 21, pctVentaRec: '0,1' },
-      { mes: 'Abril', recibidos: 49232, rechazados: 48734, pctRechazo: '99,0', aptos: 498, ventas: 0, pctVentaRec: '0,0' },
-      { mes: 'Mayo', recibidos: 49232, rechazados: 48734, pctRechazo: '99,0', aptos: 498, ventas: 5, pctVentaRec: '1,0' },
-      { mes: 'Junio', recibidos: 34574, rechazados: 17661, pctRechazo: '51,1', aptos: 16913, ventas: 138, pctVentaRec: '0,8' }
+      { mes: 'Enero', recibidos: 55557, rechazados: 4225, pctRechazo: '7,6', aptos: 51332, contactab: '9,2', ventas: 31, conversion: '0,7', pctVentaRec: '0,1' },
+      { mes: 'Febrero', recibidos: 24673, rechazados: 11397, pctRechazo: '46,2', aptos: 13276, contactab: '30,0', ventas: 123, conversion: '3,2', pctVentaRec: '0,9' },
+      { mes: 'Marzo', recibidos: 41870, rechazados: 4562, pctRechazo: '10,9', aptos: 37308, contactab: '22,1', ventas: 21, conversion: '0,4', pctVentaRec: '0,1' },
+      { mes: 'Abril', recibidos: 49232, rechazados: 48734, pctRechazo: '99,0', aptos: 498, contactab: '6,0', ventas: 0, conversion: '0,0', pctVentaRec: '0,0' },
+      { mes: 'Mayo', recibidos: 49232, rechazados: 48734, pctRechazo: '99,0', aptos: 498, contactab: '43,2', ventas: 5, conversion: '2,3', pctVentaRec: '1,0' },
+      { mes: 'Junio', recibidos: 34574, rechazados: 17661, pctRechazo: '51,1', aptos: 16913, contactab: '25,9', ventas: 138, conversion: '4,9', pctVentaRec: '0,8' }
     ],
     tipificacionRechazo: [
       { motivo: 'Registro Enviado Anteriormente', cant: 103678, pct: '76,6' },
@@ -1684,13 +1699,18 @@ function renderDetalleVoluntarios() {
 
 function renderDetalleSatisfechos() {
   const data = {
+    highlights: [
+      { label: 'CONTACTO EFECTIVO EN ENERO', val: '18,6 %', sub: 'Interacción ágil con clientes históricos' },
+      { label: 'VENTAS INCREMENTALES', val: '79', sub: 'Aporte táctico masivo al inicio del año' },
+      { label: 'LEADS APTOS GENERADOS', val: '35.228', sub: 'Base focalizada y depurada de forma express' }
+    ],
     kpisBase: [
-      { mes: 'Enero', recibidos: 108659, rechazados: 73431, pctRechazo: '67,6', aptos: 35228, ventas: 79, pctVentaRec: '0,2' },
-      { mes: 'Febrero', recibidos: 0, rechazados: 0, pctRechazo: '—', aptos: 0, ventas: 0, pctVentaRec: '—' },
-      { mes: 'Marzo', recibidos: 0, rechazados: 0, pctRechazo: '—', aptos: 0, ventas: 0, pctVentaRec: '—' },
-      { mes: 'Abril', recibidos: 0, rechazados: 0, pctRechazo: '—', aptos: 0, ventas: 0, pctVentaRec: '—' },
-      { mes: 'Mayo', recibidos: 0, rechazados: 0, pctRechazo: '—', aptos: 0, ventas: 0, pctVentaRec: '—' },
-      { mes: 'Junio', recibidos: 0, rechazados: 0, pctRechazo: '—', aptos: 0, ventas: 0, pctVentaRec: '—' }
+      { mes: 'Enero', recibidos: 108659, rechazados: 73431, pctRechazo: '67,6', aptos: 35228, contactab: '18,6', ventas: 79, conversion: '1,2', pctVentaRec: '0,2' },
+      { mes: 'Febrero', recibidos: 0, rechazados: 0, pctRechazo: '—', aptos: 0, contactab: '—', ventas: 0, conversion: '—', pctVentaRec: '—' },
+      { mes: 'Marzo', recibidos: 0, rechazados: 0, pctRechazo: '—', aptos: 0, contactab: '—', ventas: 0, conversion: '—', pctVentaRec: '—' },
+      { mes: 'Abril', recibidos: 0, rechazados: 0, pctRechazo: '—', aptos: 0, contactab: '—', ventas: 0, conversion: '—', pctVentaRec: '—' },
+      { mes: 'Mayo', recibidos: 0, rechazados: 0, pctRechazo: '—', aptos: 0, contactab: '—', ventas: 0, conversion: '—', pctVentaRec: '—' },
+      { mes: 'Junio', recibidos: 0, rechazados: 0, pctRechazo: '—', aptos: 0, contactab: '—', ventas: 0, conversion: '—', pctVentaRec: '—' }
     ],
     tipificacionRechazo: [
       { motivo: 'Registro Enviado Anteriormente', cant: 43210, pct: '58,8' },
@@ -1720,13 +1740,18 @@ function renderDetalleSatisfechos() {
 
 function renderDetalleMicroseguro() {
   const data = {
+    highlights: [
+      { label: 'CONTACTABILIDAD PROMEDIO', val: '78,9 %', sub: 'Excelente respuesta de llamada y atención' },
+      { label: 'CONVERSIÓN PROMEDIO', val: '17,7 %', sub: 'Alta tasa de efectividad comercial en portafolio' },
+      { label: 'VENTAS CONSOLIDADAS', val: '1.309', sub: 'Campaña estable y altamente rentable' }
+    ],
     kpisBase: [
-      { mes: 'Enero', recibidos: 1368, rechazados: 5, pctRechazo: '0,4', aptos: 1363, ventas: 264, pctVentaRec: '19,3' },
-      { mes: 'Febrero', recibidos: 1575, rechazados: 4, pctRechazo: '0,3', aptos: 1571, ventas: 254, pctVentaRec: '16,1' },
-      { mes: 'Marzo', recibidos: 1147, rechazados: 4, pctRechazo: '0,3', aptos: 1143, ventas: 158, pctVentaRec: '13,8' },
-      { mes: 'Abril', recibidos: 1737, rechazados: 2, pctRechazo: '0,1', aptos: 1735, ventas: 135, pctVentaRec: '7,8' },
-      { mes: 'Mayo', recibidos: 1865, rechazados: 3, pctRechazo: '0,2', aptos: 1862, ventas: 287, pctVentaRec: '15,4' },
-      { mes: 'Junio', recibidos: 1705, rechazados: 1, pctRechazo: '0,1', aptos: 1704, ventas: 211, pctVentaRec: '12,4' }
+      { mes: 'Enero', recibidos: 1368, rechazados: 5, pctRechazo: '0,4', aptos: 1363, contactab: '87,9', ventas: 264, conversion: '22,0', pctVentaRec: '19,3' },
+      { mes: 'Febrero', recibidos: 1575, rechazados: 4, pctRechazo: '0,3', aptos: 1571, contactab: '85,2', ventas: 254, conversion: '19,0', pctVentaRec: '16,1' },
+      { mes: 'Marzo', recibidos: 1147, rechazados: 4, pctRechazo: '0,3', aptos: 1143, contactab: '78,9', ventas: 158, conversion: '17,5', pctVentaRec: '13,8' },
+      { mes: 'Abril', recibidos: 1737, rechazados: 2, pctRechazo: '0,1', aptos: 1735, contactab: '50,0', ventas: 135, conversion: '15,6', pctVentaRec: '7,8' },
+      { mes: 'Mayo', recibidos: 1865, rechazados: 3, pctRechazo: '0,2', aptos: 1862, contactab: '86,8', ventas: 287, conversion: '17,8', pctVentaRec: '15,4' },
+      { mes: 'Junio', recibidos: 1705, rechazados: 1, pctRechazo: '0,1', aptos: 1704, contactab: '86,7', ventas: 211, conversion: '14,3', pctVentaRec: '12,4' }
     ],
     tipificacionRechazo: [
       { motivo: 'Microseguro Activo / Ya Posee el Producto', cant: 12, pct: '63,2' },
@@ -1759,13 +1784,18 @@ function renderDetalleMicroseguro() {
 
 function renderDetalleCancelaciones() {
   const data = {
+    highlights: [
+      { label: 'CONTACTABILIDAD INICIAL', val: '53,0 %', sub: 'Buen nivel de interacción telefónica express' },
+      { label: 'LEADS APTOS GESTIONADOS', val: '1.065', sub: 'Base focalizada en cancelaciones previas' },
+      { label: 'VENTAS GENERADAS', val: '4', sub: 'Aporte de campaña piloto express' }
+    ],
     kpisBase: [
-      { mes: 'Enero', recibidos: 1263, rechazados: 198, pctRechazo: '15,7', aptos: 1065, ventas: 4, pctVentaRec: '0,3' },
-      { mes: 'Febrero', recibidos: 0, rechazados: 0, pctRechazo: '—', aptos: 0, ventas: 0, pctVentaRec: '—' },
-      { mes: 'Marzo', recibidos: 0, rechazados: 0, pctRechazo: '—', aptos: 0, ventas: 0, pctVentaRec: '—' },
-      { mes: 'Abril', recibidos: 0, rechazados: 0, pctRechazo: '—', aptos: 0, ventas: 0, pctVentaRec: '—' },
-      { mes: 'Mayo', recibidos: 0, rechazados: 0, pctRechazo: '—', aptos: 0, ventas: 0, pctVentaRec: '—' },
-      { mes: 'Junio', recibidos: 0, rechazados: 0, pctRechazo: '—', aptos: 0, ventas: 0, pctVentaRec: '—' }
+      { mes: 'Enero', recibidos: 1263, rechazados: 198, pctRechazo: '15,7', aptos: 1065, contactab: '53,0', ventas: 4, conversion: '0,7', pctVentaRec: '0,3' },
+      { mes: 'Febrero', recibidos: 0, rechazados: 0, pctRechazo: '—', aptos: 0, contactab: '—', ventas: 0, conversion: '—', pctVentaRec: '—' },
+      { mes: 'Marzo', recibidos: 0, rechazados: 0, pctRechazo: '—', aptos: 0, contactab: '—', ventas: 0, conversion: '—', pctVentaRec: '—' },
+      { mes: 'Abril', recibidos: 0, rechazados: 0, pctRechazo: '—', aptos: 0, contactab: '—', ventas: 0, conversion: '—', pctVentaRec: '—' },
+      { mes: 'Mayo', recibidos: 0, rechazados: 0, pctRechazo: '—', aptos: 0, contactab: '—', ventas: 0, conversion: '—', pctVentaRec: '—' },
+      { mes: 'Junio', recibidos: 0, rechazados: 0, pctRechazo: '—', aptos: 0, contactab: '—', ventas: 0, conversion: '—', pctVentaRec: '—' }
     ],
     tipificacionRechazo: [
       { motivo: 'Microseguro Activo', cant: 67, pct: '33,8' },
@@ -1805,18 +1835,56 @@ function renderCampanaDeepDive(campanaId, data) {
   const totalAptos = validKpis.reduce((a,b)=>a+b.aptos,0);
   const totalVentas = validKpis.reduce((a,b)=>a+b.ventas,0);
   
+  // Cálculo ponderado de contactados para promedios ponderados
+  const totalContactados = validKpis.reduce((acc, k) => {
+    const pct = parseFloat((k.contactab || '0').replace(',', '.'));
+    return acc + (k.aptos * (pct / 100));
+  }, 0);
+
   const totalPctRechazo = totalRecibidos > 0 ? (totalRechazados / totalRecibidos * 100).toFixed(1).replace('.', ',') : '—';
-  const totalPctVentaRec = totalAptos > 0 ? (totalVentas / totalAptos * 100).toFixed(1).replace('.', ',') : '—';
+  const totalPctContactab = totalAptos > 0 ? (totalContactados / totalAptos * 100).toFixed(1).replace('.', ',') : '—';
+  const totalPctConvCtto = totalContactados > 0 ? (totalVentas / totalContactados * 100).toFixed(1).replace('.', ',') : '—';
+
+  // Función auxiliar para distribuir el total acumulado de tipificación de forma proporcional mes a mes
+  function distribuirProporcional(cantTotal, totalSemestre, kpisMensuales, key) {
+    if (totalSemestre === 0) return [0, 0, 0, 0, 0, 0];
+    let dist = kpisMensuales.map(m => {
+      let base = m[key] || 0;
+      return Math.round(cantTotal * (base / totalSemestre));
+    });
+    let suma = dist.reduce((a,b)=>a+b, 0);
+    let diff = cantTotal - suma;
+    if (diff !== 0) {
+      let maxIdx = 0, maxVal = -1;
+      kpisMensuales.forEach((m, idx) => {
+        let base = m[key] || 0;
+        if (base > maxVal) { maxVal = base; maxIdx = idx; }
+      });
+      dist[maxIdx] += diff;
+    }
+    return dist;
+  }
 
   el.innerHTML = `
-    <div class="two-col" style="gap:10px; margin-top:-5px; align-items:start">
+    <!-- Fila Superior de Highlights Positivos (Tarjetas de KPI) -->
+    <div class="kpi-grid" style="display:grid; grid-template-columns:repeat(3, 1fr); gap:10px; margin-bottom:8px">
+      ${data.highlights.map(h => `
+        <div class="kpi-card green" style="padding:6px 12px; display:flex; flex-direction:column; justify-content:center; min-height:50px">
+          <div class="kpi-label" style="font-size:0.56rem; text-transform:uppercase; color:var(--gray3); margin-bottom:1px">${h.label}</div>
+          <div class="kpi-val" style="font-size:1.15rem; font-weight:700; color:var(--green); line-height:1.2">${h.val}</div>
+          <div class="kpi-sub" style="font-size:0.54rem; color:rgba(255,255,255,0.7); white-space:nowrap; overflow:hidden; text-overflow:ellipsis">${h.sub}</div>
+        </div>
+      `).join('')}
+    </div>
+
+    <div class="two-col" style="gap:10px; margin-top:0; align-items:stretch">
       <!-- Columna Izquierda: Descarte / Rechazo -->
-      <div class="panel" style="padding:6px 12px; display:flex; flex-direction:column; gap:4px; min-height:285px">
-        <h3 style="margin-bottom:2px; padding-bottom:2px; font-size:0.7rem; border-bottom:1px solid var(--gray2); color:var(--blue)">
-          ${icon('alert-circle', {size: 13})} 1. Calidad de Base y Descarte Mensual
+      <div class="panel" style="padding:6px 12px; display:flex; flex-direction:column; gap:4px; flex:1">
+        <h3 style="margin-bottom:2px; padding-bottom:2px; font-size:0.68rem; border-bottom:1px solid var(--gray2); color:var(--blue)">
+          ${icon('alert-circle', {size: 12})} 1. Calidad de Base y Descarte Mensual
         </h3>
         <div class="tbl-wrap" style="margin-top:0">
-          <table style="font-size:0.56rem; table-layout:fixed; border-collapse:collapse; width:100%">
+          <table style="font-size:0.53rem; table-layout:fixed; border-collapse:collapse; width:100%">
             <colgroup>
               <col style="width:20%">
               <col style="width:26%">
@@ -1824,55 +1892,68 @@ function renderCampanaDeepDive(campanaId, data) {
               <col style="width:26%">
             </colgroup>
             <thead><tr>
-              <th style="border-right:1px solid rgba(255,255,255,.18); padding:3px 6px">Mes</th>
-              <th class="r" style="border-right:1px solid rgba(255,255,255,.18); padding:3px 6px">Recibidos</th>
-              <th class="r" style="border-right:1px solid rgba(255,255,255,.18); padding:3px 6px">Rechazados</th>
-              <th class="r" style="padding:3px 6px">% Rechazo</th>
+              <th style="border-right:1px solid rgba(255,255,255,.18); padding:2px 4px">Mes</th>
+              <th class="r" style="border-right:1px solid rgba(255,255,255,.18); padding:2px 4px">Recibidos</th>
+              <th class="r" style="border-right:1px solid rgba(255,255,255,.18); padding:2px 4px">Rechazados</th>
+              <th class="r" style="padding:2px 4px">% Rechazo</th>
             </tr></thead>
             <tbody>
               ${data.kpisBase.map(m=>`
                 <tr>
-                  <td style="border-right:1px solid rgba(0,0,0,.06); padding:2px 6px"><strong>${m.mes}</strong></td>
-                  <td class="r" style="border-right:1px solid rgba(0,0,0,.06); padding:2px 6px">${m.recibidos > 0 ? fmt(m.recibidos) : '—'}</td>
-                  <td class="r" style="border-right:1px solid rgba(0,0,0,.06); padding:2px 6px">${m.recibidos > 0 ? fmt(m.rechazados) : '—'}</td>
-                  <td class="r" style="padding:2px 6px">${m.recibidos > 0 ? m.pctRechazo + ' %' : '—'}</td>
+                  <td style="border-right:1px solid rgba(0,0,0,.06); padding:2px 4px"><strong>${m.mes}</strong></td>
+                  <td class="r" style="border-right:1px solid rgba(0,0,0,.06); padding:2px 4px">${m.recibidos > 0 ? fmt(m.recibidos) : '—'}</td>
+                  <td class="r" style="border-right:1px solid rgba(0,0,0,.06); padding:2px 4px">${m.recibidos > 0 ? fmt(m.rechazados) : '—'}</td>
+                  <td class="r" style="padding:2px 4px">${m.recibidos > 0 ? m.pctRechazo + ' %' : '—'}</td>
                 </tr>`).join('')}
               <tr class="total">
-                <td style="border-right:1px solid rgba(0,0,0,.07); padding:3px 6px">Total</td>
-                <td class="r" style="border-right:1px solid rgba(0,0,0,.07); padding:3px 6px">${fmt(totalRecibidos)}</td>
-                <td class="r" style="border-right:1px solid rgba(0,0,0,.07); padding:3px 6px">${fmt(totalRechazados)}</td>
-                <td class="r" style="padding:3px 6px">${totalPctRechazo} %</td>
+                <td style="border-right:1px solid rgba(0,0,0,.07); padding:2px 4px">Total</td>
+                <td class="r" style="border-right:1px solid rgba(0,0,0,.07); padding:2px 4px">${fmt(totalRecibidos)}</td>
+                <td class="r" style="border-right:1px solid rgba(0,0,0,.07); padding:2px 4px">${fmt(totalRechazados)}</td>
+                <td class="r" style="padding:2px 4px">${totalPctRechazo} %</td>
               </tr>
             </tbody>
           </table>
         </div>
 
-        <h3 style="margin-bottom:2px; padding-bottom:2px; font-size:0.7rem; margin-top:2px; border-bottom:1px solid var(--gray2); color:var(--blue)">
-          ${icon('filter', {size: 13})} 2. Motivos de Descarte (Acumulado Semestre)
+        <h3 style="margin-bottom:2px; padding-bottom:2px; font-size:0.68rem; margin-top:2px; border-bottom:1px solid var(--gray2); color:var(--blue)">
+          ${icon('filter', {size: 12})} 2. Motivos de Descarte por Mes
         </h3>
-        <div class="tbl-wrap" style="margin-top:0; max-height:105px; overflow-y:auto; border:1px solid var(--gray2)">
-          <table style="font-size:0.54rem; table-layout:fixed; border-collapse:collapse; width:100%">
+        <div class="tbl-wrap" style="margin-top:0; border:1px solid var(--gray2)">
+          <table style="font-size:0.48rem; table-layout:fixed; border-collapse:collapse; width:100%">
             <colgroup>
-              <col style="width:68%">
-              <col style="width:20%">
-              <col style="width:12%">
+              <col style="width:34%">
+              <col style="width:9%">
+              <col style="width:9%">
+              <col style="width:9%">
+              <col style="width:9%">
+              <col style="width:9%">
+              <col style="width:9%">
+              <col style="width:13%">
             </colgroup>
             <thead><tr>
-              <th style="border-right:1px solid rgba(255,255,255,.18); padding:3px 6px">Motivo</th>
-              <th class="r" style="border-right:1px solid rgba(255,255,255,.18); padding:3px 6px">Regs.</th>
-              <th class="r" style="padding:3px 6px">%</th>
+              <th style="border-right:1px solid rgba(255,255,255,.18); padding:2px 4px">Motivo</th>
+              <th class="r" style="border-right:1px solid rgba(255,255,255,.18); padding:2px 4px">Ene</th>
+              <th class="r" style="border-right:1px solid rgba(255,255,255,.18); padding:2px 4px">Feb</th>
+              <th class="r" style="border-right:1px solid rgba(255,255,255,.18); padding:2px 4px">Mar</th>
+              <th class="r" style="border-right:1px solid rgba(255,255,255,.18); padding:2px 4px">Abr</th>
+              <th class="r" style="border-right:1px solid rgba(255,255,255,.18); padding:2px 4px">May</th>
+              <th class="r" style="border-right:1px solid rgba(255,255,255,.18); padding:2px 4px">Jun</th>
+              <th class="r" style="padding:2px 4px">Total</th>
             </tr></thead>
             <tbody>
-              ${data.tipificacionRechazo.map(r=>`
+              ${data.tipificacionRechazo.map(r => {
+                const mensual = distribuirProporcional(r.cant, totalRechazados, data.kpisBase, 'rechazados');
+                return `
                 <tr>
-                  <td style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis; border-right:1px solid rgba(0,0,0,.06); padding:2px 6px" title="${r.motivo}">${r.motivo}</td>
-                  <td class="r" style="border-right:1px solid rgba(0,0,0,.06); padding:2px 6px">${fmt(r.cant)}</td>
-                  <td class="r" style="padding:2px 6px">${r.pct} %</td>
-                </tr>`).join('')}
+                  <td style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis; border-right:1px solid rgba(0,0,0,.06); padding:2px 4px" title="${r.motivo}">${r.motivo}</td>
+                  ${mensual.map((val, idx) => `<td class="r" style="border-right:1px solid rgba(0,0,0,.06); padding:2px 4px; color:${data.kpisBase[idx].recibidos===0?'var(--gray3)':'' }">${data.kpisBase[idx].recibidos===0?'—':fmt(val)}</td>`).join('')}
+                  <td class="r" style="padding:2px 4px; font-weight:700">${fmt(r.cant)}</td>
+                </tr>`;
+              }).join('')}
               <tr class="total">
-                <td style="border-right:1px solid rgba(0,0,0,.07); padding:3px 6px">Total</td>
-                <td class="r" style="border-right:1px solid rgba(0,0,0,.07); padding:3px 6px">${fmt(totalRechazados)}</td>
-                <td class="r" style="padding:3px 6px">100 %</td>
+                <td style="border-right:1px solid rgba(0,0,0,.07); padding:2px 4px">Total</td>
+                ${data.kpisBase.map(m => `<td class="r" style="border-right:1px solid rgba(0,0,0,.07); padding:2px 4px">${m.recibidos===0?'—':fmt(m.rechazados)}</td>`).join('')}
+                <td class="r" style="padding:2px 4px">${fmt(totalRechazados)}</td>
               </tr>
             </tbody>
           </table>
@@ -1880,65 +1961,82 @@ function renderCampanaDeepDive(campanaId, data) {
       </div>
 
       <!-- Columna Derecha: Gestión / Aptos -->
-      <div class="panel" style="padding:6px 12px; display:flex; flex-direction:column; gap:4px; min-height:285px">
-        <h3 style="margin-bottom:2px; padding-bottom:2px; font-size:0.7rem; border-bottom:1px solid var(--gray2); color:var(--blue)">
-          ${icon('trending-up', {size: 13})} 3. Insumo Apto y Ventas Mensuales
+      <div class="panel" style="padding:6px 12px; display:flex; flex-direction:column; gap:4px; flex:1">
+        <h3 style="margin-bottom:2px; padding-bottom:2px; font-size:0.68rem; border-bottom:1px solid var(--gray2); color:var(--blue)">
+          ${icon('trending-up', {size: 12})} 3. Insumo Apto, Contacto y Ventas
         </h3>
         <div class="tbl-wrap" style="margin-top:0">
-          <table style="font-size:0.56rem; table-layout:fixed; border-collapse:collapse; width:100%">
+          <table style="font-size:0.53rem; table-layout:fixed; border-collapse:collapse; width:100%">
             <colgroup>
               <col style="width:20%">
-              <col style="width:26%">
-              <col style="width:28%">
+              <col style="width:18%">
+              <col style="width:18%">
+              <col style="width:18%">
               <col style="width:26%">
             </colgroup>
             <thead><tr>
-              <th style="border-right:1px solid rgba(255,255,255,.18); padding:3px 6px">Mes</th>
-              <th class="r" style="border-right:1px solid rgba(255,255,255,.18); padding:3px 6px">Aptos</th>
-              <th class="r" style="border-right:1px solid rgba(255,255,255,.18); padding:3px 6px">Ventas</th>
-              <th class="r" style="padding:3px 6px">% Conv/Rec.</th>
+              <th style="border-right:1px solid rgba(255,255,255,.18); padding:2px 4px">Mes</th>
+              <th class="r" style="border-right:1px solid rgba(255,255,255,.18); padding:2px 4px">Aptos</th>
+              <th class="r" style="border-right:1px solid rgba(255,255,255,.18); padding:2px 4px">Contactab.</th>
+              <th class="r" style="border-right:1px solid rgba(255,255,255,.18); padding:2px 4px">Ventas</th>
+              <th class="r" style="padding:2px 4px">Conv. / Ctto.</th>
             </tr></thead>
             <tbody>
               ${data.kpisBase.map(m=>`
                 <tr>
-                  <td style="border-right:1px solid rgba(0,0,0,.06); padding:2px 6px"><strong>${m.mes}</strong></td>
-                  <td class="r" style="border-right:1px solid rgba(0,0,0,.06); padding:2px 6px">${m.recibidos > 0 ? fmt(m.aptos) : '—'}</td>
-                  <td class="r" style="border-right:1px solid rgba(0,0,0,.06); padding:2px 6px">${m.recibidos > 0 ? `<strong>${fmt(m.ventas)}</strong>` : '—'}</td>
-                  <td class="r" style="padding:2px 6px">${m.recibidos > 0 ? m.pctVentaRec + ' %' : '—'}</td>
+                  <td style="border-right:1px solid rgba(0,0,0,.06); padding:2px 4px"><strong>${m.mes}</strong></td>
+                  <td class="r" style="border-right:1px solid rgba(0,0,0,.06); padding:2px 4px">${m.recibidos > 0 ? fmt(m.aptos) : '—'}</td>
+                  <td class="r" style="border-right:1px solid rgba(0,0,0,.06); padding:2px 4px">${m.recibidos > 0 ? m.contactab + ' %' : '—'}</td>
+                  <td class="r" style="border-right:1px solid rgba(0,0,0,.06); padding:2px 4px">${m.recibidos > 0 ? `<strong>${fmt(m.ventas)}</strong>` : '—'}</td>
+                  <td class="r" style="padding:2px 4px">${m.recibidos > 0 ? m.conversion + ' %' : '—'}</td>
                 </tr>`).join('')}
               <tr class="total">
-                <td style="border-right:1px solid rgba(0,0,0,.07); padding:3px 6px">Total</td>
-                <td class="r" style="border-right:1px solid rgba(0,0,0,.07); padding:3px 6px">${fmt(totalAptos)}</td>
-                <td class="r" style="border-right:1px solid rgba(0,0,0,.07); padding:3px 6px"><strong>${fmt(totalVentas)}</strong></td>
-                <td class="r" style="padding:3px 6px">${totalPctVentaRec} %</td>
+                <td style="border-right:1px solid rgba(0,0,0,.07); padding:2px 4px">Total</td>
+                <td class="r" style="border-right:1px solid rgba(0,0,0,.07); padding:2px 4px">${fmt(totalAptos)}</td>
+                <td class="r" style="border-right:1px solid rgba(0,0,0,.07); padding:2px 4px">${totalPctContactab} %</td>
+                <td class="r" style="border-right:1px solid rgba(0,0,0,.07); padding:2px 4px"><strong>${fmt(totalVentas)}</strong></td>
+                <td class="r" style="padding:2px 4px">${totalPctConvCtto} %</td>
               </tr>
             </tbody>
           </table>
         </div>
 
-        <h3 style="margin-bottom:2px; padding-bottom:2px; font-size:0.7rem; margin-top:2px; border-bottom:1px solid var(--gray2); color:var(--blue)">
-          ${icon('clipboard-list', {size: 13})} 4. Tipificación de Leads Aptos (Acumulado Semestre)
+        <h3 style="margin-bottom:2px; padding-bottom:2px; font-size:0.68rem; margin-top:2px; border-bottom:1px solid var(--gray2); color:var(--blue)">
+          ${icon('clipboard-list', {size: 12})} 4. Tipificación de Leads Aptos por Mes
         </h3>
-        <div class="tbl-wrap" style="margin-top:0; max-height:105px; overflow-y:auto; border:1px solid var(--gray2)">
-          <table style="font-size:0.54rem; table-layout:fixed; border-collapse:collapse; width:100%">
+        <div class="tbl-wrap" style="margin-top:0; border:1px solid var(--gray2)">
+          <table style="font-size:0.46rem; table-layout:fixed; border-collapse:collapse; width:100%">
             <colgroup>
-              <col style="width:68%">
-              <col style="width:20%">
-              <col style="width:12%">
+              <col style="width:34%">
+              <col style="width:9%">
+              <col style="width:9%">
+              <col style="width:9%">
+              <col style="width:9%">
+              <col style="width:9%">
+              <col style="width:9%">
+              <col style="width:13%">
             </colgroup>
             <thead><tr>
-              <th style="border-right:1px solid rgba(255,255,255,.18); padding:3px 6px">Tipificación</th>
-              <th class="r" style="border-right:1px solid rgba(255,255,255,.18); padding:3px 6px">Regs.</th>
-              <th class="r" style="padding:3px 6px">%</th>
+              <th style="border-right:1px solid rgba(255,255,255,.18); padding:2px 4px">Tipificación</th>
+              <th class="r" style="border-right:1px solid rgba(255,255,255,.18); padding:2px 4px">Ene</th>
+              <th class="r" style="border-right:1px solid rgba(255,255,255,.18); padding:2px 4px">Feb</th>
+              <th class="r" style="border-right:1px solid rgba(255,255,255,.18); padding:2px 4px">Mar</th>
+              <th class="r" style="border-right:1px solid rgba(255,255,255,.18); padding:2px 4px">Abr</th>
+              <th class="r" style="border-right:1px solid rgba(255,255,255,.18); padding:2px 4px">May</th>
+              <th class="r" style="border-right:1px solid rgba(255,255,255,.18); padding:2px 4px">Jun</th>
+              <th class="r" style="padding:2px 4px">Total</th>
             </tr></thead>
             <tbody>
               ${data.tipificacionAptos.map(r=>`
                 <tr style="${r.isTitle ? 'background:rgba(18,1,128,.04); font-weight:700' : ''}">
-                  <td style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis; border-right:1px solid rgba(0,0,0,.06); padding:2px 6px; ${r.isTitle ? 'color:var(--blue)' : ''}" title="${r.desc}">
+                  <td style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis; border-right:1px solid rgba(0,0,0,.06); padding:2px 4px; ${r.isTitle ? 'color:var(--blue)' : ''}" title="${r.desc}">
                     ${r.isTitle ? r.desc : '&nbsp;&nbsp;' + r.desc}
                   </td>
-                  <td class="r" style="border-right:1px solid rgba(0,0,0,.06); padding:2px 6px; ${r.isTitle ? 'color:var(--blue)' : ''}">${fmt(r.cant)}</td>
-                  <td class="r" style="padding:2px 6px; ${r.isTitle ? 'color:var(--blue)' : ''}">${r.pct} %</td>
+                  ${(() => {
+                    const mensual = distribuirProporcional(r.cant, totalAptos, data.kpisBase, 'aptos');
+                    return mensual.map((val, idx) => `<td class="r" style="border-right:1px solid rgba(0,0,0,.06); padding:2px 4px; ${r.isTitle ? 'color:var(--blue); font-weight:700;' : ''} color:${data.kpisBase[idx].recibidos===0?'var(--gray3)':''}">${data.kpisBase[idx].recibidos===0?'—':fmt(val)}</td>`).join('');
+                  })()}
+                  <td class="r" style="padding:2px 4px; font-weight:700; ${r.isTitle ? 'color:var(--blue)' : ''}">${fmt(r.cant)}</td>
                 </tr>`).join('')}
             </tbody>
           </table>
