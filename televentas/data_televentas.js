@@ -145,6 +145,18 @@ const AUTOGESTION_TIPOS = [
   { nombre: 'No interesado precio',   meses: [3,4,47,29,21,2],       total: 106 },
 ];
 
+/* ── AUTOGESTIÓN · motivos de descarte (transcripcion_autogestion.md §2) ── */
+/* 7.460 registros rechazados antes de gestión. */
+const AUTOGESTION_DESCARTES = [
+  { motivo: 'Cuota Protegida Activa',          pct: 62.3, registros: 4648 },
+  { motivo: 'Registro Recibido Anteriormente', pct: 14.2, registros: 1056 },
+  { motivo: 'Contrato Repetido',               pct: 8.2,  registros: 615 },
+  { motivo: 'Registro Enviado Anteriormente',  pct: 6.2,  registros: 461 },
+  { motivo: 'Localidad Errónea',               pct: 4.6,  registros: 344 },
+  { motivo: 'Microseguro Activo',              pct: 1.1,  registros: 83 },
+  { motivo: 'Otros (<1% c/u)',                 pct: 3.4,  registros: 253 },
+];
+
 /* ── TOP ASESORES (pólizas por mes, tablero operativo) ─────── */
 /* Todos los asesores del semestre (liquidación ene–may; jun pendiente).
    meses = pólizas liquidadas · metas = meta Escala 1 del mes. Orden: total desc.
@@ -206,6 +218,15 @@ const INICIATIVAS_1S = [
     nota: 'Meta semanal 500 (23–28 may) → 556 logradas, con KPI diario por asesor.' },
   { nombre: 'Feria Mundialista', origen: 'Xuma', mes: 'Junio', ventas: 1520, meta: 1200,
     nota: 'KPI de 9 ventas/día para participar del premio (16–30 jun); meta 1.200 → 1.520 ventas en 2 semanas (127 %).' },
+  { nombre: 'Acelerador Mayo', origen: 'Vanti', mes: 'Mayo', ventas: 560, meta: 650,
+    nota: 'Bono $300.000 por meta de 650 ventas (4–8 may). Logrado: 560 ventas (86 %).' },
+];
+
+/* ── INCENTIVOS VANTI (para slide Asesores, pestaña Vanti) ──── */
+const VANTI_INCENTIVOS = [
+  { mes: 'Ene', eventos: 6, nota: 'Semanas Ganadoras: 1.292/950 ventas (136 %) · Bono $100K/semana × trío' },
+  { mes: 'Mar<br>Abr', eventos: 1, nota: 'La Gran Jugada: 4.798/4.200 ventas (114 %) · $7.000.000 al equipo' },
+  { mes: 'May', eventos: 1, nota: 'Acelerador Mayo: 560/650 ventas (86 %) · Bono $300.000' },
 ];
 
 /* Sin fotos reales de las capacitaciones (solo existen fotos de las campañas

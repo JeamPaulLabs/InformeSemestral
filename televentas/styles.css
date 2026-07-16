@@ -540,6 +540,17 @@ ul.check-list li::before { content: '✓'; position: absolute; left: 0; top: 1px
 .vtas-pane { display: none; }
 .vtas-pane.active { display: block; animation: panelIn .35s ease backwards; }
 
+/* ── Pestañas propias de Asesores (Vanti / Xuma), clase distinta ── */
+.asesor-tab {
+  font-family: 'Raleway', sans-serif; font-size: .6rem; font-weight: 700;
+  padding: 4px 10px; border-radius: 20px; border: 1px solid var(--gray2);
+  background: var(--white); color: var(--gray3); cursor: pointer; transition: all .2s;
+}
+.asesor-tab:hover { border-color: var(--teal); color: var(--teal); }
+.asesor-tab.active { background: var(--blue); border-color: var(--blue); color: var(--white); }
+[data-aspane] { display: none; }
+[data-aspane].active { display: block; animation: panelIn .35s ease backwards; }
+
 /* ── Pestañas propias de Cobertura (PDV / Mapa), clase distinta ── */
 .cob-tab {
   font-family: 'Raleway', sans-serif; font-size: .68rem; font-weight: 700;

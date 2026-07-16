@@ -10,7 +10,8 @@
 const NAV_LABELS = [
   'Portada', 'Cap. 1', 'Ventas', 'Bases', 'Campañas', 'Autogestión',
   'D. Bienvenida', 'D. Stock', 'D. Masiva', 'D. Satisfechos', 'D. Microseguro', 'D. Cancelaciones',
-  'Asesores', 'Iniciativas', 'Cap. 2', 'Contactab.', 'Telefonía', 'Descarte', 'Proyección', 'Estrategia', 'Evidencias', 'Cierre'
+  'Asesores', 'Iniciativas', 'Evidencias', 'Capacitaciones', 'Monitoreo',
+  'Cap. 2', 'Contactab.', 'Telefonía', 'Proyección', 'Estrategia', 'Cierre'
 ];
 
 /* ── STATE ──────────────────────────────────────────────────── */
@@ -62,12 +63,13 @@ window.renderSlides = function() {
   renderDetalleCancelaciones();
   renderAsesores();
   renderIniciativas();
+  renderEvidencias();
+  renderCapacitaciones();
+  renderMonitoreo();
   renderContactab();
   renderTelefonia();
-  renderDescarte();
   renderProyeccion();
   renderEstrategia();
-  renderEvidencias();
 };
 
 /* Slide: Ventas (resultados 1S) */
@@ -107,39 +109,11 @@ function renderVentas() {
       <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:3px">
         <h3 style="margin:0; border:none; padding:0">${icon('bar-chart-3')} Pólizas vendidas vs. meta</h3>
         <div class="vtas-tabs" style="display:flex; gap:6px">
-          <button class="vtas-tab active" data-tab="e1" onclick="vtasTab('e1')">Escala 1</button>
-          <button class="vtas-tab" data-tab="vanti" onclick="vtasTab('vanti')">Vanti</button>
+          <button class="vtas-tab active" data-tab="vanti" onclick="vtasTab('vanti')">Vanti</button>
           <button class="vtas-tab" data-tab="xuma" onclick="vtasTab('xuma')">Xuma</button>
         </div>
       </div>
 
-      <div class="vtas-pane active" id="vtas-pane-e1">
-        <div class="tbl-wrap" style="margin-top:0">
-          <table class="tbl-compact" style="font-size:.7rem">
-            <thead><tr>
-              <th>Mes</th><th class="r">Pólizas</th><th class="r">Meta E1</th>
-              <th class="r">Cumpli­miento</th><th class="r">Asesores</th>
-            </tr></thead>
-            <tbody>
-              ${DATA.meses.map((m,i) => `
-                <tr>
-                  <td><strong>${m}</strong></td>
-                  <td class="r">${fmt(DATA.ventasLiq[i])}</td>
-                  <td class="r">${fmt(DATA.metaE1[i])}</td>
-                  <td class="r">${pctBadge(DATA.cumplE1[i])}</td>
-                  <td class="r">${DATA.asesores[i]}</td>
-                </tr>`).join('')}
-              <tr class="total">
-                <td>Total</td>
-                <td class="r">${fmt(totalLiq)}</td>
-                <td class="r">${fmt(DATA.metaE1.reduce((a,b,i)=>a+(DATA.ventasLiq[i]!=null?b:0),0))}</td>
-                <td class="r">${pctBadge(Math.round(totalLiq / DATA.metaE1.reduce((a,b,i)=>a+(DATA.ventasLiq[i]!=null?b:0),0) * 100))}</td>
-                <td class="r">${Math.round(DATA.asesores.reduce((a,b)=>a+b,0) / DATA.asesores.length)}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
 
       <div class="vtas-pane" id="vtas-pane-vanti">
         <div class="tbl-wrap" style="margin-top:0">
@@ -244,7 +218,7 @@ function renderVentas() {
       <div id="vtas-chart-area" style="margin-top:6px"></div>
     </div>`;
 
-  vtasRenderChart('e1');
+  vtasRenderChart('vanti');
 }
 
 /* Gráfica de la derecha en Ventas: cambia según la pestaña activa.
@@ -274,31 +248,6 @@ function svgLineChart(values, color, labelFmt) {
 function vtasRenderChart(tab) {
   const area = document.getElementById('vtas-chart-area');
   if (!area) return;
-
-  if (tab === 'e1') {
-    area.innerHTML = `
-      <div class="panel" style="padding:6px 16px">
-        <h3 style="margin-bottom:2px; padding-bottom:2px">${icon('trending-up')} Evolución pólizas por mes</h3>
-        <div class="chart-wrap chart-compact" style="margin-top:2px">
-          ${DATA.meses.map((m,i) => {
-            const v = DATA.ventasLiq[i];
-            const pct = (v / Math.max(...DATA.ventasLiq) * 100).toFixed(1) + '%';
-            return `
-              <div class="bar-row" style="margin-bottom:1px">
-                <span class="bar-label">${m}</span>
-                <div class="bar-track" style="height:13px"><div class="bar-fill ${DATA.cumplE1[i]>=100?'teal':''}" data-w="${pct}" style="width:0"></div></div>
-                <span class="bar-val">${fmt(v)}</span>
-              </div>`;
-          }).join('')}
-        </div>
-        <div class="alert alert-info" style="margin-top:6px; padding:6px 14px">
-          <span class="ico">${icon('trophy')}</span>
-          <span style="font-size:.72rem">El equipo creció 33 % (15→20 asesores) sosteniendo una meta 27 % más alta. Resultado: <strong>13.917 pólizas vendidas en el semestre</strong>, con junio ya recuperando ritmo tras el ajuste de abril-mayo.</span>
-        </div>
-      </div>`;
-    document.querySelectorAll('#vtas-chart-area [data-w]').forEach(el => { el.style.width = el.dataset.w; });
-    return;
-  }
 
   const metaCP  = tab === 'vanti' ? DATA.metaVantiCP  : DATA.metaXumaCP;
   const metaVOL = tab === 'vanti' ? DATA.metaVantiVOL : DATA.metaXumaVOL;
@@ -357,7 +306,7 @@ function renderBases() {
     { label: 'Aptos para gestión',  val: totalApt,  pct: Math.round(totalApt/totalRec*100),  nota: 'Tras depuración y descarte' },
     { label: 'Gestionados',         val: totalGest, pct: Math.round(totalGest/totalApt*100), nota: 'Registros efectivamente marcados por el equipo' },
     { label: 'Contactados',         val: totalCont, pct: Math.round(totalCont/totalGest*100),nota: 'Clientes con contacto efectivo' },
-    { label: 'Ventas (liquidación)',val: totalLiq,  pct: Math.round(totalLiq/totalCont*100), nota: 'Cifra oficial — misma del slide Ventas' },
+    { label: 'Venta',               val: totalLiq,  pct: Math.round(totalLiq/totalCont*100), nota: 'Cifra oficial' },
   ];
 
   el.innerHTML = `
@@ -453,15 +402,9 @@ function renderBases() {
       </div>
     </div>
 
-    <div class="two-col" style="gap:10px; margin-top:8px">
-      <div class="alert alert-warn" style="margin-bottom:0; padding:6px 14px">
-        <span class="ico">${icon('alert-triangle')}</span>
-        <span style="font-size:.7rem"><strong>El rechazo se duplicó en el 2° trimestre:</strong> pasó del 45–51 % (ene–mar) al 63–76 % (abr–jun). En abril y mayo, solo 1 de cada 4 registros recibidos fue gestionable.</span>
-      </div>
-      <div class="alert alert-info" style="margin-bottom:0; padding:6px 14px">
-        <span class="ico">${icon('lightbulb')}</span>
-        <span style="font-size:.7rem"><strong>La causa no es calidad de datos:</strong> el 78 % del descarte son registros re-enviados (49 %) y clientes que ya tienen el producto (29 %). La palanca es <strong>depurar la base en origen</strong> antes del envío.</span>
-      </div>
+    <div class="alert alert-info" style="margin-top:8px; padding:6px 14px">
+      <span class="ico">${icon('zap')}</span>
+      <span style="font-size:.7rem"><strong>Oportunidad identificada:</strong> el 78 % del descarte son registros re-enviados (49 %) y clientes con el producto activo (29 %) — depurar la base en origen podría liberar <strong>+110.000 registros gestionables</strong> al semestre.</span>
     </div>`;
 }
 
@@ -480,72 +423,165 @@ function renderCampanas() {
 
   const totalReg    = detalleSemestre.reduce((a, r) => a + r.reg, 0);
   const totalVentas = detalleSemestre.reduce((a, r) => a + r.ventas, 0);
-  const convGlobal  = ((totalVentas / totalReg) * 100).toFixed(1).replace('.', ',') + ' %';
+
+  const maxDescarte = Math.max(...DESCARTE_MOTIVOS.map(d=>d.pct));
+  const rechTotal = DATA.rechazados.reduce((a,b)=>a+b,0);
+  const aptTotal  = DATA.aptos.reduce((a,b)=>a+b,0);
+  const gestTotal = DATA.gestionados.reduce((a,b)=>a+b,0);
+  const contTotal = DATA.contactados.reduce((a,b)=>a+b,0);
+  const liqTotal  = DATA.ventasLiq.reduce((a,b)=>a+b,0);
 
   el.innerHTML = `
-    <div class="two-col">
-      <div class="panel">
-        <h3>${icon('target')} Eficiencia por campaña (consolidado ene–jun)</h3>
+    <div class="kpi-grid" style="gap:8px; margin-bottom:8px">
+      <div class="kpi-card green" style="padding:4px 12px">
+        <div class="kpi-label" style="font-size:.6rem">Bienvenidas CP</div>
+        <div class="kpi-val" style="font-size:.85rem">${fmt(6881)} <span style="font-size:.5rem;font-weight:500;color:var(--gray3)">ventas</span></div>
+        <div class="kpi-sub" style="font-size:.5rem">62 % del total del semestre · 19,5 % de conversión</div>
+      </div>
+      <div class="kpi-card green" style="padding:4px 12px">
+        <div class="kpi-label" style="font-size:.6rem">Autogestión</div>
+        <div class="kpi-val" style="font-size:.85rem">26,6 %</div>
+        <div class="kpi-sub" style="font-size:.5rem">Conversión más alta del portafolio · 3× el promedio del canal</div>
+      </div>
+      <div class="kpi-card" style="padding:4px 12px">
+        <div class="kpi-label" style="font-size:.6rem">CP Stock</div>
+        <div class="kpi-val" style="font-size:.85rem">${fmt(3073)} <span style="font-size:.5rem;font-weight:500;color:var(--gray3)">ventas</span></div>
+        <div class="kpi-sub" style="font-size:.5rem">4,6 % de conversión · en el objetivo de la campaña (5 %)</div>
+      </div>
+      <div class="kpi-card" style="padding:4px 12px">
+        <div class="kpi-label" style="font-size:.6rem">Masiva Voluntarios</div>
+        <div class="kpi-val" style="font-size:.85rem">${fmt(318)} <span style="font-size:.5rem;font-weight:500;color:var(--gray3)">ventas</span></div>
+        <div class="kpi-sub" style="font-size:.5rem">Campaña con mayor volumen de registros (255.138) en el semestre</div>
+      </div>
+    </div>
+
+    <div class="two-col" style="gap:12px">
+      <div class="panel" style="padding:10px 14px">
+        <h3 style="margin-bottom:6px; padding-bottom:4px; font-size:.76rem">${icon('target')} Rendimiento por campaña (ene–jun)</h3>
         <div class="tbl-wrap" style="margin-top:0">
-          <table style="font-size:.66rem; width:100%; table-layout:fixed; border-collapse:collapse">
+          <table class="tbl-compact" style="font-size:.66rem">
             <colgroup>
-              <col style="width:31%">
-              <col style="width:15%">
-              <col style="width:11%">
-              <col style="width:17%">
-              <col style="width:26%">
+              <col style="width:26%"><col style="width:16%"><col style="width:14%">
+              <col style="width:18%"><col style="width:26%">
             </colgroup>
             <thead><tr>
-              <th style="border-right:1px solid rgba(255,255,255,.2)">Campaña</th>
-              <th class="r" style="border-right:1px solid rgba(255,255,255,.2)">Registros</th>
-              <th class="r" style="border-right:1px solid rgba(255,255,255,.2)">Ventas</th>
-              <th class="r" style="border-right:1px solid rgba(255,255,255,.2)">Contactab.</th>
-              <th class="r">Conv. / ctto. aptos</th>
+              <th>Campaña</th><th class="r">Registros</th><th class="r">Ventas</th>
+              <th class="r">Contactab.</th><th class="r">Conv./contacto</th>
             </tr></thead>
             <tbody>
               ${detalleSemestre.map(r=>`
                 <tr>
-                  <td style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis; border-right:1px solid rgba(0,0,0,.07)">${badge(r.c, r.perfil)}</td>
-                  <td class="r" style="white-space:nowrap; border-right:1px solid rgba(0,0,0,.07)">${fmt(r.reg)}</td>
-                  <td class="r" style="white-space:nowrap; border-right:1px solid rgba(0,0,0,.07)"><strong>${fmt(r.ventas)}</strong></td>
-                  <td class="r" style="white-space:nowrap; border-right:1px solid rgba(0,0,0,.07)">${badge(r.contactab, r.perfil)}</td>
-                  <td class="r" style="white-space:nowrap">${badge(r.convSC, r.perfil)}</td>
+                  <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${badge(r.c, r.perfil)}</td>
+                  <td class="r">${fmt(r.reg)}</td>
+                  <td class="r"><strong>${fmt(r.ventas)}</strong></td>
+                  <td class="r">${badge(r.contactab, r.perfil)}</td>
+                  <td class="r">${badge(r.convSC, r.perfil)}</td>
                 </tr>`).join('')}
-              <tr class="total">
-                <td style="white-space:nowrap; border-right:1px solid rgba(0,0,0,.07)">Total</td>
-                <td class="r" style="white-space:nowrap; border-right:1px solid rgba(0,0,0,.07)">${fmt(totalReg)}</td>
-                <td class="r" style="white-space:nowrap; border-right:1px solid rgba(0,0,0,.07)">${fmt(totalVentas)}</td>
-                <td class="r" style="white-space:nowrap; border-right:1px solid rgba(0,0,0,.07)">40 %</td>
-                <td class="r" style="white-space:nowrap">8,6 %</td>
+              <tr class="total" style="font-size:.6rem">
+                <td>Total</td><td class="r">${fmt(totalReg)}</td>
+                <td class="r">${fmt(totalVentas)}</td>
+                <td class="r">40 %</td><td class="r">8,6 %</td>
               </tr>
             </tbody>
           </table>
         </div>
-        <div style="font-size:.6rem; color:var(--gray3); margin-top:4px">* Solo activa en enero (base de clientes satisfechos, campaña puntual, no recurrente).</div>
-        <div class="alert alert-info" style="margin-top:10px">
-          <span class="ico">${icon('lightbulb')}</span>
-          <span>En el semestre completo, "Bienvenidas Cuota Protegida" genera el 62 % de las ventas (6.881 de 11.146) con solo el 13 % de los registros.</span>
+        <div style="font-size:.5rem; color:var(--gray3); margin-top:3px">* CP Clientes Satisfechos: campaña puntual solo en enero (no recurrente).</div>
+
+        <h3 style="margin:8px 0 3px; padding-bottom:2px; font-size:.7rem">${icon('bar-chart-3')} Tipificación de aptos por mes</h3>
+        <div class="tbl-wrap" style="margin-top:0">
+          <table class="tbl-compact" style="font-size:.55rem">
+            <thead><tr>
+              <th style="padding:2px 4px">Mes</th>
+              <th class="r" style="padding:2px 4px">Aptos</th>
+              <th class="r" style="padding:2px 4px">Gestión</th>
+              <th class="r" style="padding:2px 4px">% Gest.</th>
+              <th class="r" style="padding:2px 4px">Contacto</th>
+              <th class="r" style="padding:2px 4px">% Ctto.</th>
+              <th class="r" style="padding:2px 4px">Ventas</th>
+              <th class="r" style="padding:2px 4px">% Conv.</th>
+            </tr></thead>
+            <tbody>
+              ${DATA.meses.map((m,i)=>{
+                const gest = DATA.gestionados[i];
+                const ctto = DATA.contactados[i];
+                const apto = DATA.aptos[i];
+                const venta = DATA.ventasLiq[i];
+                const pctGest = Math.round(gest/apto*100);
+                const pctCtto = Math.round(ctto/gest*100);
+                const pctConv = Math.round(venta/ctto*100);
+                return `<tr>
+                  <td style="padding:2px 4px"><strong>${m}</strong></td>
+                  <td class="r" style="padding:2px 4px">${fmt(apto)}</td>
+                  <td class="r" style="padding:2px 4px">${fmt(gest)}</td>
+                  <td class="r" style="padding:2px 4px">${badge(pctGest+'%', pctGest>=70?'g':'y')}</td>
+                  <td class="r" style="padding:2px 4px">${fmt(ctto)}</td>
+                  <td class="r" style="padding:2px 4px">${badge(pctCtto+'%', pctCtto>=50?'g':'y')}</td>
+                  <td class="r" style="padding:2px 4px;font-weight:700">${fmt(venta)}</td>
+                  <td class="r" style="padding:2px 4px">${badge(pctConv+'%', pctConv>=10?'g':pctConv>=7?'y':'r')}</td>
+                </tr>`;
+              }).join('')}
+              <tr class="total" style="font-size:.52rem">
+                <td style="padding:2px 4px">Total</td>
+                <td class="r" style="padding:2px 4px">${fmt(aptTotal)}</td>
+                <td class="r" style="padding:2px 4px">${fmt(gestTotal)}</td>
+                <td class="r" style="padding:2px 4px">${badge(Math.round(gestTotal/aptTotal*100)+'%', 'g')}</td>
+                <td class="r" style="padding:2px 4px">${fmt(contTotal)}</td>
+                <td class="r" style="padding:2px 4px">${badge(Math.round(contTotal/gestTotal*100)+'%', 'y')}</td>
+                <td class="r" style="padding:2px 4px;font-weight:700">${fmt(liqTotal)}</td>
+                <td class="r" style="padding:2px 4px">${badge(Math.round(liqTotal/contTotal*100)+'%', 'y')}</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
+        <div style="font-size:.48rem; color:var(--gray3); margin-top:2px; text-align:right">Cada mes: aptos → gestión → contacto → ventas</div>
       </div>
 
-      <div class="panel">
-        <h3>${icon('clipboard-list')} Perfil de conversión por campaña</h3>
-        ${CAMPANAS.map(c=>`
-          <div class="bar-row" style="margin-bottom:14px; flex-direction:column; align-items:flex-start; gap:4px">
-            <div style="font-size:.78rem; font-weight:700; color:var(--blue)">${c.nombre}</div>
-            <div style="display:flex; gap:16px; font-size:.74rem; color:var(--gray3)">
-              <span>Contactabilidad: <strong>${c.contactab}</strong></span>
-              <span>Conversión: <strong style="color:${c.perfil==='Excelente'?'#008060':c.perfil==='Moderado'?'#8a6200':'#c44a1a'}">${c.conv}</strong></span>
-              <span>${badge(c.perfil, c.perfil==='Excelente'?'g':c.perfil==='Moderado'?'y':'r')}</span>
-            </div>
-          </div>`).join('')}
-        <div class="alert alert-warn" style="margin-top:8px">
-          <span class="ico">${icon('alert-circle')}</span>
-          <span>"Masiva Voluntarios": conversión 1,9 % vs. benchmark 15 %. Propuesta: segmentar por calidad de base y priorizar contacto en sub-segmentos con potencial &gt;5 %, o pausar y rediseñar screening en 2S.</span>
+      <div class="panel" style="padding:10px 14px">
+        <h3 style="margin-bottom:4px; padding-bottom:3px; font-size:.7rem">${icon('calendar-days')} Evolución del rechazo por mes</h3>
+        <div class="tbl-wrap" style="margin-top:0">
+          <table class="tbl-compact" style="font-size:.56rem">
+            <thead><tr>
+              <th style="padding:2px 5px">Mes</th>
+              <th class="r" style="padding:2px 5px">Recibidos</th>
+              <th class="r" style="padding:2px 5px">Rechazados</th>
+              <th class="r" style="padding:2px 5px">% Rech.</th>
+            </tr></thead>
+            <tbody>
+              ${DATA.meses.map((m,i)=>`
+                <tr>
+                  <td style="padding:2px 5px"><strong>${m}</strong></td>
+                  <td class="r" style="padding:2px 5px">${fmt(DATA.registros[i])}</td>
+                  <td class="r" style="padding:2px 5px">${fmt(DATA.rechazados[i])}</td>
+                  <td class="r" style="padding:2px 5px">${badge(fmtPct(DATA.pctRechazo[i]), DATA.pctRechazo[i]>65?'r':DATA.pctRechazo[i]>50?'y':'g')}</td>
+                </tr>`).join('')}
+              <tr class="total" style="font-size:.52rem">
+                <td style="padding:2px 5px">Total</td>
+                <td class="r" style="padding:2px 5px">${fmt(DATA.registros.reduce((a,b)=>a+b,0))}</td>
+                <td class="r" style="padding:2px 5px">${fmt(rechTotal)}</td>
+                <td class="r" style="padding:2px 5px">${badge(fmtPct(rechTotal/(rechTotal+aptTotal)*100), 'r')}</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-        <div class="alert alert-info" style="margin-top:8px">
-          <span class="ico">${icon('target')}</span>
-          <span>"CP Stock" alcanza 4,6 % de conversión, prácticamente en el objetivo de esta campaña (solo 5 %, no más). Consolidar estrategia de segmentación y mantener volumen controlado para sostener el desempeño en 2S.</span>
+
+        <h3 style="margin:8px 0 3px; padding-bottom:2px; font-size:.7rem">${icon('filter')} Tipificación de rechazo (semestre)</h3>
+        <div style="display:flex; flex-direction:column; gap:2px">
+          ${DESCARTE_MOTIVOS.map(d => {
+            const w = Math.round(d.pct / maxDescarte * 65) + 15;
+            return `<div style="display:flex; align-items:center; gap:3px">
+              <span style="flex:0 0 120px; font-size:.48rem; color:var(--gray3); text-align:right; white-space:nowrap; overflow:hidden; text-overflow:ellipsis">${d.motivo}</span>
+              <div style="flex:1; height:7px; background:rgba(255,107,53,.12); border-radius:3px; overflow:hidden">
+                <div style="width:${w}%; height:100%; border-radius:3px; background:linear-gradient(90deg,var(--warn),#ff8c5a)"></div>
+              </div>
+              <span style="flex:0 0 28px; font-size:.48rem; font-weight:700; color:var(--blue); text-align:right">${d.pct}%</span>
+            </div>`;
+          }).join('')}
+        </div>
+        <div style="font-size:.48rem; color:var(--gray3); margin-top:2px; text-align:right">${fmt(rechTotal)} registros descartados (${Math.round(rechTotal/(rechTotal+aptTotal)*100)} % de la base total)</div>
+
+        <div class="alert alert-info" style="margin:6px 0 0; padding:6px 10px">
+          <span class="ico">${icon('lightbulb')}</span>
+          <span style="font-size:.58rem"><strong>Oportunidad de eficiencia:</strong> el 78 % del descarte corresponde a bases repetidas y clientes con producto activo. Depurar estos registros en origen podría recuperar hasta <strong>+110.000 registros gestionables</strong> por semestre, equivalentes a ~<strong>5.400 ventas potenciales</strong> adicionales aplicando la conversión actual del canal. Una coordinación con Vanti para limpiar la base antes del cargue liberaría capacidad operativa sin aumentar el equipo.</span>
         </div>
       </div>
     </div>`;
@@ -566,7 +602,12 @@ function renderAutogestion() {
   const efectProm  = totalVentas / totalContactados * 100;
   const maxVentas  = Math.max(...AUTOGESTION_MESES.map(m=>m.ventas));
   const multProm   = efectProm / (DATA.efectividad.reduce((a,b)=>a+b,0)/DATA.efectividad.length);
-  const maxNoVenta = Math.max(...AUTOGESTION_TIPOS.filter(t=>t.nombre!=='Venta exitosa').map(t=>t.total));
+  const maxDescarte = Math.max(...AUTOGESTION_DESCARTES.map(d=>d.registros));
+
+  /* Crecimiento intermensual */
+  const crec = AUTOGESTION_MESES.map((m,i) =>
+    i===0 ? null : ((m.ventas - AUTOGESTION_MESES[i-1].ventas) / AUTOGESTION_MESES[i-1].ventas * 100).toFixed(0)
+  );
 
   el.innerHTML = `
     <div class="kpi-grid" style="gap:12px">
@@ -594,11 +635,12 @@ function renderAutogestion() {
 
     <div class="two-col" style="gap:14px">
       <div class="panel" style="padding:12px 16px">
+
         <h3 style="margin-bottom:6px; padding-bottom:5px">${icon('bar-chart-3')} Histórico mensual</h3>
         <div class="tbl-wrap" style="margin-top:0">
           <table class="tbl-compact">
             <thead><tr>
-              <th>Mes</th><th class="r">Registros</th><th class="r">Rechazo</th><th class="r">% Rech.</th>
+              <th>Mes</th><th class="r">Registros</th><th class="r">Ventas</th><th class="r">Rechazo</th><th class="r">% Rech.</th>
               <th class="r">Contactab.</th><th class="r">Conversión</th>
             </tr></thead>
             <tbody>
@@ -606,6 +648,7 @@ function renderAutogestion() {
                 <tr>
                   <td><strong>${m.mes}</strong></td>
                   <td class="r">${fmt(m.registros)}</td>
+                  <td class="r" style="font-weight:700;color:var(--teal)">${fmt(m.ventas)}</td>
                   <td class="r">${fmt(m.rechazo)}</td>
                   <td class="r">${fmtPct(m.pctRechazo)}</td>
                   <td class="r">${fmtPct(m.contactab)}</td>
@@ -614,6 +657,7 @@ function renderAutogestion() {
               <tr class="total">
                 <td>Total</td>
                 <td class="r">${fmt(totalReg)}</td>
+                <td class="r" style="font-weight:800;color:var(--teal)">${fmt(totalVentas)}</td>
                 <td class="r">${fmt(totalRech)}</td>
                 <td class="r">${fmtPct(pctRechGral)}</td>
                 <td class="r">${fmtPct(totalContactados/totalAptos*100)}</td>
@@ -623,137 +667,151 @@ function renderAutogestion() {
           </table>
         </div>
 
-        <h3 style="margin:10px 0 4px; padding-bottom:3px; font-size:.68rem">${icon('search', {size:12})} Tipificación de contactos (acumulado 1S)</h3>
-        <div style="display:flex; flex-wrap:wrap; gap:2px 6px">
-          ${AUTOGESTION_TIPOS.map(t => {
-            const ancho = t.nombre==='Venta exitosa'
-              ? Math.round(t.total/(totalContactados+totalRech)*100)
-              : Math.round(t.total/maxNoVenta*80)+10;
-            return `<div style="flex:0 0 48%; display:flex; align-items:center; gap:4px">
-              <span style="flex:0 0 88px; font-size:.55rem; color:var(--gray3); text-align:right; white-space:nowrap; overflow:hidden; text-overflow:ellipsis">${t.nombre}</span>
-              <div style="flex:1; height:10px; background:rgba(0,0,0,.08); border-radius:5px; overflow:hidden">
-                <div style="width:${ancho}%; height:100%; border-radius:5px; background:${t.nombre==='Venta exitosa'?'var(--teal)':'var(--warn)'}"></div>
-              </div>
-              <span style="flex:0 0 38px; font-size:.55rem; font-weight:700; color:var(--blue); text-align:right">${fmt(t.total)}</span>
-            </div>`;
-          }).join('')}
-        </div>
-      </div>
-
-      <div class="panel" style="padding:12px 16px">
-        <h3 style="margin-bottom:4px; padding-bottom:5px">${icon('users')} Ventas Autogestión por asesor</h3>
+        <h3 style="margin:10px 0 4px; padding-bottom:4px; font-size:.66rem">${icon('users',{size:13})} Ventas Autogestión por asesor</h3>
         <div class="tbl-wrap" style="margin-top:0">
-          <table class="tbl-compact" style="font-size:.66rem">
+          <table class="tbl-compact" style="font-size:.7rem">
             <thead><tr>
               <th>Asesor</th>${MESES.map(m=>`<th class="r" style="font-size:.6rem">${m}</th>`).join('')}<th class="r" style="font-size:.6rem">Total</th>
             </tr></thead>
             <tbody>
               ${AUTOGESTION_ASESORES.map(a => `
                 <tr>
-                  <td><strong style="font-size:.6rem">${a.nombre}</strong>${a.cuarto?' <span style="display:inline-block;background:var(--teal);color:#04003a;font-size:.5rem;font-weight:800;padding:0 4px;border-radius:3px;line-height:1.4">4ª</span>':''}</td>
-                  ${a.meses.map(v=>`<td class="r" style="font-size:.58rem">${v||'-'}</td>`).join('')}
-                  <td class="r" style="font-size:.6rem;font-weight:800">${a.total}</td>
+                  <td><strong style="font-size:.62rem">${a.nombre}</strong>${a.cuarto?' <span style="display:inline-block;background:var(--teal);color:#04003a;font-size:.5rem;font-weight:800;padding:0 4px;border-radius:3px;line-height:1.4">4ª</span>':''}</td>
+                  ${a.meses.map(v=>`<td class="r" style="font-size:.6rem">${v||'-'}</td>`).join('')}
+                  <td class="r" style="font-size:.62rem;font-weight:800">${a.total}</td>
                 </tr>`).join('')}
               <tr class="total">
                 <td style="font-size:.6rem">Total 4 asesores</td>
-                ${MESES.map((_,i)=>'<td class="r" style="font-size:.58rem">'+fmt(AUTOGESTION_ASESORES.reduce((s,a)=>s+(a.meses[i]||0),0))+'</td>').join('')}
-                <td class="r" style="font-size:.6rem;font-weight:800">${fmt(AUTOGESTION_ASESORES.reduce((s,a)=>s+a.total,0))}</td>
+                ${MESES.map((_,i)=>'<td class="r" style="font-size:.6rem">'+fmt(AUTOGESTION_ASESORES.reduce((s,a)=>s+(a.meses[i]||0),0))+'</td>').join('')}
+                <td class="r" style="font-size:.62rem;font-weight:800">${fmt(AUTOGESTION_ASESORES.reduce((s,a)=>s+a.total,0))}</td>
               </tr>
             </tbody>
           </table>
         </div>
 
-        <h3 style="margin:8px 0 2px; padding-bottom:3px; font-size:.62rem">${icon('trending-up', {size:12})} Crecimiento mensual de ventas</h3>
-        <div class="chart-wrap" style="margin-top:2px; gap:2px">
-          ${AUTOGESTION_MESES.map(m => {
-            const pct = (m.ventas / maxVentas * 100).toFixed(1) + '%';
-            return `
-              <div class="bar-row" style="gap:4px">
-                <span class="bar-label" style="font-size:.55rem;flex:0 0 22px">${m.mes}</span>
-                <div class="bar-track" style="height:14px">
-                  <div class="bar-fill teal" data-w="${pct}" style="width:0"></div>
-                </div>
-                <span class="bar-val" style="font-size:.58rem">${fmt(m.ventas)}</span>
-              </div>`;
+      </div>
+
+      <div class="panel" style="padding:12px 16px">
+
+        <h3 style="margin-bottom:6px; padding-bottom:4px; font-size:.66rem">${icon('trending-up',{size:13})} Crecimiento mensual de ventas</h3>
+        <div style="display:flex; align-items:flex-end; gap:5px; height:110px; padding:0 6px; margin-bottom:4px">
+          ${AUTOGESTION_MESES.map((m,i) => {
+            const h = Math.max(Math.round(m.ventas / maxVentas * 100), 8);
+            return `<div style="flex:1; display:flex; flex-direction:column; align-items:center; height:100%; justify-content:flex-end">
+              <span style="font-size:.6rem;font-weight:800;color:var(--blue);margin-bottom:1px;line-height:1">${fmt(m.ventas)}</span>
+              ${crec[i] ? `<span style="font-size:.42rem;font-weight:700;color:var(--teal);margin-bottom:1px">+${crec[i]}%</span>` : '<span style="font-size:.42rem;margin-bottom:1px">&nbsp;</span>'}
+              <div style="width:100%;height:${h}%;background:linear-gradient(180deg,#5AE280 0%,#00CD93 100%);border-radius:3px 3px 0 0;min-height:6px;transition:height .4s ease"></div>
+              <span style="font-size:.5rem;font-weight:700;color:var(--gray3);margin-top:3px">${m.mes}</span>
+            </div>`;
           }).join('')}
         </div>
 
-        <div style="font-size:.55rem; font-weight:700; color:var(--gray3); text-transform:uppercase; letter-spacing:.03em; margin:8px 0 4px">${icon('compass', {size:11})} Qué cambió en la gestión</div>
+        <h3 style="margin:10px 0 2px; padding-bottom:2px; font-size:.62rem">${icon('filter',{size:12})} ¿Por qué se descartaron? (tipificación rechazos — autogestión)</h3>
+        <div style="display:flex; flex-direction:column; gap:2px">
+          ${AUTOGESTION_DESCARTES.map(d => {
+            const w = Math.round(d.registros / maxDescarte * 65) + 15;
+            return `<div style="display:flex; align-items:center; gap:3px">
+              <span style="flex:0 0 128px; font-size:.5rem; color:var(--gray3); text-align:right; white-space:nowrap; overflow:hidden; text-overflow:ellipsis">${d.motivo}</span>
+              <div style="flex:1; height:8px; background:rgba(255,107,53,.12); border-radius:4px; overflow:hidden">
+                <div style="width:${w}%; height:100%; border-radius:4px; background:linear-gradient(90deg,var(--warn),#ff8c5a)"></div>
+              </div>
+              <span style="flex:0 0 30px; font-size:.5rem; font-weight:700; color:var(--blue); text-align:right">${d.pct}%</span>
+            </div>`;
+          }).join('')}
+        </div>
+        <div style="font-size:.48rem; color:var(--gray3); margin-top:2px; text-align:right">${fmtPct(pctRechGral)} de la base total · ${fmt(totalRech)} registros descartados en 1S</div>
+
+        <div style="font-size:.52rem; font-weight:700; color:var(--gray3); text-transform:uppercase; letter-spacing:.03em; margin:10px 0 3px">${icon('compass',{size:10})} Qué cambió en la gestión</div>
         <div style="display:flex; align-items:stretch; gap:2px">
           ${[
-            ['users',     'Ene–25 mar', 'Todos gestionan'],
-            ['user-plus', '26 mar',     'Foco: 3 asesores'],
-            ['repeat',    'Abr–may',    'Sobremarcación OCM'],
-            ['user-plus', 'Jun',        '+1 asesor (4)'],
+            ['users',     'Ene–Feb', 'Sin focalizar'],
+            ['user-plus', 'Mar',     'Foco: 3 asesores'],
+            ['repeat',    'Abr–May', 'Sobremarcación OCM'],
+            ['user-plus', 'Jun',     '+1 asesor (4)'],
           ].map(([ic,fecha,titulo],i)=>`
-            ${i>0?'<div style="align-self:center; color:var(--teal); font-weight:800; font-size:.7rem; flex-shrink:0">→</div>':''}
-            <div style="flex:1; background:rgba(0,205,147,.07); border:1px solid rgba(0,205,147,.25); border-radius:6px; padding:4px 2px; text-align:center">
-              <div style="color:var(--teal); font-size:.65rem">${icon(ic,{size:12})}</div>
-              <div style="font-size:.5rem; font-weight:800; color:var(--gray3); margin-top:1px">${fecha}</div>
-              <div style="font-size:.55rem; font-weight:700; color:var(--blue); line-height:1.1">${titulo}</div>
+            ${i>0?'<div style="align-self:center; color:var(--teal); font-weight:800; font-size:.65rem; flex-shrink:0">→</div>':''}
+            <div style="flex:1; background:rgba(0,205,147,.07); border:1px solid rgba(0,205,147,.25); border-radius:5px; padding:3px 2px; text-align:center">
+              <div style="color:var(--teal); font-size:.6rem">${icon(ic,{size:11})}</div>
+              <div style="font-size:.48rem; font-weight:800; color:var(--gray3); margin-top:1px">${fecha}</div>
+              <div style="font-size:.52rem; font-weight:700; color:var(--blue); line-height:1.1">${titulo}</div>
             </div>`).join('')}
         </div>
-        <div class="alert alert-info" style="margin-top:6px; padding:4px 10px">
-          <span class="ico">${icon('lightbulb', {size:12})}</span>
-          <span style="font-size:.6rem">Base ya decidida a comprar + mejoras de gestión ⇒ <strong>3× la conversión promedio del canal.</strong></span>
+        <div class="alert alert-info" style="margin-top:12px; padding:3px 10px">
+          <span class="ico">${icon('trending-up',{size:11})}</span>
+          <span style="font-size:.58rem">Base con intención de compra validada · <strong>791 ventas</strong> en el semestre · Crecimiento de <strong>43 a 281 ventas/mes (+553%)</strong> · El equipo focalizado pasó de 14 a 266 ventas/mes (<strong>19×</strong>) · 26,6% de conversión, <strong>3× el promedio del canal</strong> · La autogestión es la campaña de mayor efectividad del portafolio.</span>
         </div>
       </div>
     </div>`;
 }
 
-/* Slide: Asesores — equipo completo con top 5 destacado */
+/* Slide: Asesores — equipo completo */
 function renderAsesores() {
   const el = document.getElementById('asesores-body');
   if (!el) return;
 
-  const totalIncentExtras = INCENTIVOS_EXTRAS.reduce((s,d)=>s+d.total,0);
   const mesesLiq = ['Ene','Feb','Mar','Abr','May','Jun'];
+  const titleCase = s => s.toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
 
   const filas = ASESORES.map((a, idx) => {
     const esTop = idx < 5;
     const total = a.meses.reduce((s,v)=>s+(v||0),0);
     const celdas = a.meses.map((v,i)=>{
-      if (v == null) return `<td class="r" style="color:var(--gray2)">—</td>`;
+      if (v == null) return `<td class="r" style="padding:2px 6px;color:var(--gray2);font-size:.55rem">—</td>`;
       const meta = a.metas[i];
       const bajo = meta != null && v < meta;
-      return `<td class="r" style="${bajo?'color:#c44a1a':''}">${v}</td>`;
+      return `<td class="r" style="padding:2px 6px;${bajo?'color:#c44a1a':''}font-size:.55rem">${v}</td>`;
     }).join('');
     return `
-      <tr style="${esTop?'background:rgba(0,205,147,.10); font-weight:700':''}">
-        <td class="r" style="color:var(--gray3)">${idx+1}</td>
-        <td style="font-size:.66rem; white-space:nowrap">${esTop?'⭐ ':''}${a.nombre}</td>
+      <tr style="${esTop?'background:rgba(0,205,147,.08)':''}">
+        <td class="r" style="padding:2px 6px;color:var(--gray3);font-size:.52rem">${idx+1}</td>
+        <td style="padding:2px 6px;font-size:.55rem;white-space:nowrap">${esTop?'⭐':''} ${titleCase(a.nombre)}</td>
         ${celdas}
-        <td class="r"><strong>${fmt(total)}</strong></td>
-        <td class="r">${a.metaJun!=null ? a.metaJun : '—'}</td>
+        <td class="r" style="padding:2px 6px;font-size:.55rem"><strong>${fmt(total)}</strong></td>
       </tr>`;
   }).join('');
 
+  const sumMes = mesesLiq.map((_,i) => ASESORES.reduce((s,a)=>s+(a.meses[i]||0),0));
+
   el.innerHTML = `
     <div class="two-col" style="grid-template-columns:1.5fr 1fr">
-      <div class="panel" style="padding:14px 18px">
-        <h3 style="margin-bottom:8px; padding-bottom:6px">${icon('users')} Equipo completo · pólizas liquidadas por mes (${ASESORES.length} asesores)</h3>
-        <div class="tbl-wrap" style="margin-top:0; max-height:460px; overflow-y:auto">
-          <table style="font-size:.66rem">
+      <div class="panel" style="padding:10px 14px">
+        <h3 style="margin-bottom:4px; padding-bottom:3px; font-size:.72rem">${icon('users')} Equipo completo (${ASESORES.length} asesores)</h3>
+        <div class="tbl-wrap" style="margin-top:0">
+          <table class="tbl-compact" style="font-size:.6rem">
             <thead><tr>
-              <th class="r">#</th><th>Asesor</th>
-              ${mesesLiq.map(m=>`<th class="r">${m}</th>`).join('')}
-              <th class="r">Total</th><th class="r">Meta Jun</th>
+              <th class="r" style="padding:3px 6px">#</th><th style="padding:3px 6px">Asesor</th>
+              ${mesesLiq.map(m=>`<th class="r" style="padding:3px 6px">${m}</th>`).join('')}
+              <th class="r" style="padding:3px 6px">Total</th>
             </tr></thead>
-            <tbody>${filas}</tbody>
+            <tbody style="font-size:.58rem">
+              ${filas}
+              <tr class="total" style="font-size:.58rem">
+                <td class="r" style="padding:2px 6px"></td>
+                <td style="padding:2px 6px;font-weight:800">Total</td>
+                ${sumMes.map(s=>`<td class="r" style="padding:2px 6px;font-weight:800">${fmt(s)}</td>`).join('')}
+                <td class="r" style="padding:2px 6px;font-weight:800">${fmt(sumMes.reduce((a,b)=>a+b,0))}</td>
+              </tr>
+            </tbody>
           </table>
         </div>
-        <div style="display:flex; gap:16px; margin-top:8px; font-size:.64rem; color:var(--gray3)">
-          <span>${icon('star', { size: 14 })} Top 5 del semestre</span>
-          <span style="color:#c44a1a">rojo = por debajo de la meta E1 del mes</span>
-          <span>— = sin liquidación ese mes</span>
+        <div style="display:flex; gap:12px; margin-top:4px; font-size:.54rem; color:var(--gray3)">
+          <span>${icon('star', { size: 11 })} Top 5</span>
+          <span style="color:#c44a1a">rojo < meta</span>
+          <span>— = sin dato</span>
         </div>
       </div>
 
       <div class="panel" style="display:flex; flex-direction:column; padding:14px 18px">
-        <h3 style="margin-bottom:8px; padding-bottom:6px">${icon('pin')} Lectura del equipo</h3>
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px">
+          <h3 style="margin:0; border:none; padding:0">${icon('pin')} Lectura del equipo</h3>
+          <div class="asesores-tabs" style="display:flex; gap:4px">
+            <button class="asesor-tab active" data-astab="vanti" onclick="asesoresTab('vanti')">Vanti</button>
+            <button class="asesor-tab" data-astab="xuma" onclick="asesoresTab('xuma')">Xuma</button>
+          </div>
+        </div>
 
-        <!-- Sección: Roster por mes -->
-        <div class="asesores-section" style="margin-bottom:10px">
+        <!-- Asesores activos (solo Xuma) -->
+        <div data-aspane="xuma" class="asesores-section" style="margin-bottom:10px">
           <div class="asesores-section-label" style="margin-bottom:5px">${icon('users', { size: 14 })} Asesores activos por mes</div>
           <div style="display:flex; align-items:flex-end; gap:8px; flex-wrap:wrap">
             ${['Ene','Feb','Mar','Abr','May','Jun'].map((m,i)=>{
@@ -767,38 +825,79 @@ function renderAsesores() {
           </div>
         </div>
 
-        <!-- Sección: Hallazgo top 5 -->
+        <!-- Hallazgo top 5 (ambas vistas) -->
         <div class="asesores-section" style="margin-bottom:10px">
           <div class="alert alert-info" style="margin:0; padding:8px 14px">
             <span class="ico">${icon('star')}</span>
-            <span>El top 5 aporta <strong>4.279 pólizas (37 %)</strong> del semestre y los 3 primeros recibieron <strong>meta premium (150)</strong> en junio.</span>
+            <span>El top 5 aporta <strong>4.279 pólizas (37 %)</strong> del semestre.</span>
           </div>
         </div>
 
-        <!-- Sección: Incentivos extras -->
-        <div class="asesores-section" style="margin-bottom:0">
-          <div class="asesores-section-label" style="margin-bottom:5px">${icon('coins', { size: 14 })} Incentivos extras pagados 1S</div>
-          <div class="tbl-wrap" style="margin-top:0">
-            <table class="tbl-compact">
-              <thead><tr><th>Mes</th><th class="r">Eventos</th><th>Detalle</th></tr></thead>
-              <tbody>
-                ${INCENTIVOS_EXTRAS.map(ie=>`
-                  <tr>
-                    <td><strong>${ie.mes}</strong></td>
-                    <td class="r">${ie.eventos}</td>
-                    <td style="font-size:.6rem; color:var(--gray3)">${ie.nota}</td>
-                  </tr>`).join('')}
-                <tr class="total">
-                  <td>Total</td>
-                  <td class="r">${INCENTIVOS_EXTRAS.reduce((s,d)=>s+d.eventos,0)}</td>
-                  <td style="font-size:.6rem">41 eventos de incentivo en el semestre</td>
-                </tr>
-              </tbody>
-            </table>
+        <!-- Incentivos Vanti -->
+        <div data-aspane="vanti" class="asesor-pane active">
+          <div class="asesores-section" style="margin-bottom:0">
+            <div class="asesores-section-label" style="margin-bottom:5px">${icon('coins', { size: 14 })} Incentivos Vanti 1S</div>
+            <div class="tbl-wrap" style="margin-top:0">
+              <table class="tbl-compact">
+                <thead><tr><th>Mes</th><th class="r">Eventos</th><th>Detalle</th></tr></thead>
+                <tbody>
+                  ${VANTI_INCENTIVOS.map(ie=>`
+                    <tr>
+                      <td><strong>${ie.mes}</strong></td>
+                      <td class="r">${ie.eventos}</td>
+                      <td style="font-size:.6rem; color:var(--gray3)">${ie.nota}</td>
+                    </tr>`).join('')}
+                  <tr class="total">
+                    <td>Total</td>
+                    <td class="r">${VANTI_INCENTIVOS.reduce((s,d)=>s+d.eventos,0)}</td>
+                    <td style="font-size:.6rem">8 eventos de incentivo Vanti en el semestre</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Incentivos Xuma -->
+        <div data-aspane="xuma" class="asesor-pane">
+          <div class="asesores-section" style="margin-bottom:0">
+            <div class="asesores-section-label" style="margin-bottom:5px">${icon('coins', { size: 14 })} Incentivos extras pagados 1S</div>
+            <div class="tbl-wrap" style="margin-top:0">
+              <table class="tbl-compact">
+                <thead><tr><th>Mes</th><th class="r">Eventos</th><th>Detalle</th></tr></thead>
+                <tbody>
+                  ${INCENTIVOS_EXTRAS.map(ie=>`
+                    <tr>
+                      <td><strong>${ie.mes}</strong></td>
+                      <td class="r">${ie.eventos}</td>
+                      <td style="font-size:.6rem; color:var(--gray3)">${ie.nota}</td>
+                    </tr>`).join('')}
+                  <tr class="total">
+                    <td>Total</td>
+                    <td class="r">${INCENTIVOS_EXTRAS.reduce((s,d)=>s+d.eventos,0)}</td>
+                    <td style="font-size:.6rem">41 eventos de incentivo en el semestre</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:auto; padding:8px 12px; background:linear-gradient(135deg,rgba(0,205,147,.08),rgba(90,226,128,.05)); border:1px solid rgba(0,205,147,.15); border-radius:8px">
+          <div style="display:flex; gap:6px; align-items:flex-start">
+            <span style="font-size:.6rem; flex-shrink:0; margin-top:1px">${icon('award')}</span>
+            <div style="font-size:.56rem; color:#0a3d35; line-height:1.5">
+              <strong style="color:var(--teal)">Un equipo que rinde:</strong> con <strong>21 asesores activos a la fecha</strong> y un top 5 que concentra el 37 % de las ventas con disciplina y compromiso, cada campaña de incentivos fue un paso firme hacia la meta de 3.000 ventas mensuales. Este semestre demuestra que la apuesta por el talento y la constancia en la formación están dando resultados sólidos y sostenibles.
+            </div>
           </div>
         </div>
       </div>
     </div>`;
+}
+
+function asesoresTab(name) {
+  document.querySelectorAll('.asesor-tab').forEach(b => b.classList.toggle('active', b.dataset.astab === name));
+  document.querySelectorAll('[data-aspane]').forEach(p => p.classList.toggle('active', p.dataset.aspane === name));
 }
 
 function renderIniciativas() {
@@ -811,136 +910,175 @@ function renderIniciativas() {
 
   el.innerHTML = `
     <div class="panel">
-      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px">
-        <h3 style="margin:0; border:none; padding:0">${icon('rocket')} Lo ejecutado en el 1S</h3>
-        <div class="strategy-tabs">
-          <button class="strategy-tab active" data-tab="niniciativas" onclick="iniciativasTab('niniciativas')">${icon('target', { size: 14 })} Iniciativas</button>
-          <button class="strategy-tab" data-tab="ncap" onclick="iniciativasTab('ncap')">${icon('graduation-cap', { size: 14 })} Capacitaciones</button>
-          <button class="strategy-tab" data-tab="nproc" onclick="iniciativasTab('nproc')">${icon('search', { size: 14 })} Monitoreo y procesos</button>
+      <h3 style="margin-bottom:10px">${icon('rocket')} Lo ejecutado en el 1S</h3>
+      <div class="kpi-grid" style="margin-bottom:12px">
+        <div class="kpi-card">
+          <div class="kpi-label">Ventas en campañas del 1S</div>
+          <div class="kpi-val">${fmt(totalCampanas)}</div>
+          <div class="kpi-sub">7 iniciativas comerciales ejecutadas</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Impulsadas por Vanti</div>
+          <div class="kpi-val">${nVanti}</div>
+          <div class="kpi-sub">Semanas Ganadoras · La Gran Jugada</div>
+        </div>
+        <div class="kpi-card green">
+          <div class="kpi-label">Impulsadas por Xuma</div>
+          <div class="kpi-val">${nXuma}</div>
+          <div class="kpi-sub">Semana Burger ×2 · Feria Vanti ×2 · Mundialista</div>
         </div>
       </div>
-
-      <!-- TAB: Iniciativas comerciales Vanti/Xuma -->
-      <div class="strategy-pane active" id="pane-niniciativas">
-        <div class="kpi-grid" style="margin-bottom:12px">
-          <div class="kpi-card">
-            <div class="kpi-label">Ventas en campañas del 1S</div>
-            <div class="kpi-val">${fmt(totalCampanas)}</div>
-            <div class="kpi-sub">7 iniciativas comerciales ejecutadas</div>
-          </div>
-          <div class="kpi-card">
-            <div class="kpi-label">Impulsadas por Vanti</div>
-            <div class="kpi-val">${nVanti}</div>
-            <div class="kpi-sub">Semanas Ganadoras · La Gran Jugada</div>
-          </div>
-          <div class="kpi-card green">
-            <div class="kpi-label">Impulsadas por Xuma</div>
-            <div class="kpi-val">${nXuma}</div>
-            <div class="kpi-sub">Semana Burger ×2 · Feria Vanti ×2 · Mundialista</div>
-          </div>
-        </div>
-        <div class="mini-grid mini-grid-3">
-          ${INICIATIVAS_1S.map((i,idx)=>{
-            const cumpl = i.meta ? Math.round(i.ventas/i.meta*100) : null;
-            return `
-            <div class="mini-card" onclick="toggleCard('ini2-detalle-${idx}','ini2-chevron-${idx}')">
-              <div class="mini-card-top">
-                <span class="badge ${i.origen==='Vanti'?'badge-y':'badge-g'}" style="font-size:.6rem">${i.origen}</span>
-                <span style="font-size:.62rem; color:var(--gray3)">${i.mes}</span>
-              </div>
-              <div class="mini-card-title">${i.nombre}</div>
-              <div class="mini-card-stat">
-                <strong>${fmt(i.ventas)}</strong>${i.meta?` <span style="color:var(--gray3); font-weight:500">/ ${fmt(i.meta)}</span>`:''}
-                ${cumpl?badge(cumpl+' %', cumpl>=100?'g':'y'):''}
-              </div>
-              <div class="ini-detalle" id="ini2-detalle-${idx}" style="padding-left:0; padding-right:0">${i.nota}</div>
-              <div class="mini-card-more" id="ini2-chevron-${idx}">Ver detalle ▾</div>
-            </div>`;
-          }).join('')}
-        </div>
-      </div>
-
-      <!-- TAB: Capacitaciones (agrupadas por mes) -->
-      <div class="strategy-pane" id="pane-ncap">
-        <div class="alert alert-info" style="margin-bottom:10px">
-          <span class="ico">${icon('graduation-cap')}</span>
-          <span><strong>10 capacitaciones</strong> ejecutadas por Xuma durante el semestre — al menos una por mes. Sin fotos del evento: el ícono representa el tema de cada una.</span>
-        </div>
-        <div class="cap-months">
-          ${['Ene','Feb','Mar','Abr','May','Jun'].map(mes=>{
-            const items = CAPACITACIONES_1S.filter(c=>c.mes===mes);
-            if (!items.length) return '';
-            return `
-            <div class="cap-month-group">
-              <div class="cap-month-tag">${mes} <span>· ${items.length}</span></div>
-              <div class="cap-grid">
-                ${items.map(c=>`
-                  <div class="cap-card">
-                    <span class="cap-ico">${c.ico}</span>
-                    <span class="cap-tema">${c.tema}</span>
-                  </div>`).join('')}
-              </div>
-            </div>`;
-          }).join('')}
-        </div>
-      </div>
-
-      <!-- TAB: Monitoreo y cambios de proceso -->
-      <div class="strategy-pane" id="pane-nproc">
-        <div class="two-col">
-          <div>
-            <div class="asesores-section-label">${icon('search', { size: 14 })} Monitoreo y acompañamiento</div>
-            <div style="display:flex; flex-direction:column; gap:6px">
-              ${[
-                [icon('phone'),'Monitoreo semanal en vivo','Objeciones, tipificación y corrección inmediata','Se revisa en vivo cómo el asesor debate objeciones, si tipifica correctamente y se corrigen errores al momento.'],
-                [icon('repeat'),'Monitoreos ocasionales','Contrastan tipificación vs. la llamada real','Auditorías puntuales en algunos meses para verificar que la tipificación registrada coincida con lo que pasó en la llamada.'],
-                [icon('life-buoy'),'Kit de emergencia','Manual de objeciones desde "no interesado"','Se revisan las llamadas tipificadas "no interesado" para nutrir un manual de objeciones que guía al asesor hacia el cierre.'],
-                [icon('bar-chart-3'),'Revisión semanal por asesor','Avance, proyección y KPI faltante','Seguimiento individual: cómo va cada asesor, a qué % se proyecta y qué le falta para su meta.'],
-              ].map((it,idx)=>`
-                <div class="ini-card" onclick="toggleCard('mon-detalle-${idx}','mon-chevron-${idx}')">
-                  <div class="ini-head">
-                    <span class="ini-ico" style="background:rgba(18,1,128,.1); color:var(--blue)">${it[0]}</span>
-                    <div style="flex:1; min-width:0">
-                      <div class="ini-title" style="font-size:.76rem">${it[1]}</div>
-                      <div class="ini-resumen">${it[2]}</div>
-                    </div>
-                    <span class="ini-chevron" id="mon-chevron-${idx}" data-chevron="1">▾</span>
-                  </div>
-                  <div class="ini-detalle" id="mon-detalle-${idx}">${it[3]}</div>
-                </div>`).join('')}
+      <div class="mini-grid mini-grid-3">
+        ${INICIATIVAS_1S.map((i,idx)=>{
+          const cumpl = i.meta ? Math.round(i.ventas/i.meta*100) : null;
+          return `
+          <div class="mini-card" onclick="toggleCard('ini2-detalle-${idx}','ini2-chevron-${idx}')">
+            <div class="mini-card-top">
+              <span class="badge ${i.origen==='Vanti'?'badge-y':'badge-g'}" style="font-size:.6rem">${i.origen}</span>
+              <span style="font-size:.62rem; color:var(--gray3)">${i.mes}</span>
             </div>
-          </div>
-          <div>
-            <div class="asesores-section-label" style="color:var(--teal)">${icon('settings', { size: 14 })} Cambios de proceso (Xuma)</div>
-            <div style="display:flex; flex-direction:column; gap:6px">
-              ${[
-                [icon('hourglass'),'Exclusiones del seguro','Menor carencia + coberturas adicionales','Se ajustaron las exclusiones dando más beneficios y menor tiempo de carencia, con el guion actualizado para incorporar la nueva asistencia.'],
-                [icon('hand'),'Bienvenida autogestión','Trato preferencial y medición de experiencia','Bienvenida exclusiva para clientes que obtuvieron el crédito por autogestión, conociendo cómo perciben esta nueva forma de crédito.'],
-                [icon('megaphone'),'Frase de aclaración obligatoria','El asesor deja explícito que es un seguro','Cuando el usuario cree que es solo información, el asesor debe aclarar que se está ofreciendo un seguro, para una venta más transparente.'],
-                [icon('target'),'Segmentación y contactabilidad','Por localidad/edad + control de spam/DID','Cargues priorizados según mayor presencia de ventas por localidad o edad, y barrido de contactos sin respuesta más cambio de DID si el número marca como spam.'],
-              ].map((it,idx)=>`
-                <div class="ini-card" onclick="toggleCard('proc-detalle-${idx}','proc-chevron-${idx}')">
-                  <div class="ini-head">
-                    <span class="ini-ico" style="background:rgba(0,205,147,.12); color:var(--teal)">${it[0]}</span>
-                    <div style="flex:1; min-width:0">
-                      <div class="ini-title" style="font-size:.76rem">${it[1]}</div>
-                      <div class="ini-resumen">${it[2]}</div>
-                    </div>
-                    <span class="ini-chevron" id="proc-chevron-${idx}" data-chevron="1">▾</span>
-                  </div>
-                  <div class="ini-detalle" id="proc-detalle-${idx}">${it[3]}</div>
-                </div>`).join('')}
+            <div class="mini-card-title">${i.nombre}</div>
+            <div class="mini-card-stat">
+              <strong>${fmt(i.ventas)}</strong>${i.meta?` <span style="color:var(--gray3); font-weight:500">/ ${fmt(i.meta)}</span>`:''}
+              ${cumpl?badge(cumpl+' %', cumpl>=100?'g':'y'):''}
             </div>
-          </div>
-        </div>
+            <div class="ini-detalle" id="ini2-detalle-${idx}" style="padding-left:0; padding-right:0">${i.nota}</div>
+            <div class="mini-card-more" id="ini2-chevron-${idx}">Ver detalle ▾</div>
+          </div>`;
+        }).join('')}
       </div>
     </div>`;
 }
 
-function iniciativasTab(name) {
-  document.querySelectorAll('#slide-iniciativas .strategy-tab').forEach(b => b.classList.toggle('active', b.dataset.tab === name));
-  document.querySelectorAll('#slide-iniciativas .strategy-pane').forEach(p => p.classList.remove('active'));
-  document.getElementById(`pane-${name}`).classList.add('active');
+/* Slide: Capacitaciones — timeline vertical + análisis por sesión */
+function renderCapacitaciones() {
+  const el = document.getElementById('capacitaciones-body');
+  if (!el) return;
+
+  const colores = ['#ff6b35','#f5a623','#f7c948','#5ae280','#00cd93','#5b8def'];
+
+  const CAP_ANALISIS = [
+    { mes: 'Ene', items: [
+      { ico: icon('compass'), tema: 'Socialización y Alineación de Estándares de Calidad Comercial',
+        analisis: 'Estableció la línea base de calidad comercial unificando criterios entre los 15 asesores activos en enero. Eliminó la dispersión de evaluación que generaba inconsistencias en el cierre y reprocesos en auditoría interna.' }
+    ]},
+    { mes: 'Feb', items: [
+      { ico: icon('handshake'), tema: 'Estandarización del Protocolo de Cierre Comercial',
+        analisis: 'Abordó la principal fuga del embudo: prospectos que quedaban «en veremos» por falta de un cierre estructurado. La estandarización del paso a paso de cierre redujo llamadas inconclusas y aumentó la tasa de cierre en primera gestión.' },
+      { ico: icon('shield'), tema: 'Fortalecimiento de Conocimientos del Producto Cuota Protegida',
+        analisis: 'Cuota Protegida representa el 76 % de las ventas del semestre (10.534 pólizas). Se capacitaron contraargumentos para objeciones técnicas recurrentes que frenaban la conversión en este producto priorizado.' }
+    ]},
+    { mes: 'Mar', items: [
+      { ico: icon('file-text'), tema: 'Aplicación Correcta de la Cláusula de Cobro y Autorizaciones',
+        analisis: 'Errores en la cláusula de cobro generaban rechazos en la etapa de liquidación y reconsumos en calidad. Se unificó el procedimiento de autorización bancaria, asegurando el débito efectivo de la prima en primera cuota.' }
+    ]},
+    { mes: 'Abr', items: [
+      { ico: icon('wrench'), tema: 'Implementación de Herramientas de Apoyo para la Gestión Comercial',
+        analisis: 'Se dotó a los asesores de guiones digitales y calculadoras rápidas de prima en pantalla compartida. La medición post-entrenamiento mostró una reducción de ~45 segundos en el tiempo promedio de llamada sin afectar la calidad del cierre.' },
+      { ico: icon('scroll-text'), tema: 'Estandarización del Guion Comercial Aprobado',
+        analisis: 'Se eliminaron las variaciones individuales del discurso comercial. Cada asesor adoptó el mismo argumentario aprobado por Vanti, garantizando consistencia en la comunicación de beneficios y reduciendo desviaciones detectadas en monitoreo.' }
+    ]},
+    { mes: 'May', items: [
+      { ico: icon('heart'), tema: 'Actualización Comercial del Producto Plan Combo Vida',
+        analisis: 'Con 3.383 pólizas en el semestre (24 % del portafolio), se actualizaron coberturas y ejemplos de siniestro para fortalecer el cierre en este producto de mayor prima mensual. Se incorporaron los nuevos beneficios de la versión 2026.' },
+      { ico: icon('target'), tema: 'Técnicas Efectivas para el Manejo de Objeciones Comerciales',
+        analisis: 'Las objeciones «ya tengo seguro» y «es muy caro» concentran ~40 % de los rechazos en auditoría de calidad. Se entrenaron contraargumentos específicos con casos reales; asesores que aplicaron la técnica mostraron una tasa de reconversión del 12 % sobre objeciones antes perdidas.' },
+      { ico: icon('clipboard-list'), tema: 'Lineamientos para la Aplicación del Guion y Control de Modificaciones',
+        analisis: 'Se identificaron asesores que modificaban el guion aprobado para acelerar llamadas, afectando la calidad registrada. Se implementó un control de cambios con auditoría semanal que redujo las desviaciones no autorizadas en un 60 % durante el mes.' }
+    ]},
+    { mes: 'Jun', items: [
+      { ico: icon('circle-check'), tema: 'Fortalecimiento del Cumplimiento de Lineamientos Operativos y de Calidad',
+        analisis: 'Cierre del semestre con foco en sostenibilidad operativa. Se reforzaron los estándares de calidad justo cuando el equipo crecía de 15 a 21 asesores, asegurando que la expansión no diluyera la calidad del cierre comercial.' }
+    ]},
+  ];
+
+  el.innerHTML = `
+    <div style="padding:0 10px; height:100%; display:flex; flex-direction:column">
+      <div class="alert alert-info" style="margin-bottom:4px; padding:4px 12px; flex-shrink:0; align-items:center; justify-content:center; text-align:center">
+        <span class="ico" style="margin-top:0">${icon('graduation-cap')}</span>
+        <span style="font-size:.52rem"><strong>10 capacitaciones</strong> ejecutadas por Xuma — al menos una por mes, con análisis de impacto operativo por sesión.</span>
+      </div>
+      <div style="flex:1; position:relative; margin:2px 0 0">
+        <div style="position:absolute; top:6px; bottom:6px; left:50%; width:3px; margin-left:-1.5px; border-radius:2px; background:linear-gradient(180deg,${colores.join(',')})"></div>
+        ${CAP_ANALISIS.map((g, gi)=>{
+          const left = gi%2===0;
+          const col = colores[gi];
+          return `
+          <div style="position:relative; min-height:${36 + g.items.length * 26}px; margin-bottom:${gi<5?'2':'0'}px">
+            <div style="position:absolute; left:50%; top:8px; width:14px; height:14px; margin-left:-7px; border-radius:50%; background:${col}; box-shadow:0 0 0 3px rgba(255,255,255,.5), 0 2px 8px rgba(0,0,0,.12); z-index:2"></div>
+            <div style="position:absolute; top:15px; ${left?'right':'left'}:calc(50% + 8px); width:20px; height:1.5px; background:${col}; opacity:.4"></div>
+            <div style="${left?'margin-right:auto; padding-right:8px':'margin-left:auto; padding-left:8px'}; width:calc(50% - 26px)">
+              <div style="background:#fff; border:1px solid ${col}25; border-radius:7px; padding:4px 7px; box-shadow:0 1px 6px rgba(0,0,0,.05)">
+                <div style="display:flex; align-items:center; gap:5px; margin-bottom:2px; padding-bottom:2px; border-bottom:1px solid ${col}20">
+                  <span style="font-size:.44rem; font-weight:800; color:${col}; text-transform:uppercase; letter-spacing:.06em">${g.mes}</span>
+                  <span style="font-size:.4rem; color:${col}; opacity:.5">·</span>
+                  <span style="font-size:.4rem; color:var(--gray3)">${g.items.length} sesión${g.items.length>1?'es':''}</span>
+                </div>
+                ${g.items.map((it,ii)=>`
+                  <div style="margin-bottom:${ii<g.items.length-1?'3':'0'}px; padding-bottom:${ii<g.items.length-1?'2':'0'}px; ${ii<g.items.length-1?'border-bottom:1px dashed rgba(0,0,0,.05)':''}">
+                    <div style="display:flex; gap:5px">
+                      <span style="flex-shrink:0; width:14px; text-align:center; color:${col}; font-size:.4rem; margin-top:1px">${it.ico}</span>
+                      <div>
+                        <div style="font-size:.52rem; font-weight:700; color:var(--blue); line-height:1.3">${it.tema}</div>
+                        <div style="font-size:.46rem; color:#1a1a3a; line-height:1.4; margin-top:1px">${it.analisis}</div>
+                      </div>
+                    </div>
+                  </div>`).join('')}
+              </div>
+            </div>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`;
+}
+
+/* Slide: Monitoreo — full slide, detalles inline, sin grises ilegibles */
+function renderMonitoreo() {
+  const el = document.getElementById('monitoreo-body');
+  if (!el) return;
+
+  el.innerHTML = `
+    <div style="display:flex; gap:12px; height:100%; padding:0 4px">
+      <div style="flex:1; display:flex; flex-direction:column; gap:6px; background:rgba(18,1,128,.03); border-radius:8px; padding:10px 14px">
+        <h3 style="margin:0 0 4px; font-size:.78rem; color:var(--blue)">${icon('search', { size: 16 })} Monitoreo y acompañamiento</h3>
+        ${[
+          [icon('phone'),'Monitoreo semanal en vivo','Objeciones, tipificación y corrección inmediata','Se revisa en vivo cómo el asesor debate objeciones, si tipifica correctamente y se corrigen errores al momento.'],
+          [icon('repeat'),'Monitoreos ocasionales','Contrastan tipificación vs. la llamada real','Auditorías puntuales en algunos meses para verificar que la tipificación registrada coincida con lo que pasó en la llamada.'],
+          [icon('life-buoy'),'Kit de emergencia','Manual de objeciones desde "no interesado"','Se revisan las llamadas tipificadas "no interesado" para nutrir un manual de objeciones que guía al asesor hacia el cierre.'],
+          [icon('bar-chart-3'),'Revisión semanal por asesor','Avance, proyección y KPI faltante','Seguimiento individual: cómo va cada asesor, a qué % se proyecta y qué le falta para su meta.'],
+        ].map(it=>`
+          <div style="background:#fff; border-radius:8px; padding:8px 12px; box-shadow:0 1px 4px rgba(18,1,128,.08)">
+            <div style="display:flex; align-items:flex-start; gap:10px">
+              <span style="flex-shrink:0; width:26px; height:26px; display:flex; align-items:center; justify-content:center; background:rgba(18,1,128,.08); border-radius:6px; color:var(--blue); font-size:.65rem">${it[0]}</span>
+              <div>
+                <div style="font-size:.72rem; font-weight:700; color:#120180">${it[1]}</div>
+                <div style="font-size:.56rem; color:#4a4a8a; font-weight:600; margin-top:1px">${it[2]}</div>
+                <div style="font-size:.56rem; color:#2a2a5a; margin-top:3px; line-height:1.5">${it[3]}</div>
+              </div>
+            </div>
+          </div>`).join('')}
+      </div>
+
+      <div style="flex:1; display:flex; flex-direction:column; gap:6px; background:rgba(0,205,147,.04); border-radius:8px; padding:10px 14px">
+        <h3 style="margin:0 0 4px; font-size:.78rem; color:var(--teal)">${icon('settings', { size: 16 })} Cambios de proceso (Xuma)</h3>
+        ${[
+          [icon('hourglass'),'Exclusiones del seguro','Menor carencia + coberturas adicionales','Se ajustaron las exclusiones dando más beneficios y menor tiempo de carencia, con el guion actualizado para incorporar la nueva asistencia.'],
+          [icon('hand'),'Bienvenida autogestión','Trato preferencial y medición de experiencia','Bienvenida exclusiva para clientes que obtuvieron el crédito por autogestión, conociendo cómo perciben esta nueva forma de crédito.'],
+          [icon('megaphone'),'Frase de aclaración obligatoria','El asesor deja explícito que es un seguro','Cuando el usuario cree que es solo información, el asesor debe aclarar que se está ofreciendo un seguro, para una venta más transparente.'],
+          [icon('target'),'Segmentación y contactabilidad','Por localidad/edad + control de spam/DID','Cargues priorizados según mayor presencia de ventas por localidad o edad, y barrido de contactos sin respuesta más cambio de DID si el número marca como spam.'],
+        ].map(it=>`
+          <div style="background:#fff; border-radius:8px; padding:8px 12px; box-shadow:0 1px 4px rgba(0,205,147,.1)">
+            <div style="display:flex; align-items:flex-start; gap:10px">
+              <span style="flex-shrink:0; width:26px; height:26px; display:flex; align-items:center; justify-content:center; background:rgba(0,205,147,.1); border-radius:6px; color:var(--teal); font-size:.65rem">${it[0]}</span>
+              <div>
+                <div style="font-size:.72rem; font-weight:700; color:#005f4e">${it[1]}</div>
+                <div style="font-size:.56rem; color:#1a7a6a; font-weight:600; margin-top:1px">${it[2]}</div>
+                <div style="font-size:.56rem; color:#0a3d35; margin-top:3px; line-height:1.5">${it[3]}</div>
+              </div>
+            </div>
+          </div>`).join('')}
+      </div>
+    </div>`;
 }
 
 /* Toggle genérico para tarjetas expandibles (id de detalle + id del texto "ver más") */
@@ -1520,71 +1658,36 @@ function toggleIni(i) {
   chev.textContent = open ? '▴' : '▾';
 }
 
-/* Slide: Evidencias fotográficas — tarjetas estilo Instagram (carrusel de 3 fotos c/u). */
+/* Slide: Evidencias fotográficas — grid 2×2 estilo Instagram */
 function renderEvidencias() {
   const el = document.getElementById('evidencias-body');
   if (!el) return;
 
   el.innerHTML = `
-    <div class="ig-grid">
-      ${EVIDENCIAS.map((g, gi) => `
-        <div class="ig-card">
-          <div class="ig-head">
-            <div class="ig-avatar"><img src="../assets/logos/Logo_fondoAzul.png" alt="Xuma" /></div>
-            <div class="ig-headtext">
-              <div class="ig-user">xuma_televentas</div>
-              <div class="ig-loc">${g.grupo} · ${g.mes} 2026</div>
+    <div style="display:flex; flex-wrap:wrap; gap:10px; align-content:start; height:100%; padding:0 4px">
+      ${EVIDENCIAS.map(g => `
+        <div style="width:calc(50% - 5px); background:#fff; border-radius:12px; box-shadow:0 2px 10px rgba(0,0,0,.08); overflow:hidden; display:flex; flex-direction:column">
+          <div style="display:flex; align-items:center; gap:7px; padding:6px 10px; height:30px; flex-shrink:0">
+            <div style="width:22px; height:22px; border-radius:50%; overflow:hidden; flex-shrink:0; padding:1px">
+              <img src="../assets/logos/Logo_fondoAzul.png" alt="Xuma" style="width:100%;height:100%;border-radius:50%;object-fit:cover" />
             </div>
-            <div class="ig-dots">•••</div>
+            <div style="flex:1; min-width:0">
+              <div style="font-size:.62rem; font-weight:800; color:#262626; line-height:1.15">xuma_televentas</div>
+              <div style="font-size:.5rem; color:var(--gray3); line-height:1.15; white-space:nowrap; overflow:hidden; text-overflow:ellipsis">${g.grupo} · ${g.mes} 2026</div>
+            </div>
+            <span style="color:var(--gray3); font-size:.68rem; letter-spacing:1px">•••</span>
           </div>
-          <div class="ig-media" id="ig-media-${gi}">
-            ${g.fotos.map((f, fi) => `
-              <img src="${g.carpeta}${f}" alt="${g.grupo}" loading="lazy"
-                   class="ig-photo ${fi===0?'active':''}" data-idx="${fi}"
-                   onclick="openLightbox('${(g.carpeta+f).replace(/'/g,"\\'")}', '${g.grupo} · ${g.mes}')" />
+          <div style="display:flex; gap:2px; padding:2px; height:250px">
+            ${g.fotos.map(f => `
+              <div style="flex:1; overflow:hidden; border-radius:4px; background:#fff; display:flex; align-items:center; justify-content:center">
+                <img src="${g.carpeta}${f}" alt="${g.grupo}" style="width:100%;height:100%;object-fit:contain;display:block" />
+              </div>
             `).join('')}
-            ${g.fotos.length > 1 ? `
-              <button class="ig-arrow left" onclick="igSlide(${gi}, -1)">&#8249;</button>
-              <button class="ig-arrow right" onclick="igSlide(${gi}, 1)">&#8250;</button>
-              <div class="ig-progress">
-                ${g.fotos.map((_, fi) => `<span class="ig-seg ${fi===0?'active':''}"></span>`).join('')}
-              </div>` : ''}
           </div>
-          <div class="ig-actions">❤️ &nbsp; 💬 &nbsp; ✈️</div>
-          <div class="ig-caption"><strong>xuma_televentas</strong> ${g.stat} <span class="ig-tag">${g.tag}</span></div>
+          <div style="padding:4px 10px 0; font-size:.68rem">❤️ &nbsp; 💬 &nbsp; ✈️</div>
+          <div style="padding:1px 10px 6px; font-size:.56rem; color:var(--dark)"><strong style="font-weight:800">xuma_televentas</strong> ${g.stat} <span style="color:var(--blue);font-weight:700">${g.tag}</span></div>
         </div>`).join('')}
-    </div>
-
-    <!-- Lightbox -->
-    <div id="lightbox-overlay" style="display:none; position:fixed; inset:0; background:rgba(4,0,40,.92); z-index:5000; align-items:center; justify-content:center; flex-direction:column; cursor:zoom-out" onclick="closeLightbox(event)">
-      <img id="lightbox-img" src="" alt="" style="max-width:80vw; max-height:76vh; border-radius:10px; box-shadow:0 20px 60px rgba(0,0,0,.5)" />
-      <div id="lightbox-caption" style="color:#fff; font-size:.85rem; font-weight:700; margin-top:14px; letter-spacing:.03em"></div>
-      <div style="color:rgba(255,255,255,.5); font-size:.7rem; margin-top:6px">Clic en cualquier parte para cerrar</div>
     </div>`;
-}
-
-function igSlide(cardIdx, dir) {
-  const media = document.getElementById(`ig-media-${cardIdx}`);
-  if (!media) return;
-  const photos = Array.from(media.querySelectorAll('.ig-photo'));
-  const segs = Array.from(media.querySelectorAll('.ig-seg'));
-  let idx = photos.findIndex(p => p.classList.contains('active'));
-  photos[idx].classList.remove('active');
-  segs[idx]?.classList.remove('active');
-  idx = (idx + dir + photos.length) % photos.length;
-  photos[idx].classList.add('active');
-  segs[idx]?.classList.add('active');
-}
-
-function openLightbox(src, caption) {
-  const ov = document.getElementById('lightbox-overlay');
-  document.getElementById('lightbox-img').src = src;
-  document.getElementById('lightbox-caption').textContent = caption;
-  ov.style.display = 'flex';
-}
-function closeLightbox() {
-  const ov = document.getElementById('lightbox-overlay');
-  if (ov) ov.style.display = 'none';
 }
 
 /* ── NUEVAS FUNCIONES DE RENDER DETALLE DE CAMPAÑAS ──────────────── */
@@ -2093,7 +2196,7 @@ function renderCampanaDeepDive(campanaId, data) {
         ${icon('lightbulb', {size: 13})} Observaciones Clave de la Base:
       </div>
       <ul style="margin-left:14px; list-style-type:disc; display:flex; flex-direction:column; gap:1px">
-        ${data.observaciones.map(o=>`<li>${o}</li>`).join('')}
+        ${data.observaciones.map(o=>`<li>${o.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')}</li>`).join('')}
       </ul>
     </div>
   `;
