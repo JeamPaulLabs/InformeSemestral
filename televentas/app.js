@@ -201,7 +201,7 @@ function renderVentas() {
       <div id="vtas-chart-area" style="margin-top:6px"></div>
     </div>`;
 
-  vtasRenderChart('vanti');
+  vtasTab('vanti');
 }
 
 /* Gráfica de la derecha en Ventas: cambia según la pestaña activa.
