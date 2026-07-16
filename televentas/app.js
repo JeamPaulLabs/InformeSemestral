@@ -83,10 +83,22 @@ function renderVentas() {
   const totalMetaXuma  = DATA.metaXuma.reduce((a,b)=>a+b,0);
 
   el.innerHTML = `
-    <div class="kpi-card" style="padding:14px 24px; border-left-color:var(--teal); text-align:center">
-      <div class="kpi-label" style="font-size:.75rem; margin-bottom:4px">Pólizas liquidadas · Semestre completo</div>
-      <div class="kpi-val" style="font-size:2.8rem; color:var(--teal)">${fmt(totalLiq)}</div>
-      <div class="kpi-sub" style="font-size:.68rem">Cifra oficial liquidación ene–jun · Cuota Protegida <strong style="color:var(--teal)">${fmt(DATA.ventasCP.reduce((a,b)=>a+b,0))}</strong> · Combo Vida <strong style="color:var(--blue)">${fmt(DATA.ventasVOL.reduce((a,b)=>a+b,0))}</strong></div>
+    <div class="kpi-grid" style="gap:12px">
+      <div class="kpi-card" style="padding:10px 20px; border-left-color:var(--teal)">
+        <div class="kpi-label" style="font-size:.68rem">Pólizas liquidadas · Semestre completo</div>
+        <div class="kpi-val" style="font-size:2rem; color:var(--teal)">${fmt(totalLiq)}</div>
+        <div class="kpi-sub">Cifra oficial liquidación ene–jun</div>
+      </div>
+      <div class="kpi-card" style="padding:10px 20px">
+        <div class="kpi-label" style="font-size:.68rem">Cuota Protegida</div>
+        <div class="kpi-val" style="font-size:1.4rem; color:var(--teal)">${fmt(DATA.ventasCP.reduce((a,b)=>a+b,0))}</div>
+        <div class="kpi-sub">${Math.round(DATA.ventasCP.reduce((a,b)=>a+b,0)/totalLiq*100)} % del total</div>
+      </div>
+      <div class="kpi-card" style="padding:10px 20px">
+        <div class="kpi-label" style="font-size:.68rem">Combo Vida</div>
+        <div class="kpi-val" style="font-size:1.4rem; color:var(--blue)">${fmt(DATA.ventasVOL.reduce((a,b)=>a+b,0))}</div>
+        <div class="kpi-sub">${Math.round(DATA.ventasVOL.reduce((a,b)=>a+b,0)/totalLiq*100)} % del total</div>
+      </div>
     </div>
 
     <div class="panel" style="padding:6px 16px">
