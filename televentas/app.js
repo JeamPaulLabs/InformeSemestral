@@ -278,8 +278,10 @@ function vtasRenderChart(tab) {
       </div>
     </div>
     <div class="alert alert-info" style="margin-top:6px; padding:8px 16px">
-      <span class="ico">${icon('alert-triangle')}</span>
-      <span style="font-size:.82rem"><strong>${tab === 'vanti' ? 'Vanti' : 'Xuma'}:</strong> GAAP del <strong>4 %</strong> frente a la meta general, equivalente a <strong>655 pólizas</strong> no emitidas en el semestre.</span>
+      <span class="ico">${icon(tab === 'vanti' ? 'trophy' : 'alert-triangle')}</span>
+      <span style="font-size:.82rem"><strong>${tab === 'vanti' ? 'Vanti' : 'Xuma'}:</strong>${tab === 'vanti'
+        ? ` Meta superada al <strong>${cumplGen} %</strong> — ${fmt(totalVentas)} pólizas vendidas vs ${fmt(totalMetaGen)} de meta. CP ${fmt(totalCP)} (${cumplCP} %) · VOL ${fmt(totalVOL)} (${cumplVOL} %).`
+        : ` GAAP del <strong>4 %</strong> frente a la meta general, equivalente a <strong>655 pólizas</strong> no emitidas en el semestre. Cumplimiento general ${cumplGen} % (CP ${cumplCP} % · VOL ${cumplVOL} %).`}</span>
     </div>`;
 }
 
