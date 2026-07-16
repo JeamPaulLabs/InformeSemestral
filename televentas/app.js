@@ -77,35 +77,26 @@ function renderVentas() {
   const el = document.getElementById('ventas-body');
   if (!el) return;
 
-  // KPIs (semestre completo ene–jun, liquidación de Martha ya integrada)
   const liqVals   = DATA.ventasLiq.filter(v => v != null);
   const totalLiq  = liqVals.reduce((a,b)=>a+b,0);
-  const maxMes    = Math.max(...liqVals);
-  const ultimoMes = liqVals[liqVals.length - 1];
-  const brecha    = Math.round((3000 - ultimoMes) / ultimoMes * 100);
   const totalMetaVanti = DATA.metaVanti.reduce((a,b)=>a+b,0);
   const totalMetaXuma  = DATA.metaXuma.reduce((a,b)=>a+b,0);
 
   el.innerHTML = `
-    <div class="kpi-grid" style="gap:12px">
-      <div class="kpi-card" style="padding:6px 16px">
-        <div class="kpi-label">Pólizas liquidadas (1S completo)</div>
-        <div class="kpi-val">${fmt(totalLiq)}</div>
-        <div class="kpi-sub">Cifra oficial ene–jun</div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:6px">
+      <div class="kpi-card" style="padding:10px 20px; border-left-color:var(--teal)">
+        <div class="kpi-label" style="font-size:.68rem">Pólizas liquidadas · Semestre completo</div>
+        <div class="kpi-val" style="font-size:2.4rem; color:var(--teal)">${fmt(totalLiq)}</div>
+        <div class="kpi-sub">Cifra oficial liquidación ene–jun</div>
       </div>
-      <div class="kpi-card" style="padding:6px 16px">
-        <div class="kpi-label">Asesores en equipo</div>
-        <div class="kpi-val">${DATA.asesores[0]} → ${Math.max(...DATA.asesores)} → ${DATA.asesores[DATA.asesores.length-1]}</div>
-        <div class="kpi-sub">Ene · Pico (abr–may) · Jun</div>
-      </div>
-      <div class="kpi-card warn" style="padding:6px 16px">
-        <div class="kpi-label">Brecha vs. meta 3.000/mes</div>
-        <div class="kpi-val">+${brecha} %</div>
-        <div class="kpi-sub">Crecimiento necesario sobre junio (${fmt(ultimoMes)}) · mejor mes: ${fmt(maxMes)}</div>
+      <div class="kpi-card" style="padding:10px 20px">
+        <div class="kpi-label" style="font-size:.68rem">Distribución por producto</div>
+        <div class="kpi-val" style="font-size:1.2rem; line-height:1.3"><span style="color:var(--teal)">${fmt(DATA.ventasCP.reduce((a,b)=>a+b,0))}</span> CP · <span style="color:var(--blue)">${fmt(DATA.ventasVOL.reduce((a,b)=>a+b,0))}</span> VOL</div>
+        <div class="kpi-sub">Cuota Protegida · Combo Vida</div>
       </div>
     </div>
 
-    <div class="panel" style="padding:6px 16px; margin-top:-2px">
+    <div class="panel" style="padding:6px 16px">
       <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:3px">
         <h3 style="margin:0; border:none; padding:0">${icon('bar-chart-3')} Pólizas vendidas vs. meta</h3>
         <div class="vtas-tabs" style="display:flex; gap:6px">
@@ -113,7 +104,6 @@ function renderVentas() {
           <button class="vtas-tab" data-tab="xuma" onclick="vtasTab('xuma')">Xuma</button>
         </div>
       </div>
-
 
       <div class="vtas-pane" id="vtas-pane-vanti">
         <div class="tbl-wrap" style="margin-top:0">
@@ -225,22 +215,29 @@ function renderVentas() {
    Escala 1 = total real por mes; Vanti/Xuma = composición de la META
    por producto (CP vs VOL) — no hay venta real desagregada por producto
    hoy, solo el total (DATA.ventasLiq), por eso aquí se grafica meta. */
-/* Mini gráfica de línea en SVG (sin librerías externas) para mostrar
-   crecimiento mes a mes de un producto. */
+/* Gráfica de línea SVG mejorada — más grande, con área sombreada */
 function svgLineChart(values, color, labelFmt) {
-  const W = 300, H = 62, padL = 8, padR = 8, padT = 14, padB = 14;
+  const W = 460, H = 100, padL = 10, padR = 10, padT = 20, padB = 18;
   const min = Math.min(...values), max = Math.max(...values);
   const range = (max - min) || 1;
   const stepX = (W - padL - padR) / (values.length - 1);
   const yFor = v => H - padB - ((v - min) / range) * (H - padT - padB);
   const points = values.map((v,i) => [padL + i*stepX, yFor(v)]);
   const path = points.map((p,i) => (i===0?'M':'L') + p[0].toFixed(1) + ',' + p[1].toFixed(1)).join(' ');
+  const areaPath = 'M' + points[0][0].toFixed(1) + ',' + (H - padB).toFixed(1) + ' ' + path + ' L' + points[points.length-1][0].toFixed(1) + ',' + (H - padB).toFixed(1) + ' Z';
   const dots = points.map((p,i) => `
-    <circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="3" fill="${color}" />
-    <text x="${p[0].toFixed(1)}" y="${(p[1]-7).toFixed(1)}" font-size="9" fill="${color}" text-anchor="middle" font-weight="700">${labelFmt(values[i])}</text>
-    <text x="${p[0].toFixed(1)}" y="${H-4}" font-size="8" fill="var(--gray3)" text-anchor="middle">${DATA.meses[i]}</text>`).join('');
-  return `<svg width="100%" height="${H}" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet">
-    <path d="${path}" fill="none" stroke="${color}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+    <circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="3.5" fill="${color}" />
+    <text x="${p[0].toFixed(1)}" y="${(p[1]-9).toFixed(1)}" font-size="10" fill="${color}" text-anchor="middle" font-weight="800">${labelFmt(values[i])}</text>
+    <text x="${p[0].toFixed(1)}" y="${H-3}" font-size="9" fill="var(--gray3)" text-anchor="middle" font-weight="600">${DATA.meses[i]}</text>`).join('');
+  return `<svg width="100%" height="${H}" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet" style="display:block">
+    <defs>
+      <linearGradient id="grad-${color.replace(/\W/g,'')}" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="${color}" stop-opacity=".2"/>
+        <stop offset="100%" stop-color="${color}" stop-opacity=".02"/>
+      </linearGradient>
+    </defs>
+    <path d="${areaPath}" fill="url(#grad-${color.replace(/\W/g,'')})" />
+    <path d="${path}" fill="none" stroke="${color}" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" />
     ${dots}
   </svg>`;
 }
