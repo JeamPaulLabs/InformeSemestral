@@ -1,0 +1,20 @@
+{
+  "name": "televentas",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "ppt": "node generar_ppt_v3.mjs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "fast-xml-parser": "^5.10.0",
+    "jszip": "^3.10.1",
+    "playwright": "^1.61.1",
+    "pptxgenjs": "^4.0.1"
+  }
+}
