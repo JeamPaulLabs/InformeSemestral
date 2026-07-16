@@ -277,9 +277,11 @@ function vtasRenderChart(tab) {
         ${svgLineChart(vol, 'var(--blue)', v => fmt(v))}
       </div>
     </div>
-    <div class="alert alert-info" style="margin-top:6px; padding:6px 14px">
-      <span class="ico">${icon('trophy')}</span>
-      <span style="font-size:.72rem"><strong>${tab === 'vanti' ? 'Vanti' : 'Xuma'}:</strong> <strong>${fmt(totalVentas)} pólizas vendidas</strong> en el semestre — <strong>${cumplGen} %</strong> de la meta general${mesesSobreMeta === 6 ? ', cumpliendo los 6 meses' : mesesSobreMeta >= 3 ? `, con ${mesesSobreMeta} de 6 meses sobre la meta` : ''}. Cuota Protegida aportó ${fmt(totalCP)} (${cumplCP} %) y Combo Vida ${fmt(totalVOL)} (${cumplVOL} %).</span>
+    <div class="alert alert-info" style="margin-top:6px; padding:8px 16px">
+      <span class="ico">${icon(tab === 'vanti' ? 'trophy' : 'alert-triangle')}</span>
+      <span style="font-size:.82rem"><strong>${tab === 'vanti' ? 'Vanti' : 'Xuma'}:</strong>${tab === 'vanti'
+        ? ` <strong>Meta superada al ${cumplGen} %</strong> — ${fmt(totalVentas)} pólizas vendidas vs ${fmt(totalMetaGen)} meta. CP ${fmt(totalCP)} (${cumplCP} %) · VOL ${fmt(totalVOL)} (${cumplVOL} %).`
+        : ` Tenemos un <strong>GAAP del ${Math.round((totalMetaGen - totalVentas) / totalMetaGen * 100)} %</strong> frente la meta general, equivalente a <strong>${fmt(totalMetaGen - totalVentas)} pólizas</strong>. CP ${fmt(totalCP)} (${cumplCP} %) · VOL ${fmt(totalVOL)} (${cumplVOL} %).`}</span>
     </div>`;
 }
 
