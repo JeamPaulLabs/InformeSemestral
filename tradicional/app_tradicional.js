@@ -11,7 +11,7 @@ let slides = [];
 let map = null;
 
 const NAV_LABELS = [
-  'Portada', 'Formación', 'Cobertura', 'Ventas', 'Estrategia 2S', 'Cierre'
+  'Formación', 'Cobertura', 'Ventas'
 ];
 
 /* ── INIT ───────────────────────────────────────────────────── */
@@ -153,32 +153,32 @@ function renderFormacion() {
   const asesoresDropPct = ((eneAsesores - junAsesores) / eneAsesores * 100).toFixed(0);
 
   el.innerHTML = `
-    <div class="kpi-grid" style="gap:12px">
-      <div class="kpi-card" style="padding:8px 16px">
-        <div class="kpi-label">Visitas Realizadas 1S</div>
-        <div class="kpi-val">${fmt(totalVisitas)}</div>
-        <div class="kpi-sub">Enero - Junio 2026</div>
+    <div class="kpi-grid" style="gap:8px; margin-bottom:8px">
+      <div class="kpi-card" style="padding:5px 12px">
+        <div class="kpi-label" style="font-size:.58rem">Visitas Realizadas 1S</div>
+        <div class="kpi-val" style="font-size:.85rem">${fmt(totalVisitas)}</div>
+        <div class="kpi-sub" style="font-size:.5rem">Enero - Junio 2026</div>
       </div>
-      <div class="kpi-card warn" style="padding:8px 16px">
-        <div class="kpi-label">Variación Mar → Jun</div>
-        <div class="kpi-val">${dropPct} %</div>
-        <div class="kpi-sub">${marVisits} visitas → ${junVisits} visitas</div>
+      <div class="kpi-card warn" style="padding:5px 12px">
+        <div class="kpi-label" style="font-size:.58rem">Variación Mar → Jun</div>
+        <div class="kpi-val" style="font-size:.85rem">${dropPct} %</div>
+        <div class="kpi-sub" style="font-size:.5rem">${marVisits} visitas → ${junVisits} visitas</div>
       </div>
-      <div class="kpi-card warn" style="padding:8px 16px">
-        <div class="kpi-label">Asesores capacitados</div>
-        <div class="kpi-val">-${asesoresDropPct} %</div>
-        <div class="kpi-sub">${eneAsesores} → ${junAsesores} (ene→jun)</div>
+      <div class="kpi-card warn" style="padding:5px 12px">
+        <div class="kpi-label" style="font-size:.58rem">Asesores capacitados</div>
+        <div class="kpi-val" style="font-size:.85rem">-${asesoresDropPct} %</div>
+        <div class="kpi-sub" style="font-size:.5rem">${eneAsesores} → ${junAsesores} (ene→jun)</div>
       </div>
-      <div class="kpi-card" style="padding:8px 16px">
-        <div class="kpi-label">PDV Promedio / Mes</div>
-        <div class="kpi-val">${(TRADICIONAL_DATA.visitas.reduce((s, v) => s + v.pdvs, 0) / 6).toFixed(1)}</div>
-        <div class="kpi-sub">Sobre ${bestMonth.pdvs} PDV en Enero</div>
+      <div class="kpi-card" style="padding:5px 12px">
+        <div class="kpi-label" style="font-size:.58rem">PDV Promedio / Mes</div>
+        <div class="kpi-val" style="font-size:.85rem">${(TRADICIONAL_DATA.visitas.reduce((s, v) => s + v.pdvs, 0) / 6).toFixed(1)}</div>
+        <div class="kpi-sub" style="font-size:.5rem">Sobre ${bestMonth.pdvs} PDV en Enero</div>
       </div>
     </div>
 
-    <div class="two-col" style="gap:14px">
-      <div class="panel" style="padding:10px 16px">
-        <h3 style="margin-bottom:4px; padding-bottom:4px">${icon('calendar')} Visitas, asesores capacitados y PDV por mes</h3>
+    <div class="two-col" style="gap:10px">
+      <div class="panel" style="padding:8px 12px">
+        <h3 style="margin-bottom:4px; padding-bottom:3px; font-size:.68rem">${icon('calendar')} Visitas, asesores capacitados y PDV por mes</h3>
         <div class="tbl-wrap" style="margin-top:0">
           <table>
             <thead>
@@ -209,27 +209,27 @@ function renderFormacion() {
         </div>
       </div>
 
-      <div class="panel" style="padding:10px 16px">
-        <h3 style="margin-bottom:4px; padding-bottom:4px">${icon('trending-down')} Evolución de visitas por mes</h3>
-        <div class="chart-wrap" style="margin-top:4px">
+      <div class="panel" style="padding:8px 12px">
+        <h3 style="margin-bottom:4px; padding-bottom:3px; font-size:.68rem">${icon('trending-down')} Evolución de visitas por mes</h3>
+        <div class="chart-wrap" style="margin-top:2px">
           ${TRADICIONAL_DATA.visitas.map(v => {
             const pct = (v.visitas / bestMonth.visitas * 100).toFixed(0) + '%';
             const colorClass = (v.mes === 'May' || v.mes === 'Jun') ? 'warn' : 'teal';
             const style = colorClass === 'warn' ? 'background:linear-gradient(90deg,#e05320,#ff6b35)' : '';
             return `
               <div class="bar-row">
-                <span class="bar-label">${v.mes}</span>
+                <span class="bar-label" style="font-size:.58rem">${v.mes}</span>
                 <div class="bar-track">
                   <div class="bar-fill ${colorClass === 'teal' ? 'teal' : ''}" data-w="${pct}" style="width:0; ${style}"></div>
                 </div>
-                <span class="bar-val">${v.visitas}</span>
+                <span class="bar-val" style="font-size:.58rem">${v.visitas}</span>
               </div>
             `;
           }).join('')}
         </div>
-        <div class="alert alert-warn" style="margin-top:8px; padding:7px 14px">
+        <div class="alert alert-warn" style="margin-top:6px; padding:6px 12px">
           <span class="ico">${icon('alert-triangle')}</span>
-          <span style="font-size:.72rem"><strong>Por qué cayó abril-junio:</strong> marzo concentró el esfuerzo (148 visitas, 93 asesores); desde abril, la reestructuración de zonas y canales (empalme con Retail) redujo la ejecución hasta 43 visitas en junio (-72 %) — no una caída de desempeño, sino de capacidad temporal de visitar.</span>
+          <span style="font-size:.62rem"><strong>Por qué cayó abril-junio:</strong> marzo concentró el esfuerzo (148 visitas, 93 asesores); desde abril, la reestructuración de zonas y canales (empalme con Retail) redujo la ejecución hasta 43 visitas en junio (-72 %) — no una caída de desempeño, sino de capacidad temporal de visitar.</span>
         </div>
       </div>
     </div>
@@ -253,32 +253,32 @@ function renderVentas() {
   const rsCumpl = rsMeta > 0 ? (rsPositivas / rsMeta * 100) : 0;
 
   el.innerHTML = `
-    <div class="kpi-grid" style="gap:12px">
-      <div class="kpi-card green" style="padding:8px 16px">
-        <div class="kpi-label">Ventas CP positivas 1S</div>
-        <div class="kpi-val">${fmt(cpPositivas)}</div>
-        <div class="kpi-sub">${fmt(cpCantadas)} cantadas · ${cpMeta>0?cpCumpl.toFixed(1).replace('.', ','):'S/D'}% meta</div>
+    <div class="kpi-grid" style="gap:8px; margin-bottom:8px">
+      <div class="kpi-card green" style="padding:5px 12px">
+        <div class="kpi-label" style="font-size:.58rem">Ventas CP positivas 1S</div>
+        <div class="kpi-val" style="font-size:.85rem">${fmt(cpPositivas)}</div>
+        <div class="kpi-sub" style="font-size:.5rem">${fmt(cpCantadas)} cantadas · ${cpMeta>0?cpCumpl.toFixed(1).replace('.', ','):'S/D'}% meta</div>
       </div>
-      <div class="kpi-card green" style="padding:8px 16px">
-        <div class="kpi-label">Ventas RS positivas 1S</div>
-        <div class="kpi-val">${fmt(rsPositivas)}</div>
-        <div class="kpi-sub">${fmt(rsCantadas)} cantadas · ${rsMeta>0?rsCumpl.toFixed(1).replace('.', ','):'S/D'}% meta</div>
+      <div class="kpi-card green" style="padding:5px 12px">
+        <div class="kpi-label" style="font-size:.58rem">Ventas RS positivas 1S</div>
+        <div class="kpi-val" style="font-size:.85rem">${fmt(rsPositivas)}</div>
+        <div class="kpi-sub" style="font-size:.5rem">${fmt(rsCantadas)} cantadas · ${rsMeta>0?rsCumpl.toFixed(1).replace('.', ','):'S/D'}% meta</div>
       </div>
-      <div class="kpi-card" style="padding:8px 16px">
-        <div class="kpi-label">Financiaciones CP</div>
-        <div class="kpi-val">${fmt(cpFinanciaciones)}</div>
-        <div class="kpi-sub">Universo de oportunidades (12 aliados)</div>
+      <div class="kpi-card" style="padding:5px 12px">
+        <div class="kpi-label" style="font-size:.58rem">Financiaciones CP</div>
+        <div class="kpi-val" style="font-size:.85rem">${fmt(cpFinanciaciones)}</div>
+        <div class="kpi-sub" style="font-size:.5rem">12 aliados activos</div>
       </div>
-      <div class="kpi-card" style="padding:8px 16px">
-        <div class="kpi-label">Financiaciones RS</div>
-        <div class="kpi-val">${fmt(rsFinanciaciones)}</div>
-        <div class="kpi-sub">Universo de oportunidades (25 aliados)</div>
+      <div class="kpi-card" style="padding:5px 12px">
+        <div class="kpi-label" style="font-size:.58rem">Financiaciones RS</div>
+        <div class="kpi-val" style="font-size:.85rem">${fmt(rsFinanciaciones)}</div>
+        <div class="kpi-sub" style="font-size:.5rem">25 aliados activos</div>
       </div>
     </div>
 
-    <div class="two-col" style="gap:14px">
-      <div class="panel" style="padding:8px 16px">
-        <h3 style="margin-bottom:4px; padding-bottom:4px">${icon('shield')} Cuota Protegida Tradicional</h3>
+    <div class="two-col" style="gap:10px">
+      <div class="panel" style="padding:8px 12px">
+        <h3 style="margin-bottom:4px; padding-bottom:3px; font-size:.68rem">${icon('shield')} Cuota Protegida Tradicional</h3>
         <div class="tbl-wrap" style="margin-top:0">
           <table class="tbl-compact" style="font-size:.66rem">
             <thead>
@@ -314,11 +314,11 @@ function renderVentas() {
             </tbody>
           </table>
         </div>
-        <div style="font-size:.6rem; color:var(--gray3); margin-top:5px">El cierre de junio registra un incremento significativo en financiaciones (5.605) y 12 aliados activos.</div>
+        <div style="font-size:.56rem; color:var(--gray3); margin-top:4px">El cierre de junio registra un incremento en financiaciones (5.605) y 12 aliados activos.</div>
       </div>
 
-      <div class="panel" style="padding:8px 16px">
-        <h3 style="margin-bottom:4px; padding-bottom:4px">${icon('bike')} Rueda Seguro Tradicional</h3>
+      <div class="panel" style="padding:8px 12px">
+        <h3 style="margin-bottom:4px; padding-bottom:3px; font-size:.68rem">${icon('bike')} Rueda Seguro Tradicional</h3>
         <div class="tbl-wrap" style="margin-top:0">
           <table class="tbl-compact" style="font-size:.66rem">
             <thead>
@@ -354,7 +354,7 @@ function renderVentas() {
             </tbody>
           </table>
         </div>
-        <div style="font-size:.6rem; color:var(--gray3); margin-top:5px">Junio muestra un repunte significativo de financiaciones de motocicletas (1.395) con 25 aliados activos.</div>
+        <div style="font-size:.56rem; color:var(--gray3); margin-top:4px">Junio muestra un repunte de financiaciones de motocicletas (1.395) con 25 aliados activos.</div>
       </div>
     </div>
   `;
@@ -373,16 +373,16 @@ function renderCobertura() {
     .slice(0, 5);
 
   el.innerHTML = `
-    <div style="display:flex; flex-direction:column; gap:8px">
-    <div class="cob-tabs" style="display:flex; gap:8px; margin-bottom:-4px">
-      <button class="cob-tab active" data-tab="aliado" onclick="coberturaTab('aliado')">${icon('store', {size:14})} Por Aliado</button>
-      <button class="cob-tab" data-tab="mapa" onclick="coberturaTab('mapa')">${icon('map', {size:14})} Mapa de visitas</button>
+    <div style="display:flex; flex-direction:column; gap:4px">
+    <div class="cob-tabs" style="display:flex; gap:8px; margin-bottom:-2px">
+      <button class="cob-tab active" data-tab="aliado" onclick="coberturaTab('aliado')">${icon('store', {size:12})} Por Aliado</button>
+      <button class="cob-tab" data-tab="mapa" onclick="coberturaTab('mapa')">${icon('map', {size:12})} Mapa de visitas</button>
     </div>
 
     <div class="cob-pane active" id="cob-pane-aliado">
-    <div class="two-col" style="grid-template-columns: 1.15fr 1fr; gap: 12px;">
-      <div class="panel" style="padding:8px 16px">
-        <h3 style="margin-bottom:4px; padding-bottom:4px">${icon('store')} Cobertura de Formación por Aliado (Ene-Jun 2026)</h3>
+    <div class="two-col" style="grid-template-columns: 1.15fr 1fr; gap: 10px;">
+      <div class="panel" style="padding:6px 12px">
+        <h3 style="margin-bottom:2px; padding-bottom:2px; font-size:.68rem">${icon('store')} Cobertura de Formación por Aliado (Ene-Jun 2026)</h3>
         <p style="font-size: .62rem; color: var(--gray3); margin-top: -3px; margin-bottom: 5px;">
           Asesores que financiaron en conciliaciones vs capacitados (cruzados por cédula).
         </p>
@@ -428,9 +428,9 @@ function renderCobertura() {
         <div style="font-size:.56rem; color:var(--gray3); margin-top:4px">Comportamiento mes a mes por aliado: pendiente de extraer de los cortes mensuales "Como vamos" (hoy solo se consolida el agregado semestral por aliado).</div>
       </div>
 
-      <div class="panel" style="display: flex; flex-direction: column; justify-content: space-between; padding:8px 16px">
+      <div class="panel" style="display: flex; flex-direction: column; justify-content: space-between; padding:6px 12px">
         <div>
-          <h3 style="margin-bottom:4px; padding-bottom:4px">${icon('calendar')} Cobertura de Formación por Mes (Semestre)</h3>
+          <h3 style="margin-bottom:2px; padding-bottom:2px; font-size:.68rem">${icon('calendar')} Cobertura de Formación por Mes (Semestre)</h3>
           <div class="tbl-wrap" style="margin-top:0">
             <table class="tbl-compact" style="font-size: 0.68rem;">
               <thead>
@@ -460,9 +460,9 @@ function renderCobertura() {
           </div>
         </div>
 
-        <div class="alert alert-warn" style="margin-top:8px; margin-bottom: 0; padding:6px 14px">
+        <div class="alert alert-warn" style="margin-top:6px; margin-bottom: 0; padding:4px 12px">
           <span class="ico">${icon('scale')}</span>
-          <span style="font-size:.68rem"><strong>Regla de Cobertura de Orlando:</strong> Cruce por documento del asesor en conciliaciones contra visitas del mes. Cobertura agregada promedio del canal: <strong>7,5%</strong>, con espacio de mejora prioritario en los aliados con baja tasa de cruce.</span>
+          <span style="font-size:.62rem"><strong>Regla de Cobertura de Orlando:</strong> Cruce por documento del asesor en conciliaciones contra visitas del mes. Cobertura agregada promedio del canal: <strong>7,5%</strong>, con espacio de mejora prioritario en los aliados con baja tasa de cruce.</span>
         </div>
       </div>
     </div>

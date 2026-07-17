@@ -11,7 +11,7 @@ let slides = [];
 let map = null;
 
 const NAV_LABELS = [
-  'Portada', 'Formación', 'Cobertura', 'Ventas', 'Estrategia 2S', 'Cierre'
+  'Formación', 'Cobertura', 'Ventas'
 ];
 
 /* ── INIT ───────────────────────────────────────────────────── */
@@ -155,32 +155,32 @@ function renderFormacion() {
   const efPorPdvUp = ((efPorPdvFin - efPorPdvIni) / efPorPdvIni * 100).toFixed(0);
 
   el.innerHTML = `
-    <div class="kpi-grid" style="gap:12px">
-      <div class="kpi-card" style="padding:10px 16px">
-        <div class="kpi-label">Visitas Realizadas 1S</div>
-        <div class="kpi-val">${fmt(totalVisitas)}</div>
-        <div class="kpi-sub">Enero - Junio 2026</div>
+    <div class="kpi-grid" style="gap:8px; margin-bottom:8px">
+      <div class="kpi-card" style="padding:5px 12px">
+        <div class="kpi-label" style="font-size:.58rem">Visitas Realizadas 1S</div>
+        <div class="kpi-val" style="font-size:.85rem">${fmt(totalVisitas)}</div>
+        <div class="kpi-sub" style="font-size:.5rem">Enero - Junio 2026</div>
       </div>
-      <div class="kpi-card warn" style="padding:10px 16px">
-        <div class="kpi-label">Variación Ene → Jun</div>
-        <div class="kpi-val">${dropPct} %</div>
-        <div class="kpi-sub">${eneVisits} visitas → ${junVisits} visitas</div>
+      <div class="kpi-card warn" style="padding:5px 12px">
+        <div class="kpi-label" style="font-size:.58rem">Variación Ene → Jun</div>
+        <div class="kpi-val" style="font-size:.85rem">${dropPct} %</div>
+        <div class="kpi-sub" style="font-size:.5rem">${eneVisits} visitas → ${junVisits} visitas</div>
       </div>
-      <div class="kpi-card warn" style="padding:10px 16px">
-        <div class="kpi-label">PDV con venta activa</div>
-        <div class="kpi-val">-${pdvDropPct} %</div>
-        <div class="kpi-sub">${pdvIni} → ${pdvFin} PDV (ene→jun)</div>
+      <div class="kpi-card warn" style="padding:5px 12px">
+        <div class="kpi-label" style="font-size:.58rem">PDV con venta activa</div>
+        <div class="kpi-val" style="font-size:.85rem">-${pdvDropPct} %</div>
+        <div class="kpi-sub" style="font-size:.5rem">${pdvIni} → ${pdvFin} PDV</div>
       </div>
-      <div class="kpi-card green" style="padding:10px 16px">
-        <div class="kpi-label">Efectivas por PDV activo</div>
-        <div class="kpi-val">+${efPorPdvUp} %</div>
-        <div class="kpi-sub">${efPorPdvIni.toFixed(1)} → ${efPorPdvFin.toFixed(1)} pólizas/PDV</div>
+      <div class="kpi-card green" style="padding:5px 12px">
+        <div class="kpi-label" style="font-size:.58rem">Efectivas por PDV activo</div>
+        <div class="kpi-val" style="font-size:.85rem">+${efPorPdvUp} %</div>
+        <div class="kpi-sub" style="font-size:.5rem">${efPorPdvIni.toFixed(1)} → ${efPorPdvFin.toFixed(1)} pólizas/PDV</div>
       </div>
     </div>
 
-    <div class="two-col" style="gap:14px">
-      <div class="panel" style="padding:12px 16px">
-        <h3 style="margin-bottom:6px; padding-bottom:5px">${icon('calendar')} Planta activa vs. formaciones por mes</h3>
+    <div class="two-col" style="gap:10px">
+      <div class="panel" style="padding:8px 12px">
+        <h3 style="margin-bottom:4px; padding-bottom:3px; font-size:.68rem">${icon('calendar')} Planta activa vs. formaciones por mes</h3>
         <div class="tbl-wrap" style="margin-top:0">
           <table class="tbl-compact">
             <thead>
@@ -217,14 +217,14 @@ function renderFormacion() {
             </tbody>
           </table>
         </div>
-        <div style="font-size:.6rem; color:var(--gray3); margin-top:6px; line-height:1.35">
+        <div style="font-size:.56rem; color:var(--gray3); margin-top:4px; line-height:1.3">
           * Planta = gestores comerciales con actividad transaccional registrados en el "Como vamos" (cierres mensuales). Tipos de capacitación: Inicial 44 % · Portafolio 40 % · Recapacitación 9 % · Acompañamiento 7 %. El registro de visitas no distingue hoy entre producto CP y RS — ajuste pendiente en el formulario de captura.
         </div>
       </div>
 
-      <div class="panel" style="padding:12px 16px">
-        <h3 style="margin-bottom:6px; padding-bottom:5px">${icon('trending-down')} Evolución de visitas por mes</h3>
-        <div class="chart-wrap chart-compact" style="margin-top:4px">
+      <div class="panel" style="padding:8px 12px">
+        <h3 style="margin-bottom:4px; padding-bottom:3px; font-size:.68rem">${icon('trending-down')} Evolución de visitas por mes</h3>
+        <div class="chart-wrap chart-compact" style="margin-top:2px">
           ${RETAIL_DATA.visitas.map(v => {
             const maxV = Math.max(...RETAIL_DATA.visitas.map(x=>x.visitas));
             const pct = (v.visitas / maxV * 100).toFixed(0) + '%';
@@ -232,18 +232,18 @@ function renderFormacion() {
             const style = colorClass === 'warn' ? 'background:linear-gradient(90deg,#e05320,#ff6b35)' : '';
             return `
               <div class="bar-row">
-                <span class="bar-label">${v.mes}</span>
+                <span class="bar-label" style="font-size:.58rem">${v.mes}</span>
                 <div class="bar-track">
                   <div class="bar-fill ${colorClass === 'teal' ? 'teal' : ''}" data-w="${pct}" style="width:0; ${style}"></div>
                 </div>
-                <span class="bar-val">${v.visitas}</span>
+                <span class="bar-val" style="font-size:.58rem">${v.visitas}</span>
               </div>
             `;
           }).join('')}
         </div>
-        <div class="alert alert-warn" style="margin-top:8px; padding:8px 14px">
+        <div class="alert alert-warn" style="margin-top:6px; padding:6px 12px">
           <span class="ico">${icon('alert-triangle')}</span>
-          <span><strong>Por qué cayó mayo-junio:</strong> la reestructuración de zonas y canales de Retail (empalme con Tradicional) redujo temporalmente la capacidad de visitar — no una caída de desempeño. Prueba: con 43 % menos PDV activos, las ventas efectivas por PDV subieron ${efPorPdvUp} % (${efPorPdvIni.toFixed(1)} → ${efPorPdvFin.toFixed(1)}/PDV): el canal se concentró y se hizo más productivo por punto.</span>
+          <span style="font-size:.62rem"><strong>Por qué cayó mayo-junio:</strong> la reestructuración de zonas y canales de Retail (empalme con Tradicional) redujo temporalmente la capacidad de visitar — no una caída de desempeño. Prueba: con 43 % menos PDV activos, las ventas efectivas por PDV subieron ${efPorPdvUp} % (${efPorPdvIni.toFixed(1)} → ${efPorPdvFin.toFixed(1)}/PDV): el canal se concentró y se hizo más productivo por punto.</span>
         </div>
       </div>
     </div>
@@ -265,32 +265,32 @@ function renderVentas() {
   const promEfectRS = totalCantadasRS > 0 ? (totalEfectivasRS / totalCantadasRS * 100) : 0;
 
   el.innerHTML = `
-    <div class="kpi-grid" style="gap:12px">
-      <div class="kpi-card green" style="padding:10px 16px">
-        <div class="kpi-label">Ventas CP 1S (Efectivas)</div>
-        <div class="kpi-val">${fmt(totalEfectivasCP)}</div>
-        <div class="kpi-sub">Total de ${fmt(totalCantadasCP)} cantadas (${promEfectCP.toFixed(1).replace('.', ',')}%)</div>
+    <div class="kpi-grid" style="gap:8px; margin-bottom:8px">
+      <div class="kpi-card green" style="padding:5px 12px">
+        <div class="kpi-label" style="font-size:.58rem">Ventas CP 1S (Efectivas)</div>
+        <div class="kpi-val" style="font-size:.85rem">${fmt(totalEfectivasCP)}</div>
+        <div class="kpi-sub" style="font-size:.5rem">Total de ${fmt(totalCantadasCP)} cantadas (${promEfectCP.toFixed(1).replace('.', ',')}%)</div>
       </div>
-      <div class="kpi-card green" style="padding:10px 16px">
-        <div class="kpi-label">Ventas RS 1S (Efectivas)</div>
-        <div class="kpi-val">${fmt(totalEfectivasRS)}</div>
-        <div class="kpi-sub">Total de ${fmt(totalCantadasRS)} cantadas (${promEfectRS.toFixed(1).replace('.', ',')}%)</div>
+      <div class="kpi-card green" style="padding:5px 12px">
+        <div class="kpi-label" style="font-size:.58rem">Ventas RS 1S (Efectivas)</div>
+        <div class="kpi-val" style="font-size:.85rem">${fmt(totalEfectivasRS)}</div>
+        <div class="kpi-sub" style="font-size:.5rem">Total de ${fmt(totalCantadasRS)} cantadas (${promEfectRS.toFixed(1).replace('.', ',')}%)</div>
       </div>
-      <div class="kpi-card" style="padding:10px 16px">
-        <div class="kpi-label">Pico CP Semestre</div>
-        <div class="kpi-val">2.474</div>
-        <div class="kpi-sub">Marzo · 135 gestores activos</div>
+      <div class="kpi-card" style="padding:5px 12px">
+        <div class="kpi-label" style="font-size:.58rem">Pico CP Semestre</div>
+        <div class="kpi-val" style="font-size:.85rem">2.474</div>
+        <div class="kpi-sub" style="font-size:.5rem">Marzo · 135 gestores activos</div>
       </div>
-      <div class="kpi-card warn" style="padding:10px 16px">
-        <div class="kpi-label">Ventas CP Mayo + Junio</div>
-        <div class="kpi-val">${fmt(RETAIL_DATA.ventas.cp[4].efectivas + RETAIL_DATA.ventas.cp[5].efectivas)}</div>
-        <div class="kpi-sub">Reales consolidadas de cierre</div>
+      <div class="kpi-card warn" style="padding:5px 12px">
+        <div class="kpi-label" style="font-size:.58rem">Ventas CP Mayo + Junio</div>
+        <div class="kpi-val" style="font-size:.85rem">${fmt(RETAIL_DATA.ventas.cp[4].efectivas + RETAIL_DATA.ventas.cp[5].efectivas)}</div>
+        <div class="kpi-sub" style="font-size:.5rem">Reales consolidadas de cierre</div>
       </div>
     </div>
 
-    <div class="two-col" style="gap:14px">
-      <div class="panel" style="padding:12px 16px">
-        <h3 style="margin-bottom:6px; padding-bottom:5px">${icon('shield')} Cuota Protegida Retail (Como vamos)</h3>
+    <div class="two-col" style="gap:10px">
+      <div class="panel" style="padding:8px 12px">
+        <h3 style="margin-bottom:4px; padding-bottom:3px; font-size:.68rem">${icon('shield')} Cuota Protegida Retail (Como vamos)</h3>
         <div class="tbl-wrap" style="margin-top:0">
           <table class="tbl-compact">
             <thead>
@@ -332,9 +332,9 @@ function renderVentas() {
         </div>
       </div>
 
-      <div class="panel" style="display:flex; flex-direction:column; justify-content:space-between; padding:12px 16px">
+      <div class="panel" style="display:flex; flex-direction:column; justify-content:space-between; padding:8px 12px">
         <div>
-          <h3 style="margin-bottom:6px; padding-bottom:5px">${icon('bike')} Rueda Seguro Retail (Como vamos)</h3>
+          <h3 style="margin-bottom:4px; padding-bottom:3px; font-size:.68rem">${icon('bike')} Rueda Seguro Retail (Como vamos)</h3>
           <div class="tbl-wrap" style="margin-top:0">
             <table class="tbl-compact">
               <thead>
@@ -368,9 +368,9 @@ function renderVentas() {
             </table>
           </div>
         </div>
-        <div class="alert alert-info" style="margin-top:8px; margin-bottom: 0; padding:8px 14px">
+        <div class="alert alert-info" style="margin-top:6px; margin-bottom: 0; padding:6px 12px">
           <span class="ico">${icon('pin')}</span>
-          <span><strong>Marzo y Mayo representaron los picos</strong> del canal. La efectividad se mantiene en niveles altos (78 - 84%). Los cierres de Mayo y Junio confirman ventas efectivas consolidadas superiores a 2.100 por mes.</span>
+          <span style="font-size:.62rem"><strong>Marzo y Mayo representaron los picos</strong> del canal. La efectividad se mantiene en niveles altos (78 - 84%). Los cierres de Mayo y Junio confirman ventas efectivas consolidadas superiores a 2.100 por mes.</span>
         </div>
       </div>
     </div>
@@ -386,39 +386,39 @@ function renderCobertura() {
   // en un solo slide con pestañas, por pedido de Orlando (reunión 2026-07).
 
   el.innerHTML = `
-    <div style="display:flex; flex-direction:column; gap:6px">
-    <div class="kpi-grid" style="gap:12px">
-      <div class="kpi-card" style="padding:6px 16px">
-        <div class="kpi-label">PDV con gestión promedio</div>
-        <div class="kpi-val">${(COBERTURA_PDV.reduce((s,d)=>s+d.gestion,0)/6).toFixed(0)}</div>
-        <div class="kpi-sub">Total PDV activos en CP</div>
+    <div style="display:flex; flex-direction:column; gap:4px">
+    <div class="kpi-grid" style="gap:8px; margin-bottom:4px">
+      <div class="kpi-card" style="padding:5px 12px">
+        <div class="kpi-label" style="font-size:.58rem">PDV con gestión promedio</div>
+        <div class="kpi-val" style="font-size:.85rem">${(COBERTURA_PDV.reduce((s,d)=>s+d.gestion,0)/6).toFixed(0)}</div>
+        <div class="kpi-sub" style="font-size:.5rem">Total PDV activos en CP</div>
       </div>
-      <div class="kpi-card warn" style="padding:6px 16px">
-        <div class="kpi-label">Cobertura Junio</div>
-        <div class="kpi-val">26,9 %</div>
-        <div class="kpi-sub">14 de 52 PDV activos visitados</div>
+      <div class="kpi-card warn" style="padding:5px 12px">
+        <div class="kpi-label" style="font-size:.58rem">Cobertura Junio</div>
+        <div class="kpi-val" style="font-size:.85rem">26,9 %</div>
+        <div class="kpi-sub" style="font-size:.5rem">14 de 52 PDV activos visitados</div>
       </div>
-      <div class="kpi-card" style="padding:6px 16px">
-        <div class="kpi-label">Visitas de formación 1S</div>
-        <div class="kpi-val">373</div>
-        <div class="kpi-sub">Capacitando asesores de venta</div>
+      <div class="kpi-card" style="padding:5px 12px">
+        <div class="kpi-label" style="font-size:.58rem">Visitas de formación 1S</div>
+        <div class="kpi-val" style="font-size:.85rem">373</div>
+        <div class="kpi-sub" style="font-size:.5rem">Capacitando asesores de venta</div>
       </div>
-      <div class="kpi-card" style="padding:6px 16px">
-        <div class="kpi-label">Zonas / municipios</div>
-        <div class="kpi-val">${RETAIL_DATA.mapa.length}</div>
-        <div class="kpi-sub">Con al menos una visita registrada</div>
+      <div class="kpi-card" style="padding:5px 12px">
+        <div class="kpi-label" style="font-size:.58rem">Zonas / municipios</div>
+        <div class="kpi-val" style="font-size:.85rem">${RETAIL_DATA.mapa.length}</div>
+        <div class="kpi-sub" style="font-size:.5rem">Con al menos una visita registrada</div>
       </div>
     </div>
 
-    <div class="cob-tabs" style="display:flex; gap:8px; margin-bottom:-4px">
-      <button class="cob-tab active" data-tab="pdv" onclick="coberturaTab('pdv')">${icon('store', {size:14})} Cobertura PDV</button>
-      <button class="cob-tab" data-tab="mapa" onclick="coberturaTab('mapa')">${icon('map', {size:14})} Mapa de visitas</button>
+    <div class="cob-tabs" style="display:flex; gap:8px; margin-bottom:-2px">
+      <button class="cob-tab active" data-tab="pdv" onclick="coberturaTab('pdv')">${icon('store', {size:12})} Cobertura PDV</button>
+      <button class="cob-tab" data-tab="mapa" onclick="coberturaTab('mapa')">${icon('map', {size:12})} Mapa de visitas</button>
     </div>
 
     <div class="cob-pane active" id="cob-pane-pdv">
-    <div class="two-col" style="gap:14px">
-      <div class="panel" style="padding:8px 16px">
-        <h3 style="margin-bottom:4px; padding-bottom:4px">${icon('map')} Cobertura de formación en Puntos de Venta (PDV)</h3>
+    <div class="two-col" style="gap:10px">
+      <div class="panel" style="padding:6px 12px">
+        <h3 style="margin-bottom:2px; padding-bottom:2px; font-size:.68rem">${icon('map')} Cobertura de formación en Puntos de Venta (PDV)</h3>
         <div class="tbl-wrap" style="margin-top:0">
           <table class="tbl-compact">
             <thead>
