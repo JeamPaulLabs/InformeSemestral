@@ -165,7 +165,7 @@ function renderFormacion() {
     </div>
 
     <div class="two-col" style="gap:14px; margin-bottom:12px">
-      <div class="panel" style="padding:12px 16px; display:flex; flex-direction:column; justify-content:space-between; min-height:280px">
+      <div class="panel" style="padding:12px 16px; display:flex; flex-direction:column; justify-content:space-between; min-height:310px">
         <div>
           <h3 style="margin-bottom:8px; padding-bottom:4px; font-size:.78rem; border-bottom:1px dashed rgba(18,1,128,0.1)">${icon('calendar')} Planta activa vs. formaciones por mes</h3>
           <div class="tbl-wrap" style="margin-top:2px">
@@ -210,7 +210,7 @@ function renderFormacion() {
         </div>
       </div>
 
-      <div class="panel" style="padding:12px 16px; display:flex; flex-direction:column; justify-content:space-between; min-height:280px">
+      <div class="panel" style="padding:12px 16px; display:flex; flex-direction:column; justify-content:space-between; min-height:310px">
         <div>
           <h3 style="margin-bottom:8px; padding-bottom:4px; font-size:.78rem; border-bottom:1px dashed rgba(18,1,128,0.1)">${icon('trending-down')} Evolución de visitas por mes</h3>
           <div class="chart-wrap" style="margin-top:10px; display:flex; flex-direction:column; gap:8px">
@@ -236,10 +236,11 @@ function renderFormacion() {
         </div>
       </div>
     </div>
-    <div class="alert alert-info" style="margin-top:8px; padding:10px 16px; border-left: 4px solid var(--teal); background: rgba(0,205,147,0.06)">
+    <div class="alert alert-info" style="margin-top:14px; margin-bottom:24px; padding:12px 18px; border-left: 4px solid var(--teal); background: rgba(0,205,147,0.06)">
       <span class="ico">${icon('shield-check')}</span>
       <span style="font-size:.72rem; line-height:1.4; color:var(--dark)"><strong>Logro Semestral:</strong> La reestructuración estratégica de zonas y canales de Retail (empalme con Tradicional) concentró la operación en puntos de mayor valor. Como resultado, a pesar del menor número de visitas, las ventas efectivas por PDV subieron <strong>+137%</strong> (de 17,5 a 41,5 pólizas/PDV entre ene y jun), demostrando una alta eficiencia comercial y un canal más enfocado y productivo.</span>
     </div>
+    <div style="height: 10px;"></div>
   `;
 }
 
@@ -389,6 +390,11 @@ function renderVentas() {
         </div>
       </div>
     </div>
+
+    <div class="alert alert-info" style="margin-top:10px; margin-bottom:0; padding:8px 14px; border-left: 4px solid var(--green); background: rgba(90,226,128,0.08)">
+      <span class="ico">${icon('trending-up')}</span>
+      <span style="font-size:.68rem; line-height:1.4; color:var(--dark)"><strong>Logro Comercial:</strong> el canal Retail cerró el semestre con <strong>${fmt(totalEfectivasCP + totalEfectivasRS)} ventas efectivas</strong> entre Cuota Protegida y Rueda Seguro, sosteniendo una efectividad promedio superior al <strong>${Math.min(promEfectCP, promEfectRS).toFixed(0)} %</strong> durante todo el semestre — un desempeño comercial consistente que valida el enfoque del canal en los puntos de mayor valor.</span>
+    </div>
   `;
 }
 
@@ -397,8 +403,8 @@ function renderCobertura() {
   if (!el) return;
 
   // Cobertura de PDV visitados vs. activos (con gestión en CP) — datos en
-  // data_retail.js como COBERTURA_PDV. Fusiona Cobertura + Geografía (mapa)
-  // en un solo slide con pestañas, por pedido de Orlando (reunión 2026-07).
+  // data_retail.js como COBERTURA_PDV. El mapa fue reemplazado por la lista
+  // de municipios visitados, alineado con el slide equivalente de Tradicional.
 
   el.innerHTML = `
     <div style="display:flex; flex-direction:column; gap:4px">
@@ -425,17 +431,20 @@ function renderCobertura() {
       </div>
     </div>
 
-    <div class="cob-tabs" style="display:flex; gap:8px; margin-bottom:-2px">
-      <button class="cob-tab active" data-tab="pdv" onclick="coberturaTab('pdv')">${icon('store', {size:12})} Cobertura PDV</button>
-      <button class="cob-tab" data-tab="mapa" onclick="coberturaTab('mapa')">${icon('map', {size:12})} Mapa de visitas</button>
-    </div>
-
-    <div class="cob-pane active" id="cob-pane-pdv">
     <div class="two-col" style="gap:10px">
-      <div class="panel" style="padding:6px 12px">
+      <div class="panel" style="padding:8px 14px; display:flex; flex-direction:column">
         <h3 style="margin-bottom:2px; padding-bottom:2px; font-size:.68rem">${icon('map')} Cobertura de formación en Puntos de Venta (PDV)</h3>
-        <div class="tbl-wrap" style="margin-top:0">
-          <table class="tbl-compact">
+        <p style="font-size:.58rem; color:var(--gray3); margin:2px 0 6px">
+          PDV visitados por Formación vs. PDV con gestión comercial activa en Cuota Protegida cada mes (cortes "Como vamos").
+        </p>
+        <div class="tbl-wrap" style="margin-top:0; flex-grow:1">
+          <table class="tbl-compact" style="width:100%; table-layout:fixed">
+            <colgroup>
+              <col style="width:22%">
+              <col style="width:28%">
+              <col style="width:26%">
+              <col style="width:24%">
+            </colgroup>
             <thead>
               <tr>
                 <th>Mes</th>
@@ -517,16 +526,47 @@ function renderCobertura() {
       </div>
     </div>
 
-    <div style="display:flex; flex-direction:column; gap:4px; margin-top:2px">
-    <div class="alert alert-warn" style="margin-bottom: 0; padding:5px 14px">
-      <span class="ico">${icon('search')}</span>
-      <span style="font-size:.7rem"><strong>Hallazgo:</strong> el parque de PDV con gestión activa se contrajo 43 % (92→52) y la cobertura mensual cayó de 61 % a 27 %, pero Éxito (aliado retirado tras el semestre) y Cencosud mostraron cobertura acumulada &gt;100 % durante el 1S: Formación llegó a más puntos de los que en ese momento tenían venta activa.</span>
-    </div>
-
-    <div class="two-col" style="gap:10px">
-      <div class="alert alert-info" style="margin-bottom: 0; padding:6px 14px">
-        <span class="ico">${icon('building-2')}</span>
-        <span style="font-size:.68rem"><strong>Sobre "Serdán" (90 visitas):</strong> empresa que provee promotores a ambos canales, no un aliado. De las 90: 33 puras Retail+Tradicional, 33 sedes/roles internos (no PDV) y 14 con cédula activa en ambos canales <strong>(contadas en los dos)</strong>. Total atribuido: <strong>24 a Retail</strong> y <strong>47 a Tradicional</strong>.</span>
+    <div style="display:flex; flex-direction:column; gap:6px; margin-top:4px">
+    <div class="two-col" style="gap:10px; align-items:stretch">
+      <div class="panel" style="padding:8px 14px">
+        <h3 style="margin-bottom:2px; padding-bottom:2px; font-size:.7rem; border-bottom:1px dashed rgba(18,1,128,0.1)">${icon('map-pin')} Municipios Visitados (1S)</h3>
+        <p style="font-size:.56rem; color:var(--gray3); margin:2px 0 6px">
+          Zonas y municipios con al menos una visita de formación registrada en el semestre.
+        </p>
+        <div style="display:flex; gap:14px">
+          <div style="flex:1">
+            <table class="tbl-compact" style="font-size:0.56rem; table-layout:fixed; width:100%">
+              <colgroup>
+                <col style="width:75%">
+                <col style="width:25%">
+              </colgroup>
+              <tbody>
+                ${RETAIL_DATA.mapa.slice(0, 6).map(pt => `
+                  <tr>
+                    <td style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"><strong>${pt.name}</strong></td>
+                    <td class="r" style="color:var(--teal)">${pt.visits}</td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+          <div style="flex:1">
+            <table class="tbl-compact" style="font-size:0.56rem; table-layout:fixed; width:100%">
+              <colgroup>
+                <col style="width:75%">
+                <col style="width:25%">
+              </colgroup>
+              <tbody>
+                ${RETAIL_DATA.mapa.slice(6).map(pt => `
+                  <tr>
+                    <td style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"><strong>${pt.name}</strong></td>
+                    <td class="r" style="color:var(--teal)">${pt.visits}</td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
       <div class="panel" style="padding:5px 14px; box-shadow:none; border:1px solid var(--gray2)">
         <div style="font-size:.6rem; font-weight:800; color:var(--blue); letter-spacing:.05em; margin-bottom:4px">${icon('tag', { size: 13 })} TIPO DE PUNTO VISITADO EN LAS 90 "SERDÁN"</div>
@@ -555,48 +595,16 @@ function renderCobertura() {
         <div style="font-size:.58rem; color:var(--gray3); margin-top:5px">Solo el 41 % fue a un PDV físico; el resto es actividad real de formación que no suma a cobertura de PDV.</div>
       </div>
     </div>
-    </div>
-    </div>
 
-    <div class="cob-pane" id="cob-pane-mapa">
-      <div class="two-col" style="grid-template-columns: 1.5fr 1fr; gap: 14px;">
-        <div class="panel" style="position: relative; height: 390px; padding: 0; overflow: hidden; border-radius: 12px; border: 1px solid var(--gray2); box-shadow: 0 4px 12px rgba(0,0,0,0.05)">
-          <div id="map-container" style="width: 100%; height: 100%"></div>
-        </div>
-        <div class="panel" style="max-height: 390px; display: flex; flex-direction: column;">
-          <h3 style="margin-top: 0">${icon('map-pin')} Visitas de Formación por Zona</h3>
-          <div class="tbl-wrap" style="margin-top: 0; flex-grow: 1; overflow-y: auto;">
-            <table>
-              <thead>
-                <tr>
-                  <th>Zona / Municipio</th>
-                  <th class="r">Visitas</th>
-                </tr>
-              </thead>
-              <tbody>
-                ${RETAIL_DATA.mapa.map(pt => `
-                  <tr>
-                    <td><strong>${pt.name}</strong></td>
-                    <td class="r">${pt.visits}</td>
-                  </tr>
-                `).join('')}
-              </tbody>
-            </table>
-          </div>
-          <div class="alert alert-info" style="margin-top: 10px; margin-bottom: 0;">
-            <span class="ico">${icon('pin')}</span>
-            <span>Bogotá Centro, Sur y Occidente concentran el 61% de las visitas. Tunja, Bucaramanga y Soacha lideran en cobertura regional.</span>
-          </div>
-        </div>
-      </div>
+    <div class="alert alert-info" style="margin-bottom: 0; padding:6px 14px">
+      <span class="ico">${icon('building-2')}</span>
+      <span style="font-size:.68rem"><strong>Sobre "Serdán" (90 visitas):</strong> empresa que provee promotores a ambos canales, no un aliado. De las 90: 33 puras Retail+Tradicional, 33 sedes/roles internos (no PDV) y 14 con cédula activa en ambos canales <strong>(contadas en los dos)</strong>. Total atribuido: <strong>24 a Retail</strong> y <strong>47 a Tradicional</strong>.</span>
+    </div>
     </div>
     </div>
   `;
 }
 
 function coberturaTab(name) {
-  document.querySelectorAll('.cob-tab').forEach(b => b.classList.toggle('active', b.dataset.tab === name));
-  document.querySelectorAll('.cob-pane').forEach(p => p.classList.remove('active'));
-  document.getElementById(`cob-pane-${name}`).classList.add('active');
-  if (name === 'mapa' && typeof initMap === 'function') initMap();
+  // No-op: el mapa fue removido por diseño; la slide ya no usa pestañas.
 }

@@ -162,7 +162,7 @@ function renderFormacion() {
     </div>
 
     <div class="two-col" style="gap:14px; margin-bottom:12px">
-      <div class="panel" style="padding:12px 16px; display:flex; flex-direction:column; justify-content:space-between; min-height:280px">
+      <div class="panel" style="padding:12px 16px; display:flex; flex-direction:column; justify-content:space-between; min-height:310px">
         <div>
           <h3 style="margin-bottom:8px; padding-bottom:4px; font-size:.78rem; border-bottom:1px dashed rgba(18,1,128,0.1)">${icon('calendar')} Visitas, asesores y PDV por mes</h3>
           <div class="tbl-wrap" style="margin-top:2px">
@@ -199,7 +199,7 @@ function renderFormacion() {
         </div>
       </div>
 
-      <div class="panel" style="padding:12px 16px; display:flex; flex-direction:column; justify-content:space-between; min-height:280px">
+      <div class="panel" style="padding:12px 16px; display:flex; flex-direction:column; justify-content:space-between; min-height:310px">
         <div>
           <h3 style="margin-bottom:8px; padding-bottom:4px; font-size:.78rem; border-bottom:1px dashed rgba(18,1,128,0.1)">${icon('trending-down')} Evolución de visitas por mes</h3>
           <div class="chart-wrap" style="margin-top:10px; display:flex; flex-direction:column; gap:8px">
@@ -224,7 +224,7 @@ function renderFormacion() {
         </div>
       </div>
     </div>
-    <div class="alert alert-info" style="margin-top:8px; padding:10px 16px; border-left: 4px solid var(--teal); background: rgba(0,205,147,0.06)">
+    <div class="alert alert-info" style="margin-top:14px; margin-bottom:24px; padding:12px 18px; border-left: 4px solid var(--teal); background: rgba(0,205,147,0.06)">
       <span class="ico">${icon('shield-check')}</span>
       <span style="font-size:.72rem; line-height:1.4; color:var(--dark)"><strong>Logro Semestral:</strong> El canal Tradicional concentró un esfuerzo récord de formación en marzo (148 visitas y 93 asesores capacitados). Con la posterior consolidación y el empalme con Retail, el canal centró su capacidad y cobertura promedio del semestre alcanzó un <strong>7,5%</strong>, identificando grandes oportunidades de crecimiento en los aliados de mayor volumen.</span>
     </div>
@@ -385,94 +385,78 @@ function renderCobertura() {
   const el = document.getElementById('cobertura-body');
   if (!el) return;
 
-  // Top 5 aliados destacados: mejor cobertura entre los que tienen volumen
-  // representativo (>=7 asesores financiaron), para no dejar que aliados de
-  // 1-2 financiaciones (100% con n muy chico) distorsionen el ranking.
-  const top5 = TRADICIONAL_DATA.cobertura.aliados
-    .filter(a => a.financiaron >= 7 && a.cobertura !== null)
-    .sort((a, b) => b.cobertura - a.cobertura)
-    .slice(0, 5);
+  const aliados = TRADICIONAL_DATA.cobertura.aliados;
+  const half = Math.ceil(aliados.length / 2);
+  const col1 = aliados.slice(0, half);
+  const col2 = aliados.slice(half);
 
   el.innerHTML = `
-    <div style="display:flex; flex-direction:column; gap:4px">
-    <div class="cob-tabs" style="display:flex; gap:8px; margin-bottom:-2px">
-      <button class="cob-tab active" data-tab="aliado" onclick="coberturaTab('aliado')">${icon('store', {size:12})} Por Aliado</button>
-      <button class="cob-tab" data-tab="mapa" onclick="coberturaTab('mapa')">${icon('map', {size:12})} Mapa de visitas</button>
-    </div>
-
-    <div class="cob-pane active" id="cob-pane-aliado">
-    <div class="two-col" style="grid-template-columns: 1.15fr 1fr; gap: 10px;">
-      <div class="panel" style="padding:6px 12px">
-        <h3 style="margin-bottom:2px; padding-bottom:2px; font-size:.68rem">${icon('store')} Cobertura de Formación por Aliado (Ene-Jun 2026)</h3>
-        <p style="font-size: .62rem; color: var(--gray3); margin-top: -3px; margin-bottom: 5px;">
+    <div class="two-col" style="grid-template-columns: 1.6fr 1fr; gap: 14px; align-items: start;">
+      <!-- Columna Izquierda: Aliados completa sin scroll -->
+      <div class="panel" style="padding:10px 14px; display:flex; flex-direction:column; min-height:360px">
+        <h3 style="margin-bottom:6px; padding-bottom:3px; font-size:.74rem; border-bottom:1px dashed rgba(18,1,128,0.1)">${icon('store')} Cobertura de Formación por Aliado (Ene-Jun 2026)</h3>
+        <p style="font-size: .58rem; color: var(--gray3); margin-top: -3px; margin-bottom: 8px;">
           Asesores que financiaron en conciliaciones vs capacitados (cruzados por cédula).
         </p>
-        <div class="tbl-wrap" style="margin-top:0; max-height: 300px; overflow-y: auto;">
-          <table class="tbl-compact" style="font-size: 0.66rem;">
-            <thead>
-              <tr>
-                <th>Aliado</th>
-                <th class="r">Financiaron</th>
-                <th class="r">Capacitados</th>
-                <th class="r">Cruzados</th>
-                <th class="r">Cobertura %</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${TRADICIONAL_DATA.cobertura.aliados.map(a => {
-                const showCob = a.cobertura !== null ? `${a.cobertura.toFixed(1).replace('.', ',')}%` : 'S/D';
-                const bType = a.cobertura !== null ? (a.cobertura >= 15 ? 'g' : a.cobertura >= 5 ? 'y' : 'r') : 'y';
-                return `
-                  <tr>
-                    <td><strong>${a.aliado}</strong></td>
-                    <td class="r">${a.financiaron}</td>
-                    <td class="r">${a.capacitados}</td>
-                    <td class="r"><strong>${a.ambos}</strong></td>
-                    <td class="r">${badge(showCob, bType)}</td>
-                  </tr>
-                `;
-              }).join('')}
-            </tbody>
-          </table>
-        </div>
-
-        <div style="font-size:.6rem; font-weight:800; color:var(--blue); letter-spacing:.05em; margin:8px 0 4px">${icon('trophy', {size:12})} TOP 5 ALIADOS DESTACADOS (cobertura, con volumen ≥ 7 financiaron)</div>
-        <div style="display:flex; gap:5px">
-          ${top5.map((a,i) => `
-            <div style="flex:1; background:rgba(0,205,147,.07); border:1px solid rgba(0,205,147,.3); border-radius:8px; padding:5px 4px; text-align:center">
-              <div style="font-size:.56rem; font-weight:700; color:var(--gray3)">#${i+1}</div>
-              <div style="font-size:.6rem; font-weight:800; color:var(--blue); line-height:1.15; margin:2px 0">${a.aliado}</div>
-              <div style="font-size:.68rem; font-weight:800; color:var(--teal)">${a.cobertura.toFixed(1).replace('.', ',')}%</div>
-            </div>
-          `).join('')}
-        </div>
-        <div style="font-size:.56rem; color:var(--gray3); margin-top:4px">Comportamiento mes a mes por aliado: pendiente de extraer de los cortes mensuales "Como vamos" (hoy solo se consolida el agregado semestral por aliado).</div>
-      </div>
-
-      <div class="panel" style="display: flex; flex-direction: column; justify-content: space-between; padding:6px 12px">
-        <div>
-          <h3 style="margin-bottom:2px; padding-bottom:2px; font-size:.68rem">${icon('calendar')} Cobertura de Formación por Mes (Semestre)</h3>
-          <div class="tbl-wrap" style="margin-top:0">
-            <table class="tbl-compact" style="font-size: 0.68rem;">
+        <div style="display:flex; gap:16px; flex-grow:1">
+          <div style="flex:1">
+            <table class="tbl-compact" style="font-size:0.6rem; table-layout:fixed; width:100%">
+              <colgroup>
+                <col style="width:48%">
+                <col style="width:14%">
+                <col style="width:14%">
+                <col style="width:24%">
+              </colgroup>
               <thead>
                 <tr>
-                  <th>Mes</th>
-                  <th class="r">Financiaron</th>
-                  <th class="r">Capacitados</th>
-                  <th class="r">Ambos</th>
-                  <th class="r">Cobertura %</th>
+                  <th>Aliado</th>
+                  <th class="r">Fin.</th>
+                  <th class="r">Cap.</th>
+                  <th class="r">Cob.</th>
                 </tr>
               </thead>
               <tbody>
-                ${TRADICIONAL_DATA.cobertura.meses.map(m => {
-                  const bType = m.cobertura >= 12 ? 'g' : m.cobertura >= 5 ? 'y' : 'r';
+                ${col1.map(a => {
+                  const showCob = a.cobertura !== null ? `${a.cobertura.toFixed(0)}%` : 'S/D';
+                  const bType = a.cobertura !== null ? (a.cobertura >= 15 ? 'g' : a.cobertura >= 5 ? 'y' : 'r') : 'y';
                   return `
                     <tr>
-                      <td><strong>${m.mes}</strong></td>
-                      <td class="r">${m.financiaron}</td>
-                      <td class="r">${m.capacitados}</td>
-                      <td class="r"><strong>${m.ambos}</strong></td>
-                      <td class="r">${badge(m.cobertura.toFixed(1).replace('.', ',') + '%', bType)}</td>
+                      <td style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="${a.aliado}"><strong>${a.aliado}</strong></td>
+                      <td class="r">${a.financiaron}</td>
+                      <td class="r">${a.capacitados}</td>
+                      <td class="r">${badge(showCob, bType)}</td>
+                    </tr>
+                  `;
+                }).join('')}
+              </tbody>
+            </table>
+          </div>
+          <div style="flex:1">
+            <table class="tbl-compact" style="font-size:0.6rem; table-layout:fixed; width:100%">
+              <colgroup>
+                <col style="width:48%">
+                <col style="width:14%">
+                <col style="width:14%">
+                <col style="width:24%">
+              </colgroup>
+              <thead>
+                <tr>
+                  <th>Aliado</th>
+                  <th class="r">Fin.</th>
+                  <th class="r">Cap.</th>
+                  <th class="r">Cob.</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${col2.map(a => {
+                  const showCob = a.cobertura !== null ? `${a.cobertura.toFixed(0)}%` : 'S/D';
+                  const bType = a.cobertura !== null ? (a.cobertura >= 15 ? 'g' : a.cobertura >= 5 ? 'y' : 'r') : 'y';
+                  return `
+                    <tr>
+                      <td style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="${a.aliado}"><strong>${a.aliado}</strong></td>
+                      <td class="r">${a.financiaron}</td>
+                      <td class="r">${a.capacitados}</td>
+                      <td class="r">${badge(showCob, bType)}</td>
                     </tr>
                   `;
                 }).join('')}
@@ -480,54 +464,83 @@ function renderCobertura() {
             </table>
           </div>
         </div>
-
-        <div class="alert alert-warn" style="margin-top:6px; margin-bottom: 0; padding:4px 12px">
-          <span class="ico">${icon('scale')}</span>
-          <span style="font-size:.62rem"><strong>Regla de Cobertura de Orlando:</strong> Cruce por documento del asesor en conciliaciones contra visitas del mes. Cobertura agregada promedio del canal: <strong>7,5%</strong>, con espacio de mejora prioritario en los aliados con baja tasa de cruce.</span>
-        </div>
       </div>
-    </div>
-    </div>
 
-    <div class="cob-pane" id="cob-pane-mapa">
-      <div class="two-col" style="grid-template-columns: 1.5fr 1fr; gap: 14px;">
-        <div class="panel" style="position: relative; height: 420px; padding: 0; overflow: hidden; border-radius: 12px; border: 1px solid var(--gray2); box-shadow: 0 4px 12px rgba(0,0,0,0.05)">
-          <div id="map-container" style="width: 100%; height: 100%"></div>
-        </div>
-        <div class="panel" style="max-height: 420px; display: flex; flex-direction: column;">
-          <h3 style="margin-top: 0">${icon('map-pin')} Visitas de Formación por Zona</h3>
-          <div class="tbl-wrap" style="margin-top: 0; flex-grow: 1; overflow-y: auto;">
-            <table>
-              <thead>
-                <tr>
-                  <th>Zona / Municipio</th>
-                  <th class="r">Visitas</th>
-                </tr>
-              </thead>
-              <tbody>
-                ${TRADICIONAL_DATA.mapa.map(pt => `
+      <!-- Columna Derecha: Meses y Municipios -->
+      <div style="display:flex; flex-direction:column; gap:12px">
+        <!-- Panel de Meses -->
+        <div class="panel" style="padding:10px 14px">
+          <h3 style="margin-bottom:4px; padding-bottom:2px; font-size:.74rem; border-bottom:1px dashed rgba(18,1,128,0.1)">${icon('calendar')} Cobertura por Mes (Semestre)</h3>
+          <table class="tbl-compact" style="font-size:0.6rem">
+            <thead>
+              <tr>
+                <th>Mes</th>
+                <th class="r">Financ.</th>
+                <th class="r">Capac.</th>
+                <th class="r">Ambos</th>
+                <th class="r">Cob. %</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${TRADICIONAL_DATA.cobertura.meses.map(m => {
+                const bType = m.cobertura >= 12 ? 'g' : m.cobertura >= 5 ? 'y' : 'r';
+                return `
                   <tr>
-                    <td><strong>${pt.name}</strong></td>
-                    <td class="r">${pt.visits}</td>
+                    <td><strong>${m.mes}</strong></td>
+                    <td class="r">${m.financiaron}</td>
+                    <td class="r">${m.capacitados}</td>
+                    <td class="r"><strong>${m.ambos}</strong></td>
+                    <td class="r">${badge(m.cobertura.toFixed(1).replace('.', ',') + '%', bType)}</td>
                   </tr>
-                `).join('')}
-              </tbody>
-            </table>
-          </div>
-          <div class="alert alert-info" style="margin-top: 10px; margin-bottom: 0;">
-            <span class="ico">${icon('pin')}</span>
-            <span>Bogotá Centro, Sur y Occidente agrupan el 62% del total. Tunja, Bucaramanga y Soacha reportan importante despliegue regional.</span>
+                `;
+              }).join('')}
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Panel de Municipios Visitados -->
+        <div class="panel" style="padding:10px 14px">
+          <h3 style="margin-bottom:6px; padding-bottom:2px; font-size:.74rem; border-bottom:1px dashed rgba(18,1,128,0.1)">${icon('map-pin')} Municipios Visitados (1S)</h3>
+          <div style="display:flex; gap:14px">
+            <div style="flex:1">
+              <table class="tbl-compact" style="font-size:0.56rem; table-layout:fixed; width:100%">
+                <colgroup>
+                  <col style="width:75%">
+                  <col style="width:25%">
+                </colgroup>
+                <tbody>
+                  ${TRADICIONAL_DATA.mapa.slice(0, 6).map(pt => `
+                    <tr>
+                      <td style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"><strong>${pt.name}</strong></td>
+                      <td class="r" style="color:var(--teal)">${pt.visits}</td>
+                    </tr>
+                  `).join('')}
+                </tbody>
+              </table>
+            </div>
+            <div style="flex:1">
+              <table class="tbl-compact" style="font-size:0.56rem; table-layout:fixed; width:100%">
+                <colgroup>
+                  <col style="width:75%">
+                  <col style="width:25%">
+                </colgroup>
+                <tbody>
+                  ${TRADICIONAL_DATA.mapa.slice(6).map(pt => `
+                    <tr>
+                      <td style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"><strong>${pt.name}</strong></td>
+                      <td class="r" style="color:var(--teal)">${pt.visits}</td>
+                    </tr>
+                  `).join('')}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
-    </div>
     </div>
   `;
 }
 
 function coberturaTab(name) {
-  document.querySelectorAll('.cob-tab').forEach(b => b.classList.toggle('active', b.dataset.tab === name));
-  document.querySelectorAll('.cob-pane').forEach(p => p.classList.remove('active'));
-  document.getElementById(`cob-pane-${name}`).classList.add('active');
-  if (name === 'mapa' && typeof initMap === 'function') initMap();
+  // No-op ya que el mapa fue removido por diseño
 }
