@@ -374,55 +374,35 @@ function renderBases() {
               <th class="r">Venta liquidación</th>
             </tr></thead>
             <tbody>
-              ${DATA.meses.map((m,i) => `
-                <tr>
+              ${DATA.meses.map((m,i) => {
+                const r = DATA.registros[i] + MICRO.recibidos[i];
+                const d = DATA.rechazados[i] + MICRO.rechazados[i];
+                const p = d/r*100;
+                const a = DATA.aptos[i] + MICRO.aptos[i];
+                const vb = DATA.ventasOp[i] + MICRO.ventas[i];
+                return `<tr>
                   <td><strong>${m}</strong></td>
-                  <td class="r">${fmt(DATA.registros[i])}</td>
-                  <td class="r">${fmt(DATA.rechazados[i])}</td>
-                  <td class="r">${badge(Math.round(DATA.pctRechazo[i]) + ' %', DATA.pctRechazo[i]>65?'r':DATA.pctRechazo[i]>50?'y':'g')}</td>
-                  <td class="r">${fmt(DATA.aptos[i])}</td>
-                  <td class="r">${fmt(DATA.ventasOp[i])}</td>
-                  <td class="r">${fmt(DATA.ventasLiq[i])}</td>
-                </tr>
-                <tr class="micro">
-                  <td style="padding-left:14px; font-size:.6rem">${m} · Micro</td>
-                  <td class="r" style="font-size:.6rem">${fmt(MICRO.recibidos[i])}</td>
-                  <td class="r" style="font-size:.6rem">${fmt(MICRO.rechazados[i])}</td>
-                  <td class="r" style="font-size:.6rem">${badge(MICRO.pctRechazo[i] + ' %', 'g')}</td>
-                  <td class="r" style="font-size:.6rem">${fmt(MICRO.aptos[i])}</td>
-                  <td class="r" style="font-size:.6rem">${fmt(MICRO.ventas[i])}</td>
-                  <td class="r" style="font-size:.6rem">${fmt(MICRO.ventas[i])}</td>
-                </tr>`).join('')}
+                  <td class="r">${fmt(r)}</td>
+                  <td class="r">${fmt(d)}</td>
+                  <td class="r">${badge(Math.round(p) + ' %', p>65?'r':p>50?'y':'g')}</td>
+                  <td class="r">${fmt(a)}</td>
+                  <td class="r">${fmt(vb)}</td>
+                  <td class="r"><strong>${fmt(DATA.ventasLiq[i])}</strong></td>
+                </tr>`;
+              }).join('')}
               <tr class="total">
-                <td>Total base</td>
-                <td class="r">${fmt(totalRec)}</td>
-                <td class="r">${fmt(totalRech)}</td>
-                <td class="r">${pctRechProm} %</td>
-                <td class="r">${fmt(totalApt)}</td>
-                <td class="r">${fmt(totalOp)}</td>
-                <td class="r">${fmt(totalLiq)}</td>
-              </tr>
-              <tr class="total micro">
-                <td>Total Microseguro</td>
-                <td class="r">${fmt(mRec)}</td>
-                <td class="r">${fmt(mRech)}</td>
-                <td class="r">${badge(Math.round(mRech/mRec*100) + ' %', 'g')}</td>
-                <td class="r">${fmt(mApt)}</td>
-                <td class="r">${fmt(mVtas)}</td>
-                <td class="r">${fmt(mVtas)}</td>
-              </tr>
-              <tr class="grand-total">
-                <td>Total general</td>
+                <td>Total</td>
                 <td class="r">${fmt(totalRecComb)}</td>
                 <td class="r">${fmt(totalRechComb)}</td>
                 <td class="r">${Math.round(totalRechComb/totalRecComb*100)} %</td>
                 <td class="r">${fmt(totalAptComb)}</td>
                 <td class="r">${fmt(totalOpComb)}</td>
-                <td class="r"><strong>${fmt(totalLiqComb)}</strong></td>
+                <td class="r">${fmt(totalLiq)}</td>
               </tr>
             </tbody>
           </table>
         </div>
+        <div style="font-size:.6rem; color:var(--gray3); margin-top:3px; line-height:1.3">Recibidos, aptos y venta base incluyen Microseguro Activo (<strong>${fmt(mRec)}</strong> registros, <strong>${fmt(mVtas)}</strong> ventas). Venta liquidación es cifra oficial sin ajuste.</div>
       </div>
 
       <div class="panel" style="padding:8px 16px">
