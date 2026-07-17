@@ -44,6 +44,7 @@ const TRADICIONAL_DATA = {
   {
     "mes": "Ene",
     "aliados": 7,
+    "gestores": 26,
     "financiaciones": 2074,
     "cantadas": 92,
     "positivas": 69,
@@ -53,6 +54,7 @@ const TRADICIONAL_DATA = {
   {
     "mes": "Feb",
     "aliados": 7,
+    "gestores": 24,
     "financiaciones": 2999,
     "cantadas": 139,
     "positivas": 105,
@@ -62,6 +64,7 @@ const TRADICIONAL_DATA = {
   {
     "mes": "Mar",
     "aliados": 7,
+    "gestores": 28,
     "financiaciones": 3127,
     "cantadas": 135,
     "positivas": 96,
@@ -71,6 +74,7 @@ const TRADICIONAL_DATA = {
   {
     "mes": "Abr",
     "aliados": 7,
+    "gestores": 28,
     "financiaciones": 3076,
     "cantadas": 125,
     "positivas": 103,
@@ -80,6 +84,7 @@ const TRADICIONAL_DATA = {
   {
     "mes": "May",
     "aliados": 10,
+    "gestores": 28,
     "financiaciones": 2399,
     "cantadas": 112,
     "positivas": 94,
@@ -89,6 +94,7 @@ const TRADICIONAL_DATA = {
   {
     "mes": "Jun",
     "aliados": 12,
+    "gestores": 31,
     "financiaciones": 5605,
     "cantadas": 127,
     "positivas": 96,
@@ -100,6 +106,7 @@ const TRADICIONAL_DATA = {
   {
     "mes": "Ene",
     "aliados": 6,
+    "gestores": 34,
     "financiaciones": 783,
     "cantadas": 22,
     "positivas": 16,
@@ -108,6 +115,7 @@ const TRADICIONAL_DATA = {
   {
     "mes": "Feb",
     "aliados": 9,
+    "gestores": 39,
     "financiaciones": 743,
     "cantadas": 50,
     "positivas": 22,
@@ -116,6 +124,7 @@ const TRADICIONAL_DATA = {
   {
     "mes": "Mar",
     "aliados": 9,
+    "gestores": 40,
     "financiaciones": 391,
     "cantadas": 71,
     "positivas": 40,
@@ -124,6 +133,7 @@ const TRADICIONAL_DATA = {
   {
     "mes": "Abr",
     "aliados": 9,
+    "gestores": 41,
     "financiaciones": 329,
     "cantadas": 57,
     "positivas": 40,
@@ -132,6 +142,7 @@ const TRADICIONAL_DATA = {
   {
     "mes": "May",
     "aliados": 22,
+    "gestores": 9,
     "financiaciones": 818,
     "cantadas": 45,
     "positivas": 30,
@@ -140,6 +151,7 @@ const TRADICIONAL_DATA = {
   {
     "mes": "Jun",
     "aliados": 25,
+    "gestores": 45,
     "financiaciones": 1395,
     "cantadas": 38,
     "positivas": 23,
@@ -350,19 +362,77 @@ const TRADICIONAL_DATA = {
 ]
   },
   mapa: [
-  { "name": "Bogotá D.C.", "lat": 4.6486, "lon": -74.1178, "visits": 571 },
-  { "name": "Tunja", "lat": 5.5353, "lon": -73.3678, "visits": 58 },
-  { "name": "Soacha", "lat": 4.5781, "lon": -74.2158, "visits": 27 },
-  { "name": "Bucaramanga", "lat": 7.1193, "lon": -73.1227, "visits": 25 },
-  { "name": "Chía", "lat": 4.8632, "lon": -74.0514, "visits": 24 },
-  { "name": "Duitama", "lat": 5.8244, "lon": -73.0334, "visits": 17 },
-  { "name": "Sogamoso", "lat": 5.7148, "lon": -72.9339, "visits": 16 },
-  { "name": "Mosquera", "lat": 4.7059, "lon": -74.2302, "visits": 14 },
-  { "name": "Facatativá", "lat": 4.8136, "lon": -74.3541, "visits": 14 },
-  { "name": "Zipaquirá", "lat": 5.0267, "lon": -74.0039, "visits": 10 },
-  { "name": "Madrid", "lat": 4.7325, "lon": -74.2644, "visits": 10 },
-  { "name": "Barrancabermeja", "lat": 7.0653, "lon": -73.8547, "visits": 10 },
-  { "name": "El Banco", "lat": 9.0014, "lon": -73.9761, "visits": 5 },
-  { "name": "Aguachica", "lat": 8.3079, "lon": -73.6238, "visits": 1 }
+  {
+    "name": "Bogotá Centro",
+    "lat": 4.628,
+    "lon": -74.075,
+    "visits": 209
+  },
+  {
+    "name": "Bogotá Occidente",
+    "lat": 4.665,
+    "lon": -74.125,
+    "visits": 117
+  },
+  {
+    "name": "Bogotá Sur",
+    "lat": 4.59,
+    "lon": -74.15,
+    "visits": 31
+  },
+  {
+    "name": "Tunja",
+    "lat": 5.5353,
+    "lon": -73.3678,
+    "visits": 31
+  },
+  {
+    "name": "Soacha",
+    "lat": 4.5781,
+    "lon": -74.2158,
+    "visits": 24
+  },
+  {
+    "name": "Chía",
+    "lat": 4.8632,
+    "lon": -74.0514,
+    "visits": 14
+  },
+  {
+    "name": "Sogamoso",
+    "lat": 5.7148,
+    "lon": -72.9339,
+    "visits": 13
+  },
+  {
+    "name": "Mosquera",
+    "lat": 4.7059,
+    "lon": -74.2302,
+    "visits": 7
+  },
+  {
+    "name": "Facatativá",
+    "lat": 4.8136,
+    "lon": -74.3541,
+    "visits": 7
+  },
+  {
+    "name": "Bucaramanga",
+    "lat": 7.1193,
+    "lon": -73.1227,
+    "visits": 4
+  },
+  {
+    "name": "Zipaquirá",
+    "lat": 5.0267,
+    "lon": -74.0039,
+    "visits": 4
+  },
+  {
+    "name": "Madrid",
+    "lat": 4.7325,
+    "lon": -74.2644,
+    "visits": 2
+  }
 ]
 };

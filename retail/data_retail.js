@@ -124,28 +124,77 @@ const RETAIL_DATA = {
 ]
   },
   mapa: [
-  { "name": "Bogotá D.C.", "lat": 4.6486, "lon": -74.1178, "visits": 276 },
-  { "name": "Tunja", "lat": 5.5353, "lon": -73.3678, "visits": 34 },
-  { "name": "Bucaramanga", "lat": 7.1193, "lon": -73.1227, "visits": 26 },
-  { "name": "Soacha", "lat": 4.5781, "lon": -74.2158, "visits": 24 },
-  { "name": "Sogamoso", "lat": 5.7148, "lon": -72.9339, "visits": 17 },
-  { "name": "Duitama", "lat": 5.8244, "lon": -73.0334, "visits": 10 },
-  { "name": "Chía", "lat": 4.8632, "lon": -74.0514, "visits": 8 },
-  { "name": "Mosquera", "lat": 4.7059, "lon": -74.2302, "visits": 8 },
-  { "name": "Barrancabermeja", "lat": 7.0653, "lon": -73.8547, "visits": 8 },
-  { "name": "Zipaquirá", "lat": 5.0267, "lon": -74.0039, "visits": 6 },
-  { "name": "Facatativá", "lat": 4.8136, "lon": -74.3541, "visits": 6 }
+  {
+    "name": "Bogotá Centro",
+    "lat": 4.628,
+    "lon": -74.075,
+    "visits": 111
+  },
+  {
+    "name": "Bogotá Sur",
+    "lat": 4.59,
+    "lon": -74.15,
+    "visits": 74
+  },
+  {
+    "name": "Bogotá Occidente",
+    "lat": 4.665,
+    "lon": -74.125,
+    "visits": 44
+  },
+  {
+    "name": "Tunja",
+    "lat": 5.5353,
+    "lon": -73.3678,
+    "visits": 33
+  },
+  {
+    "name": "Bucaramanga",
+    "lat": 7.1193,
+    "lon": -73.1227,
+    "visits": 25
+  },
+  {
+    "name": "Soacha",
+    "lat": 4.5781,
+    "lon": -74.2158,
+    "visits": 24
+  },
+  {
+    "name": "Bogotá Norte",
+    "lat": 4.73,
+    "lon": -74.055,
+    "visits": 19
+  },
+  {
+    "name": "Sogamoso",
+    "lat": 5.7148,
+    "lon": -72.9339,
+    "visits": 15
+  },
+  {
+    "name": "Chía",
+    "lat": 4.8632,
+    "lon": -74.0514,
+    "visits": 8
+  },
+  {
+    "name": "Mosquera",
+    "lat": 4.7059,
+    "lon": -74.2302,
+    "visits": 8
+  },
+  {
+    "name": "Facatativá",
+    "lat": 4.8136,
+    "lon": -74.3541,
+    "visits": 6
+  },
+  {
+    "name": "Zipaquirá",
+    "lat": 5.0267,
+    "lon": -74.0039,
+    "visits": 6
+  }
 ]
 };
-
-// Cobertura de PDV visitados vs. PDV con gestión activa en CP, por mes.
-// Ene: visitados 56, gestión 92 -> 60,9 % · Feb: 52/91 -> 57,1 % · Mar: 45/82 -> 54,9 %
-// Abr: 36/72 -> 50,0 % · May: 19/57 -> 33,3 % · Jun: 14/52 -> 26,9 %
-const COBERTURA_PDV = [
-  { mes: 'Ene', gestion: 92, visitas: 56, pct: 60.9 },
-  { mes: 'Feb', gestion: 91, visitas: 52, pct: 57.1 },
-  { mes: 'Mar', gestion: 82, visitas: 45, pct: 54.9 },
-  { mes: 'Abr', gestion: 72, visitas: 36, pct: 50.0 },
-  { mes: 'May', gestion: 57, visitas: 19, pct: 33.3 },
-  { mes: 'Jun', gestion: 52, visitas: 14, pct: 26.9 },
-];

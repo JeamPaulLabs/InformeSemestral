@@ -241,11 +241,11 @@ function renderFormacion() {
             `;
           }).join('')}
         </div>
-        <div class="alert alert-warn" style="margin-top:6px; padding:6px 12px">
-          <span class="ico">${icon('alert-triangle')}</span>
-          <span style="font-size:.62rem"><strong>Por qué cayó mayo-junio:</strong> la reestructuración de zonas y canales de Retail (empalme con Tradicional) redujo temporalmente la capacidad de visitar — no una caída de desempeño. Prueba: con 43 % menos PDV activos, las ventas efectivas por PDV subieron ${efPorPdvUp} % (${efPorPdvIni.toFixed(1)} → ${efPorPdvFin.toFixed(1)}/PDV): el canal se concentró y se hizo más productivo por punto.</span>
-        </div>
       </div>
+    </div>
+    <div class="alert alert-warn" style="margin-top:6px; padding:6px 12px">
+      <span class="ico">${icon('alert-triangle')}</span>
+      <span style="font-size:.62rem"><strong>Por qué cayó mayo-junio:</strong> la reestructuración de zonas y canales de Retail (empalme con Tradicional) redujo temporalmente la capacidad de visitar — no una caída de desempeño. Prueba: con 43 % menos PDV activos, las ventas efectivas por PDV subieron ${efPorPdvUp} % (${efPorPdvIni.toFixed(1)} → ${efPorPdvFin.toFixed(1)}/PDV): el canal se concentró y se hizo más productivo por punto.</span>
     </div>
   `;
 }
@@ -304,21 +304,32 @@ function renderVentas() {
               </tr>
             </thead>
             <tbody>
-              ${RETAIL_DATA.ventas.cp.map(v => {
-                const pct = v.cantadas > 0 ? (v.efectivas / v.cantadas * 100) : 0;
-                const bType = pct >= 80 ? 'g' : pct >= 70 ? 'y' : 'r';
-                const showPct = v.cantadas > 0 ? `${pct.toFixed(1).replace('.', ',')}%` : 'S/D';
-                return `
-                  <tr>
-                    <td><strong>${v.mes}</strong></td>
-                    <td class="r">${v.gestores > 0 ? v.gestores : 'S/D'}</td>
-                    <td class="r">${v.pdv > 0 ? v.pdv : 'S/D'}</td>
-                    <td class="r">${fmt(v.cantadas)}</td>
-                    <td class="r">${fmt(v.efectivas)}</td>
-                    <td class="r">${showPct !== 'S/D' ? badge(showPct, bType) : badge('S/D', 'y')}</td>
-                  </tr>
-                `;
-              }).join('')}
+              ${(() => {
+                const maxCP = Math.max(...RETAIL_DATA.ventas.cp.map(x => x.efectivas));
+                return RETAIL_DATA.ventas.cp.map(v => {
+                  const pct = v.cantadas > 0 ? (v.efectivas / v.cantadas * 100) : 0;
+                  const bType = pct >= 80 ? 'g' : pct >= 70 ? 'y' : 'r';
+                  const showPct = v.cantadas > 0 ? `${pct.toFixed(1).replace('.', ',')}%` : 'S/D';
+                  const barW = maxCP > 0 ? (v.efectivas / maxCP * 100).toFixed(0) + '%' : '0%';
+                  return `
+                    <tr>
+                      <td><strong>${v.mes}</strong></td>
+                      <td class="r">${v.gestores > 0 ? v.gestores : 'S/D'}</td>
+                      <td class="r">${v.pdv > 0 ? v.pdv : 'S/D'}</td>
+                      <td class="r">${fmt(v.cantadas)}</td>
+                      <td class="r">
+                        <div style="display:flex; flex-direction:column; align-items:flex-end">
+                          <span>${fmt(v.efectivas)}</span>
+                          <div style="width:40px; background:rgba(255,255,255,0.08); height:3px; border-radius:1px; overflow:hidden; margin-top:2px">
+                            <div style="width:${barW}; background:var(--green); height:100%"></div>
+                          </div>
+                        </div>
+                      </td>
+                      <td class="r">${showPct !== 'S/D' ? badge(showPct, bType) : badge('S/D', 'y')}</td>
+                    </tr>
+                  `;
+                }).join('');
+              })()}
               <tr class="total">
                 <td>Total 1S</td>
                 <td class="r">—</td>
@@ -346,18 +357,29 @@ function renderVentas() {
                 </tr>
               </thead>
               <tbody>
-                ${RETAIL_DATA.ventas.rs.map(v => {
-                  const pct = v.cantadas > 0 ? (v.efectivas / v.cantadas * 100) : 0;
-                  const bType = pct >= 65 ? 'g' : pct >= 50 ? 'y' : 'r';
-                  return `
-                    <tr>
-                      <td><strong>${v.mes}</strong></td>
-                      <td class="r">${fmt(v.cantadas)}</td>
-                      <td class="r">${fmt(v.efectivas)}</td>
-                      <td class="r">${badge(pct.toFixed(1).replace('.', ',') + '%', bType)}</td>
-                    </tr>
-                  `;
-                }).join('')}
+                ${(() => {
+                  const maxRS = Math.max(...RETAIL_DATA.ventas.rs.map(x => x.efectivas));
+                  return RETAIL_DATA.ventas.rs.map(v => {
+                    const pct = v.cantadas > 0 ? (v.efectivas / v.cantadas * 100) : 0;
+                    const bType = pct >= 65 ? 'g' : pct >= 50 ? 'y' : 'r';
+                    const barW = maxRS > 0 ? (v.efectivas / maxRS * 100).toFixed(0) + '%' : '0%';
+                    return `
+                      <tr>
+                        <td><strong>${v.mes}</strong></td>
+                        <td class="r">${fmt(v.cantadas)}</td>
+                        <td class="r">
+                          <div style="display:flex; flex-direction:column; align-items:flex-end">
+                            <span>${fmt(v.efectivas)}</span>
+                            <div style="width:40px; background:rgba(255,255,255,0.08); height:3px; border-radius:1px; overflow:hidden; margin-top:2px">
+                              <div style="width:${barW}; background:var(--teal); height:100%"></div>
+                            </div>
+                          </div>
+                        </td>
+                        <td class="r">${badge(pct.toFixed(1).replace('.', ',') + '%', bType)}</td>
+                      </tr>
+                    `;
+                  }).join('');
+                })()}
                 <tr class="total">
                   <td>Total 1S</td>
                   <td class="r">${fmt(totalCantadasRS)}</td>

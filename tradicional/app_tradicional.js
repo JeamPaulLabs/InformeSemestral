@@ -227,11 +227,11 @@ function renderFormacion() {
             `;
           }).join('')}
         </div>
-        <div class="alert alert-warn" style="margin-top:6px; padding:6px 12px">
-          <span class="ico">${icon('alert-triangle')}</span>
-          <span style="font-size:.62rem"><strong>Por qué cayó abril-junio:</strong> marzo concentró el esfuerzo (148 visitas, 93 asesores); desde abril, la reestructuración de zonas y canales (empalme con Retail) redujo la ejecución hasta 43 visitas en junio (-72 %) — no una caída de desempeño, sino de capacidad temporal de visitar.</span>
-        </div>
       </div>
+    </div>
+    <div class="alert alert-warn" style="margin-top:6px; padding:6px 12px">
+      <span class="ico">${icon('alert-triangle')}</span>
+      <span style="font-size:.62rem"><strong>Por qué cayó abril-junio:</strong> marzo concentró el esfuerzo (148 visitas, 93 asesores); desde abril, la reestructuración de zonas y canales (empalme con Retail) redujo la ejecución hasta 43 visitas en junio (-72 %) — no una caída de desempeño, sino de capacidad temporal de visitar.</span>
     </div>
   `;
 }
@@ -283,28 +283,41 @@ function renderVentas() {
           <table class="tbl-compact" style="font-size:.66rem">
             <thead>
               <tr>
-                <th>Mes</th><th class="r">Aliados</th><th class="r">Financ.</th>
+                <th>Mes</th><th class="r">Aliados</th><th class="r">Gestores</th><th class="r">Financ.</th>
                 <th class="r">Cantadas</th><th class="r">Positivas</th><th class="r">% Cumpl.</th>
               </tr>
             </thead>
             <tbody>
-              ${TRADICIONAL_DATA.ventas.cp.map(v => {
-                const pct = v.meta > 0 ? (v.positivas / v.meta * 100) : 0;
-                const bType = v.meta > 0 ? (pct >= 90 ? 'g' : pct >= 70 ? 'y' : 'r') : 'y';
-                const showCumpl = v.meta > 0 ? `${pct.toFixed(1).replace('.', ',')}%` : 'S/D';
-                return `
-                  <tr>
-                    <td><strong>${v.mes}</strong></td>
-                    <td class="r">${v.aliados}</td>
-                    <td class="r">${fmt(v.financiaciones)}</td>
-                    <td class="r">${fmt(v.cantadas)}</td>
-                    <td class="r">${fmt(v.positivas)}</td>
-                    <td class="r">${badge(showCumpl, bType)}</td>
-                  </tr>
-                `;
-              }).join('')}
+              ${(() => {
+                const maxCP = Math.max(...TRADICIONAL_DATA.ventas.cp.map(x => x.positivas));
+                return TRADICIONAL_DATA.ventas.cp.map(v => {
+                  const pct = v.meta > 0 ? (v.positivas / v.meta * 100) : 0;
+                  const bType = v.meta > 0 ? (pct >= 90 ? 'g' : pct >= 70 ? 'y' : 'r') : 'y';
+                  const showCumpl = v.meta > 0 ? `${pct.toFixed(1).replace('.', ',')}%` : 'S/D';
+                  const barW = maxCP > 0 ? (v.positivas / maxCP * 100).toFixed(0) + '%' : '0%';
+                  return `
+                    <tr>
+                      <td><strong>${v.mes}</strong></td>
+                      <td class="r">${v.aliados}</td>
+                      <td class="r">${v.gestores > 0 ? v.gestores : 'S/D'}</td>
+                      <td class="r">${fmt(v.financiaciones)}</td>
+                      <td class="r">${fmt(v.cantadas)}</td>
+                      <td class="r">
+                        <div style="display:flex; flex-direction:column; align-items:flex-end">
+                          <span>${fmt(v.positivas)}</span>
+                          <div style="width:40px; background:rgba(255,255,255,0.08); height:3px; border-radius:1px; overflow:hidden; margin-top:2px">
+                            <div style="width:${barW}; background:var(--green); height:100%"></div>
+                          </div>
+                        </div>
+                      </td>
+                      <td class="r">${badge(showCumpl, bType)}</td>
+                    </tr>
+                  `;
+                }).join('');
+              })()}
               <tr class="total">
                 <td>Total</td>
+                <td class="r">—</td>
                 <td class="r">—</td>
                 <td class="r">${fmt(cpFinanciaciones)}</td>
                 <td class="r">${fmt(cpCantadas)}</td>
@@ -323,28 +336,41 @@ function renderVentas() {
           <table class="tbl-compact" style="font-size:.66rem">
             <thead>
               <tr>
-                <th>Mes</th><th class="r">Aliados</th><th class="r">Financ.</th>
+                <th>Mes</th><th class="r">Aliados</th><th class="r">Gestores</th><th class="r">Financ.</th>
                 <th class="r">Cantadas</th><th class="r">Positivas</th><th class="r">% Cumpl.</th>
               </tr>
             </thead>
             <tbody>
-              ${TRADICIONAL_DATA.ventas.rs.map(v => {
-                const pct = v.meta > 0 ? (v.positivas / v.meta * 100) : 0;
-                const bType = v.meta > 0 ? (pct >= 90 ? 'g' : pct >= 70 ? 'y' : 'r') : 'y';
-                const showCumpl = v.meta > 0 ? `${pct.toFixed(1).replace('.', ',')}%` : 'S/D';
-                return `
-                  <tr>
-                    <td><strong>${v.mes}</strong></td>
-                    <td class="r">${v.aliados}</td>
-                    <td class="r">${fmt(v.financiaciones)}</td>
-                    <td class="r">${fmt(v.cantadas)}</td>
-                    <td class="r">${fmt(v.positivas)}</td>
-                    <td class="r">${showCumpl !== 'S/D' ? badge(showCumpl, bType) : badge('S/D', 'y')}</td>
-                  </tr>
-                `;
-              }).join('')}
+              ${(() => {
+                const maxRS = Math.max(...TRADICIONAL_DATA.ventas.rs.map(x => x.positivas));
+                return TRADICIONAL_DATA.ventas.rs.map(v => {
+                  const pct = v.meta > 0 ? (v.positivas / v.meta * 100) : 0;
+                  const bType = v.meta > 0 ? (pct >= 90 ? 'g' : pct >= 70 ? 'y' : 'r') : 'y';
+                  const showCumpl = v.meta > 0 ? `${pct.toFixed(1).replace('.', ',')}%` : 'S/D';
+                  const barW = maxRS > 0 ? (v.positivas / maxRS * 100).toFixed(0) + '%' : '0%';
+                  return `
+                    <tr>
+                      <td><strong>${v.mes}</strong></td>
+                      <td class="r">${v.aliados}</td>
+                      <td class="r">${v.gestores > 0 ? v.gestores : 'S/D'}</td>
+                      <td class="r">${fmt(v.financiaciones)}</td>
+                      <td class="r">${fmt(v.cantadas)}</td>
+                      <td class="r">
+                        <div style="display:flex; flex-direction:column; align-items:flex-end">
+                          <span>${fmt(v.positivas)}</span>
+                          <div style="width:40px; background:rgba(255,255,255,0.08); height:3px; border-radius:1px; overflow:hidden; margin-top:2px">
+                            <div style="width:${barW}; background:var(--teal); height:100%"></div>
+                          </div>
+                        </div>
+                      </td>
+                      <td class="r">${showCumpl !== 'S/D' ? badge(showCumpl, bType) : badge('S/D', 'y')}</td>
+                    </tr>
+                  `;
+                }).join('');
+              })()}
               <tr class="total">
                 <td>Total</td>
+                <td class="r">—</td>
                 <td class="r">—</td>
                 <td class="r">${fmt(rsFinanciaciones)}</td>
                 <td class="r">${fmt(rsCantadas)}</td>
