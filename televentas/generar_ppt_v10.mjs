@@ -29,7 +29,7 @@ const CANVAS_H = 720;
 const SX = PPT_W / CANVAS_W;
 const SY = PPT_H / CANVAS_H;
 const FM = 0.75;
-const FMAX = 14;
+const FMAX = 48;
 const CELL_DY_IN = -0.0156;
 const CELL_DY_PX = CELL_DY_IN / SY;
 
@@ -39,7 +39,7 @@ const SLIDES = [
   [3,'Bases',null],[4,'Campanas',null],[5,'Autogestion',null],
   [6,'D. Bienvenida',null],[7,'D. Stock',null],[8,'D. Masiva',null],
   [9,'D. Satisfechos',null],[10,'D. Microseguro',null],[11,'D. Cancelaciones',null],
-  [12,'Asesores',[['Vanti',"asesoresTab('vanti')"],['Xuma',"asesoresTab('xuma')"]]],
+  [12,'Asesores',null],
   [13,'Iniciativas',null],[14,'Evidencias',null],[15,'Capacitaciones',null],
   [16,'Monitoreo',null],[17,'Cap. 2',null],
   [18,'Contactab.',[['Mes',"contactabTab('mes')"],['Campana',"contactabTab('campana')"]]],
@@ -85,12 +85,12 @@ async function main() {
   pptx.layout = 'CUSTOM';
 
   const browser = await chromium.launch({ headless:true });
-  const ctx = await browser.newContext({ viewport:{ width:1280, height:720 } });
+  const ctx = await browser.newContext({ viewport:{ width:1280, height:720 }, deviceScaleFactor:3 });
   const page = await ctx.newPage();
 
   for (const [num, label, tabs] of SLIDES) {
     try {
-      await page.goto(`http://localhost:${port}/televentas/index.html?slide=${num}`, { waitUntil:'networkidle', timeout:15000 });
+      await page.goto(`http://localhost:${port}/televentas/index.html?slide=${num}`, { waitUntil:'load', timeout:30000 });
       await page.waitForTimeout(900);
 
       await page.evaluate(() => {
@@ -166,11 +166,17 @@ async function main() {
             if (el.closest('.lucide-ico')||el.classList.contains('lucide-ico')||el.classList.contains('ico')) return;
             const style = window.getComputedStyle(el);
             if (style.display==='none'||style.visibility==='hidden') return;
-            let dt = '';
-            for (const c of el.childNodes) {
-              if (c.nodeType===3) dt += c.textContent;
+            const hasBlockChildren = el.querySelector('div, p, table, tr, td, th, ul, li, h1, h2, h3, h4, h5, h6, section, article, nav, header, footer') !== null;
+            let text = '';
+            if (hasBlockChildren) {
+              let dt = '';
+              for (const c of el.childNodes) {
+                if (c.nodeType===3) dt += c.textContent;
+              }
+              text = dt.replace(/\s+/g, ' ').trim();
+            } else {
+              text = el.textContent.replace(/\s+/g, ' ').trim();
             }
-            const text = dt.trim();
             if (!text||text.length<2) return;
             const p = cp(el);
             if (p.w<3||p.h<3) return;

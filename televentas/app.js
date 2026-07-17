@@ -297,35 +297,35 @@ function renderBases() {
   const el = document.getElementById('bases-body');
   if (!el) return;
 
-  /* Todas las cifras salen de DATA (tableros Manager Performance), que YA
-     incluye la campaña Microseguro Activo en cada mes — no debe volver a
-     sumarse aparte. El embudo es 100 % operativo (misma fuente en cada
-     etapa); la liquidación (otra fuente: liquidación oficial de Martha)
-     se muestra como columna de cruce, no dentro del embudo. */
-  const MICRO_REC = 9397, MICRO_VTAS = 1309;  // ya contenidos en DATA (solo informativos)
+  /* Todas las etapas de base salen de DATA (tableros Manager Performance),
+     que YA incluye la campaña Microseguro Activo en cada mes — no debe
+     volver a sumarse aparte. Las ventas de esta slide (y de todas las
+     vistas consolidadas) son SIEMPRE la liquidación oficial (Martha),
+     única cifra de ventas del informe; las tipificaciones "venta exitosa"
+     del tablero operativo no se muestran para evitar dobles lecturas. */
   const totalRec  = DATA.registros.reduce((a,b)=>a+b,0);
   const totalRech = DATA.rechazados.reduce((a,b)=>a+b,0);
   const totalApt  = DATA.aptos.reduce((a,b)=>a+b,0);
   const totalGest = DATA.gestionados.reduce((a,b)=>a+b,0);
   const totalCont = DATA.contactados.reduce((a,b)=>a+b,0);
   const totalLiq  = DATA.ventasLiq.reduce((a,b)=>a+b,0);
-  const totalOp   = DATA.ventasOp.reduce((a,b)=>a+b,0);
   const pctRechProm = Math.round(totalRech/totalRec*100);
 
   const funnel = [
-    { label: 'Registros recibidos', val: totalRec,  pct: null,                                nota: 'Bases Vanti + Microseguro (Power BI)' },
+    { label: 'Registros recibidos', val: totalRec,  pct: null,                                nota: 'Base Vanti' },
     { label: 'Aptos para gestión',  val: totalApt,  pct: Math.round(totalApt/totalRec*100),   nota: 'Tras depuración' },
     { label: 'Gestionados',         val: totalGest, pct: Math.round(totalGest/totalApt*100),  nota: 'Registros marcados' },
     { label: 'Contactados',         val: totalCont, pct: Math.round(totalCont/totalGest*100), nota: 'Contacto efectivo' },
-    { label: 'Venta operativa',     val: totalOp,   pct: Math.round(totalOp/totalCont*100),   nota: 'Tipificación «venta exitosa»' },
+    { label: 'Ventas',              val: totalLiq,  pct: Math.round(totalLiq/totalCont*100),  nota: 'Cifra oficial liquidación' },
   ];
 
   el.innerHTML = `
-    <div class="kpi-grid" style="gap:10px">
+    <div style="height:100%; display:flex; flex-direction:column; min-height:0">
+    <div class="kpi-grid" style="gap:10px; flex-shrink:0; margin-bottom:12px">
       <div class="kpi-card" style="padding:6px 14px">
         <div class="kpi-label">Registros recibidos (ene–jun)</div>
         <div class="kpi-val">${fmt(totalRec)}</div>
-        <div class="kpi-sub">Ya incluye Microseguro Activo (${fmt(MICRO_REC)})</div>
+        <div class="kpi-sub">Fuente: dashboards Power BI</div>
       </div>
       <div class="kpi-card warn" style="padding:6px 14px">
         <div class="kpi-label">Rechazo promedio</div>
@@ -337,46 +337,36 @@ function renderBases() {
         <div class="kpi-val">${fmt(totalApt)}</div>
         <div class="kpi-sub">De ${fmt(totalRec)} recibidos</div>
       </div>
-      <div class="kpi-card" style="padding:6px 14px">
-        <div class="kpi-label">Ventas operativas (tablero)</div>
-        <div class="kpi-val">${fmt(totalOp)}</div>
-        <div class="kpi-sub">Tipificación «venta exitosa» · incluye ${fmt(MICRO_VTAS)} de Microseguro</div>
-      </div>
       <div class="kpi-card green" style="padding:6px 14px">
-        <div class="kpi-label">Ventas 1S (liquidación oficial)</div>
+        <div class="kpi-label">Ventas 1S</div>
         <div class="kpi-val">${fmt(totalLiq)}</div>
         <div class="kpi-sub">1 venta por cada ${Math.round(totalRec/totalLiq)} registros recibidos</div>
       </div>
     </div>
 
-    <div class="two-col" style="gap:10px">
-      <div class="panel" style="padding:6px 14px">
+    <div class="two-col" style="gap:10px; flex:1; min-height:0; grid-template-rows:minmax(0,1fr); overflow:hidden">
+      <div class="panel" style="padding:6px 14px; display:flex; flex-direction:column; min-height:0; overflow:hidden">
         <h3 style="margin-bottom:4px; padding-bottom:4px">${icon('calendar')} Volumen y calidad de base por mes</h3>
-        <div class="tbl-wrap" style="margin-top:0">
-          <table class="tbl-compact" style="font-size:.66rem">
+        <div class="tbl-wrap" style="margin-top:0; flex:1; min-height:0; overflow:hidden">
+          <table class="tbl-compact" style="font-size:.7rem; height:100%; width:100%">
             <thead><tr>
               <th>Mes</th>
               <th class="r">Recibidos</th>
               <th class="r">Rechazados</th>
               <th class="r">% Rechazo</th>
               <th class="r">Aptos</th>
-              <th class="r">Venta base</th>
-              <th class="r">Venta liquidación</th>
+              <th class="r">Ventas</th>
             </tr></thead>
             <tbody>
               ${DATA.meses.map((m,i) => {
                 const p = DATA.pctRechazo[i];
-                const vb = DATA.ventasOp[i];
-                const vl = DATA.ventasLiq[i];
-                const excepcion = vb > vl;  // solo mayo: el tablero arrastra gestión de abril
                 return `<tr>
                   <td><strong>${m}</strong></td>
                   <td class="r">${fmt(DATA.registros[i])}</td>
                   <td class="r">${fmt(DATA.rechazados[i])}</td>
                   <td class="r">${badge(Math.round(p) + ' %', p>65?'r':p>50?'y':'g')}</td>
                   <td class="r">${fmt(DATA.aptos[i])}</td>
-                  <td class="r">${fmt(vb)}${excepcion ? '<span style="color:var(--warn);font-weight:800">*</span>' : ''}</td>
-                  <td class="r"><strong>${fmt(vl)}</strong></td>
+                  <td class="r"><strong>${fmt(DATA.ventasLiq[i])}</strong></td>
                 </tr>`;
               }).join('')}
               <tr class="total">
@@ -385,21 +375,19 @@ function renderBases() {
                 <td class="r">${fmt(totalRech)}</td>
                 <td class="r">${Math.round(totalRech/totalRec*100)} %</td>
                 <td class="r">${fmt(totalApt)}</td>
-                <td class="r">${fmt(totalOp)}</td>
                 <td class="r">${fmt(totalLiq)}</td>
               </tr>
             </tbody>
           </table>
         </div>
-        <div style="font-size:.6rem; color:var(--gray3); margin-top:3px; line-height:1.3">Venta base = tipificación «venta exitosa» del tablero operativo (todas las campañas, Microseguro incluido). Venta liquidación = cifra oficial (CP + Combo Vida), siempre mayor en el semestre (${fmt(totalLiq)} vs ${fmt(totalOp)}). <strong style="color:var(--warn)">* Mayo</strong>: el tablero operativo repite las bases de abril en Stock y Masiva (arrastra gestión tipificada tras el corte), por eso solo ese mes la venta base (${fmt(DATA.ventasOp[4])}) supera puntualmente la liquidación (${fmt(DATA.ventasLiq[4])}).</div>
       </div>
 
-      <div class="panel" style="padding:6px 14px">
+      <div class="panel" style="padding:6px 14px; display:flex; flex-direction:column; min-height:0; overflow:hidden">
         <h3 style="margin-bottom:4px; padding-bottom:4px">${icon('trending-down')} Embudo de la gestión · de la base a la venta (semestre)</h3>
-        <div style="display:flex; flex-direction:column; margin-top:6px">
+        <div style="display:flex; flex-direction:column; flex:1; margin-top:6px">
           ${(() => {
             // Anchos visuales (escala raíz cuadrada con mínimo, para que la
-            // última etapa no desaparezca: 12.276 es el 1,3 % de 921.480).
+            // última etapa no desaparezca: 13.917 es el 1,5 % de 921.480).
             const widths = [100, 64, 60, 40, 28, 20]; // top de cada etapa + bottom final
             const colors = ['#120180', '#1d02b8', '#00CD93', '#2ed9a4', '#5AE280'];
             const darkText = [false, false, true, true, true];
@@ -407,12 +395,12 @@ function renderBases() {
               const wTop = widths[i], wBot = widths[i+1];
               const clip = `polygon(${(100-wTop)/2}% 0, ${(100+wTop)/2}% 0, ${(100+wBot)/2}% 100%, ${(100-wBot)/2}% 100%)`;
               return `
-              <div style="display:grid; grid-template-columns: 1fr 200px 1fr; align-items:center; gap:10px">
+              <div style="display:grid; grid-template-columns: 1fr 200px 1fr; align-items:center; gap:10px; flex:1">
                 <div style="text-align:right">
                   <div style="font-size:.7rem; font-weight:800; color:var(--blue); line-height:1.15">${f.label}</div>
                   <div style="font-size:.56rem; color:var(--gray3); line-height:1.2">${f.nota}</div>
                 </div>
-                <div style="height:56px; position:relative">
+                <div style="align-self:stretch; min-height:42px; position:relative">
                   <div style="position:absolute; inset:0; background:${colors[i]}; clip-path:${clip}"></div>
                   <div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:.76rem; font-weight:800; color:${darkText[i] ? 'var(--blue)' : '#fff'}">${fmt(f.val)}</div>
                 </div>
@@ -423,13 +411,14 @@ function renderBases() {
             }).join('');
           })()}
         </div>
-        <div style="font-size:.52rem; color:var(--gray3); margin-top:2px; text-align:center">Escala visual (no lineal). Valores reales, todos del tablero operativo. La liquidación oficial cierra en <strong>${fmt(totalLiq)}</strong> pólizas (incluye ventas cerradas fuera del marcador).</div>
+        <div style="font-size:.52rem; color:var(--gray3); margin-top:2px; text-align:center">Ancho del embudo en escala visual (no lineal) — los valores y porcentajes son los reales.</div>
       </div>
     </div>
 
-    <div class="alert alert-info" style="margin-top:6px; padding:10px 18px">
+    <div class="alert alert-info" style="margin:10px 0 14px; padding:12px 18px; flex-shrink:0">
       <span class="ico">${icon('zap')}</span>
-      <span style="font-size:.7rem"><strong>Oportunidad identificada:</strong> el 78 % del descarte son registros re-enviados (49 %) y clientes con el producto activo (29 %) — depurar la base en origen podría liberar <strong>+110.000 registros gestionables</strong> al semestre.</span>
+      <span style="font-size:.7rem"><strong>Oportunidad identificada :</strong> el <strong>78 %</strong> del descarte son, registros recibidos anteriormente y el <strong>49 %</strong> y clientes con el producto activo es el <strong>29 %</strong></span>
+    </div>
     </div>`;
 }
 
@@ -439,9 +428,12 @@ function renderCampanas() {
   if (!el) return;
 
   const detalleSemestre = [
-    { c: 'Bienvenidas CP',       reg: 114694, ventas: 6912, contactab: '79 %', convSC: '19,6 %', perfil: 'g' },
-    { c: 'Autogestión',          reg: 11685,  ventas: 803,  contactab: '73 %', convSC: '26,3 %', perfil: 'g' },
-    { c: 'CP Clientes Satisf.*', reg: 108659, ventas: 79,   contactab: '19 %', convSC: '1,2 %',  perfil: 'r' },
+    { c: 'Bienvenidas CP',        reg: 114694, ventas: 6912, contactab: '79 %', convSC: '19,6 %', perfil: 'g' },
+    { c: 'Autogestión',           reg: 11685,  ventas: 803,  contactab: '73 %', convSC: '26,3 %', perfil: 'g' },
+    { c: 'CP Stock',              reg: 420641, ventas: 2845, contactab: '52 %', convSC: '3,6 %',  perfil: 'y' },
+    { c: 'Masiva Voluntarios',    reg: 255141, ventas: 324,  contactab: '19 %', convSC: '1,5 %',  perfil: 'r' },
+    { c: 'CP Clientes Satisf.*',  reg: 108659, ventas: 79,   contactab: '19 %', convSC: '1,2 %',  perfil: 'r' },
+    { c: 'Volunt. Cancelaciones*',reg: 1263,   ventas: 4,    contactab: '53 %', convSC: '0,7 %',  perfil: 'r' },
   ];
 
   const totalReg    = detalleSemestre.reduce((a, r) => a + r.reg, 0);
@@ -452,27 +444,28 @@ function renderCampanas() {
   const aptTotal  = DATA.aptos.reduce((a,b)=>a+b,0);
   const gestTotal = DATA.gestionados.reduce((a,b)=>a+b,0);
   const contTotal = DATA.contactados.reduce((a,b)=>a+b,0);
-  const opTotal   = DATA.ventasOp.reduce((a,b)=>a+b,0);
+  const liqTotal  = DATA.ventasLiq.reduce((a,b)=>a+b,0);
 
   el.innerHTML = `
-    <div class="kpi-grid" style="gap:8px; margin-bottom:8px">
+    <div style="height:100%; display:flex; flex-direction:column; min-height:0">
+    <div class="kpi-grid" style="gap:8px; margin-bottom:8px; flex-shrink:0">
       <div class="kpi-card green" style="padding:4px 12px">
         <div class="kpi-label" style="font-size:.6rem">Bienvenidas CP</div>
         <div class="kpi-val" style="font-size:.85rem">${fmt(6912)} <span style="font-size:.5rem;font-weight:500;color:var(--gray3)">ventas</span></div>
-        <div class="kpi-sub" style="font-size:.5rem">${fmt(Math.round(6912/totalVentas*100))} % del total del semestre · 19,6 % de conversión</div>
+        <div class="kpi-sub" style="font-size:.5rem">${fmt(Math.round(6912/liqTotal*100))} % de las ventas del semestre · 19,6 % de conversión</div>
       </div>
       <div class="kpi-card green" style="padding:4px 12px">
         <div class="kpi-label" style="font-size:.6rem">Autogestión</div>
         <div class="kpi-val" style="font-size:.85rem">26,3 %</div>
-        <div class="kpi-sub" style="font-size:.5rem">Conversión más alta del portafolio · 2,3× el promedio del canal</div>
+        <div class="kpi-sub" style="font-size:.5rem">Conversión más alta del portafolio · 2,9× el promedio del canal</div>
       </div>
     </div>
 
-    <div class="two-col" style="gap:12px">
-      <div class="panel" style="padding:10px 14px">
-        <h3 style="margin-bottom:6px; padding-bottom:4px; font-size:.76rem">${icon('target')} Rendimiento por campaña (ene–jun)</h3>
-        <div class="tbl-wrap" style="margin-top:0">
-          <table class="tbl-compact" style="font-size:.66rem">
+    <div class="two-col" style="gap:12px; flex:1; min-height:0; grid-template-rows:minmax(0,1fr); overflow:hidden">
+      <div class="panel" style="padding:10px 14px; display:flex; flex-direction:column; min-height:0; overflow:hidden">
+        <h3 style="margin-bottom:4px; padding-bottom:3px; font-size:.7rem">${icon('target')} Rendimiento por campaña (ene–jun)</h3>
+        <div class="tbl-wrap" style="margin-top:0; flex:1 1 0; min-height:0; overflow:hidden">
+          <table class="tbl-compact" style="font-size:.6rem; height:100%; width:100%">
             <colgroup>
               <col style="width:26%"><col style="width:16%"><col style="width:14%">
               <col style="width:18%"><col style="width:26%">
@@ -493,16 +486,16 @@ function renderCampanas() {
               <tr class="total" style="font-size:.6rem">
                 <td>Total</td><td class="r">${fmt(totalReg)}</td>
                 <td class="r">${fmt(totalVentas)}</td>
-                <td class="r">51 %</td><td class="r">11,4 %</td>
+                <td class="r">41 %</td><td class="r">7,4 %</td>
               </tr>
             </tbody>
           </table>
         </div>
-        <div style="font-size:.5rem; color:var(--gray3); margin-top:3px">* CP Clientes Satisfechos: campaña puntual solo en enero (no recurrente).</div>
+        <div style="font-size:.5rem; color:var(--gray3); margin-top:3px">* Campañas puntuales solo de enero (no recurrentes).</div>
 
         <h3 style="margin:8px 0 3px; padding-bottom:2px; font-size:.7rem">${icon('bar-chart-3')} Tipificación de aptos por mes</h3>
-        <div class="tbl-wrap" style="margin-top:0">
-          <table class="tbl-compact" style="font-size:.55rem">
+        <div class="tbl-wrap" style="margin-top:0; flex:1 1 0; min-height:0; overflow:hidden">
+          <table class="tbl-compact" style="font-size:.55rem; height:100%; width:100%">
             <thead><tr>
               <th style="padding:2px 4px">Mes</th>
               <th class="r" style="padding:2px 4px">Aptos</th>
@@ -518,7 +511,7 @@ function renderCampanas() {
                 const gest = DATA.gestionados[i];
                 const ctto = DATA.contactados[i];
                 const apto = DATA.aptos[i];
-                const venta = DATA.ventasOp[i];  // operativa: misma fuente que aptos/gestión/contacto
+                const venta = DATA.ventasLiq[i];  // liquidación oficial, única cifra de ventas
                 const pctGest = Math.round(gest/apto*100);
                 const pctCtto = Math.round(ctto/gest*100);
                 const pctConv = Math.round(venta/ctto*100);
@@ -540,8 +533,8 @@ function renderCampanas() {
                 <td class="r" style="padding:2px 4px">${badge(Math.round(gestTotal/aptTotal*100)+'%', 'g')}</td>
                 <td class="r" style="padding:2px 4px">${fmt(contTotal)}</td>
                 <td class="r" style="padding:2px 4px">${badge(Math.round(contTotal/gestTotal*100)+'%', 'y')}</td>
-                <td class="r" style="padding:2px 4px;font-weight:700">${fmt(opTotal)}</td>
-                <td class="r" style="padding:2px 4px">${badge(Math.round(opTotal/contTotal*100)+'%', 'y')}</td>
+                <td class="r" style="padding:2px 4px;font-weight:700">${fmt(liqTotal)}</td>
+                <td class="r" style="padding:2px 4px">${badge(Math.round(liqTotal/contTotal*100)+'%', 'y')}</td>
               </tr>
             </tbody>
           </table>
@@ -549,10 +542,10 @@ function renderCampanas() {
         <div style="font-size:.48rem; color:var(--gray3); margin-top:2px; text-align:right">Cada mes: aptos → gestión → contacto → ventas</div>
       </div>
 
-      <div class="panel" style="padding:10px 14px">
+      <div class="panel" style="padding:10px 14px; display:flex; flex-direction:column; min-height:0; overflow:hidden">
         <h3 style="margin-bottom:4px; padding-bottom:3px; font-size:.7rem">${icon('calendar-days')} Evolución del rechazo por mes</h3>
-        <div class="tbl-wrap" style="margin-top:0">
-          <table class="tbl-compact" style="font-size:.56rem">
+        <div class="tbl-wrap" style="margin-top:0; flex:1 1 0; min-height:0; overflow:hidden">
+          <table class="tbl-compact" style="font-size:.56rem; height:100%; width:100%">
             <thead><tr>
               <th style="padding:2px 5px">Mes</th>
               <th class="r" style="padding:2px 5px">Recibidos</th>
@@ -576,9 +569,10 @@ function renderCampanas() {
             </tbody>
           </table>
         </div>
+        <div style="font-size:.5rem; color:var(--gray3); margin-top:3px">Rechazo promedio del semestre: 60 % de la base recibida.</div>
 
         <h3 style="margin:8px 0 3px; padding-bottom:2px; font-size:.7rem">${icon('filter')} Tipificación de rechazo (semestre)</h3>
-        <div style="display:flex; flex-direction:column; gap:2px">
+        <div style="display:flex; flex-direction:column; gap:2px; flex:1 1 0; min-height:0; justify-content:space-evenly">
           ${DESCARTE_MOTIVOS.map(d => {
             const w = Math.round(d.pct / maxDescarte * 65) + 15;
             return `<div style="display:flex; align-items:center; gap:3px">
@@ -591,12 +585,13 @@ function renderCampanas() {
           }).join('')}
         </div>
         <div style="font-size:.48rem; color:var(--gray3); margin-top:2px; text-align:right">${fmt(rechTotal)} registros descartados (${Math.round(rechTotal/(rechTotal+aptTotal)*100)} % de la base total)</div>
-
-        <div class="alert alert-info" style="margin:6px 0 0; padding:6px 10px">
-          <span class="ico">${icon('lightbulb')}</span>
-          <span style="font-size:.58rem"><strong>Oportunidad de eficiencia:</strong> el 78 % del descarte corresponde a bases repetidas y clientes con producto activo. Depurar estos registros en origen podría recuperar hasta <strong>+110.000 registros gestionables</strong> por semestre, equivalentes a ~<strong>3.600 ventas potenciales</strong> adicionales aplicando la conversión actual del canal. Una coordinación con Vanti para limpiar la base antes del cargue liberaría capacidad operativa sin aumentar el equipo.</span>
-        </div>
       </div>
+    </div>
+
+    <div class="alert alert-info" style="margin:10px 0 14px; padding:10px 18px; flex-shrink:0">
+      <span class="ico">${icon('lightbulb')}</span>
+      <span style="font-size:.7rem"><strong>¿Por qué la gestión no llega al 100 %?</strong> El semestre cerró en <strong>97,9 %</strong>: la base de junio no llegó a tiempo — ingresó sobre el cierre del mes y ~8.000 registros quedaron sin tiempo de marcación.</span>
+    </div>
     </div>`;
 }
 
@@ -623,35 +618,36 @@ function renderAutogestion() {
   );
 
   el.innerHTML = `
-    <div class="kpi-grid" style="gap:12px">
-      <div class="kpi-card" style="padding:10px 16px">
-        <div class="kpi-label">Registros (1S)</div>
-        <div class="kpi-val">${fmt(totalReg)}</div>
-        <div class="kpi-sub">Solicitudes de financiación autogestionada</div>
+    <div style="height:100%; display:flex; flex-direction:column; min-height:0">
+    <div class="kpi-grid" style="gap:8px; flex-shrink:0; margin-bottom:6px">
+      <div class="kpi-card" style="padding:5px 12px">
+        <div class="kpi-label" style="font-size:.58rem">Registros (1S)</div>
+        <div class="kpi-val" style="font-size:.85rem">${fmt(totalReg)}</div>
+        <div class="kpi-sub" style="font-size:.5rem">Solicitudes de financiación autogestionada</div>
       </div>
-      <div class="kpi-card green" style="padding:10px 16px">
-        <div class="kpi-label">Ventas (1S)</div>
-        <div class="kpi-val">${fmt(totalVentas)}</div>
-        <div class="kpi-sub">${fmtPct(efectProm)} sobre contactados</div>
+      <div class="kpi-card green" style="padding:5px 12px">
+        <div class="kpi-label" style="font-size:.58rem">Ventas (1S)</div>
+        <div class="kpi-val" style="font-size:.85rem">${fmt(totalVentas)}</div>
+        <div class="kpi-sub" style="font-size:.5rem">${fmtPct(efectProm)} sobre contactados</div>
       </div>
-      <div class="kpi-card" style="padding:10px 16px">
-        <div class="kpi-label">Rechazo promedio</div>
-        <div class="kpi-val">${fmtPct(pctRechGral)}</div>
-        <div class="kpi-sub">${fmt(totalRech)} registros descartados en el semestre</div>
+      <div class="kpi-card" style="padding:5px 12px">
+        <div class="kpi-label" style="font-size:.58rem">Rechazo promedio</div>
+        <div class="kpi-val" style="font-size:.85rem">${fmtPct(pctRechGral)}</div>
+        <div class="kpi-sub" style="font-size:.5rem">${fmt(totalRech)} registros descartados</div>
       </div>
-      <div class="kpi-card green" style="padding:10px 16px">
-        <div class="kpi-label">Vs. promedio general del canal</div>
-        <div class="kpi-val">${multProm.toFixed(1)}×</div>
-        <div class="kpi-sub">Convierte ${multProm.toFixed(1)} veces mejor que el resto de la base</div>
+      <div class="kpi-card green" style="padding:5px 12px">
+        <div class="kpi-label" style="font-size:.58rem">Vs. promedio general del canal</div>
+        <div class="kpi-val" style="font-size:.85rem">${multProm.toFixed(1)}×</div>
+        <div class="kpi-sub" style="font-size:.5rem">Convierte ${multProm.toFixed(1)} veces mejor</div>
       </div>
     </div>
 
-    <div class="two-col" style="gap:14px">
-      <div class="panel" style="padding:12px 16px">
+    <div class="two-col" style="gap:10px; flex:1; min-height:0; grid-template-rows:minmax(0,1fr); overflow:hidden">
+      <div class="panel" style="padding:8px 12px; display:flex; flex-direction:column; min-height:0; overflow:hidden">
 
-        <h3 style="margin-bottom:6px; padding-bottom:5px">${icon('bar-chart-3')} Histórico mensual</h3>
-        <div class="tbl-wrap" style="margin-top:0">
-          <table class="tbl-compact">
+        <h3 style="margin-bottom:4px; padding-bottom:3px; font-size:.68rem">${icon('bar-chart-3')} Histórico mensual</h3>
+        <div class="tbl-wrap" style="margin-top:0; flex:1 1 0; min-height:0; overflow:hidden">
+          <table class="tbl-compact" style="width:100%">
             <thead><tr>
               <th>Mes</th><th class="r">Registros</th><th class="r">Ventas</th><th class="r">Rechazo</th><th class="r">% Rech.</th>
               <th class="r">Contactab.</th><th class="r">Conversión</th>
@@ -680,23 +676,23 @@ function renderAutogestion() {
           </table>
         </div>
 
-        <h3 style="margin:10px 0 4px; padding-bottom:4px; font-size:.66rem">${icon('users',{size:13})} Ventas Autogestión por asesor</h3>
-        <div class="tbl-wrap" style="margin-top:0">
-          <table class="tbl-compact" style="font-size:.7rem">
+        <h3 style="margin:8px 0 3px; padding-bottom:2px; font-size:.68rem">${icon('users',{size:13})} Ventas Autogestión por asesor</h3>
+        <div class="tbl-wrap" style="margin-top:0; flex:1 1 0; min-height:0; overflow:hidden">
+          <table class="tbl-compact" style="font-size:.66rem; width:100%">
             <thead><tr>
-              <th>Asesor</th>${MESES.map(m=>`<th class="r" style="font-size:.6rem">${m}</th>`).join('')}<th class="r" style="font-size:.6rem">Total</th>
+              <th>Asesor</th>${MESES.map(m=>`<th class="r" style="font-size:.56rem">${m}</th>`).join('')}<th class="r" style="font-size:.56rem">Total</th>
             </tr></thead>
             <tbody>
               ${AUTOGESTION_ASESORES.map(a => `
                 <tr>
-                  <td><strong style="font-size:.62rem">${a.nombre}</strong>${a.cuarto?' <span style="display:inline-block;background:var(--teal);color:#04003a;font-size:.5rem;font-weight:800;padding:0 4px;border-radius:3px;line-height:1.4">4ª</span>':''}</td>
-                  ${a.meses.map(v=>`<td class="r" style="font-size:.6rem">${v||'-'}</td>`).join('')}
-                  <td class="r" style="font-size:.62rem;font-weight:800">${a.total}</td>
+                  <td><strong style="font-size:.58rem">${a.nombre}</strong>${a.cuarto?' <span style="display:inline-block;background:var(--teal);color:#04003a;font-size:.45rem;font-weight:800;padding:0 3px;border-radius:2px;line-height:1.3">4ª</span>':''}</td>
+                  ${a.meses.map(v=>`<td class="r" style="font-size:.56rem">${v||'-'}</td>`).join('')}
+                  <td class="r" style="font-size:.58rem;font-weight:800">${a.total}</td>
                 </tr>`).join('')}
               <tr class="total">
-                <td style="font-size:.6rem">Total 4 asesores</td>
-                ${MESES.map((_,i)=>'<td class="r" style="font-size:.6rem">'+fmt(AUTOGESTION_ASESORES.reduce((s,a)=>s+(a.meses[i]||0),0))+'</td>').join('')}
-                <td class="r" style="font-size:.62rem;font-weight:800">${fmt(AUTOGESTION_ASESORES.reduce((s,a)=>s+a.total,0))}</td>
+                <td style="font-size:.56rem">Total 4 asesores</td>
+                ${MESES.map((_,i)=>'<td class="r" style="font-size:.56rem">'+fmt(AUTOGESTION_ASESORES.reduce((s,a)=>s+(a.meses[i]||0),0))+'</td>').join('')}
+                <td class="r" style="font-size:.58rem;font-weight:800">${fmt(AUTOGESTION_ASESORES.reduce((s,a)=>s+a.total,0))}</td>
               </tr>
             </tbody>
           </table>
@@ -704,56 +700,58 @@ function renderAutogestion() {
 
       </div>
 
-      <div class="panel" style="padding:12px 16px">
+      <div class="panel" style="padding:8px 12px; display:flex; flex-direction:column; min-height:0; overflow:hidden">
 
-        <h3 style="margin-bottom:6px; padding-bottom:4px; font-size:.66rem">${icon('trending-up',{size:13})} Crecimiento mensual de ventas</h3>
-        <div style="display:flex; align-items:flex-end; gap:5px; height:110px; padding:0 6px; margin-bottom:4px">
+        <h3 style="margin-bottom:4px; padding-bottom:2px; font-size:.68rem">${icon('trending-up',{size:13})} Crecimiento mensual de ventas</h3>
+        <div style="display:flex; align-items:flex-end; gap:5px; flex:1 1 0; min-height:65px; padding:0 6px; margin-bottom:4px">
           ${AUTOGESTION_MESES.map((m,i) => {
             const h = Math.max(Math.round(m.ventas / maxVentas * 100), 8);
             return `<div style="flex:1; display:flex; flex-direction:column; align-items:center; height:100%; justify-content:flex-end">
-              <span style="font-size:.6rem;font-weight:800;color:var(--blue);margin-bottom:1px;line-height:1">${fmt(m.ventas)}</span>
-              ${crec[i] ? `<span style="font-size:.42rem;font-weight:700;color:var(--teal);margin-bottom:1px">+${crec[i]}%</span>` : '<span style="font-size:.42rem;margin-bottom:1px">&nbsp;</span>'}
+              <span style="font-size:.62rem;font-weight:800;color:var(--blue);margin-bottom:1px;line-height:1">${fmt(m.ventas)}</span>
+              ${crec[i] ? `<span style="font-size:.52rem;font-weight:700;color:var(--teal);margin-bottom:1px">+${crec[i]}%</span>` : '<span style="font-size:.52rem;margin-bottom:1px">&nbsp;</span>'}
               <div style="width:100%;height:${h}%;background:linear-gradient(180deg,#5AE280 0%,#00CD93 100%);border-radius:3px 3px 0 0;min-height:6px;transition:height .4s ease"></div>
-              <span style="font-size:.5rem;font-weight:700;color:var(--gray3);margin-top:3px">${m.mes}</span>
+              <span style="font-size:.58rem;font-weight:700;color:var(--gray3);margin-top:3px">${m.mes}</span>
             </div>`;
           }).join('')}
         </div>
 
-        <h3 style="margin:10px 0 2px; padding-bottom:2px; font-size:.62rem">${icon('filter',{size:12})} ¿Por qué se descartaron? (tipificación rechazos — autogestión)</h3>
-        <div style="display:flex; flex-direction:column; gap:2px">
+        <h3 style="margin:6px 0 2px; padding-bottom:1px; font-size:.68rem">${icon('filter',{size:12})} ¿Por qué se descartaron? (tipificación rechazos)</h3>
+        <div style="display:flex; flex-direction:column; gap:2px; flex:1 1 0; min-height:0; justify-content:space-evenly">
           ${AUTOGESTION_DESCARTES.map(d => {
             const w = Math.round(d.registros / maxDescarte * 65) + 15;
             return `<div style="display:flex; align-items:center; gap:3px">
-              <span style="flex:0 0 128px; font-size:.5rem; color:var(--gray3); text-align:right; white-space:nowrap; overflow:hidden; text-overflow:ellipsis">${d.motivo}</span>
-              <div style="flex:1; height:8px; background:rgba(255,107,53,.12); border-radius:4px; overflow:hidden">
-                <div style="width:${w}%; height:100%; border-radius:4px; background:linear-gradient(90deg,var(--warn),#ff8c5a)"></div>
+              <span style="flex:0 0 115px; font-size:.48rem; color:var(--gray3); text-align:right; white-space:nowrap; overflow:hidden; text-overflow:ellipsis">${d.motivo}</span>
+              <div style="flex:1; height:6px; background:rgba(255,107,53,.12); border-radius:3px; overflow:hidden">
+                <div style="width:${w}%; height:100%; border-radius:3px; background:linear-gradient(90deg,var(--warn),#ff8c5a)"></div>
               </div>
-              <span style="flex:0 0 30px; font-size:.5rem; font-weight:700; color:var(--blue); text-align:right">${d.pct}%</span>
+              <span style="flex:0 0 25px; font-size:.48rem; font-weight:700; color:var(--blue); text-align:right">${d.pct}%</span>
             </div>`;
           }).join('')}
         </div>
-        <div style="font-size:.48rem; color:var(--gray3); margin-top:2px; text-align:right">${fmtPct(pctRechGral)} de la base total · ${fmt(totalRech)} registros descartados en 1S</div>
+        <div style="font-size:.45rem; color:var(--gray3); margin-top:2px; text-align:right">${fmtPct(pctRechGral)} de la base total · ${fmt(totalRech)} registros descartados</div>
 
-        <div style="font-size:.52rem; font-weight:700; color:var(--gray3); text-transform:uppercase; letter-spacing:.03em; margin:10px 0 3px">${icon('compass',{size:10})} Qué cambió en la gestión</div>
-        <div style="display:flex; align-items:stretch; gap:2px">
+        <div style="font-size:.6rem; font-weight:700; color:var(--gray3); text-transform:uppercase; letter-spacing:.03em; margin:6px 0 3px">${icon('compass',{size:13})} Qué cambió en la gestión</div>
+        <div style="display:flex; align-items:stretch; gap:3px">
           ${[
             ['users',     'Ene–Feb', 'Sin focalizar'],
             ['user-plus', 'Mar',     'Foco: 3 asesores'],
             ['repeat',    'Abr–May', 'Sobremarcación OCM'],
             ['user-plus', 'Jun',     '+1 asesor (4)'],
           ].map(([ic,fecha,titulo],i)=>`
-            ${i>0?'<div style="align-self:center; color:var(--teal); font-weight:800; font-size:.65rem; flex-shrink:0">→</div>':''}
+            ${i>0?'<div style="align-self:center; color:var(--teal); font-weight:800; font-size:.8rem; flex-shrink:0">→</div>':''}
             <div style="flex:1; background:rgba(0,205,147,.07); border:1px solid rgba(0,205,147,.25); border-radius:5px; padding:3px 2px; text-align:center">
-              <div style="color:var(--teal); font-size:.6rem">${icon(ic,{size:11})}</div>
-              <div style="font-size:.48rem; font-weight:800; color:var(--gray3); margin-top:1px">${fecha}</div>
-              <div style="font-size:.52rem; font-weight:700; color:var(--blue); line-height:1.1">${titulo}</div>
+              <div style="color:var(--teal); font-size:.65rem">${icon(ic,{size:12})}</div>
+              <div style="font-size:.52rem; font-weight:800; color:var(--gray3); margin-top:1px">${fecha}</div>
+              <div style="font-size:.58rem; font-weight:700; color:var(--blue); line-height:1.1">${titulo}</div>
             </div>`).join('')}
         </div>
-        <div class="alert alert-info" style="margin-top:12px; padding:3px 10px">
-          <span class="ico">${icon('trending-up',{size:11})}</span>
-          <span style="font-size:.58rem">Base con intención de compra validada · <strong>803 ventas</strong> en el semestre · Crecimiento de <strong>43 a 287 ventas/mes (+567%)</strong> · El equipo focalizado pasó de 14 a 266 ventas/mes (<strong>19×</strong>) · 26,3% de conversión, <strong>3× el promedio del canal</strong> · La autogestión es la campaña de mayor efectividad del portafolio.</span>
-        </div>
       </div>
+    </div>
+
+    <div class="alert alert-info" style="margin:6px 0; padding:6px 14px; flex-shrink:0">
+      <span class="ico">${icon('trending-up',{size:11})}</span>
+      <span style="font-size:.7rem">La estrategia de cabinas dedicadas logró una tasa de crecimiento de <strong>(+553%)</strong></span>
+    </div>
     </div>`;
 }
 
@@ -765,7 +763,9 @@ function renderAsesores() {
   const mesesLiq = ['Ene','Feb','Mar','Abr','May','Jun'];
   const titleCase = s => s.toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
 
-  const filas = ASESORES.map((a, idx) => {
+  /* Solo asesores activos a junio (con venta liquidada en jun), con todo su histórico */
+  const ACTIVOS = ASESORES.filter(a => a.meses[5] != null);
+  const filas = ACTIVOS.map((a, idx) => {
     const esTop = idx < 5;
     const total = a.meses.reduce((s,v)=>s+(v||0),0);
     const celdas = a.meses.map((v,i)=>{
@@ -783,14 +783,18 @@ function renderAsesores() {
       </tr>`;
   }).join('');
 
-  const sumMes = mesesLiq.map((_,i) => ASESORES.reduce((s,a)=>s+(a.meses[i]||0),0));
+  const sumMes = mesesLiq.map((_,i) => ACTIVOS.reduce((s,a)=>s+(a.meses[i]||0),0));
+
+  /* La "Lectura del equipo" es interna de Xuma: no se muestra en la vista Vanti */
+  const esVistaVanti = new URLSearchParams(location.search).get('audiencia') === 'vanti';
 
   el.innerHTML = `
-    <div class="two-col" style="grid-template-columns:1.5fr 1fr">
-      <div class="panel" style="padding:10px 14px">
-        <h3 style="margin-bottom:4px; padding-bottom:3px; font-size:.72rem">${icon('users')} Equipo completo (${ASESORES.length} asesores)</h3>
-        <div class="tbl-wrap" style="margin-top:0">
-          <table class="tbl-compact" style="font-size:.6rem">
+    <div style="height:100%; display:flex; flex-direction:column; min-height:0">
+    <div style="flex:1; min-height:0; overflow:hidden; display:flex">
+      <div class="panel" style="flex:1; padding:10px 14px; display:flex; flex-direction:column; min-height:0; overflow:hidden">
+        <h3 style="margin-bottom:4px; padding-bottom:3px; font-size:.72rem">${icon('users')} Equipo activo a junio (${ACTIVOS.length} asesores) · histórico ene–jun</h3>
+        <div class="tbl-wrap" style="margin-top:0; flex:1; min-height:0; overflow:hidden">
+          <table class="tbl-compact" style="font-size:.6rem; height:100%; width:100%">
             <thead><tr>
               <th class="r" style="padding:3px 6px">#</th><th style="padding:3px 6px">Asesor</th>
               ${mesesLiq.map(m=>`<th class="r" style="padding:3px 6px">${m}</th>`).join('')}
@@ -809,108 +813,33 @@ function renderAsesores() {
         </div>
         <div style="display:flex; gap:12px; margin-top:4px; font-size:.54rem; color:var(--gray3)">
           <span>${icon('star', { size: 11 })} Top 5</span>
-          <span style="color:#c44a1a">rojo < meta</span>
-          <span>— = sin dato</span>
         </div>
       </div>
 
-      <div class="panel" style="display:flex; flex-direction:column; padding:14px 18px">
-        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px">
-          <h3 style="margin:0; border:none; padding:0">${icon('pin')} Lectura del equipo</h3>
-          <div class="asesores-tabs" style="display:flex; gap:4px">
-            <button class="asesor-tab active" data-astab="vanti" onclick="asesoresTab('vanti')">Vanti</button>
-            <button class="asesor-tab" data-astab="xuma" onclick="asesoresTab('xuma')">Xuma</button>
-          </div>
-        </div>
+    </div>
 
-        <!-- Asesores activos (solo Xuma) -->
-        <div data-aspane="xuma" class="asesores-section" style="margin-bottom:10px">
-          <div class="asesores-section-label" style="margin-bottom:5px">${icon('users', { size: 14 })} Asesores activos por mes</div>
-          <div style="display:flex; align-items:flex-end; gap:8px; flex-wrap:wrap">
-            ${['Ene','Feb','Mar','Abr','May','Jun'].map((m,i)=>{
-              const n = ROSTER.rosterPorMes[i];
-              const fill = n >= 20 ? 'var(--teal)' : n >= 17 ? 'var(--blue)' : 'var(--gray2)';
-              return `<div style="text-align:center">
-                <div style="width:28px;height:28px;border-radius:8px;background:${fill};color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.74rem;margin:0 auto 2px">${n}</div>
-                <div style="font-size:.58rem;color:var(--gray3);font-weight:600">${m}</div>
-              </div>`;
-            }).join('')}
-          </div>
+    <div style="display:flex; gap:10px; align-items:stretch; flex-shrink:0; margin:10px 0 14px">
+      ${esVistaVanti ? '' : `
+      <div class="panel" style="flex:0 0 42%; margin:0; padding:8px 14px; display:flex; flex-direction:column; gap:5px">
+        <h3 style="margin:0; border:none; padding:0 0 3px; font-size:.68rem">${icon('pin')} Lectura del equipo <span style="font-weight:600; color:var(--gray3); font-size:.56rem">· asesores activos por mes</span></h3>
+        <div style="display:flex; align-items:flex-end; gap:8px; flex-wrap:wrap">
+          ${['Ene','Feb','Mar','Abr','May','Jun'].map((m,i)=>{
+            const n = ROSTER.rosterPorMes[i];
+            const fill = n >= 20 ? 'var(--teal)' : n >= 17 ? 'var(--blue)' : 'var(--gray2)';
+            return `<div style="text-align:center">
+              <div style="width:24px;height:24px;border-radius:6px;background:${fill};color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.64rem;margin:0 auto 2px">${n}</div>
+              <div style="font-size:.52rem;color:var(--gray3);font-weight:600">${m}</div>
+            </div>`;
+          }).join('')}
         </div>
-
-        <!-- Hallazgo top 5 (ambas vistas) -->
-        <div class="asesores-section" style="margin-bottom:10px">
-          <div class="alert alert-info" style="margin:0; padding:8px 14px">
-            <span class="ico">${icon('star')}</span>
-            <span>El top 5 aporta <strong>4.279 pólizas (37 %)</strong> del semestre.</span>
-          </div>
-        </div>
-
-        <!-- Incentivos Vanti -->
-        <div data-aspane="vanti" class="asesor-pane active">
-          <div class="asesores-section" style="margin-bottom:0">
-            <div class="asesores-section-label" style="margin-bottom:5px">${icon('coins', { size: 14 })} Incentivos Vanti 1S</div>
-            <div class="tbl-wrap" style="margin-top:0">
-              <table class="tbl-compact">
-                <thead><tr><th>Mes</th><th class="r">Eventos</th><th>Detalle</th></tr></thead>
-                <tbody>
-                  ${VANTI_INCENTIVOS.map(ie=>`
-                    <tr>
-                      <td><strong>${ie.mes}</strong></td>
-                      <td class="r">${ie.eventos}</td>
-                      <td style="font-size:.6rem; color:var(--gray3)">${ie.nota}</td>
-                    </tr>`).join('')}
-                  <tr class="total">
-                    <td>Total</td>
-                    <td class="r">${VANTI_INCENTIVOS.reduce((s,d)=>s+d.eventos,0)}</td>
-                    <td style="font-size:.6rem">8 eventos de incentivo Vanti en el semestre</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
-        <!-- Incentivos Xuma -->
-        <div data-aspane="xuma" class="asesor-pane">
-          <div class="asesores-section" style="margin-bottom:0">
-            <div class="asesores-section-label" style="margin-bottom:5px">${icon('coins', { size: 14 })} Incentivos extras pagados 1S</div>
-            <div class="tbl-wrap" style="margin-top:0">
-              <table class="tbl-compact">
-                <thead><tr><th>Mes</th><th class="r">Eventos</th><th>Detalle</th></tr></thead>
-                <tbody>
-                  ${INCENTIVOS_EXTRAS.map(ie=>`
-                    <tr>
-                      <td><strong>${ie.mes}</strong></td>
-                      <td class="r">${ie.eventos}</td>
-                      <td style="font-size:.6rem; color:var(--gray3)">${ie.nota}</td>
-                    </tr>`).join('')}
-                  <tr class="total">
-                    <td>Total</td>
-                    <td class="r">${INCENTIVOS_EXTRAS.reduce((s,d)=>s+d.eventos,0)}</td>
-                    <td style="font-size:.6rem">41 eventos de incentivo en el semestre</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
-        <div style="margin-top:auto; padding:8px 12px; background:linear-gradient(135deg,rgba(0,205,147,.08),rgba(90,226,128,.05)); border:1px solid rgba(0,205,147,.15); border-radius:8px">
-          <div style="display:flex; gap:6px; align-items:flex-start">
-            <span style="font-size:.6rem; flex-shrink:0; margin-top:1px">${icon('award')}</span>
-            <div style="font-size:.56rem; color:#0a3d35; line-height:1.5">
-              <strong style="color:var(--teal)">Un equipo que rinde:</strong> con <strong>21 asesores activos a la fecha</strong> y un top 5 que concentra el 37 % de las ventas con disciplina y compromiso, cada campaña de incentivos fue un paso firme hacia la meta de 3.000 ventas mensuales. Este semestre demuestra que la apuesta por el talento y la constancia en la formación están dando resultados sólidos y sostenibles.
-            </div>
-          </div>
-        </div>
+        <div style="font-size:.6rem; color:var(--dark)">${icon('star', { size: 11 })} El top 5 aporta <strong>4.279 pólizas (37 %)</strong> del semestre.</div>
+      </div>`}
+      <div class="alert alert-info" style="flex:1; margin:0; padding:10px 18px; display:flex; align-items:center">
+        <span class="ico">${icon('award')}</span>
+        <span style="font-size:.7rem"><strong>Un equipo que rinde:</strong> el equipo creció de 15 a 21 asesores (+40 %), pero la productividad media bajó de 150 a 110 pólizas/asesor. El top 5 concentra el <strong>37 % de las ventas (4.279 pólizas)</strong>: el reto del 2S no es sumar gente, es nivelar al resto hacia ese estándar.</span>
       </div>
+    </div>
     </div>`;
-}
-
-function asesoresTab(name) {
-  document.querySelectorAll('.asesor-tab').forEach(b => b.classList.toggle('active', b.dataset.astab === name));
-  document.querySelectorAll('[data-aspane]').forEach(p => p.classList.toggle('active', p.dataset.aspane === name));
 }
 
 function renderIniciativas() {
@@ -921,42 +850,31 @@ function renderIniciativas() {
   const nVanti = INICIATIVAS_1S.filter(i=>i.origen==='Vanti').length;
   const nXuma  = INICIATIVAS_1S.filter(i=>i.origen==='Xuma').length;
 
+  /* Línea de tiempo horizontal profesional: eje central, hitos en orden
+     cronológico y bloques de texto alternando arriba/abajo. */
+  const orden = [0, 1, 2, 3, 4, 7, 5, 6].map(i => INICIATIVAS_1S[i]);
+
   el.innerHTML = `
-    <div class="panel">
-      <h3 style="margin-bottom:10px">${icon('rocket')} Lo ejecutado en el 1S</h3>
-      <div class="kpi-grid" style="margin-bottom:12px">
-        <div class="kpi-card">
-          <div class="kpi-label">Ventas en campañas del 1S</div>
-          <div class="kpi-val">${fmt(totalCampanas)}</div>
-          <div class="kpi-sub">7 iniciativas comerciales ejecutadas</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-label">Impulsadas por Vanti</div>
-          <div class="kpi-val">${nVanti}</div>
-          <div class="kpi-sub">Semanas Ganadoras · La Gran Jugada</div>
-        </div>
-        <div class="kpi-card green">
-          <div class="kpi-label">Impulsadas por Xuma</div>
-          <div class="kpi-val">${nXuma}</div>
-          <div class="kpi-sub">Semana Burger ×2 · Feria Vanti ×2 · Mundialista</div>
-        </div>
+    <div class="panel" style="height:100%; display:flex; flex-direction:column; min-height:0">
+      <div style="display:flex; align-items:baseline; justify-content:space-between; flex-shrink:0; border-bottom:2px solid var(--gray2); padding-bottom:6px; margin-bottom:2px">
+        <h3 style="margin:0; border:none; padding:0">${icon('rocket')} Lo ejecutado en el 1S</h3>
+        <div style="font-size:.68rem; color:var(--gray3)"><strong style="color:var(--teal)">${fmt(totalCampanas)} ventas</strong> en ${INICIATIVAS_1S.length} iniciativas · <span style="color:#c98908; font-weight:700">${nVanti} Vanti</span> · <span style="color:#009a70; font-weight:700">${nXuma} Xuma</span></div>
       </div>
-      <div class="mini-grid mini-grid-3">
-        ${INICIATIVAS_1S.map((i,idx)=>{
-          const cumpl = i.meta ? Math.round(i.ventas/i.meta*100) : null;
+
+      <div style="flex:1; min-height:0; position:relative">
+        <div style="position:absolute; left:1.5%; right:1.5%; top:50%; height:3px; margin-top:-1.5px; border-radius:2px; background:linear-gradient(90deg, #120180, #1d02b8 55%, #00CD93)"></div>
+        ${orden.map((ini, i) => {
+          const x = 6.5 + i * (87 / 7);
+          const up = i % 2 === 0;
+          const cumpl = ini.meta ? Math.round(ini.ventas/ini.meta*100) : null;
+          const colOr = ini.origen === 'Vanti' ? '#c98908' : '#009a70';
           return `
-          <div class="mini-card" onclick="toggleCard('ini2-detalle-${idx}','ini2-chevron-${idx}')">
-            <div class="mini-card-top">
-              <span class="badge ${i.origen==='Vanti'?'badge-y':'badge-g'}" style="font-size:.6rem">${i.origen}</span>
-              <span style="font-size:.62rem; color:var(--gray3)">${i.mes}</span>
-            </div>
-            <div class="mini-card-title">${i.nombre}</div>
-            <div class="mini-card-stat">
-              <strong>${fmt(i.ventas)}</strong>${i.meta?` <span style="color:var(--gray3); font-weight:500">/ ${fmt(i.meta)}</span>`:''}
-              ${cumpl?badge(cumpl+' %', cumpl>=100?'g':'y'):''}
-            </div>
-            <div class="ini-detalle" id="ini2-detalle-${idx}" style="padding-left:0; padding-right:0">${i.nota}</div>
-            <div class="mini-card-more" id="ini2-chevron-${idx}">Ver detalle ▾</div>
+          <div style="position:absolute; left:${x.toFixed(2)}%; top:50%; width:13px; height:13px; transform:translate(-50%,-50%); border-radius:50%; background:${ini.origen==='Vanti'?'#f5a623':'#00CD93'}; box-shadow:0 0 0 3px #fff, 0 1px 5px rgba(18,1,128,.25); z-index:2"></div>
+          <div style="position:absolute; left:${x.toFixed(2)}%; ${up?'bottom:calc(50% + 9px)':'top:calc(50% + 9px)'}; width:1.5px; height:30px; transform:translateX(-50%); background:rgba(18,1,128,.22)"></div>
+          <div style="position:absolute; left:${x.toFixed(2)}%; ${up?'bottom:calc(50% + 44px)':'top:calc(50% + 44px)'}; transform:translateX(-50%); width:158px; text-align:center; z-index:2">
+            <div style="font-size:.56rem; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:${colOr}">${ini.mes} · ${ini.origen}</div>
+            <div style="font-size:.74rem; font-weight:800; color:var(--blue); line-height:1.2; margin:1px 0">${ini.nombre}</div>
+            <div style="font-size:.66rem"><strong style="color:var(--teal)">${fmt(ini.ventas)}</strong>${ini.meta?` <span style="color:var(--gray3); font-size:.56rem">/ ${fmt(ini.meta)}</span>`:''} ${cumpl?badge(cumpl+' %', cumpl>=100?'g':'y'):''}</div>
           </div>`;
         }).join('')}
       </div>
@@ -1009,32 +927,29 @@ function renderCapacitaciones() {
     <div style="padding:0 10px; height:100%; display:flex; flex-direction:column">
       <div class="alert alert-info" style="margin-bottom:4px; padding:4px 12px; flex-shrink:0; align-items:center; justify-content:center; text-align:center">
         <span class="ico" style="margin-top:0">${icon('graduation-cap')}</span>
-        <span style="font-size:.52rem"><strong>10 capacitaciones</strong> ejecutadas por Xuma — al menos una por mes, con análisis de impacto operativo por sesión.</span>
+        <span style="font-size:.66rem"><strong>10 capacitaciones</strong> ejecutadas por Xuma — al menos una por mes.</span>
       </div>
-      <div style="flex:1; position:relative; margin:2px 0 0">
+      <div style="flex:1; position:relative; margin:2px 0 0; display:flex; flex-direction:column; min-height:0">
         <div style="position:absolute; top:6px; bottom:6px; left:50%; width:3px; margin-left:-1.5px; border-radius:2px; background:linear-gradient(180deg,${colores.join(',')})"></div>
         ${CAP_ANALISIS.map((g, gi)=>{
           const left = gi%2===0;
           const col = colores[gi];
           return `
-          <div style="position:relative; min-height:${36 + g.items.length * 26}px; margin-bottom:${gi<5?'2':'0'}px">
-            <div style="position:absolute; left:50%; top:8px; width:14px; height:14px; margin-left:-7px; border-radius:50%; background:${col}; box-shadow:0 0 0 3px rgba(255,255,255,.5), 0 2px 8px rgba(0,0,0,.12); z-index:2"></div>
-            <div style="position:absolute; top:15px; ${left?'right':'left'}:calc(50% + 8px); width:20px; height:1.5px; background:${col}; opacity:.4"></div>
+          <div style="position:relative; flex:1; display:flex; align-items:center; min-height:0">
+            <div style="position:absolute; left:50%; top:50%; width:14px; height:14px; margin:-7px 0 0 -7px; border-radius:50%; background:${col}; box-shadow:0 0 0 3px rgba(255,255,255,.5), 0 2px 8px rgba(0,0,0,.12); z-index:2"></div>
+            <div style="position:absolute; top:50%; ${left?'right':'left'}:calc(50% + 8px); width:20px; height:1.5px; background:${col}; opacity:.4"></div>
             <div style="${left?'margin-right:auto; padding-right:8px':'margin-left:auto; padding-left:8px'}; width:calc(50% - 26px)">
-              <div style="background:#fff; border:1px solid ${col}25; border-radius:7px; padding:4px 7px; box-shadow:0 1px 6px rgba(0,0,0,.05)">
+              <div style="background:#fff; border:1px solid ${col}25; border-radius:7px; padding:7px 12px; box-shadow:0 1px 6px rgba(0,0,0,.05)">
                 <div style="display:flex; align-items:center; gap:5px; margin-bottom:2px; padding-bottom:2px; border-bottom:1px solid ${col}20">
-                  <span style="font-size:.44rem; font-weight:800; color:${col}; text-transform:uppercase; letter-spacing:.06em">${g.mes}</span>
-                  <span style="font-size:.4rem; color:${col}; opacity:.5">·</span>
-                  <span style="font-size:.4rem; color:var(--gray3)">${g.items.length} sesión${g.items.length>1?'es':''}</span>
+                  <span style="font-size:.6rem; font-weight:800; color:${col}; text-transform:uppercase; letter-spacing:.06em">${g.mes}</span>
+                  <span style="font-size:.52rem; color:${col}; opacity:.5">·</span>
+                  <span style="font-size:.52rem; color:var(--gray3)">${g.items.length} sesión${g.items.length>1?'es':''}</span>
                 </div>
                 ${g.items.map((it,ii)=>`
-                  <div style="margin-bottom:${ii<g.items.length-1?'3':'0'}px; padding-bottom:${ii<g.items.length-1?'2':'0'}px; ${ii<g.items.length-1?'border-bottom:1px dashed rgba(0,0,0,.05)':''}">
-                    <div style="display:flex; gap:5px">
-                      <span style="flex-shrink:0; width:14px; text-align:center; color:${col}; font-size:.4rem; margin-top:1px">${it.ico}</span>
-                      <div>
-                        <div style="font-size:.52rem; font-weight:700; color:var(--blue); line-height:1.3">${it.tema}</div>
-                        <div style="font-size:.46rem; color:#1a1a3a; line-height:1.4; margin-top:1px">${it.analisis}</div>
-                      </div>
+                  <div style="margin-bottom:${ii<g.items.length-1?'4':'0'}px; padding-bottom:${ii<g.items.length-1?'3':'0'}px; ${ii<g.items.length-1?'border-bottom:1px dashed rgba(0,0,0,.05)':''}">
+                    <div style="display:flex; gap:6px; align-items:center">
+                      <span style="flex-shrink:0; width:18px; text-align:center; color:${col}; font-size:.6rem">${it.ico}</span>
+                      <div style="font-size:.72rem; font-weight:700; color:var(--blue); line-height:1.3">${it.tema}</div>
                     </div>
                   </div>`).join('')}
               </div>
@@ -1051,17 +966,17 @@ function renderMonitoreo() {
   if (!el) return;
 
   el.innerHTML = `
-    <div style="display:flex; gap:12px; height:100%; padding:0 4px">
-      <div style="flex:1; display:flex; flex-direction:column; gap:6px; background:rgba(18,1,128,.03); border-radius:8px; padding:10px 14px">
-        <h3 style="margin:0 0 4px; font-size:.78rem; color:var(--blue)">${icon('search', { size: 16 })} Monitoreo y acompañamiento</h3>
+    <div style="display:flex; gap:12px; height:100%; min-height:0; padding:0 4px 8px">
+      <div style="flex:1; display:flex; flex-direction:column; gap:8px; min-height:0; background:rgba(18,1,128,.03); border-radius:8px; padding:10px 14px">
+        <h3 style="margin:0 0 2px; font-size:.78rem; color:var(--blue); flex-shrink:0">${icon('search', { size: 16 })} Monitoreo y acompañamiento</h3>
         ${[
           [icon('phone'),'Monitoreo semanal en vivo','Objeciones, tipificación y corrección inmediata','Se revisa en vivo cómo el asesor debate objeciones, si tipifica correctamente y se corrigen errores al momento.'],
           [icon('repeat'),'Monitoreos ocasionales','Contrastan tipificación vs. la llamada real','Auditorías puntuales en algunos meses para verificar que la tipificación registrada coincida con lo que pasó en la llamada.'],
           [icon('life-buoy'),'Kit de emergencia','Manual de objeciones desde "no interesado"','Se revisan las llamadas tipificadas "no interesado" para nutrir un manual de objeciones que guía al asesor hacia el cierre.'],
           [icon('bar-chart-3'),'Revisión semanal por asesor','Avance, proyección y KPI faltante','Seguimiento individual: cómo va cada asesor, a qué % se proyecta y qué le falta para su meta.'],
         ].map(it=>`
-          <div style="background:#fff; border-radius:8px; padding:8px 12px; box-shadow:0 1px 4px rgba(18,1,128,.08)">
-            <div style="display:flex; align-items:flex-start; gap:10px">
+          <div style="background:#fff; border-radius:8px; padding:8px 12px; box-shadow:0 1px 4px rgba(18,1,128,.08); flex:1; min-height:0; display:flex; align-items:center">
+            <div style="display:flex; align-items:center; gap:10px">
               <span style="flex-shrink:0; width:26px; height:26px; display:flex; align-items:center; justify-content:center; background:rgba(18,1,128,.08); border-radius:6px; color:var(--blue); font-size:.65rem">${it[0]}</span>
               <div>
                 <div style="font-size:.72rem; font-weight:700; color:#120180">${it[1]}</div>
@@ -1072,16 +987,16 @@ function renderMonitoreo() {
           </div>`).join('')}
       </div>
 
-      <div style="flex:1; display:flex; flex-direction:column; gap:6px; background:rgba(0,205,147,.04); border-radius:8px; padding:10px 14px">
-        <h3 style="margin:0 0 4px; font-size:.78rem; color:var(--teal)">${icon('settings', { size: 16 })} Cambios de proceso (Xuma)</h3>
+      <div style="flex:1; display:flex; flex-direction:column; gap:8px; min-height:0; background:rgba(0,205,147,.04); border-radius:8px; padding:10px 14px">
+        <h3 style="margin:0 0 2px; font-size:.78rem; color:var(--teal); flex-shrink:0">${icon('settings', { size: 16 })} Cambios de proceso (Xuma)</h3>
         ${[
           [icon('hourglass'),'Exclusiones del seguro','Menor carencia + coberturas adicionales','Se ajustaron las exclusiones dando más beneficios y menor tiempo de carencia, con el guion actualizado para incorporar la nueva asistencia.'],
           [icon('hand'),'Bienvenida autogestión','Trato preferencial y medición de experiencia','Bienvenida exclusiva para clientes que obtuvieron el crédito por autogestión, conociendo cómo perciben esta nueva forma de crédito.'],
           [icon('megaphone'),'Frase de aclaración obligatoria','El asesor deja explícito que es un seguro','Cuando el usuario cree que es solo información, el asesor debe aclarar que se está ofreciendo un seguro, para una venta más transparente.'],
           [icon('target'),'Segmentación y contactabilidad','Por localidad/edad + control de spam/DID','Cargues priorizados según mayor presencia de ventas por localidad o edad, y barrido de contactos sin respuesta más cambio de DID si el número marca como spam.'],
         ].map(it=>`
-          <div style="background:#fff; border-radius:8px; padding:8px 12px; box-shadow:0 1px 4px rgba(0,205,147,.1)">
-            <div style="display:flex; align-items:flex-start; gap:10px">
+          <div style="background:#fff; border-radius:8px; padding:8px 12px; box-shadow:0 1px 4px rgba(0,205,147,.1); flex:1; min-height:0; display:flex; align-items:center">
+            <div style="display:flex; align-items:center; gap:10px">
               <span style="flex-shrink:0; width:26px; height:26px; display:flex; align-items:center; justify-content:center; background:rgba(0,205,147,.1); border-radius:6px; color:var(--teal); font-size:.65rem">${it[0]}</span>
               <div>
                 <div style="font-size:.72rem; font-weight:700; color:#005f4e">${it[1]}</div>
@@ -1125,8 +1040,8 @@ function renderContactab() {
       </div>
       <div class="kpi-card" style="padding:8px 16px">
         <div class="kpi-label">Efectividad prom./contacto</div>
-        <div class="kpi-val">7,9 %</div>
-        <div class="kpi-sub">Promedio ene–jun (5,7–10,9 %)</div>
+        <div class="kpi-val">9,0 %</div>
+        <div class="kpi-sub">Promedio ene–jun (7,5–11,2 %)</div>
       </div>
       <div class="kpi-card warn" style="padding:8px 16px">
         <div class="kpi-label">Contestador (semestre)</div>
@@ -1169,12 +1084,12 @@ function renderContactab() {
             </tr></thead>
             <tbody>
               ${DATA.meses.map((m,i)=>{
-                const efect = DATA.ventasOp[i] / DATA.contactados[i] * 100;
+                const efect = DATA.ventasLiq[i] / DATA.contactados[i] * 100;
                 return `
                 <tr>
                   <td><strong>${m}</strong></td>
                   <td class="r">${fmt(DATA.contactados[i])}</td>
-                  <td class="r">${fmt(DATA.ventasOp[i])}</td>
+                  <td class="r">${fmt(DATA.ventasLiq[i])}</td>
                   <td class="r">${badge(fmtPct(efect), efect>=9?'g':efect>=7?'y':'r')}</td>
                 </tr>`;}).join('')}
             </tbody>
@@ -1185,7 +1100,7 @@ function renderContactab() {
 
     <div class="alert alert-info" style="margin-top:10px; padding:8px 14px">
       <span class="ico">${icon('pin')}</span>
-      <span><strong>Lo importante:</strong> entre enero (22 %) y mayo (65 %) triplicamos la contactabilidad sin cambiar quién llamamos, solo <strong>cómo y cuándo</strong>. Eso nos trajo 19 % más ventas. <strong>Lectura:</strong> el calendario, horarios y estrategia de llamadas son tan poderosos como la base misma. Febrero y junio bajan porque cambia el mix de campañas (vimos esto arriba). En el 2S, Isaac propone seguir con análisis por franja horaria para identificar ventanas óptimas.</span>
+      <span><strong>Lo importante:</strong> entre enero (22 %) y mayo (65 %) triplicamos la contactabilidad sin cambiar quién llamamos, solo <strong>cómo y cuándo</strong>. Eso sostuvo el nivel de ventas pese a que la base apta cayó un 62 %. <strong>Lectura:</strong> el calendario, horarios y estrategia de llamadas son tan poderosos como la base misma. Febrero y junio bajan porque cambia el mix de campañas (vimos esto arriba). En el 2S, Isaac propone seguir con análisis por franja horaria para identificar ventanas óptimas.</span>
     </div>
     </div>
 
@@ -1304,7 +1219,7 @@ function renderTelefonia() {
           ${[
             ['Hoy', '69.740', 'caídas de troncal (backup Movistar)'],
             ['Recuperable', '≈ 49.500', 'contactos, a la tasa de Tigo (71 %)'],
-            ['Potencial', '≈ 3.900', 'ventas, a la efectividad histórica (7,9 %)'],
+            ['Potencial', '≈ 4.450', 'ventas, a la efectividad histórica (9,0 %)'],
           ].map(([paso, cifra, det], i)=>`
             ${i>0?'<div style="align-self:center; color:var(--teal); font-weight:800; font-size:1.2rem; flex-shrink:0">→</div>':''}
             <div style="flex:1; display:flex; flex-direction:column; justify-content:center; background:rgba(0,205,147,.07); border:1px solid rgba(0,205,147,.3); border-radius:10px; padding:10px 8px; text-align:center; min-height:86px">
@@ -1447,7 +1362,7 @@ function renderProyeccion() {
       </div>
       <div class="kpi-card warn" style="padding:8px 16px">
         <div class="kpi-label">Registros requeridos (estimado)</div>
-        <div class="kpi-val">~225K</div>
+        <div class="kpi-val">~200K</div>
         <div class="kpi-sub">Con indicadores históricos ene–jun</div>
       </div>
       <div class="kpi-card green" style="padding:8px 16px">
@@ -1475,11 +1390,11 @@ function renderProyeccion() {
             <thead><tr><th>Parámetro</th><th class="r">Valor histórico</th><th class="r">Insumo para 3.000</th></tr></thead>
             <tbody>
               <tr><td>Meta ventas/mes</td><td class="r">—</td><td class="r"><strong>3.000</strong></td></tr>
-              <tr><td>Efectividad / contactados</td><td class="r">7,93 %</td><td class="r">÷ 7,93 % = <strong>37.831</strong> contactos</td></tr>
-              <tr><td>Contactabilidad</td><td class="r">42,4 %</td><td class="r">÷ 42,4 % = <strong>89.203</strong> gestionados</td></tr>
-              <tr><td>% Gestión sobre aptos</td><td class="r">97,9 %</td><td class="r">÷ 97,9 % = <strong>91.163</strong> aptos</td></tr>
-              <tr><td>% Aptos (1–rechazo)</td><td class="r">40,5 %</td><td class="r">÷ 40,5 % = <strong>~225.100</strong> recibidos</td></tr>
-              <tr class="total"><td colspan="2">${icon('package')} Registros mínimos requeridos/mes</td><td class="r">220.000–230.000</td></tr>
+              <tr><td>Efectividad / contactados</td><td class="r">8,99 %</td><td class="r">÷ 8,99 % = <strong>33.370</strong> contactos</td></tr>
+              <tr><td>Contactabilidad</td><td class="r">42,4 %</td><td class="r">÷ 42,4 % = <strong>78.700</strong> gestionados</td></tr>
+              <tr><td>% Gestión sobre aptos</td><td class="r">97,9 %</td><td class="r">÷ 97,9 % = <strong>80.400</strong> aptos</td></tr>
+              <tr><td>% Aptos (1–rechazo)</td><td class="r">40,5 %</td><td class="r">÷ 40,5 % = <strong>~198.600</strong> recibidos</td></tr>
+              <tr class="total"><td colspan="2">${icon('package')} Registros mínimos requeridos/mes</td><td class="r">190.000–210.000</td></tr>
             </tbody>
           </table>
         </div>
@@ -1511,7 +1426,7 @@ function renderProyeccion() {
           ${[
             ['Paso 1 · Depurar', '60 % → 35 %', 'de rechazo, excluyendo re-envíos y producto activo'],
             ['Paso 2 · Aptos', '62K → 110K', 'registros aptos/mes con los mismos ~170K recibidos'],
-            ['Paso 3 · Ventas', '≈ 3.840', 'ventas/mes potenciales — supera la meta de 3.000'],
+            ['Paso 3 · Ventas', '≈ 4.380', 'ventas/mes potenciales — supera la meta de 3.000'],
           ].map(([paso, cifra, det], i)=>`
             ${i>0?'<div style="align-self:center; color:var(--teal); font-weight:800; font-size:1.1rem; flex-shrink:0">→</div>':''}
             <div style="flex:1; display:flex; flex-direction:column; justify-content:center; background:rgba(0,205,147,.07); border:1px solid rgba(0,205,147,.3); border-radius:10px; padding:6px 10px; text-align:center; min-height:60px">
@@ -1520,7 +1435,7 @@ function renderProyeccion() {
               <div style="font-size:.58rem; color:var(--gray3); line-height:1.25">${det}</div>
             </div>`).join('')}
         </div>
-        <div style="font-size:.6rem; color:var(--gray3); text-align:center; margin-bottom:2px">Premisas del cálculo: 97,8 % gestión · 45 % contactabilidad · 7,9 % conversión (históricos 1S)</div>
+        <div style="font-size:.6rem; color:var(--gray3); text-align:center; margin-bottom:2px">Premisas del cálculo: 97,8 % gestión · 45 % contactabilidad · 9,0 % conversión (históricos 1S)</div>
 
         <!-- Notas complementarias -->
         <ul class="check-list" style="gap:1px; margin:2px 0">
@@ -1678,9 +1593,9 @@ function renderEvidencias() {
   if (!el) return;
 
   el.innerHTML = `
-    <div style="display:flex; flex-wrap:wrap; gap:10px; align-content:start; height:100%; padding:0 4px">
+    <div style="display:grid; grid-template-columns:1fr 1fr; grid-template-rows:minmax(0,1fr) minmax(0,1fr); gap:10px; height:100%; min-height:0; padding:0 4px 8px">
       ${EVIDENCIAS.map(g => `
-        <div style="width:calc(50% - 5px); background:#fff; border-radius:12px; box-shadow:0 2px 10px rgba(0,0,0,.08); overflow:hidden; display:flex; flex-direction:column">
+        <div style="background:#fff; border-radius:12px; box-shadow:0 2px 10px rgba(0,0,0,.08); overflow:hidden; display:flex; flex-direction:column; min-height:0">
           <div style="display:flex; align-items:center; gap:7px; padding:6px 10px; height:30px; flex-shrink:0">
             <div style="width:22px; height:22px; border-radius:50%; overflow:hidden; flex-shrink:0; padding:1px">
               <img src="../assets/logos/Logo_fondoAzul.png" alt="Xuma" style="width:100%;height:100%;border-radius:50%;object-fit:cover" />
@@ -1691,7 +1606,7 @@ function renderEvidencias() {
             </div>
             <span style="color:var(--gray3); font-size:.68rem; letter-spacing:1px">•••</span>
           </div>
-          <div style="display:flex; gap:2px; padding:2px; height:250px">
+          <div style="display:flex; gap:2px; padding:2px; flex:1; min-height:0">
             ${g.fotos.map(f => `
               <div style="flex:1; overflow:hidden; border-radius:4px; background:#fff; display:flex; align-items:center; justify-content:center">
                 <img src="${g.carpeta}${f}" alt="${g.grupo}" style="width:100%;height:100%;object-fit:contain;display:block" />
@@ -1710,16 +1625,16 @@ function renderDetalleBienvenida() {
   const data = {
     highlights: [
       { label: 'CONTACTABILIDAD PROMEDIO', val: '79 %', sub: 'Líder en contactabilidad del canal' },
-      { label: 'VENTAS TOTALES', val: '6.912', sub: 'Aporta el 56% de las ventas operativas del canal' },
-      { label: 'CONVERSIÓN PROMEDIO', val: '19,6 %', sub: 'Alta efectividad comercial sobre contacto' }
+      { label: 'VENTAS TOTALES', val: '7.715', sub: 'Motor de ventas del canal' },
+      { label: 'CONVERSIÓN PROMEDIO', val: '20,1 %', sub: 'Alta efectividad comercial sobre contacto' }
     ],
     kpisBase: [
-      { mes: 'Enero', recibidos: 14772, rechazados: 8485, pctRechazo: '57,4', aptos: 6287, contactab: '81,5', ventas: 1208, conversion: '23,6', pctVentaRec: '19,2' },
-      { mes: 'Febrero', recibidos: 19573, rechazados: 11134, pctRechazo: '56,9', aptos: 8439, contactab: '79,0', ventas: 1435, conversion: '21,5', pctVentaRec: '17,0' },
-      { mes: 'Marzo', recibidos: 21419, rechazados: 13486, pctRechazo: '63,0', aptos: 7933, contactab: '78,7', ventas: 1170, conversion: '18,8', pctVentaRec: '14,7' },
-      { mes: 'Abril', recibidos: 19096, rechazados: 10792, pctRechazo: '56,5', aptos: 8304, contactab: '76,0', ventas: 1065, conversion: '16,9', pctVentaRec: '12,8' },
-      { mes: 'Mayo', recibidos: 20067, rechazados: 13166, pctRechazo: '65,6', aptos: 6901, contactab: '83,1', ventas: 1068, conversion: '18,6', pctVentaRec: '15,5' },
-      { mes: 'Junio', recibidos: 19767, rechazados: 13203, pctRechazo: '66,8', aptos: 6564, contactab: '80,1', ventas: 966, conversion: '18,4', pctVentaRec: '14,7' }
+      { mes: 'Enero', recibidos: 14772, rechazados: 8485, pctRechazo: '57,4', aptos: 6459, contactab: '81,5', ventas: 1251, conversion: '23,8', pctVentaRec: '19,4' },
+      { mes: 'Febrero', recibidos: 19573, rechazados: 11134, pctRechazo: '56,9', aptos: 8610, contactab: '79,1', ventas: 1480, conversion: '21,7', pctVentaRec: '17,2' },
+      { mes: 'Marzo', recibidos: 21419, rechazados: 13486, pctRechazo: '63,0', aptos: 8608, contactab: '78,5', ventas: 1265, conversion: '18,7', pctVentaRec: '14,7' },
+      { mes: 'Abril', recibidos: 19096, rechazados: 10792, pctRechazo: '56,5', aptos: 9117, contactab: '75,6', ventas: 1180, conversion: '17,2', pctVentaRec: '12,9' },
+      { mes: 'Mayo', recibidos: 20067, rechazados: 13166, pctRechazo: '65,6', aptos: 7773, contactab: '82,3', ventas: 1286, conversion: '20,1', pctVentaRec: '16,5' },
+      { mes: 'Junio', recibidos: 19767, rechazados: 13203, pctRechazo: '66,8', aptos: 8085, contactab: '77,9', ventas: 1253, conversion: '19,9', pctVentaRec: '15,5' }
     ],
     tipificacionRechazo: [
       { motivo: 'Cuota Protegida Activa', cant: 35758, pct: '50,9' },
@@ -1751,6 +1666,7 @@ function renderDetalleBienvenida() {
     observaciones: [
       "Esta base tiene la **mayor contactabilidad del canal (79,0 % Semestre)** y una efectividad sobresaliente.",
       "El descarte principal es **Cuota Protegida Activa (50,9 %)**, lo que indica que el 1S se depuró correctamente contra clientes vigentes antes de lanzar el marcador.",
+      "**Registros enviados anteriormente:** cada vez hay menos clientes nuevos en la base — hay mucho cliente que ya gestionamos en algún momento (los re-envíos suman el **16,6 % del descarte**).",
       "**Venta Exitosa** representa el **15,9 % de la gestión de leads aptos**, convirtiéndose en el motor de ventas del canal."
     ]
   };
@@ -1849,9 +1765,10 @@ function renderDetalleVoluntarios() {
       { desc: 'Otros no contacto', cant: 258, pct: '0,2' }
     ],
     observaciones: [
-      "Esta base tiene una **contactabilidad crítica muy baja (19,0 %)**, con un rechazo promedio del **53,03 %**.",
-      "El no contacto es el más alto del portafolio (**81,1 %**), impulsado masivamente por **Contestadores (78,6 %)**, lo que indica bases quemadas o números desactualizados.",
-      "En abril y mayo el rechazo llegó al **99 %** porque se enviaron registros duplicados. **Junio mostró recuperación (143 ventas y 3,10 % conversión)** al actualizarse la base."
+      "Menor oportunidad de conversión.",
+      "Densa y baja contactabilidad.",
+      "**Febrero:** Cabinas exclusivas, actualmente no se encuentran activas.",
+      "**Junio:** A corte, la base presenta un saludable porcentaje de conversión cercano al **5 %**, impulsado principalmente por la calidad de los registros y la integridad de la información suministrada en la base de datos."
     ]
   };
   renderCampanaDeepDive('detalle-voluntarios-body', data);
@@ -1934,9 +1851,10 @@ function renderDetalleMicroseguro() {
       { desc: 'Otros no contacto', cant: 17, pct: '0,2' }
     ],
     observaciones: [
-      "La campaña Microseguro tiene un **nivel de rechazo casi nulo (<1 %)** porque es base ultra-filtrada.",
-      "Muestra una contactabilidad excelente (**78,91 %**) y una conversión sobre contacto muy alta (**17,69 % promedio, llegando a 22,04 % en enero**).",
-      "**Venta Exitosa** es el **14,0 % de la gestión total de Leads**, consolidándose como un canal de gran eficiencia a menor escala."
+      "Fabricación desde Xuma.",
+      "Mayor oportunidad de venta.",
+      "Alto porcentaje de contactabilidad = **mayor efectividad**.",
+      "Base soporte efectiva para Masiva Voluntarios."
     ]
   };
   renderCampanaDeepDive('detalle-microseguro-body', data);
@@ -2026,20 +1944,21 @@ function renderCampanaDeepDive(campanaId, data) {
   }
 
   el.innerHTML = `
+    <div style="height:100%; display:flex; flex-direction:column; min-height:0">
     <!-- Fila Superior de Highlights Positivos (Tarjetas de KPI) -->
-    <div class="kpi-grid" style="display:grid; grid-template-columns:repeat(3, 1fr); gap:10px; margin-bottom:8px">
+    <div class="kpi-grid" style="display:grid; grid-template-columns:repeat(3, 1fr); gap:10px; margin-bottom:8px; flex-shrink:0">
       ${data.highlights.map(h => `
         <div class="kpi-card green" style="padding:6px 12px; display:flex; flex-direction:column; justify-content:center; min-height:50px">
           <div class="kpi-label" style="font-size:0.56rem; text-transform:uppercase; color:var(--gray3); margin-bottom:1px">${h.label}</div>
           <div class="kpi-val" style="font-size:1.15rem; font-weight:700; color:var(--green); line-height:1.2">${h.val}</div>
-          <div class="kpi-sub" style="font-size:0.54rem; color:rgba(255,255,255,0.7); white-space:nowrap; overflow:hidden; text-overflow:ellipsis">${h.sub}</div>
+          <div class="kpi-sub" style="font-size:0.54rem; color:var(--gray3); white-space:nowrap; overflow:hidden; text-overflow:ellipsis">${h.sub}</div>
         </div>
       `).join('')}
     </div>
 
-    <div class="two-col" style="gap:10px; margin-top:0; align-items:stretch">
+    <div class="two-col" style="gap:10px; margin-top:0; flex:1; min-height:0; grid-template-rows:minmax(0,1fr)">
       <!-- Columna Izquierda: Descarte / Rechazo -->
-      <div class="panel" style="padding:6px 12px; display:flex; flex-direction:column; gap:4px; flex:1">
+      <div class="panel" style="padding:6px 12px; display:flex; flex-direction:column; gap:4px; min-height:0; overflow:hidden">
         <h3 style="margin-bottom:2px; padding-bottom:2px; font-size:0.68rem; border-bottom:1px solid var(--gray2); color:var(--blue)">
           ${icon('alert-circle', {size: 12})} 1. Calidad de Base y Descarte Mensual
         </h3>
@@ -2121,7 +2040,7 @@ function renderCampanaDeepDive(campanaId, data) {
       </div>
 
       <!-- Columna Derecha: Gestión / Aptos -->
-      <div class="panel" style="padding:6px 12px; display:flex; flex-direction:column; gap:4px; flex:1">
+      <div class="panel" style="padding:6px 12px; display:flex; flex-direction:column; gap:4px; min-height:0; overflow:hidden">
         <h3 style="margin-bottom:2px; padding-bottom:2px; font-size:0.68rem; border-bottom:1px solid var(--gray2); color:var(--blue)">
           ${icon('trending-up', {size: 12})} 3. Insumo Apto, Contacto y Ventas
         </h3>
@@ -2187,17 +2106,44 @@ function renderCampanaDeepDive(campanaId, data) {
               <th class="r" style="padding:2px 4px">Total</th>
             </tr></thead>
             <tbody>
-              ${data.tipificacionAptos.map(r=>`
+              ${(() => {
+                /* Solo %: los títulos (contacto/no contacto) usan la contactabilidad
+                   real de cada mes; las subfilas se escalan a ese % mensual para que
+                   cada columna cierre en 100 %. */
+                const semTotal = data.tipificacionAptos.filter(r=>r.isTitle).reduce((s,r)=>s+r.cant,0);
+                const semCE = (data.tipificacionAptos.find(r=>r.isTitle)?.cant || 0) / semTotal * 100;
+                const fp = v => v.toFixed(1).replace('.', ',') + ' %';
+                let grupo = 'CE';
+                const filas = data.tipificacionAptos.map(r => {
+                  if (r.isTitle) grupo = r.desc.includes('NO CONTACTO') ? 'NC' : 'CE';
+                  const g = grupo;
+                  const pSem = r.cant / semTotal * 100;
+                  const celdas = data.kpisBase.map(m => {
+                    if (!(m.recibidos > 0)) return `<td class="r" style="border-right:1px solid rgba(0,0,0,.06); padding:2px 4px; color:var(--gray3)">—</td>`;
+                    const cm = parseFloat((m.contactab||'0').replace(',','.'));
+                    let pMes;
+                    if (r.isTitle) pMes = g === 'CE' ? cm : 100 - cm;
+                    else if (/^Venta exitosa/.test(r.desc)) pMes = m.ventas / m.aptos * 100;
+                    else pMes = g === 'CE' ? pSem * cm / semCE : pSem * (100 - cm) / (100 - semCE);
+                    return `<td class="r" style="border-right:1px solid rgba(0,0,0,.06); padding:2px 4px; ${r.isTitle ? 'color:var(--blue); font-weight:700;' : ''}">${fp(pMes)}</td>`;
+                  }).join('');
+                  return `
                 <tr style="${r.isTitle ? 'background:rgba(18,1,128,.04); font-weight:700' : ''}">
                   <td style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis; border-right:1px solid rgba(0,0,0,.06); padding:2px 4px; ${r.isTitle ? 'color:var(--blue)' : ''}" title="${r.desc}">
                     ${r.isTitle ? r.desc : '&nbsp;&nbsp;' + r.desc}
                   </td>
-                  ${(() => {
-                    const mensual = distribuirProporcional(r.cant, totalAptos, data.kpisBase, 'aptos');
-                    return mensual.map((val, idx) => `<td class="r" style="border-right:1px solid rgba(0,0,0,.06); padding:2px 4px; ${r.isTitle ? 'color:var(--blue); font-weight:700;' : ''} color:${data.kpisBase[idx].recibidos===0?'var(--gray3)':''}">${data.kpisBase[idx].recibidos===0?'—':fmt(val)}</td>`).join('');
-                  })()}
-                  <td class="r" style="padding:2px 4px; font-weight:700; ${r.isTitle ? 'color:var(--blue)' : ''}">${fmt(r.cant)}</td>
-                </tr>`).join('')}
+                  ${celdas}
+                  <td class="r" style="padding:2px 4px; font-weight:700; ${r.isTitle ? 'color:var(--blue)' : ''}">${fp(pSem)}</td>
+                </tr>`;
+                }).join('');
+                const totalRow = `
+                <tr class="total">
+                  <td style="border-right:1px solid rgba(0,0,0,.07); padding:2px 4px">Total gestionado</td>
+                  ${data.kpisBase.map(m => `<td class="r" style="border-right:1px solid rgba(0,0,0,.07); padding:2px 4px">${m.recibidos>0?'100 %':'—'}</td>`).join('')}
+                  <td class="r" style="padding:2px 4px">100 %</td>
+                </tr>`;
+                return filas + totalRow;
+              })()}
             </tbody>
           </table>
         </div>
@@ -2205,13 +2151,14 @@ function renderCampanaDeepDive(campanaId, data) {
     </div>
 
     <!-- Fila Inferior de Observaciones -->
-    <div class="alert alert-info" style="margin-top:6px; padding:6px 14px; font-size:0.62rem; line-height:1.45; display:flex; flex-direction:column; gap:2px">
+    <div class="alert alert-info" style="margin:8px 0 14px; padding:6px 14px; font-size:0.62rem; line-height:1.45; display:flex; flex-direction:column; gap:2px; flex-shrink:0">
       <div style="font-weight:700; color:var(--blue); display:flex; align-items:center; gap:4px">
         ${icon('lightbulb', {size: 13})} Observaciones Clave de la Base:
       </div>
       <ul style="margin-left:14px; list-style-type:disc; display:flex; flex-direction:column; gap:1px">
         ${data.observaciones.map(o=>`<li>${o.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')}</li>`).join('')}
       </ul>
+    </div>
     </div>
   `;
 }

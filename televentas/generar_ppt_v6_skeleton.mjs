@@ -21,7 +21,7 @@ const SLIDES = [
   [3,'Bases',null],[4,'Campanas',null],[5,'Autogestion',null],
   [6,'D. Bienvenida',null],[7,'D. Stock',null],[8,'D. Masiva',null],
   [9,'D. Satisfechos',null],[10,'D. Microseguro',null],[11,'D. Cancelaciones',null],
-  [12,'Asesores',[['Vanti',"asesoresTab('vanti')"],['Xuma',"asesoresTab('xuma')"]]],
+  [12,'Asesores',null],
   [13,'Iniciativas',null],[14,'Evidencias',null],[15,'Capacitaciones',null],
   [16,'Monitoreo',null],[17,'Cap. 2',null],
   [18,'Contactab.',[['Mes',"contactabTab('mes')"],['Campana',"contactabTab('campana')"]]],
@@ -41,12 +41,12 @@ async function main(){
 
   const pptx=new PptxGenJS(); pptx.defineLayout({name:'CUSTOM',width:PPT_W,height:PPT_H}); pptx.layout='CUSTOM';
   const browser=await chromium.launch({headless:true});
-  const ctx=await browser.newContext({viewport:{width:1280,height:720}});
+  const ctx=await browser.newContext({viewport:{width:1280,height:720},deviceScaleFactor:2});
   const page=await ctx.newPage();
 
   for(const [num,label,tabs] of SLIDES){
     try{
-      await page.goto(`http://localhost:${port}/televentas/index.html?slide=${num}`,{waitUntil:'networkidle',timeout:15000});
+      await page.goto(`http://localhost:${port}/televentas/index.html?slide=${num}`,{waitUntil:'load',timeout:30000});
       await page.waitForTimeout(900);
       await page.evaluate(()=>{
         const s=document.getElementById('scaler');if(s){s.style.position='relative';s.style.transform='scale(1)';s.style.top='0';s.style.left='0';}
@@ -102,9 +102,17 @@ async function main(){
             const style=window.getComputedStyle(el);
             if(style.display==='none'||style.visibility==='hidden') return;
 
-            let dt='';
-            for(const c of el.childNodes){if(c.nodeType===3)dt+=c.textContent;}
-            const text=dt.trim();
+            const hasBlockChildren = el.querySelector('div, p, table, tr, td, th, ul, li, h1, h2, h3, h4, h5, h6, section, article, nav, header, footer') !== null;
+            let text = '';
+            if (hasBlockChildren) {
+              let dt = '';
+              for (const c of el.childNodes) {
+                if (c.nodeType===3) dt += c.textContent;
+              }
+              text = dt.replace(/\s+/g, ' ').trim();
+            } else {
+              text = el.textContent.replace(/\s+/g, ' ').trim();
+            }
             if(!text||text.length<2) return;
 
             const p=vp(el);if(p.w<3||p.h<3) return;
@@ -162,7 +170,7 @@ async function main(){
           slide.addText(t.text,{
             x:t.x*SX,y:yAdj,
             w:Math.max(t.w*SX*1.03,0.3),h:t.isCell?t.h*SY:Math.max(t.h*SY*1.03,0.14),
-            fontSize:Math.min(t.fontSize*0.75,14),
+            fontSize:Math.min(t.fontSize*0.75,48),
             bold:t.bold,color:parseColor(t.color),fontFace:'Raleway',
             align:t.textAlign,
             margin:margin,valign:t.isCell?'middle':'top',

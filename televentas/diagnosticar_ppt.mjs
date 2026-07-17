@@ -23,7 +23,7 @@ const SLIDES = [
   [3,'Bases',null],[4,'Campanas',null],[5,'Autogestion',null],
   [6,'D. Bienvenida',null],[7,'D. Stock',null],[8,'D. Masiva',null],
   [9,'D. Satisfechos',null],[10,'D. Microseguro',null],[11,'D. Cancelaciones',null],
-  [12,'Asesores',[['Vanti',"asesoresTab('vanti')"],['Xuma',"asesoresTab('xuma')"]]],
+  [12,'Asesores',null],
   [13,'Iniciativas',null],[14,'Evidencias',null],[15,'Capacitaciones',null],
   [16,'Monitoreo',null],[17,'Cap. 2',null],
   [18,'Contactab.',[['Mes',"contactabTab('mes')"],['Campana',"contactabTab('campana')"]]],
@@ -79,7 +79,7 @@ async function readPPTX(filePath){
       const pList=txBody['a:p']||[];
       const pars=Array.isArray(pList)?pList:[pList];
       let fullText='';
-      let fontSize=10, bold=false;
+      let fontSize=0, bold=false;
       for(const p of pars){
         const rList=p['a:r']||[];
         const rs=Array.isArray(rList)?rList:[rList];
@@ -91,7 +91,7 @@ async function readPPTX(filePath){
       }
       const text=fullText.trim();
       if(text.length>=2){
-        texts.push({text,x,y,w,h,fontSize,bold,source:'shape'});
+        texts.push({text,x,y,w,h,fontSize:fontSize||10,bold,source:'shape'});
       }
     }
     slides.push(texts);
