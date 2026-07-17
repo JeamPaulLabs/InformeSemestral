@@ -337,7 +337,7 @@ function renderVentas() {
         </div>
       </div>
 
-      <div class="panel" style="display:flex; flex-direction:column; justify-content:space-between; padding:8px 12px">
+      <div class="panel" style="display:flex; flex-direction:column; padding:8px 12px">
         <div>
           <h3 style="margin-bottom:4px; padding-bottom:3px; font-size:.68rem">${icon('bike')} Rueda Seguro Retail (Como vamos)</h3>
           <div class="tbl-wrap" style="margin-top:0">
@@ -384,14 +384,10 @@ function renderVentas() {
             </table>
           </div>
         </div>
-        <div class="alert alert-info" style="margin-top:6px; margin-bottom: 0; padding:6px 12px">
-          <span class="ico">${icon('pin')}</span>
-          <span style="font-size:.62rem"><strong>Marzo y Mayo representaron los picos</strong> del canal. La efectividad se mantiene en niveles altos (78 - 84%). Los cierres de Mayo y Junio confirman ventas efectivas consolidadas superiores a 2.100 por mes.</span>
-        </div>
       </div>
     </div>
 
-    <div class="alert alert-info" style="margin-top:10px; margin-bottom:0; padding:8px 14px; border-left: 4px solid var(--green); background: rgba(90,226,128,0.08)">
+    <div class="alert alert-info" style="margin-top:14px; margin-bottom:0; padding:12px 18px; border-left: 4px solid var(--green); background: rgba(90,226,128,0.08)">
       <span class="ico">${icon('trending-up')}</span>
       <span style="font-size:.68rem; line-height:1.4; color:var(--dark)"><strong>Logro Comercial:</strong> el canal Retail cerró el semestre con <strong>${fmt(totalEfectivasCP + totalEfectivasRS)} ventas efectivas</strong> entre Cuota Protegida y Rueda Seguro, sosteniendo una efectividad promedio superior al <strong>${Math.min(promEfectCP, promEfectRS).toFixed(0)} %</strong> durante todo el semestre — un desempeño comercial consistente que valida el enfoque del canal en los puntos de mayor valor.</span>
     </div>
