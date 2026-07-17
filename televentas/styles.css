@@ -340,6 +340,9 @@ tbody tr:hover { background: #f0f2fc; }
 tbody td { padding: 9px 14px; color: var(--dark); font-weight: 500; }
 tbody td.r { text-align: right; font-variant-numeric: tabular-nums; }
 tbody tr.total td { font-weight: 800; background: #eeedf9; color: var(--blue); }
+tbody tr.micro td { background: #f5f8ff; border-top: 1px solid #e8ecf5; }
+tbody tr.micro td:first-child { font-weight:600; color:var(--gray3); }
+tbody tr.grand-total td { font-weight: 900; background: var(--blue); color: #fff; }
 /* Variante compacta, opt-in por clase — para tablas dentro de slides muy cargadas
    de contenido, sin afectar el resto de tablas del deck. */
 table.tbl-compact { font-size: .74rem; }

@@ -3,21 +3,22 @@
 //  Datos consolidados de: Manager_Performance_2026.md
 //                         Liquidacion_Metas_2026.md
 //                         Análisis_Data_Disponible.md
-//  Última actualización: 2026-07-08 (semestre completo ene–jun,
-//  liquidación de junio integrada y ratificada como cifra oficial)
+//  Última actualización: 2026-07-17 (base operativa 1S actualizada e
+//  integrada en Power BI — tableros del 2026-07-16; liquidación de
+//  junio ratificada como cifra oficial)
 // ============================================================
 
 const DATA = {
   meses: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun'],
-  registros:       [201409, 94918, 134897, 153111, 154335, 173413],
+  registros:       [202777, 96493, 136044, 154848, 156200, 175118],
   rechazados:      [99241,  48185, 60998,  114123, 116691, 109130],
-  aptos:           [102168, 46733, 73899,  38988,  37644,  64283],
-  pctRechazo:      [49.27,  50.76, 45.22,  74.54,  75.61,  62.93],
-  gestionados:     [102168, 46426, 60402,  31039,  37642,  43410],  // aptos efectivamente gestionados (Manager_Performance §2)
-  contactados:     [21204,  19832, 27138,  16200,  24031,  21291],
-  contactabilidad: [20.75,  42.72, 44.93,  52.19,  63.84,  49.05],
-  efectividad:     [7.96,   10.31, 6.73,   9.56,   8.49,   9.39],
-  ventasOp:        [1687,   2044,  1827,   1548,   2041,   1999],  // tablero operativo
+  aptos:           [103536, 48308, 75046,  40725,  39509,  65988],
+  pctRechazo:      [48.94,  49.94, 44.84,  73.70,  74.71,  62.32],
+  gestionados:     [103531, 47997, 71926,  40682,  39504,  61450],  // aptos efectivamente gestionados (Manager_Performance §2)
+  contactados:     [22402,  21171, 32546,  24520,  25647,  28552],
+  contactabilidad: [21.64,  44.11, 45.25,  60.27,  64.92,  46.46],
+  efectividad:     [8.71,   10.85, 6.36,   5.68,   9.08,   7.83],
+  ventasOp:        [1951,   2298,  2071,   1392,   2328,   2236],  // tablero operativo
   ventasLiq:       [2245,   2374,  2431,   2367,   2186,   2314],  // liquidación Martha (semestre completo)
   metaE1:          [2025,   2010,  2225,   2586,   2576,   2707],
   metaE2:          [2430,   2412,  2670,   3104,   3097,   1884],
@@ -94,15 +95,16 @@ const METAS_JUN = [
 /* ── CAMPAÑAS ─────────────────────────────────────────────── */
 /* Consolidado ene–jun (semestre completo). Suma de registros/contactados/gestionados/
    ventas de las 6 campañas mensuales de Manager_Performance_2026.md §2 — el total
-   de registros (912.083) y ventas (11.146) cuadra exacto con DATA. Los conteos crudos
+   de registros (921.480) y ventas (12.276) cuadra exacto con DATA. Los conteos crudos
    por campaña no se guardan aquí (solo % ya calculados de la fuente); por eso
    validateData() no puede recalcular este total automáticamente — si DATA cambia,
-   estos porcentajes deben revisarse a mano contra Manager_Performance_2026.md. */
+   estos porcentajes deben revisarse a mano contra Manager_Performance_2026.md.
+   conv = efectividad / contactados (Distribution Performance v2). */
 const CAMPANAS = [
-  { nombre: 'Bienvenidas Cuota Protegida', contactab: '79 %', conv: '19,5 %', perfil: 'Excelente' },
-  { nombre: 'Autogestión',                 contactab: '71 %', conv: '26,6 %', perfil: 'Excelente' },
-  { nombre: 'Cuota Protegida Stock',       contactab: '49 %', conv: '4,6 %',  perfil: 'Moderado' },
-  { nombre: 'Masiva Voluntarios',          contactab: '17 %', conv: '1,9 %',  perfil: 'Bajo' },
+  { nombre: 'Bienvenidas Cuota Protegida', contactab: '79 %', conv: '19,6 %', perfil: 'Excelente' },
+  { nombre: 'Autogestión',                 contactab: '73 %', conv: '26,3 %', perfil: 'Excelente' },
+  { nombre: 'Cuota Protegida Stock',       contactab: '52 %', conv: '3,6 %',  perfil: 'Moderado' },
+  { nombre: 'Masiva Voluntarios',          contactab: '19 %', conv: '1,5 %',  perfil: 'Bajo' },
 ];
 
 /* ── AUTOGESTIÓN · histórico mensual (Manager_Performance_2026.md §2) ──
@@ -115,10 +117,10 @@ const CAMPANAS = [
 const AUTOGESTION_MESES = [
   { mes: 'Ene', registros: 294,   aptos: 173,   contactados: 140, contactab: 80.92, efect: 30.71, ventas: 43,  rechazo: 121, pctRechazo: 41.16 },
   { mes: 'Feb', registros: 406,   aptos: 171,   contactados: 139, contactab: 81.29, efect: 32.37, ventas: 45,  rechazo: 235, pctRechazo: 57.88 },
-  { mes: 'Mar', registros: 1865,  aptos: 676,   contactados: 506, contactab: 74.85, efect: 17.19, ventas: 87,  rechazo: 1189, pctRechazo: 63.75 },
-  { mes: 'Abr', registros: 1950,  aptos: 813,   contactados: 564, contactab: 71.03, efect: 20.74, ventas: 117, rechazo: 1137, pctRechazo: 58.31 },
+  { mes: 'Mar', registros: 1864,  aptos: 675,   contactados: 515, contactab: 76.30, efect: 18.45, ventas: 95,  rechazo: 1189, pctRechazo: 63.79 },
+  { mes: 'Abr', registros: 1950,  aptos: 813,   contactados: 564, contactab: 71.03, efect: 20.39, ventas: 115, rechazo: 1137, pctRechazo: 58.31 },
   { mes: 'May', registros: 2203,  aptos: 872,   contactados: 661, contactab: 75.80, efect: 32.98, ventas: 218, rechazo: 1331, pctRechazo: 60.42 },
-  { mes: 'Jun', registros: 4968,  aptos: 1521,  contactados: 962, contactab: 63.25, efect: 29.21, ventas: 281, rechazo: 3447, pctRechazo: 69.38 },
+  { mes: 'Jun', registros: 4968,  aptos: 1521,  contactados: 1040, contactab: 68.38, efect: 27.60, ventas: 287, rechazo: 3447, pctRechazo: 69.38 },
 ];
 
 /* ── AUTOGESTIÓN · ventas por asesor (fuente: reporte de ventas.xlsx) ── */
@@ -135,7 +137,7 @@ const AUTOGESTION_ASESORES = [
 /* ── AUTOGESTIÓN · tipificación de contactos (reporte de ventas.xlsx) ── */
 /* Top 8 motivos de no-venta + ventas por mes. Ordenado por total descendente. */
 const AUTOGESTION_TIPOS = [
-  { nombre: 'Venta exitosa',          meses: [43,45,87,117,218,281], total: 791 },
+  { nombre: 'Venta exitosa',          meses: [43,45,95,115,218,287], total: 803 },  // alineado al tablero operativo actualizado (2026-07-16)
   { nombre: 'No interesado producto', meses: [40,33,165,202,213,382], total: 1035 },
   { nombre: 'Contestador',            meses: [21,29,127,74,69,442],  total: 762 },
   { nombre: 'Cuelga llamada',         meses: [16,22,69,83,69,106],   total: 365 },

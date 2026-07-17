@@ -297,6 +297,13 @@ function renderBases() {
   const el = document.getElementById('bases-body');
   if (!el) return;
 
+  const MICRO = {
+    recibidos: [1368, 1575, 1147, 1737, 1865, 1705],
+    rechazados: [5, 4, 4, 2, 3, 1],
+    pctRechazo: [0.4, 0.3, 0.3, 0.1, 0.2, 0.1],
+    aptos: [1363, 1571, 1143, 1735, 1862, 1704],
+    ventas: [264, 254, 158, 135, 287, 211]
+  };
   const totalRec  = DATA.registros.reduce((a,b)=>a+b,0);
   const totalRech = DATA.rechazados.reduce((a,b)=>a+b,0);
   const totalApt  = DATA.aptos.reduce((a,b)=>a+b,0);
@@ -305,6 +312,15 @@ function renderBases() {
   const totalLiq  = DATA.ventasLiq.reduce((a,b)=>a+b,0);
   const totalOp   = DATA.ventasOp.reduce((a,b)=>a+b,0);
   const pctRechProm = Math.round(totalRech/totalRec*100);
+  const mRec = MICRO.recibidos.reduce((a,b)=>a+b,0);
+  const mRech = MICRO.rechazados.reduce((a,b)=>a+b,0);
+  const mApt = MICRO.aptos.reduce((a,b)=>a+b,0);
+  const mVtas = MICRO.ventas.reduce((a,b)=>a+b,0);
+  const totalRecComb = totalRec + mRec;
+  const totalRechComb = totalRech + mRech;
+  const totalAptComb = totalApt + mApt;
+  const totalOpComb = totalOp + mVtas;
+  const totalLiqComb = totalLiq + mVtas;
 
   const funnel = [
     { label: 'Registros recibidos', val: totalRec,  pct: null,                               nota: 'Bases enviadas por Vanti (Power BI)' },
@@ -347,7 +363,7 @@ function renderBases() {
       <div class="panel" style="padding:8px 16px">
         <h3 style="margin-bottom:4px; padding-bottom:4px">${icon('calendar')} Volumen y calidad de base por mes</h3>
         <div class="tbl-wrap" style="margin-top:0">
-          <table class="tbl-compact" style="font-size:.7rem">
+          <table class="tbl-compact" style="font-size:.66rem">
             <thead><tr>
               <th>Mes</th>
               <th class="r">Recibidos</th>
@@ -366,10 +382,19 @@ function renderBases() {
                   <td class="r">${badge(Math.round(DATA.pctRechazo[i]) + ' %', DATA.pctRechazo[i]>65?'r':DATA.pctRechazo[i]>50?'y':'g')}</td>
                   <td class="r">${fmt(DATA.aptos[i])}</td>
                   <td class="r">${fmt(DATA.ventasOp[i])}</td>
-                  <td class="r"><strong>${fmt(DATA.ventasLiq[i])}</strong></td>
+                  <td class="r">${fmt(DATA.ventasLiq[i])}</td>
+                </tr>
+                <tr class="micro">
+                  <td style="padding-left:14px; font-size:.6rem">${m} · Micro</td>
+                  <td class="r" style="font-size:.6rem">${fmt(MICRO.recibidos[i])}</td>
+                  <td class="r" style="font-size:.6rem">${fmt(MICRO.rechazados[i])}</td>
+                  <td class="r" style="font-size:.6rem">${badge(MICRO.pctRechazo[i] + ' %', 'g')}</td>
+                  <td class="r" style="font-size:.6rem">${fmt(MICRO.aptos[i])}</td>
+                  <td class="r" style="font-size:.6rem">${fmt(MICRO.ventas[i])}</td>
+                  <td class="r" style="font-size:.6rem">${fmt(MICRO.ventas[i])}</td>
                 </tr>`).join('')}
               <tr class="total">
-                <td>Total</td>
+                <td>Total base</td>
                 <td class="r">${fmt(totalRec)}</td>
                 <td class="r">${fmt(totalRech)}</td>
                 <td class="r">${pctRechProm} %</td>
@@ -377,11 +402,27 @@ function renderBases() {
                 <td class="r">${fmt(totalOp)}</td>
                 <td class="r">${fmt(totalLiq)}</td>
               </tr>
+              <tr class="total micro">
+                <td>Total Microseguro</td>
+                <td class="r">${fmt(mRec)}</td>
+                <td class="r">${fmt(mRech)}</td>
+                <td class="r">${badge(Math.round(mRech/mRec*100) + ' %', 'g')}</td>
+                <td class="r">${fmt(mApt)}</td>
+                <td class="r">${fmt(mVtas)}</td>
+                <td class="r">${fmt(mVtas)}</td>
+              </tr>
+              <tr class="grand-total">
+                <td>Total general</td>
+                <td class="r">${fmt(totalRecComb)}</td>
+                <td class="r">${fmt(totalRechComb)}</td>
+                <td class="r">${Math.round(totalRechComb/totalRecComb*100)} %</td>
+                <td class="r">${fmt(totalAptComb)}</td>
+                <td class="r">${fmt(totalOpComb)}</td>
+                <td class="r"><strong>${fmt(totalLiqComb)}</strong></td>
+              </tr>
             </tbody>
           </table>
         </div>
-        <div style="font-size:.6rem; color:var(--gray3); margin-top:4px; line-height:1.3">Las ventas en base (operativo) no incluyen campañas fuera de base como Microseguro Activo. Distribución mensual:</div>
-        <div style="display:flex; gap:6px; margin-top:2px; font-size:.55rem; flex-wrap:wrap">${[264,254,158,135,287,211].map((v,i) => `<span style="background:var(--gray1); padding:1px 6px; border-radius:4px; white-space:nowrap"><strong>${DATA.meses[i]}:</strong> ${fmt(v)}</span>`).join('')} <span style="background:var(--blue); color:#fff; padding:1px 6px; border-radius:4px; white-space:nowrap"><strong>Total:</strong> ${fmt(1309)}</span></div>
       </div>
 
       <div class="panel" style="padding:8px 16px">
