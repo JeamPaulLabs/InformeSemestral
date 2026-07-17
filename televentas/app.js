@@ -380,10 +380,9 @@ function renderBases() {
             </tbody>
           </table>
         </div>
-        <div style="font-size:.6rem; color:var(--gray3); margin-top:4px; line-height:1.3">Las ventas en base (operativo) no incluyen campañas fuera de base como Microseguro Activo (<strong>1.462 pólizas</strong>). La liquidación consolida ambos orígenes.</div>
+        <div style="font-size:.6rem; color:var(--gray3); margin-top:4px; line-height:1.3">Las ventas en base (operativo) no incluyen campañas fuera de base como Microseguro Activo. Distribución mensual:</div>
+        <div style="display:flex; gap:6px; margin-top:2px; font-size:.55rem; flex-wrap:wrap">${[264,254,158,135,287,211].map((v,i) => `<span style="background:var(--gray1); padding:1px 6px; border-radius:4px; white-space:nowrap"><strong>${DATA.meses[i]}:</strong> ${fmt(v)}</span>`).join('')} <span style="background:var(--blue); color:#fff; padding:1px 6px; border-radius:4px; white-space:nowrap"><strong>Total:</strong> ${fmt(1309)}</span></div>
       </div>
-
-      <div class="panel" style="padding:8px 16px">
 
       <div class="panel" style="padding:8px 16px">
         <h3 style="margin-bottom:4px; padding-bottom:4px">${icon('trending-down')} Embudo de la gestión · de la base a la venta (semestre)</h3>
