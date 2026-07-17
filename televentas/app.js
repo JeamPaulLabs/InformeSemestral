@@ -300,8 +300,9 @@ function renderBases() {
   const MICRO = {
     recibidos: [1368, 1575, 1147, 1737, 1865, 1705],
     rechazados: [5, 4, 4, 2, 3, 1],
-    pctRechazo: [0.4, 0.3, 0.3, 0.1, 0.2, 0.1],
     aptos: [1363, 1571, 1143, 1735, 1862, 1704],
+    gestionados: [1363, 1571, 1143, 1735, 1862, 1704],
+    contactab: [87.9, 85.2, 78.9, 50.0, 86.8, 86.7],
     ventas: [264, 254, 158, 135, 287, 211]
   };
   const totalRec  = DATA.registros.reduce((a,b)=>a+b,0);
@@ -311,56 +312,59 @@ function renderBases() {
   const totalCont = DATA.contactados.reduce((a,b)=>a+b,0);
   const totalLiq  = DATA.ventasLiq.reduce((a,b)=>a+b,0);
   const totalOp   = DATA.ventasOp.reduce((a,b)=>a+b,0);
-  const pctRechProm = Math.round(totalRech/totalRec*100);
   const mRec = MICRO.recibidos.reduce((a,b)=>a+b,0);
   const mRech = MICRO.rechazados.reduce((a,b)=>a+b,0);
   const mApt = MICRO.aptos.reduce((a,b)=>a+b,0);
+  const mGest = MICRO.gestionados.reduce((a,b)=>a+b,0);
+  const mCont = MICRO.aptos.reduce((s,_,i) => s + Math.round(MICRO.aptos[i] * MICRO.contactab[i] / 100), 0);
   const mVtas = MICRO.ventas.reduce((a,b)=>a+b,0);
   const totalRecComb = totalRec + mRec;
   const totalRechComb = totalRech + mRech;
   const totalAptComb = totalApt + mApt;
+  const totalGestComb = totalGest + mGest;
+  const totalContComb = totalCont + mCont;
   const totalOpComb = totalOp + mVtas;
-  const totalLiqComb = totalLiq + mVtas;
+  const pctRechComb = Math.round(totalRechComb/totalRecComb*100);
 
   const funnel = [
-    { label: 'Registros recibidos', val: totalRec,  pct: null,                               nota: 'Bases enviadas por Vanti (Power BI)' },
-    { label: 'Aptos para gestión',  val: totalApt,  pct: Math.round(totalApt/totalRec*100),  nota: 'Tras depuración y descarte' },
-    { label: 'Gestionados',         val: totalGest, pct: Math.round(totalGest/totalApt*100), nota: 'Registros efectivamente marcados por el equipo' },
-    { label: 'Contactados',         val: totalCont, pct: Math.round(totalCont/totalGest*100),nota: 'Clientes con contacto efectivo' },
-    { label: 'Venta',               val: totalLiq,  pct: Math.round(totalLiq/totalCont*100), nota: 'Cifra oficial' },
+    { label: 'Registros recibidos', val: totalRecComb, pct: null,                               nota: 'Bases + Microseguro' },
+    { label: 'Aptos para gestión',  val: totalAptComb, pct: Math.round(totalAptComb/totalRecComb*100), nota: 'Tras depuración' },
+    { label: 'Gestionados',         val: totalGestComb, pct: Math.round(totalGestComb/totalAptComb*100),nota: 'Registros marcados' },
+    { label: 'Contactados',         val: totalContComb, pct: Math.round(totalContComb/totalGestComb*100),nota: 'Contacto efectivo' },
+    { label: 'Venta',               val: totalLiq,      pct: Math.round(totalLiq/totalContComb*100),     nota: 'Cifra oficial liquidación' },
   ];
 
   el.innerHTML = `
-    <div class="kpi-grid" style="gap:12px">
-      <div class="kpi-card" style="padding:8px 16px">
+    <div class="kpi-grid" style="gap:10px">
+      <div class="kpi-card" style="padding:6px 14px">
         <div class="kpi-label">Registros recibidos (ene–jun)</div>
-        <div class="kpi-val">${fmt(totalRec)}</div>
-        <div class="kpi-sub">Fuente: dashboards Power BI</div>
+        <div class="kpi-val">${fmt(totalRecComb)}</div>
+        <div class="kpi-sub">Incluye ${fmt(mRec)} de Microseguro</div>
       </div>
-      <div class="kpi-card warn" style="padding:8px 16px">
-        <div class="kpi-label">Rechazo promedio de base</div>
-        <div class="kpi-val">${pctRechProm} %</div>
-        <div class="kpi-sub">Solo ${100-pctRechProm} % apto para gestión</div>
+      <div class="kpi-card warn" style="padding:6px 14px">
+        <div class="kpi-label">Rechazo promedio</div>
+        <div class="kpi-val">${pctRechComb} %</div>
+        <div class="kpi-sub">Solo ${100-pctRechComb} % apto para gestión</div>
       </div>
-      <div class="kpi-card green" style="padding:8px 16px">
+      <div class="kpi-card green" style="padding:6px 14px">
         <div class="kpi-label">Aptos (gestionables)</div>
-        <div class="kpi-val">${fmt(totalApt)}</div>
-        <div class="kpi-sub">De ${fmt(totalRec)} recibidos</div>
+        <div class="kpi-val">${fmt(totalAptComb)}</div>
+        <div class="kpi-sub">De ${fmt(totalRecComb)} recibidos</div>
       </div>
-      <div class="kpi-card green" style="padding:8px 16px">
+      <div class="kpi-card green" style="padding:6px 14px">
         <div class="kpi-label">Ventas 1S (liquidación)</div>
         <div class="kpi-val">${fmt(totalLiq)}</div>
-        <div class="kpi-sub">1 venta por cada ${Math.round(totalRec/totalLiq)} registros recibidos</div>
+        <div class="kpi-sub">1 venta por cada ${Math.round(totalRecComb/totalLiq)} registros recibidos</div>
       </div>
-      <div class="kpi-card" style="padding:8px 16px">
+      <div class="kpi-card" style="padding:6px 14px">
         <div class="kpi-label">Ventas operativas (base)</div>
-        <div class="kpi-val">${fmt(totalOp)}</div>
-        <div class="kpi-sub">Registradas en base · dif vs liquidación: ${fmt(totalLiq-totalOp)}</div>
+        <div class="kpi-val">${fmt(totalOpComb)}</div>
+        <div class="kpi-sub">Incluye ${fmt(mVtas)} de Microseguro</div>
       </div>
     </div>
 
-    <div class="two-col" style="gap:14px">
-      <div class="panel" style="padding:8px 16px">
+    <div class="two-col" style="gap:10px">
+      <div class="panel" style="padding:6px 14px">
         <h3 style="margin-bottom:4px; padding-bottom:4px">${icon('calendar')} Volumen y calidad de base por mes</h3>
         <div class="tbl-wrap" style="margin-top:0">
           <table class="tbl-compact" style="font-size:.66rem">
@@ -405,7 +409,7 @@ function renderBases() {
         <div style="font-size:.6rem; color:var(--gray3); margin-top:3px; line-height:1.3">Recibidos, aptos y venta base incluyen Microseguro Activo (<strong>${fmt(mRec)}</strong> registros, <strong>${fmt(mVtas)}</strong> ventas). Venta liquidación es cifra oficial sin ajuste.</div>
       </div>
 
-      <div class="panel" style="padding:8px 16px">
+      <div class="panel" style="padding:6px 14px">
         <h3 style="margin-bottom:4px; padding-bottom:4px">${icon('trending-down')} Embudo de la gestión · de la base a la venta (semestre)</h3>
         <div style="display:flex; flex-direction:column; margin-top:6px">
           ${(() => {
@@ -434,11 +438,11 @@ function renderBases() {
             }).join('');
           })()}
         </div>
-        <div style="font-size:.54rem; color:var(--gray3); margin-top:4px; text-align:center">Ancho del embudo en escala visual (no lineal) — los valores y porcentajes son los reales.</div>
+        <div style="font-size:.52rem; color:var(--gray3); margin-top:2px; text-align:center">Escala visual (no lineal). Valores reales.</div>
       </div>
     </div>
 
-    <div class="alert alert-info" style="margin-top:8px; padding:6px 14px">
+    <div class="alert alert-info" style="margin-top:6px; padding:10px 18px">
       <span class="ico">${icon('zap')}</span>
       <span style="font-size:.7rem"><strong>Oportunidad identificada:</strong> el 78 % del descarte son registros re-enviados (49 %) y clientes con el producto activo (29 %) — depurar la base en origen podría liberar <strong>+110.000 registros gestionables</strong> al semestre.</span>
     </div>`;
