@@ -272,10 +272,10 @@ function renderVentas() {
     </div>
 
     <div class="two-col" style="gap:10px">
-      <div class="panel" style="padding:8px 12px">
+      <div class="panel" style="padding:8px 12px; display:flex; flex-direction:column">
         <h3 style="margin-bottom:4px; padding-bottom:3px; font-size:.68rem">${icon('shield')} Cuota Protegida Tradicional</h3>
-        <div class="tbl-wrap" style="margin-top:0">
-          <table class="tbl-compact" style="font-size:.66rem">
+        <div class="tbl-wrap" style="margin-top:0; flex-grow:1">
+          <table class="tbl-compact" style="font-size:.66rem; width:100%; height:100%">
             <thead>
               <tr>
                 <th>Mes</th><th class="r">Aliados</th><th class="r">Gestores</th><th class="r">Financ.</th>
@@ -312,8 +312,8 @@ function renderVentas() {
               })()}
               <tr class="total">
                 <td>Total</td>
-                <td class="r">—</td>
-                <td class="r">—</td>
+                <td class="r">${Math.round(TRADICIONAL_DATA.ventas.cp.reduce((s, v) => s + v.aliados, 0) / TRADICIONAL_DATA.ventas.cp.length)}*</td>
+                <td class="r">${Math.round(TRADICIONAL_DATA.ventas.cp.reduce((s, v) => s + v.gestores, 0) / TRADICIONAL_DATA.ventas.cp.length)}*</td>
                 <td class="r">${fmt(cpFinanciaciones)}</td>
                 <td class="r">${fmt(cpCantadas)}</td>
                 <td class="r">${fmt(cpPositivas)}</td>
@@ -325,10 +325,10 @@ function renderVentas() {
         <div style="font-size:.56rem; color:var(--gray3); margin-top:4px">El cierre de junio registra un incremento en financiaciones (5.605) y 12 aliados activos.</div>
       </div>
 
-      <div class="panel" style="padding:8px 12px">
+      <div class="panel" style="padding:8px 12px; display:flex; flex-direction:column">
         <h3 style="margin-bottom:4px; padding-bottom:3px; font-size:.68rem">${icon('bike')} Rueda Seguro Tradicional</h3>
-        <div class="tbl-wrap" style="margin-top:0">
-          <table class="tbl-compact" style="font-size:.66rem">
+        <div class="tbl-wrap" style="margin-top:0; flex-grow:1">
+          <table class="tbl-compact" style="font-size:.66rem; width:100%; height:100%">
             <thead>
               <tr>
                 <th>Mes</th><th class="r">Aliados</th><th class="r">Gestores</th><th class="r">Financ.</th>
@@ -365,8 +365,8 @@ function renderVentas() {
               })()}
               <tr class="total">
                 <td>Total</td>
-                <td class="r">—</td>
-                <td class="r">—</td>
+                <td class="r">${Math.round(TRADICIONAL_DATA.ventas.rs.reduce((s, v) => s + v.aliados, 0) / TRADICIONAL_DATA.ventas.rs.length)}*</td>
+                <td class="r">${Math.round(TRADICIONAL_DATA.ventas.rs.reduce((s, v) => s + v.gestores, 0) / TRADICIONAL_DATA.ventas.rs.length)}*</td>
                 <td class="r">${fmt(rsFinanciaciones)}</td>
                 <td class="r">${fmt(rsCantadas)}</td>
                 <td class="r">${fmt(rsPositivas)}</td>
@@ -377,6 +377,13 @@ function renderVentas() {
         </div>
         <div style="font-size:.56rem; color:var(--gray3); margin-top:4px">Junio muestra un repunte de financiaciones de motocicletas (1.395) con 25 aliados activos.</div>
       </div>
+    </div>
+
+    <div style="font-size:.58rem; color:var(--gray3); margin-top:4px">* Aliados y Gestores en la fila de total corresponden al promedio mensual de la estructura activa del canal.</div>
+
+    <div class="alert alert-info" style="margin-top:4px; margin-bottom:0; padding:12px 18px; border-left: 4px solid var(--green); background: rgba(90,226,128,0.08)">
+      <span class="ico">${icon('trending-up')}</span>
+      <span style="font-size:.68rem; line-height:1.4; color:var(--dark)"><strong>Logro Comercial:</strong> el canal Tradicional cerró el semestre con <strong>${fmt(cpPositivas + rsPositivas)} ventas positivas</strong> entre Cuota Protegida y Rueda Seguro, y junio marcó el mayor volumen de financiaciones del 1S (<strong>5.605 en CP</strong> y <strong>1.395 en RS</strong>) con la red de aliados más amplia del semestre — una base sólida para acelerar la conversión en el 2S.</span>
     </div>
   `;
 }
@@ -494,6 +501,20 @@ function renderCobertura() {
                   </tr>
                 `;
               }).join('')}
+              ${(() => {
+                const ms = TRADICIONAL_DATA.cobertura.meses;
+                const avg = k => Math.round(ms.reduce((s, m) => s + m[k], 0) / ms.length);
+                const avgCob = ms.reduce((s, m) => s + m.cobertura, 0) / ms.length;
+                return `
+                  <tr class="total">
+                    <td>Prom. 1S</td>
+                    <td class="r">${avg('financiaron')}</td>
+                    <td class="r">${avg('capacitados')}</td>
+                    <td class="r"><strong>${avg('ambos')}</strong></td>
+                    <td class="r">${badge(avgCob.toFixed(1).replace('.', ',') + '%', 'y')}</td>
+                  </tr>
+                `;
+              })()}
             </tbody>
           </table>
         </div>
