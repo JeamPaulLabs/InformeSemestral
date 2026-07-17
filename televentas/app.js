@@ -297,14 +297,12 @@ function renderBases() {
   const el = document.getElementById('bases-body');
   if (!el) return;
 
-  const MICRO = {
-    recibidos: [1368, 1575, 1147, 1737, 1865, 1705],
-    rechazados: [5, 4, 4, 2, 3, 1],
-    aptos: [1363, 1571, 1143, 1735, 1862, 1704],
-    gestionados: [1363, 1571, 1143, 1735, 1862, 1704],
-    contactab: [87.9, 85.2, 78.9, 50.0, 86.8, 86.7],
-    ventas: [264, 254, 158, 135, 287, 211]
-  };
+  /* Todas las cifras salen de DATA (tableros Manager Performance), que YA
+     incluye la campaña Microseguro Activo en cada mes — no debe volver a
+     sumarse aparte. El embudo es 100 % operativo (misma fuente en cada
+     etapa); la liquidación (otra fuente: liquidación oficial de Martha)
+     se muestra como columna de cruce, no dentro del embudo. */
+  const MICRO_REC = 9397, MICRO_VTAS = 1309;  // ya contenidos en DATA (solo informativos)
   const totalRec  = DATA.registros.reduce((a,b)=>a+b,0);
   const totalRech = DATA.rechazados.reduce((a,b)=>a+b,0);
   const totalApt  = DATA.aptos.reduce((a,b)=>a+b,0);
@@ -312,54 +310,42 @@ function renderBases() {
   const totalCont = DATA.contactados.reduce((a,b)=>a+b,0);
   const totalLiq  = DATA.ventasLiq.reduce((a,b)=>a+b,0);
   const totalOp   = DATA.ventasOp.reduce((a,b)=>a+b,0);
-  const mRec = MICRO.recibidos.reduce((a,b)=>a+b,0);
-  const mRech = MICRO.rechazados.reduce((a,b)=>a+b,0);
-  const mApt = MICRO.aptos.reduce((a,b)=>a+b,0);
-  const mGest = MICRO.gestionados.reduce((a,b)=>a+b,0);
-  const mCont = MICRO.aptos.reduce((s,_,i) => s + Math.round(MICRO.aptos[i] * MICRO.contactab[i] / 100), 0);
-  const mVtas = MICRO.ventas.reduce((a,b)=>a+b,0);
-  const totalRecComb = totalRec + mRec;
-  const totalRechComb = totalRech + mRech;
-  const totalAptComb = totalApt + mApt;
-  const totalGestComb = totalGest + mGest;
-  const totalContComb = totalCont + mCont;
-  const totalOpComb = totalOp + mVtas;
-  const pctRechComb = Math.round(totalRechComb/totalRecComb*100);
+  const pctRechProm = Math.round(totalRech/totalRec*100);
 
   const funnel = [
-    { label: 'Registros recibidos', val: totalRecComb, pct: null,                               nota: 'Bases + Microseguro' },
-    { label: 'Aptos para gestión',  val: totalAptComb, pct: Math.round(totalAptComb/totalRecComb*100), nota: 'Tras depuración' },
-    { label: 'Gestionados',         val: totalGestComb, pct: Math.round(totalGestComb/totalAptComb*100),nota: 'Registros marcados' },
-    { label: 'Contactados',         val: totalContComb, pct: Math.round(totalContComb/totalGestComb*100),nota: 'Contacto efectivo' },
-    { label: 'Venta',               val: totalLiq,      pct: Math.round(totalLiq/totalContComb*100),     nota: 'Cifra oficial liquidación' },
+    { label: 'Registros recibidos', val: totalRec,  pct: null,                                nota: 'Bases Vanti + Microseguro (Power BI)' },
+    { label: 'Aptos para gestión',  val: totalApt,  pct: Math.round(totalApt/totalRec*100),   nota: 'Tras depuración' },
+    { label: 'Gestionados',         val: totalGest, pct: Math.round(totalGest/totalApt*100),  nota: 'Registros marcados' },
+    { label: 'Contactados',         val: totalCont, pct: Math.round(totalCont/totalGest*100), nota: 'Contacto efectivo' },
+    { label: 'Venta operativa',     val: totalOp,   pct: Math.round(totalOp/totalCont*100),   nota: 'Tipificación «venta exitosa»' },
   ];
 
   el.innerHTML = `
     <div class="kpi-grid" style="gap:10px">
       <div class="kpi-card" style="padding:6px 14px">
         <div class="kpi-label">Registros recibidos (ene–jun)</div>
-        <div class="kpi-val">${fmt(totalRecComb)}</div>
-        <div class="kpi-sub">Incluye ${fmt(mRec)} de Microseguro</div>
+        <div class="kpi-val">${fmt(totalRec)}</div>
+        <div class="kpi-sub">Ya incluye Microseguro Activo (${fmt(MICRO_REC)})</div>
       </div>
       <div class="kpi-card warn" style="padding:6px 14px">
         <div class="kpi-label">Rechazo promedio</div>
-        <div class="kpi-val">${pctRechComb} %</div>
-        <div class="kpi-sub">Solo ${100-pctRechComb} % apto para gestión</div>
+        <div class="kpi-val">${pctRechProm} %</div>
+        <div class="kpi-sub">Solo ${100-pctRechProm} % apto para gestión</div>
       </div>
       <div class="kpi-card green" style="padding:6px 14px">
         <div class="kpi-label">Aptos (gestionables)</div>
-        <div class="kpi-val">${fmt(totalAptComb)}</div>
-        <div class="kpi-sub">De ${fmt(totalRecComb)} recibidos</div>
-      </div>
-      <div class="kpi-card green" style="padding:6px 14px">
-        <div class="kpi-label">Ventas 1S (liquidación)</div>
-        <div class="kpi-val">${fmt(totalLiq)}</div>
-        <div class="kpi-sub">1 venta por cada ${Math.round(totalRecComb/totalLiq)} registros recibidos</div>
+        <div class="kpi-val">${fmt(totalApt)}</div>
+        <div class="kpi-sub">De ${fmt(totalRec)} recibidos</div>
       </div>
       <div class="kpi-card" style="padding:6px 14px">
-        <div class="kpi-label">Ventas operativas (base)</div>
-        <div class="kpi-val">${fmt(totalOpComb)}</div>
-        <div class="kpi-sub">Incluye ${fmt(mVtas)} de Microseguro</div>
+        <div class="kpi-label">Ventas operativas (tablero)</div>
+        <div class="kpi-val">${fmt(totalOp)}</div>
+        <div class="kpi-sub">Tipificación «venta exitosa» · incluye ${fmt(MICRO_VTAS)} de Microseguro</div>
+      </div>
+      <div class="kpi-card green" style="padding:6px 14px">
+        <div class="kpi-label">Ventas 1S (liquidación oficial)</div>
+        <div class="kpi-val">${fmt(totalLiq)}</div>
+        <div class="kpi-sub">1 venta por cada ${Math.round(totalRec/totalLiq)} registros recibidos</div>
       </div>
     </div>
 
@@ -379,34 +365,33 @@ function renderBases() {
             </tr></thead>
             <tbody>
               ${DATA.meses.map((m,i) => {
-                const r = DATA.registros[i] + MICRO.recibidos[i];
-                const d = DATA.rechazados[i] + MICRO.rechazados[i];
-                const p = d/r*100;
-                const a = DATA.aptos[i] + MICRO.aptos[i];
-                const vb = DATA.ventasOp[i] + MICRO.ventas[i];
+                const p = DATA.pctRechazo[i];
+                const vb = DATA.ventasOp[i];
+                const vl = DATA.ventasLiq[i];
+                const excepcion = vb > vl;  // solo mayo: el tablero arrastra gestión de abril
                 return `<tr>
                   <td><strong>${m}</strong></td>
-                  <td class="r">${fmt(r)}</td>
-                  <td class="r">${fmt(d)}</td>
+                  <td class="r">${fmt(DATA.registros[i])}</td>
+                  <td class="r">${fmt(DATA.rechazados[i])}</td>
                   <td class="r">${badge(Math.round(p) + ' %', p>65?'r':p>50?'y':'g')}</td>
-                  <td class="r">${fmt(a)}</td>
-                  <td class="r">${fmt(vb)}</td>
-                  <td class="r"><strong>${fmt(DATA.ventasLiq[i])}</strong></td>
+                  <td class="r">${fmt(DATA.aptos[i])}</td>
+                  <td class="r">${fmt(vb)}${excepcion ? '<span style="color:var(--warn);font-weight:800">*</span>' : ''}</td>
+                  <td class="r"><strong>${fmt(vl)}</strong></td>
                 </tr>`;
               }).join('')}
               <tr class="total">
                 <td>Total</td>
-                <td class="r">${fmt(totalRecComb)}</td>
-                <td class="r">${fmt(totalRechComb)}</td>
-                <td class="r">${Math.round(totalRechComb/totalRecComb*100)} %</td>
-                <td class="r">${fmt(totalAptComb)}</td>
-                <td class="r">${fmt(totalOpComb)}</td>
+                <td class="r">${fmt(totalRec)}</td>
+                <td class="r">${fmt(totalRech)}</td>
+                <td class="r">${Math.round(totalRech/totalRec*100)} %</td>
+                <td class="r">${fmt(totalApt)}</td>
+                <td class="r">${fmt(totalOp)}</td>
                 <td class="r">${fmt(totalLiq)}</td>
               </tr>
             </tbody>
           </table>
         </div>
-        <div style="font-size:.6rem; color:var(--gray3); margin-top:3px; line-height:1.3">Recibidos, aptos y venta base incluyen Microseguro Activo (<strong>${fmt(mRec)}</strong> registros, <strong>${fmt(mVtas)}</strong> ventas). Venta liquidación es cifra oficial sin ajuste.</div>
+        <div style="font-size:.6rem; color:var(--gray3); margin-top:3px; line-height:1.3">Venta base = tipificación «venta exitosa» del tablero operativo (todas las campañas, Microseguro incluido). Venta liquidación = cifra oficial (CP + Combo Vida), siempre mayor en el semestre (${fmt(totalLiq)} vs ${fmt(totalOp)}). <strong style="color:var(--warn)">* Mayo</strong>: el tablero operativo repite las bases de abril en Stock y Masiva (arrastra gestión tipificada tras el corte), por eso solo ese mes la venta base (${fmt(DATA.ventasOp[4])}) supera puntualmente la liquidación (${fmt(DATA.ventasLiq[4])}).</div>
       </div>
 
       <div class="panel" style="padding:6px 14px">
@@ -414,7 +399,7 @@ function renderBases() {
         <div style="display:flex; flex-direction:column; margin-top:6px">
           ${(() => {
             // Anchos visuales (escala raíz cuadrada con mínimo, para que la
-            // última etapa no desaparezca: 13.917 es el 1,5 % de 921.480).
+            // última etapa no desaparezca: 12.276 es el 1,3 % de 921.480).
             const widths = [100, 64, 60, 40, 28, 20]; // top de cada etapa + bottom final
             const colors = ['#120180', '#1d02b8', '#00CD93', '#2ed9a4', '#5AE280'];
             const darkText = [false, false, true, true, true];
@@ -438,7 +423,7 @@ function renderBases() {
             }).join('');
           })()}
         </div>
-        <div style="font-size:.52rem; color:var(--gray3); margin-top:2px; text-align:center">Escala visual (no lineal). Valores reales.</div>
+        <div style="font-size:.52rem; color:var(--gray3); margin-top:2px; text-align:center">Escala visual (no lineal). Valores reales, todos del tablero operativo. La liquidación oficial cierra en <strong>${fmt(totalLiq)}</strong> pólizas (incluye ventas cerradas fuera del marcador).</div>
       </div>
     </div>
 
@@ -456,8 +441,6 @@ function renderCampanas() {
   const detalleSemestre = [
     { c: 'Bienvenidas CP',       reg: 114694, ventas: 6912, contactab: '79 %', convSC: '19,6 %', perfil: 'g' },
     { c: 'Autogestión',          reg: 11685,  ventas: 803,  contactab: '73 %', convSC: '26,3 %', perfil: 'g' },
-    { c: 'CP Stock',             reg: 420641, ventas: 2845, contactab: '52 %', convSC: '3,6 %',  perfil: 'y' },
-    { c: 'Masiva Voluntarios',   reg: 255141, ventas: 324,  contactab: '19 %', convSC: '1,5 %',  perfil: 'r' },
     { c: 'CP Clientes Satisf.*', reg: 108659, ventas: 79,   contactab: '19 %', convSC: '1,2 %',  perfil: 'r' },
   ];
 
@@ -469,29 +452,19 @@ function renderCampanas() {
   const aptTotal  = DATA.aptos.reduce((a,b)=>a+b,0);
   const gestTotal = DATA.gestionados.reduce((a,b)=>a+b,0);
   const contTotal = DATA.contactados.reduce((a,b)=>a+b,0);
-  const liqTotal  = DATA.ventasLiq.reduce((a,b)=>a+b,0);
+  const opTotal   = DATA.ventasOp.reduce((a,b)=>a+b,0);
 
   el.innerHTML = `
     <div class="kpi-grid" style="gap:8px; margin-bottom:8px">
       <div class="kpi-card green" style="padding:4px 12px">
         <div class="kpi-label" style="font-size:.6rem">Bienvenidas CP</div>
         <div class="kpi-val" style="font-size:.85rem">${fmt(6912)} <span style="font-size:.5rem;font-weight:500;color:var(--gray3)">ventas</span></div>
-        <div class="kpi-sub" style="font-size:.5rem">56 % del total del semestre · 19,6 % de conversión</div>
+        <div class="kpi-sub" style="font-size:.5rem">${fmt(Math.round(6912/totalVentas*100))} % del total del semestre · 19,6 % de conversión</div>
       </div>
       <div class="kpi-card green" style="padding:4px 12px">
         <div class="kpi-label" style="font-size:.6rem">Autogestión</div>
         <div class="kpi-val" style="font-size:.85rem">26,3 %</div>
-        <div class="kpi-sub" style="font-size:.5rem">Conversión más alta del portafolio · 3× el promedio del canal</div>
-      </div>
-      <div class="kpi-card" style="padding:4px 12px">
-        <div class="kpi-label" style="font-size:.6rem">CP Stock</div>
-        <div class="kpi-val" style="font-size:.85rem">${fmt(2845)} <span style="font-size:.5rem;font-weight:500;color:var(--gray3)">ventas</span></div>
-        <div class="kpi-sub" style="font-size:.5rem">3,6 % de conversión sobre contacto (4,6 % sobre contacto apto)</div>
-      </div>
-      <div class="kpi-card" style="padding:4px 12px">
-        <div class="kpi-label" style="font-size:.6rem">Masiva Voluntarios</div>
-        <div class="kpi-val" style="font-size:.85rem">${fmt(324)} <span style="font-size:.5rem;font-weight:500;color:var(--gray3)">ventas</span></div>
-        <div class="kpi-sub" style="font-size:.5rem">Segunda campaña de mayor volumen (255.141 registros) del semestre</div>
+        <div class="kpi-sub" style="font-size:.5rem">Conversión más alta del portafolio · 2,3× el promedio del canal</div>
       </div>
     </div>
 
@@ -520,7 +493,7 @@ function renderCampanas() {
               <tr class="total" style="font-size:.6rem">
                 <td>Total</td><td class="r">${fmt(totalReg)}</td>
                 <td class="r">${fmt(totalVentas)}</td>
-                <td class="r">42 %</td><td class="r">7,9 %</td>
+                <td class="r">51 %</td><td class="r">11,4 %</td>
               </tr>
             </tbody>
           </table>
@@ -545,7 +518,7 @@ function renderCampanas() {
                 const gest = DATA.gestionados[i];
                 const ctto = DATA.contactados[i];
                 const apto = DATA.aptos[i];
-                const venta = DATA.ventasLiq[i];
+                const venta = DATA.ventasOp[i];  // operativa: misma fuente que aptos/gestión/contacto
                 const pctGest = Math.round(gest/apto*100);
                 const pctCtto = Math.round(ctto/gest*100);
                 const pctConv = Math.round(venta/ctto*100);
@@ -567,8 +540,8 @@ function renderCampanas() {
                 <td class="r" style="padding:2px 4px">${badge(Math.round(gestTotal/aptTotal*100)+'%', 'g')}</td>
                 <td class="r" style="padding:2px 4px">${fmt(contTotal)}</td>
                 <td class="r" style="padding:2px 4px">${badge(Math.round(contTotal/gestTotal*100)+'%', 'y')}</td>
-                <td class="r" style="padding:2px 4px;font-weight:700">${fmt(liqTotal)}</td>
-                <td class="r" style="padding:2px 4px">${badge(Math.round(liqTotal/contTotal*100)+'%', 'y')}</td>
+                <td class="r" style="padding:2px 4px;font-weight:700">${fmt(opTotal)}</td>
+                <td class="r" style="padding:2px 4px">${badge(Math.round(opTotal/contTotal*100)+'%', 'y')}</td>
               </tr>
             </tbody>
           </table>
@@ -1196,12 +1169,12 @@ function renderContactab() {
             </tr></thead>
             <tbody>
               ${DATA.meses.map((m,i)=>{
-                const efect = DATA.ventasLiq[i] / DATA.contactados[i] * 100;
+                const efect = DATA.ventasOp[i] / DATA.contactados[i] * 100;
                 return `
                 <tr>
                   <td><strong>${m}</strong></td>
                   <td class="r">${fmt(DATA.contactados[i])}</td>
-                  <td class="r">${fmt(DATA.ventasLiq[i])}</td>
+                  <td class="r">${fmt(DATA.ventasOp[i])}</td>
                   <td class="r">${badge(fmtPct(efect), efect>=9?'g':efect>=7?'y':'r')}</td>
                 </tr>`;}).join('')}
             </tbody>
