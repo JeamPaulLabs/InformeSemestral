@@ -527,7 +527,7 @@ function renderCobertura() {
     </div>
 
     <div style="display:flex; flex-direction:column; gap:6px; margin-top:4px">
-    <div class="two-col" style="gap:10px; align-items:stretch">
+    <div class="two-col" style="gap:10px; align-items:stretch; grid-template-columns:1fr 1.35fr">
       <div class="panel" style="padding:8px 14px">
         <h3 style="margin-bottom:2px; padding-bottom:2px; font-size:.7rem; border-bottom:1px dashed rgba(18,1,128,0.1)">${icon('map-pin')} Municipios Visitados (1S)</h3>
         <p style="font-size:.56rem; color:var(--gray3); margin:2px 0 6px">
@@ -568,8 +568,9 @@ function renderCobertura() {
           </div>
         </div>
       </div>
-      <div class="panel" style="padding:5px 14px; box-shadow:none; border:1px solid var(--gray2)">
+      <div class="panel" style="padding:8px 14px; box-shadow:none; border:1px solid var(--gray2); display:flex; flex-direction:column; justify-content:space-between">
         <div style="font-size:.6rem; font-weight:800; color:var(--blue); letter-spacing:.05em; margin-bottom:4px">${icon('tag', { size: 13 })} TIPO DE PUNTO VISITADO EN LAS 90 "SERDÁN"</div>
+        <p style="font-size:.6rem; color:var(--dark); line-height:1.45; margin:0 0 6px"><strong>Sobre "Serdán" (90 visitas):</strong> empresa que provee promotores a ambos canales, no un aliado. De las 90: 33 puras Retail+Tradicional, 33 sedes/roles internos (no PDV) y 14 con cédula activa en ambos canales <strong>(contadas en los dos)</strong>. Total atribuido: <strong>24 a Retail</strong> y <strong>47 a Tradicional</strong>.</p>
         <div style="display:flex; gap:8px; flex-wrap:wrap">
           <div style="flex:1; min-width:85px; text-align:center; background:var(--gray1); border-radius:8px; padding:5px">
             <div style="font-weight:800; font-size:.9rem; color:var(--teal)">37</div>
@@ -594,11 +595,6 @@ function renderCobertura() {
         </div>
         <div style="font-size:.58rem; color:var(--gray3); margin-top:5px">Solo el 41 % fue a un PDV físico; el resto es actividad real de formación que no suma a cobertura de PDV.</div>
       </div>
-    </div>
-
-    <div class="alert alert-info" style="margin-bottom: 0; padding:6px 14px">
-      <span class="ico">${icon('building-2')}</span>
-      <span style="font-size:.68rem"><strong>Sobre "Serdán" (90 visitas):</strong> empresa que provee promotores a ambos canales, no un aliado. De las 90: 33 puras Retail+Tradicional, 33 sedes/roles internos (no PDV) y 14 con cédula activa en ambos canales <strong>(contadas en los dos)</strong>. Total atribuido: <strong>24 a Retail</strong> y <strong>47 a Tradicional</strong>.</span>
     </div>
     </div>
     </div>
