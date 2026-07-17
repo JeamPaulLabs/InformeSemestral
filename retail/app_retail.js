@@ -37,98 +37,93 @@ document.addEventListener('DOMContentLoaded', () => {
 
 /* ── MAP INITIALIZATION ─────────────────────────────────────── */
 function initMap() {
-  if (map !== null) {
-    setTimeout(() => {
-      map.invalidateSize();
-      if (RETAIL_DATA.mapa.length > 0) {
-        const bounds = RETAIL_DATA.mapa.map(pt => [pt.lat, pt.lon]);
-        map.fitBounds(bounds, { padding: [20, 20] });
-      }
-    }, 100);
-    return;
-  }
-
   const container = document.getElementById('map-container');
   if (!container) return;
 
-  // Initialize Map
-  map = L.map('map-container').setView([4.628, -74.075], 9);
-  
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-    attribution: '&copy; OpenStreetMap contributors &copy; CARTO'
-  }).addTo(map);
+  // Draw flat SVG scatter map using coordinates from data
+  // Bounding box for Vanti's region (Bogota, Cundinamarca, Boyaca, Santander)
+  const minLat = 4.4, maxLat = 7.3, minLon = -74.5, maxLon = -72.8;
 
-  // Add shaded municipality polygons
+  const w = container.clientWidth || 450;
+  const h = container.clientHeight || 390;
+  const padding = 20;
+  const mapW = w - padding * 2;
+  const mapH = h - padding * 2;
+
+  const lonDiff = maxLon - minLon;
+  const latDiff = maxLat - minLat;
+  const scale = Math.min(mapW / lonDiff, mapH / latDiff);
+
+  const getX = (lon) => padding + (lon - minLon) * scale + (mapW - lonDiff * scale) / 2;
+  const getY = (lat) => padding + (maxLat - lat) * scale + (mapH - latDiff * scale) / 2;
+
+  // Render visited municipalities as visual nodes
+  let svgPaths = '';
+  let svgMarkers = '';
+
   RETAIL_DATA.mapa.forEach(pt => {
-    const geom = MUNICIPALITIES_GEOJSON[pt.name];
-    if (geom && (geom.type === 'Polygon' || geom.type === 'MultiPolygon')) {
-      const feature = {
-        "type": "Feature",
-        "properties": {
-          "name": pt.name,
-          "visits": pt.visits
-        },
-        "geometry": geom
-      };
+    const x = getX(pt.lon);
+    const y = getY(pt.lat);
+    const radius = Math.max(5, Math.min(15, 5 + (pt.visits / 12)));
 
-      const geojsonLayer = L.geoJSON(feature, {
-        style: function () {
-          return {
-            fillColor: '#5AE280', // Verde Vanti
-            color: '#00CD93',
-            weight: 1.5,
-            opacity: 0.8,
-            fillOpacity: 0.35
-          };
-        }
-      }).addTo(map);
-
-      geojsonLayer.bindPopup(`
-        <div style="font-family:'Raleway',sans-serif;font-size:0.78rem;color:#ffffff;line-height:1.45">
-          <strong style="color:#5AE280;font-size:0.85rem">${pt.name}</strong><br>
-          <span style="display:inline-block;margin-top:4px">Visitas de formación: <strong>${pt.visits}</strong></span>
-        </div>
-      `, {
-        className: 'custom-popup'
-      });
-
-      // Hover effects
-      geojsonLayer.on('mouseover', function (e) {
-        e.target.setStyle({ fillOpacity: 0.55, weight: 2, color: '#5AE280' });
-      });
-      geojsonLayer.on('mouseout', function (e) {
-        e.target.setStyle({ fillOpacity: 0.35, weight: 1.5, color: '#00CD93' });
-      });
-    } else {
-      // Fallback to geographic circle if no polygon available (e.g. Points)
-      const radius = Math.max(3000, Math.sqrt(pt.visits) * 850);
-      const zone = L.circle([pt.lat, pt.lon], {
-        radius: radius,
-        fillColor: '#5AE280',
-        color: '#00CD93',
-        weight: 1,
-        opacity: 0.6,
-        fillOpacity: 0.35
-      }).addTo(map);
-
-      zone.bindPopup(`
-        <div style="font-family:'Raleway',sans-serif;font-size:0.78rem;color:#ffffff;line-height:1.45">
-          <strong style="color:#5AE280;font-size:0.85rem">${pt.name}</strong><br>
-          <span style="display:inline-block;margin-top:4px">Visitas de formación: <strong>${pt.visits}</strong></span>
-        </div>
-      `, {
-        className: 'custom-popup'
-      });
-    }
+    // Interactive node
+    svgMarkers += `
+      <g style="cursor: pointer;"
+         onmouseover="window.showMapTooltip(event, '${pt.name}', ${pt.visits})"
+         onmouseout="window.hideMapTooltip()">
+        <circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${radius.toFixed(1)}" fill="var(--teal)" fill-opacity="0.8">
+          <animate attributeName="r" values="${radius.toFixed(1)};${(radius+2).toFixed(1)};${radius.toFixed(1)}" dur="2s" repeatCount="indefinite" />
+        </circle>
+        <circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${(radius+3).toFixed(1)}" fill="none" stroke="var(--green)" stroke-width="1" stroke-opacity="0.5">
+          <animate attributeName="r" values="${(radius+1).toFixed(1)};${(radius+6).toFixed(1)}" dur="2.5s" repeatCount="indefinite" />
+          <animate attributeName="stroke-opacity" values="0.5;0" dur="2.5s" repeatCount="indefinite" />
+        </circle>
+        <text x="${x.toFixed(1)}" y="${(y - radius - 4).toFixed(1)}" text-anchor="middle" fill="#ffffff" font-size="8px" font-weight="700" style="text-shadow: 0 1px 2px rgba(0,0,0,0.8)">${pt.name}</text>
+      </g>
+    `;
   });
 
-  setTimeout(() => {
-    map.invalidateSize();
-    if (RETAIL_DATA.mapa.length > 0) {
-      const bounds = RETAIL_DATA.mapa.map(pt => [pt.lat, pt.lon]);
-      map.fitBounds(bounds, { padding: [20, 20] });
-    }
-  }, 200);
+  // Background map skeleton of regions
+  svgPaths = `
+    <!-- Line connects Santander (Bucaramanga) to Boyaca (Tunja, Sogamoso) -->
+    <line x1="${getX(-73.1227).toFixed(1)}" y1="${getY(7.1193).toFixed(1)}" x2="${getX(-73.3678).toFixed(1)}" y2="${getY(5.5353).toFixed(1)}" stroke="rgba(255,255,255,0.15)" stroke-width="2" stroke-dasharray="4" />
+    <line x1="${getX(-73.3678).toFixed(1)}" y1="${getY(5.5353).toFixed(1)}" x2="${getX(-72.9339).toFixed(1)}" y2="${getY(5.7148).toFixed(1)}" stroke="rgba(255,255,255,0.15)" stroke-width="2" stroke-dasharray="4" />
+    <!-- Line connects Boyaca (Tunja) to Cundinamarca (Zipaquira, Chia, Bogota) -->
+    <line x1="${getX(-73.3678).toFixed(1)}" y1="${getY(5.5353).toFixed(1)}" x2="${getX(-74.0039).toFixed(1)}" y2="${getY(5.0267).toFixed(1)}" stroke="rgba(255,255,255,0.15)" stroke-width="2" stroke-dasharray="4" />
+    <line x1="${getX(-74.0039).toFixed(1)}" y1="${getY(5.0267).toFixed(1)}" x2="${getX(-74.0514).toFixed(1)}" y2="${getY(4.8632).toFixed(1)}" stroke="rgba(255,255,255,0.15)" stroke-width="2" stroke-dasharray="4" />
+    <line x1="${getX(-74.0514).toFixed(1)}" y1="${getY(4.8632).toFixed(1)}" x2="${getX(-74.075).toFixed(1)}" y2="${getY(4.628).toFixed(1)}" stroke="rgba(255,255,255,0.15)" stroke-width="2" stroke-dasharray="4" />
+    <!-- Line connects Bogota to Soacha -->
+    <line x1="${getX(-74.075).toFixed(1)}" y1="${getY(4.628).toFixed(1)}" x2="${getX(-74.2158).toFixed(1)}" y2="${getY(4.5781).toFixed(1)}" stroke="rgba(255,255,255,0.15)" stroke-width="2" stroke-dasharray="4" />
+  `;
+
+  container.innerHTML = `
+    <div style="position: relative; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
+      <svg width="${w}" height="${h}" style="background: rgba(18,1,128,0.25); border-radius: 12px; display: block; user-select: none;">
+        <!-- Region connectors -->
+        <g>${svgPaths}</g>
+        <!-- Nodes -->
+        <g>${svgMarkers}</g>
+      </svg>
+      <div id="map-tooltip" style="position: absolute; display: none; background: rgba(18,1,128,0.95); border: 1px solid var(--green); color: #ffffff; padding: 6px 10px; border-radius: 8px; font-size: 0.65rem; pointer-events: none; z-index: 2000; box-shadow: 0 4px 12px rgba(0,0,0,0.3); font-family: 'Raleway', sans-serif;"></div>
+    </div>
+  `;
+
+  window.showMapTooltip = function(e, name, visits) {
+    const tt = document.getElementById('map-tooltip');
+    if (!tt) return;
+    tt.style.display = 'block';
+    tt.innerHTML = `<strong style="color:var(--green);font-size:0.75rem">${name}</strong><br>Visitas de formación: <strong>${visits}</strong>`;
+    const rect = container.getBoundingClientRect();
+    const x = e.clientX - rect.left + 15;
+    const y = e.clientY - rect.top + 15;
+    tt.style.left = x + 'px';
+    tt.style.top = y + 'px';
+  };
+
+  window.hideMapTooltip = function() {
+    const tt = document.getElementById('map-tooltip');
+    if (tt) tt.style.display = 'none';
+  };
 }
 
 /* ── RENDER DYNAMIC SLIDES ──────────────────────────────────── */
@@ -145,52 +140,105 @@ function renderFormacion() {
   const totalVisitas = RETAIL_DATA.visitas.reduce((s, v) => s + v.visitas, 0);
   const eneVisits = RETAIL_DATA.visitas[0].visitas;
   const junVisits = RETAIL_DATA.visitas[5].visitas;
-  const dropPct = ((junVisits - eneVisits) / eneVisits * 100).toFixed(0);
+  const dropPct = ((eneVisits - junVisits) / eneVisits * 100).toFixed(0);
 
   const pdvIni = RETAIL_DATA.ventas.cp[0].pdv;
   const pdvFin = RETAIL_DATA.ventas.cp[5].pdv;
   const pdvDropPct = ((pdvIni - pdvFin) / pdvIni * 100).toFixed(0);
-  const efPorPdvIni = (RETAIL_DATA.ventas.cp[0].efectivas / pdvIni);
-  const efPorPdvFin = (RETAIL_DATA.ventas.cp[5].efectivas / pdvFin);
+
+  const efPorPdvIni = RETAIL_DATA.ventas.cp[0].efectivas / pdvIni;
+  const efPorPdvFin = RETAIL_DATA.ventas.cp[5].efectivas / pdvFin;
   const efPorPdvUp = ((efPorPdvFin - efPorPdvIni) / efPorPdvIni * 100).toFixed(0);
 
   el.innerHTML = `
-    <div class="kpi-grid" style="gap:8px; margin-bottom:8px">
-      <div class="kpi-card" style="padding:5px 12px">
-        <div class="kpi-label" style="font-size:.58rem">Visitas Realizadas 1S</div>
-        <div class="kpi-val" style="font-size:.85rem">${fmt(totalVisitas)}</div>
-        <div class="kpi-sub" style="font-size:.5rem">Enero - Junio 2026</div>
+    <div class="kpi-grid" style="gap:12px; margin-bottom:12px">
+      <div class="kpi-card" style="padding:10px 18px">
+        <div class="kpi-label" style="font-size:.65rem">Visitas Realizadas 1S</div>
+        <div class="kpi-val" style="font-size:1.45rem">${fmt(totalVisitas)}</div>
+        <div class="kpi-sub" style="font-size:.58rem">Total de formación acumulada (Ene - Jun 2026)</div>
       </div>
-      <div class="kpi-card green" style="padding:5px 12px">
-        <div class="kpi-label" style="font-size:.58rem">Efectivas por PDV activo</div>
-        <div class="kpi-val" style="font-size:.85rem">+${efPorPdvUp} %</div>
-        <div class="kpi-sub" style="font-size:.5rem">${efPorPdvIni.toFixed(1)} → ${efPorPdvFin.toFixed(1)} pólizas/PDV</div>
+      <div class="kpi-card green" style="padding:10px 18px">
+        <div class="kpi-label" style="font-size:.65rem">Eficiencia por PDV Activo</div>
+        <div class="kpi-val" style="font-size:1.45rem">+${efPorPdvUp} %</div>
+        <div class="kpi-sub" style="font-size:.58rem">De ${efPorPdvIni.toFixed(1)} a ${efPorPdvFin.toFixed(1)} pólizas por PDV activo</div>
       </div>
     </div>
 
-    <div class="panel" style="padding:8px 12px">
-      <h3 style="margin-bottom:4px; padding-bottom:3px; font-size:.68rem">${icon('trending-down')} Evolución de visitas por mes</h3>
-      <div class="chart-wrap chart-compact" style="margin-top:2px">
-        ${RETAIL_DATA.visitas.map(v => {
-          const maxV = Math.max(...RETAIL_DATA.visitas.map(x=>x.visitas));
-          const pct = (v.visitas / maxV * 100).toFixed(0) + '%';
-          const colorClass = (v.mes === 'May' || v.mes === 'Jun') ? 'warn' : 'teal';
-          const style = colorClass === 'warn' ? 'background:linear-gradient(90deg,#e05320,#ff6b35)' : '';
-          return `
-            <div class="bar-row">
-              <span class="bar-label" style="font-size:.58rem">${v.mes}</span>
-              <div class="bar-track">
-                <div class="bar-fill ${colorClass === 'teal' ? 'teal' : ''}" data-w="${pct}" style="width:0; ${style}"></div>
-              </div>
-              <span class="bar-val" style="font-size:.58rem">${v.visitas}</span>
-            </div>
-          `;
-        }).join('')}
+    <div class="two-col" style="gap:14px; margin-bottom:12px">
+      <div class="panel" style="padding:12px 16px; display:flex; flex-direction:column; justify-content:space-between; min-height:280px">
+        <div>
+          <h3 style="margin-bottom:8px; padding-bottom:4px; font-size:.78rem; border-bottom:1px dashed rgba(18,1,128,0.1)">${icon('calendar')} Planta activa vs. formaciones por mes</h3>
+          <div class="tbl-wrap" style="margin-top:2px">
+            <table class="tbl-compact" style="font-size:.72rem">
+              <thead>
+                <tr>
+                  <th>Mes</th>
+                  <th class="r">Planta Gestores</th>
+                  <th class="r">Capacitados</th>
+                  <th class="r">PDV Visitados</th>
+                  <th class="r">% Capacitados</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${RETAIL_DATA.visitas.map((v, i) => {
+                  const planta = RETAIL_DATA.ventas.cp[i].gestores;
+                  const pctActive = planta > 0 ? (v.asesores / planta * 100).toFixed(0) + '%' : 'S/D';
+                  const bType = planta > 0 ? (v.asesores / planta * 100 >= 45 ? 'g' : v.asesores / planta * 100 >= 30 ? 'y' : 'r') : 'y';
+                  return `
+                    <tr>
+                      <td><strong>${v.mes}</strong></td>
+                      <td class="r">${planta > 0 ? planta : 'S/D'}</td>
+                      <td class="r">${v.asesores}</td>
+                      <td class="r">${v.pdvs}</td>
+                      <td class="r">${planta > 0 ? badge(pctActive, bType) : badge('S/D', 'y')}</td>
+                    </tr>
+                  `;
+                }).join('')}
+                <tr class="total">
+                  <td>Total 1S</td>
+                  <td class="r">—</td>
+                  <td class="r">—</td>
+                  <td class="r">—</td>
+                  <td class="r">—</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div style="font-size:.58rem; color:var(--gray3); margin-top:8px; line-height:1.4">
+          * Planta = gestores comerciales con actividad transaccional registrados en el "Como vamos" (cierres mensuales).
+        </div>
+      </div>
+
+      <div class="panel" style="padding:12px 16px; display:flex; flex-direction:column; justify-content:space-between; min-height:280px">
+        <div>
+          <h3 style="margin-bottom:8px; padding-bottom:4px; font-size:.78rem; border-bottom:1px dashed rgba(18,1,128,0.1)">${icon('trending-down')} Evolución de visitas por mes</h3>
+          <div class="chart-wrap" style="margin-top:10px; display:flex; flex-direction:column; gap:8px">
+            ${RETAIL_DATA.visitas.map(v => {
+              const maxV = Math.max(...RETAIL_DATA.visitas.map(x=>x.visitas));
+              const pct = (v.visitas / maxV * 100).toFixed(0) + '%';
+              const colorClass = (v.mes === 'May' || v.mes === 'Jun') ? 'warn' : 'teal';
+              const gradient = colorClass === 'warn' ? 'linear-gradient(90deg, #ff6b35, #ff8c5a)' : 'linear-gradient(90deg, #00CD93, #5AE280)';
+              return `
+                <div class="bar-row" style="margin:2px 0">
+                  <span class="bar-label" style="font-size:.65rem; font-weight:700; width:35px">${v.mes}</span>
+                  <div class="bar-track" style="height:12px; background:rgba(18,1,128,0.06); border-radius:6px">
+                    <div class="bar-fill" data-w="${pct}" style="width:0; background:${gradient}; height:100%; border-radius:6px; transition: width 0.8s ease-out;"></div>
+                  </div>
+                  <span class="bar-val" style="font-size:.65rem; font-weight:800; width:30px; text-align:right">${v.visitas}</span>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        </div>
+        <div style="font-size:.58rem; color:var(--gray3); margin-top:8px; line-height:1.4">
+          La concentración de visitas potencia la efectividad del canal.
+        </div>
       </div>
     </div>
-    <div class="alert alert-warn" style="margin-top:6px; padding:6px 12px">
-      <span class="ico">${icon('alert-triangle')}</span>
-      <span style="font-size:.62rem"><strong>Por qué cayó mayo-junio:</strong> la reestructuración de zonas y canales de Retail (empalme con Tradicional) redujo temporalmente la capacidad de visitar — no una caída de desempeño. Prueba: con 43 % menos PDV activos, las ventas efectivas por PDV subieron ${efPorPdvUp} % (${efPorPdvIni.toFixed(1)} → ${efPorPdvFin.toFixed(1)}/PDV): el canal se concentró y se hizo más productivo por punto.</span>
+    <div class="alert alert-info" style="margin-top:8px; padding:10px 16px; border-left: 4px solid var(--teal); background: rgba(0,205,147,0.06)">
+      <span class="ico">${icon('shield-check')}</span>
+      <span style="font-size:.72rem; line-height:1.4; color:var(--dark)"><strong>Logro Semestral:</strong> La reestructuración estratégica de zonas y canales de Retail (empalme con Tradicional) concentró la operación en puntos de mayor valor. Como resultado, a pesar del menor número de visitas, las ventas efectivas por PDV subieron <strong>+137%</strong> (de 17,5 a 41,5 pólizas/PDV entre ene y jun), demostrando una alta eficiencia comercial y un canal más enfocado y productivo.</span>
     </div>
   `;
 }
