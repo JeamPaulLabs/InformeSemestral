@@ -303,6 +303,7 @@ function renderBases() {
   const totalGest = DATA.gestionados.reduce((a,b)=>a+b,0);
   const totalCont = DATA.contactados.reduce((a,b)=>a+b,0);
   const totalLiq  = DATA.ventasLiq.reduce((a,b)=>a+b,0);
+  const totalOp   = DATA.ventasOp.reduce((a,b)=>a+b,0);
   const pctRechProm = Math.round(totalRech/totalRec*100);
 
   const funnel = [
@@ -335,6 +336,11 @@ function renderBases() {
         <div class="kpi-val">${fmt(totalLiq)}</div>
         <div class="kpi-sub">1 venta por cada ${Math.round(totalRec/totalLiq)} registros recibidos</div>
       </div>
+      <div class="kpi-card" style="padding:8px 16px">
+        <div class="kpi-label">Ventas operativas (base)</div>
+        <div class="kpi-val">${fmt(totalOp)}</div>
+        <div class="kpi-sub">Tablero Power BI · ${Math.round((totalLiq - totalOp) / totalOp * 100)} % más en liquidación</div>
+      </div>
     </div>
 
     <div class="two-col" style="gap:14px">
@@ -348,7 +354,8 @@ function renderBases() {
               <th class="r">Rechazados</th>
               <th class="r">% Rechazo</th>
               <th class="r">Aptos</th>
-              <th class="r">Ventas</th>
+              <th class="r">Venta base</th>
+              <th class="r">Venta liquidación</th>
             </tr></thead>
             <tbody>
               ${DATA.meses.map((m,i) => `
@@ -358,6 +365,7 @@ function renderBases() {
                   <td class="r">${fmt(DATA.rechazados[i])}</td>
                   <td class="r">${badge(Math.round(DATA.pctRechazo[i]) + ' %', DATA.pctRechazo[i]>65?'r':DATA.pctRechazo[i]>50?'y':'g')}</td>
                   <td class="r">${fmt(DATA.aptos[i])}</td>
+                  <td class="r">${fmt(DATA.ventasOp[i])}</td>
                   <td class="r"><strong>${fmt(DATA.ventasLiq[i])}</strong></td>
                 </tr>`).join('')}
               <tr class="total">
@@ -366,6 +374,7 @@ function renderBases() {
                 <td class="r">${fmt(totalRech)}</td>
                 <td class="r">${pctRechProm} %</td>
                 <td class="r">${fmt(totalApt)}</td>
+                <td class="r">${fmt(totalOp)}</td>
                 <td class="r">${fmt(totalLiq)}</td>
               </tr>
             </tbody>
@@ -378,7 +387,7 @@ function renderBases() {
         <div style="display:flex; flex-direction:column; margin-top:6px">
           ${(() => {
             // Anchos visuales (escala raíz cuadrada con mínimo, para que la
-            // última etapa no desaparezca: 13.917 es el 1,5 % de 912.083).
+            // última etapa no desaparezca: 13.917 es el 1,5 % de 921.480).
             const widths = [100, 64, 60, 40, 28, 20]; // top de cada etapa + bottom final
             const colors = ['#120180', '#1d02b8', '#00CD93', '#2ed9a4', '#5AE280'];
             const darkText = [false, false, true, true, true];
@@ -418,10 +427,10 @@ function renderCampanas() {
   if (!el) return;
 
   const detalleSemestre = [
-    { c: 'Bienvenidas CP',       reg: 114696, ventas: 6881, contactab: '79 %', convSC: '19,5 %', perfil: 'g' },
-    { c: 'Autogestión',          reg: 11686,  ventas: 791,  contactab: '71 %', convSC: '26,6 %', perfil: 'g' },
-    { c: 'CP Stock',             reg: 420641, ventas: 3073, contactab: '49 %', convSC: '4,6 %',  perfil: 'y' },
-    { c: 'Masiva Voluntarios',   reg: 255138, ventas: 318,  contactab: '17 %', convSC: '1,9 %',  perfil: 'r' },
+    { c: 'Bienvenidas CP',       reg: 114694, ventas: 6912, contactab: '79 %', convSC: '19,6 %', perfil: 'g' },
+    { c: 'Autogestión',          reg: 11685,  ventas: 803,  contactab: '73 %', convSC: '26,3 %', perfil: 'g' },
+    { c: 'CP Stock',             reg: 420641, ventas: 2845, contactab: '52 %', convSC: '3,6 %',  perfil: 'y' },
+    { c: 'Masiva Voluntarios',   reg: 255141, ventas: 324,  contactab: '19 %', convSC: '1,5 %',  perfil: 'r' },
     { c: 'CP Clientes Satisf.*', reg: 108659, ventas: 79,   contactab: '19 %', convSC: '1,2 %',  perfil: 'r' },
   ];
 
@@ -439,23 +448,23 @@ function renderCampanas() {
     <div class="kpi-grid" style="gap:8px; margin-bottom:8px">
       <div class="kpi-card green" style="padding:4px 12px">
         <div class="kpi-label" style="font-size:.6rem">Bienvenidas CP</div>
-        <div class="kpi-val" style="font-size:.85rem">${fmt(6881)} <span style="font-size:.5rem;font-weight:500;color:var(--gray3)">ventas</span></div>
-        <div class="kpi-sub" style="font-size:.5rem">62 % del total del semestre · 19,5 % de conversión</div>
+        <div class="kpi-val" style="font-size:.85rem">${fmt(6912)} <span style="font-size:.5rem;font-weight:500;color:var(--gray3)">ventas</span></div>
+        <div class="kpi-sub" style="font-size:.5rem">56 % del total del semestre · 19,6 % de conversión</div>
       </div>
       <div class="kpi-card green" style="padding:4px 12px">
         <div class="kpi-label" style="font-size:.6rem">Autogestión</div>
-        <div class="kpi-val" style="font-size:.85rem">26,6 %</div>
+        <div class="kpi-val" style="font-size:.85rem">26,3 %</div>
         <div class="kpi-sub" style="font-size:.5rem">Conversión más alta del portafolio · 3× el promedio del canal</div>
       </div>
       <div class="kpi-card" style="padding:4px 12px">
         <div class="kpi-label" style="font-size:.6rem">CP Stock</div>
-        <div class="kpi-val" style="font-size:.85rem">${fmt(3073)} <span style="font-size:.5rem;font-weight:500;color:var(--gray3)">ventas</span></div>
-        <div class="kpi-sub" style="font-size:.5rem">4,6 % de conversión · en el objetivo de la campaña (5 %)</div>
+        <div class="kpi-val" style="font-size:.85rem">${fmt(2845)} <span style="font-size:.5rem;font-weight:500;color:var(--gray3)">ventas</span></div>
+        <div class="kpi-sub" style="font-size:.5rem">3,6 % de conversión sobre contacto (4,6 % sobre contacto apto)</div>
       </div>
       <div class="kpi-card" style="padding:4px 12px">
         <div class="kpi-label" style="font-size:.6rem">Masiva Voluntarios</div>
-        <div class="kpi-val" style="font-size:.85rem">${fmt(318)} <span style="font-size:.5rem;font-weight:500;color:var(--gray3)">ventas</span></div>
-        <div class="kpi-sub" style="font-size:.5rem">Campaña con mayor volumen de registros (255.138) en el semestre</div>
+        <div class="kpi-val" style="font-size:.85rem">${fmt(324)} <span style="font-size:.5rem;font-weight:500;color:var(--gray3)">ventas</span></div>
+        <div class="kpi-sub" style="font-size:.5rem">Segunda campaña de mayor volumen (255.141 registros) del semestre</div>
       </div>
     </div>
 
@@ -484,7 +493,7 @@ function renderCampanas() {
               <tr class="total" style="font-size:.6rem">
                 <td>Total</td><td class="r">${fmt(totalReg)}</td>
                 <td class="r">${fmt(totalVentas)}</td>
-                <td class="r">40 %</td><td class="r">8,6 %</td>
+                <td class="r">42 %</td><td class="r">7,9 %</td>
               </tr>
             </tbody>
           </table>
@@ -585,7 +594,7 @@ function renderCampanas() {
 
         <div class="alert alert-info" style="margin:6px 0 0; padding:6px 10px">
           <span class="ico">${icon('lightbulb')}</span>
-          <span style="font-size:.58rem"><strong>Oportunidad de eficiencia:</strong> el 78 % del descarte corresponde a bases repetidas y clientes con producto activo. Depurar estos registros en origen podría recuperar hasta <strong>+110.000 registros gestionables</strong> por semestre, equivalentes a ~<strong>5.400 ventas potenciales</strong> adicionales aplicando la conversión actual del canal. Una coordinación con Vanti para limpiar la base antes del cargue liberaría capacidad operativa sin aumentar el equipo.</span>
+          <span style="font-size:.58rem"><strong>Oportunidad de eficiencia:</strong> el 78 % del descarte corresponde a bases repetidas y clientes con producto activo. Depurar estos registros en origen podría recuperar hasta <strong>+110.000 registros gestionables</strong> por semestre, equivalentes a ~<strong>3.600 ventas potenciales</strong> adicionales aplicando la conversión actual del canal. Una coordinación con Vanti para limpiar la base antes del cargue liberaría capacidad operativa sin aumentar el equipo.</span>
         </div>
       </div>
     </div>`;
@@ -742,7 +751,7 @@ function renderAutogestion() {
         </div>
         <div class="alert alert-info" style="margin-top:12px; padding:3px 10px">
           <span class="ico">${icon('trending-up',{size:11})}</span>
-          <span style="font-size:.58rem">Base con intención de compra validada · <strong>791 ventas</strong> en el semestre · Crecimiento de <strong>43 a 281 ventas/mes (+553%)</strong> · El equipo focalizado pasó de 14 a 266 ventas/mes (<strong>19×</strong>) · 26,6% de conversión, <strong>3× el promedio del canal</strong> · La autogestión es la campaña de mayor efectividad del portafolio.</span>
+          <span style="font-size:.58rem">Base con intención de compra validada · <strong>803 ventas</strong> en el semestre · Crecimiento de <strong>43 a 287 ventas/mes (+567%)</strong> · El equipo focalizado pasó de 14 a 266 ventas/mes (<strong>19×</strong>) · 26,3% de conversión, <strong>3× el promedio del canal</strong> · La autogestión es la campaña de mayor efectividad del portafolio.</span>
         </div>
       </div>
     </div>`;
@@ -1106,22 +1115,22 @@ function renderContactab() {
     <div class="kpi-grid" style="gap:12px">
       <div class="kpi-card green" style="padding:8px 16px">
         <div class="kpi-label">Contactabilidad promedio (1S)</div>
-        <div class="kpi-val">40,4 %</div>
-        <div class="kpi-sub">129.696 contactos en el semestre</div>
+        <div class="kpi-val">42,4 %</div>
+        <div class="kpi-sub">154.838 contactos en el semestre</div>
       </div>
       <div class="kpi-card green" style="padding:8px 16px">
         <div class="kpi-label">Pico: mayo</div>
-        <div class="kpi-val">63,8 %</div>
-        <div class="kpi-sub">Jun: 49,1 % (+15 % volumen)</div>
+        <div class="kpi-val">64,9 %</div>
+        <div class="kpi-sub">Jun: 46,5 % (+56 % volumen gestionado)</div>
       </div>
       <div class="kpi-card" style="padding:8px 16px">
         <div class="kpi-label">Efectividad prom./contacto</div>
-        <div class="kpi-val">8,6 %</div>
-        <div class="kpi-sub">Promedio ene–jun (6,7–10,3 %)</div>
+        <div class="kpi-val">7,9 %</div>
+        <div class="kpi-sub">Promedio ene–jun (5,7–10,9 %)</div>
       </div>
       <div class="kpi-card warn" style="padding:8px 16px">
         <div class="kpi-label">Contestador (semestre)</div>
-        <div class="kpi-val">~54 %</div>
+        <div class="kpi-val">~51 %</div>
         <div class="kpi-sub">Principal causa de no contacto</div>
       </div>
     </div>
@@ -1176,7 +1185,7 @@ function renderContactab() {
 
     <div class="alert alert-info" style="margin-top:10px; padding:8px 14px">
       <span class="ico">${icon('pin')}</span>
-      <span><strong>Lo importante:</strong> entre enero (20 %) y mayo (64 %) triplicamos la contactabilidad sin cambiar quién llamamos, solo <strong>cómo y cuándo</strong>. Eso nos trajo 21 % más ventas. <strong>Lectura:</strong> el calendario, horarios y estrategia de llamadas son tan poderosos como la base misma. Febrero y junio bajan porque cambia el mix de campañas (vimos esto arriba). En el 2S, Isaac propone seguir con análisis por franja horaria para identificar ventanas óptimas.</span>
+      <span><strong>Lo importante:</strong> entre enero (22 %) y mayo (65 %) triplicamos la contactabilidad sin cambiar quién llamamos, solo <strong>cómo y cuándo</strong>. Eso nos trajo 19 % más ventas. <strong>Lectura:</strong> el calendario, horarios y estrategia de llamadas son tan poderosos como la base misma. Febrero y junio bajan porque cambia el mix de campañas (vimos esto arriba). En el 2S, Isaac propone seguir con análisis por franja horaria para identificar ventanas óptimas.</span>
     </div>
     </div>
 
@@ -1202,7 +1211,7 @@ function renderContactab() {
       </div>
       <div class="alert alert-info" style="margin-top:10px">
         <span class="ico">${icon('lightbulb')}</span>
-        <span><strong>Clave:</strong> Los números en el calendario cambian según qué tipo de cliente estamos llamando. Cuando trabajamos con gente que ya nos conoce (CP y Autogestión) los contactamos 4-5 veces mejor (71-79 %) que números nuevos en Masiva Voluntarios (17 %). <strong>Implicación:</strong> mejorar contactabilidad no es solo cuestión de horarios — es el tipo de base. Mejor calidad de números = mejores resultados.</span>
+        <span><strong>Clave:</strong> Los números en el calendario cambian según qué tipo de cliente estamos llamando. Cuando trabajamos con gente que ya nos conoce (CP y Autogestión) los contactamos unas 4 veces mejor (73-79 %) que números nuevos en Masiva Voluntarios (19 %). <strong>Implicación:</strong> mejorar contactabilidad no es solo cuestión de horarios — es el tipo de base. Mejor calidad de números = mejores resultados.</span>
       </div>
     </div>
     </div>
@@ -1236,7 +1245,7 @@ function renderTelefonia() {
       <div class="kpi-card green" style="padding:10px 16px">
         <div class="kpi-label">Contactabilidad telefónica</div>
         <div class="kpi-val">38,9 %</div>
-        <div class="kpi-sub">Consistente con el 40,4 % operativo del 1S</div>
+        <div class="kpi-sub">Consistente con el 42,4 % operativo del 1S</div>
       </div>
       <div class="kpi-card warn" style="padding:10px 16px">
         <div class="kpi-label">Caídas de troncal</div>
@@ -1294,7 +1303,7 @@ function renderTelefonia() {
           ${[
             ['Hoy', '69.740', 'caídas de troncal (backup Movistar)'],
             ['Recuperable', '≈ 49.500', 'contactos, a la tasa de Tigo (71 %)'],
-            ['Potencial', '≈ 4.200', 'ventas, a la efectividad histórica (8,6 %)'],
+            ['Potencial', '≈ 3.900', 'ventas, a la efectividad histórica (7,9 %)'],
           ].map(([paso, cifra, det], i)=>`
             ${i>0?'<div style="align-self:center; color:var(--teal); font-weight:800; font-size:1.2rem; flex-shrink:0">→</div>':''}
             <div style="flex:1; display:flex; flex-direction:column; justify-content:center; background:rgba(0,205,147,.07); border:1px solid rgba(0,205,147,.3); border-radius:10px; padding:10px 8px; text-align:center; min-height:86px">
@@ -1307,7 +1316,7 @@ function renderTelefonia() {
 
         <div class="alert alert-info" style="margin-bottom:0; padding:8px 14px">
           <span class="ico">${icon('pin')}</span>
-          <span style="font-size:.72rem">Del 59,6 % de "no contacto", al menos <strong>69.740 llamadas (11,1 %)</strong> nunca se cursaron por fallas de red. <strong>Hipótesis a validar con Isaac:</strong> parte de ese insumo termina descartándose luego como "re-enviado" — cruce pendiente de confirmar registro por registro.</span>
+          <span style="font-size:.72rem">Del 57,6 % de "no contacto", al menos <strong>69.740 llamadas (11,1 %)</strong> nunca se cursaron por fallas de red. <strong>Hipótesis a validar con Isaac:</strong> parte de ese insumo termina descartándose luego como "re-enviado" — cruce pendiente de confirmar registro por registro.</span>
         </div>
 
         <div style="margin-top:12px">
@@ -1437,7 +1446,7 @@ function renderProyeccion() {
       </div>
       <div class="kpi-card warn" style="padding:8px 16px">
         <div class="kpi-label">Registros requeridos (estimado)</div>
-        <div class="kpi-val">~245K</div>
+        <div class="kpi-val">~225K</div>
         <div class="kpi-sub">Con indicadores históricos ene–jun</div>
       </div>
       <div class="kpi-card green" style="padding:8px 16px">
@@ -1465,11 +1474,11 @@ function renderProyeccion() {
             <thead><tr><th>Parámetro</th><th class="r">Valor histórico</th><th class="r">Insumo para 3.000</th></tr></thead>
             <tbody>
               <tr><td>Meta ventas/mes</td><td class="r">—</td><td class="r"><strong>3.000</strong></td></tr>
-              <tr><td>Efectividad / contactados</td><td class="r">8,59 %</td><td class="r">÷ 8,59 % = <strong>34.908</strong> contactos</td></tr>
-              <tr><td>Contactabilidad</td><td class="r">40,4 %</td><td class="r">÷ 40,4 % = <strong>86.427</strong> gestionados</td></tr>
-              <tr><td>% Gestión sobre aptos</td><td class="r">88,3 %</td><td class="r">÷ 88,3 % = <strong>97.902</strong> aptos</td></tr>
-              <tr><td>% Aptos (1–rechazo)</td><td class="r">39,9 %</td><td class="r">÷ 39,9 % = <strong>~245.500</strong> recibidos</td></tr>
-              <tr class="total"><td colspan="2">${icon('package')} Registros mínimos requeridos/mes</td><td class="r">235.000–260.000</td></tr>
+              <tr><td>Efectividad / contactados</td><td class="r">7,93 %</td><td class="r">÷ 7,93 % = <strong>37.831</strong> contactos</td></tr>
+              <tr><td>Contactabilidad</td><td class="r">42,4 %</td><td class="r">÷ 42,4 % = <strong>89.203</strong> gestionados</td></tr>
+              <tr><td>% Gestión sobre aptos</td><td class="r">97,9 %</td><td class="r">÷ 97,9 % = <strong>91.163</strong> aptos</td></tr>
+              <tr><td>% Aptos (1–rechazo)</td><td class="r">40,5 %</td><td class="r">÷ 40,5 % = <strong>~225.100</strong> recibidos</td></tr>
+              <tr class="total"><td colspan="2">${icon('package')} Registros mínimos requeridos/mes</td><td class="r">220.000–230.000</td></tr>
             </tbody>
           </table>
         </div>
@@ -1500,8 +1509,8 @@ function renderProyeccion() {
         <div style="display:flex; align-items:stretch; gap:8px; margin:4px 0">
           ${[
             ['Paso 1 · Depurar', '60 % → 35 %', 'de rechazo, excluyendo re-envíos y producto activo'],
-            ['Paso 2 · Aptos', '64K → 110K', 'registros aptos/mes con los mismos ~170K recibidos'],
-            ['Paso 3 · Ventas', '≈ 3.760', 'ventas/mes potenciales — supera la meta de 3.000'],
+            ['Paso 2 · Aptos', '62K → 110K', 'registros aptos/mes con los mismos ~170K recibidos'],
+            ['Paso 3 · Ventas', '≈ 3.840', 'ventas/mes potenciales — supera la meta de 3.000'],
           ].map(([paso, cifra, det], i)=>`
             ${i>0?'<div style="align-self:center; color:var(--teal); font-weight:800; font-size:1.1rem; flex-shrink:0">→</div>':''}
             <div style="flex:1; display:flex; flex-direction:column; justify-content:center; background:rgba(0,205,147,.07); border:1px solid rgba(0,205,147,.3); border-radius:10px; padding:6px 10px; text-align:center; min-height:60px">
@@ -1510,7 +1519,7 @@ function renderProyeccion() {
               <div style="font-size:.58rem; color:var(--gray3); line-height:1.25">${det}</div>
             </div>`).join('')}
         </div>
-        <div style="font-size:.6rem; color:var(--gray3); text-align:center; margin-bottom:2px">Premisas del cálculo: 88 % gestión · 45 % contactabilidad · 8,6 % conversión (históricos 1S)</div>
+        <div style="font-size:.6rem; color:var(--gray3); text-align:center; margin-bottom:2px">Premisas del cálculo: 97,8 % gestión · 45 % contactabilidad · 7,9 % conversión (históricos 1S)</div>
 
         <!-- Notas complementarias -->
         <ul class="check-list" style="gap:1px; margin:2px 0">
@@ -1700,16 +1709,16 @@ function renderDetalleBienvenida() {
   const data = {
     highlights: [
       { label: 'CONTACTABILIDAD PROMEDIO', val: '79 %', sub: 'Líder en contactabilidad del canal' },
-      { label: 'VENTAS TOTALES', val: '6.881', sub: 'Aporta el 62% de las ventas de CP' },
-      { label: 'CONVERSIÓN PROMEDIO', val: '19,5 %', sub: 'Alta efectividad comercial sobre contacto' }
+      { label: 'VENTAS TOTALES', val: '6.912', sub: 'Aporta el 56% de las ventas operativas del canal' },
+      { label: 'CONVERSIÓN PROMEDIO', val: '19,6 %', sub: 'Alta efectividad comercial sobre contacto' }
     ],
     kpisBase: [
       { mes: 'Enero', recibidos: 14772, rechazados: 8485, pctRechazo: '57,4', aptos: 6287, contactab: '81,5', ventas: 1208, conversion: '23,6', pctVentaRec: '19,2' },
       { mes: 'Febrero', recibidos: 19573, rechazados: 11134, pctRechazo: '56,9', aptos: 8439, contactab: '79,0', ventas: 1435, conversion: '21,5', pctVentaRec: '17,0' },
-      { mes: 'Marzo', recibidos: 21421, rechazados: 13486, pctRechazo: '63,0', aptos: 7935, contactab: '78,2', ventas: 1119, conversion: '18,0', pctVentaRec: '14,1' },
-      { mes: 'Abril', recibidos: 19096, rechazados: 10792, pctRechazo: '56,5', aptos: 8304, contactab: '76,1', ventas: 1086, conversion: '17,2', pctVentaRec: '13,1' },
+      { mes: 'Marzo', recibidos: 21419, rechazados: 13486, pctRechazo: '63,0', aptos: 7933, contactab: '78,7', ventas: 1170, conversion: '18,8', pctVentaRec: '14,7' },
+      { mes: 'Abril', recibidos: 19096, rechazados: 10792, pctRechazo: '56,5', aptos: 8304, contactab: '76,0', ventas: 1065, conversion: '16,9', pctVentaRec: '12,8' },
       { mes: 'Mayo', recibidos: 20067, rechazados: 13166, pctRechazo: '65,6', aptos: 6901, contactab: '83,1', ventas: 1068, conversion: '18,6', pctVentaRec: '15,5' },
-      { mes: 'Junio', recibidos: 19767, rechazados: 13203, pctRechazo: '66,8', aptos: 6564, contactab: '79,9', ventas: 965, conversion: '18,4', pctVentaRec: '14,7' }
+      { mes: 'Junio', recibidos: 19767, rechazados: 13203, pctRechazo: '66,8', aptos: 6564, contactab: '80,1', ventas: 966, conversion: '18,4', pctVentaRec: '14,7' }
     ],
     tipificacionRechazo: [
       { motivo: 'Cuota Protegida Activa', cant: 35758, pct: '50,9' },
@@ -1723,25 +1732,25 @@ function renderDetalleBienvenida() {
       { motivo: 'Otros motivos menores', cant: 779, pct: '1,1' }
     ],
     tipificacionAptos: [
-      { desc: 'CONTACTO EFECTIVO', cant: 38250, pct: '78,7', isTitle: true },
-      { desc: 'Venta exitosa (CP + Autogestión)', cant: 7672, pct: '15,8' },
-      { desc: 'No interesado por el producto', cant: 14908, pct: '30,7' },
-      { desc: 'Cuelga la llamada', cant: 4822, pct: '9,9' },
-      { desc: 'Agendado / llamada posterior', cant: 2971, pct: '6,1' },
-      { desc: 'No es responsable del pago', cant: 2501, pct: '5,1' },
-      { desc: 'Datos errados / experiencia', cant: 1847, pct: '3,8' },
-      { desc: 'No interesado por el precio', cant: 1126, pct: '2,3' },
-      { desc: 'Otros motivos menores', cant: 2403, pct: '4,9' },
-      { desc: 'NO CONTACTO', cant: 10362, pct: '21,3', isTitle: true },
-      { desc: 'Contestador automático', cant: 6837, pct: '14,1' },
-      { desc: 'No contesta', cant: 2442, pct: '5,0' },
-      { desc: 'Teléfono apagado / fuera de servicio', cant: 1033, pct: '2,1' },
-      { desc: 'Otros no contacto', cant: 50, pct: '0,1' }
+      { desc: 'CONTACTO EFECTIVO', cant: 38386, pct: '79,0', isTitle: true },
+      { desc: 'Venta exitosa', cant: 7715, pct: '15,9' },
+      { desc: 'No interesado por el producto', cant: 14876, pct: '30,6' },
+      { desc: 'Cuelga la llamada', cant: 4844, pct: '10,0' },
+      { desc: 'Agendado / llamada posterior', cant: 2948, pct: '6,1' },
+      { desc: 'No es responsable del pago', cant: 2515, pct: '5,2' },
+      { desc: 'Datos errados / experiencia', cant: 1857, pct: '3,8' },
+      { desc: 'No interesado por el precio', cant: 1218, pct: '2,5' },
+      { desc: 'Otros motivos menores', cant: 2413, pct: '5,0' },
+      { desc: 'NO CONTACTO', cant: 10226, pct: '21,0', isTitle: true },
+      { desc: 'Contestador automático', cant: 6687, pct: '13,8' },
+      { desc: 'No contesta', cant: 2444, pct: '5,0' },
+      { desc: 'Teléfono apagado / fuera de servicio', cant: 1040, pct: '2,1' },
+      { desc: 'Otros no contacto', cant: 55, pct: '0,1' }
     ],
     observaciones: [
-      "Esta base tiene la **mayor contactabilidad del canal (78,7 % Semestre)** y una efectividad sobresaliente.",
+      "Esta base tiene la **mayor contactabilidad del canal (79,0 % Semestre)** y una efectividad sobresaliente.",
       "El descarte principal es **Cuota Protegida Activa (50,9 %)**, lo que indica que el 1S se depuró correctamente contra clientes vigentes antes de lanzar el marcador.",
-      "**Venta Exitosa** representa el **15,8 % de la gestión de leads aptos**, convirtiéndose en el motor de ventas del canal."
+      "**Venta Exitosa** representa el **15,9 % de la gestión de leads aptos**, convirtiéndose en el motor de ventas del canal."
     ]
   };
   renderCampanaDeepDive('detalle-bienvenida-body', data);
@@ -1751,16 +1760,16 @@ function renderDetalleStock() {
   const data = {
     highlights: [
       { label: 'VOLUMEN DE REGISTROS', val: '420.641', sub: 'Base de mayor dimensionamiento' },
-      { label: 'VENTAS CONSOLIDADAS', val: '3.073', sub: 'Segundo mayor aportante de ventas' },
-      { label: 'CONVERSIÓN PROMEDIO', val: '4,6 %', sub: 'Cumplimiento de objetivos sobre contacto' }
+      { label: 'VENTAS CONSOLIDADAS', val: '2.845', sub: 'Segundo mayor aportante de ventas' },
+      { label: 'CONVERSIÓN PROMEDIO', val: '3,6 %', sub: 'Sobre contacto (4,6 % sobre contacto apto)' }
     ],
     kpisBase: [
       { mes: 'Enero', recibidos: 20864, rechazados: 12781, pctRechazo: '61,3', aptos: 8083, contactab: '51,1', ventas: 322, conversion: '7,8', pctVentaRec: '4,0' },
       { mes: 'Febrero', recibidos: 50266, rechazados: 25419, pctRechazo: '50,6', aptos: 24847, contactab: '36,8', ventas: 441, conversion: '4,8', pctVentaRec: '1,8' },
-      { mes: 'Marzo', recibidos: 69741, rechazados: 41761, pctRechazo: '59,9', aptos: 27980, contactab: '54,4', ventas: 600, conversion: '4,0', pctVentaRec: '2,1' },
-      { mes: 'Abril', recibidos: 82833, rechazados: 53460, pctRechazo: '64,5', aptos: 29373, contactab: '42,9', ventas: 345, conversion: '3,7', pctVentaRec: '1,2' },
+      { mes: 'Marzo', recibidos: 69741, rechazados: 41761, pctRechazo: '59,9', aptos: 27980, contactab: '59,2', ventas: 626, conversion: '3,8', pctVentaRec: '2,2' },
+      { mes: 'Abril', recibidos: 82833, rechazados: 53460, pctRechazo: '64,5', aptos: 29373, contactab: '56,4', ventas: 77, conversion: '0,5', pctVentaRec: '0,3' },
       { mes: 'Mayo', recibidos: 82833, rechazados: 53460, pctRechazo: '64,5', aptos: 29373, contactab: '59,3', ventas: 750, conversion: '4,3', pctVentaRec: '2,6' },
-      { mes: 'Junio', recibidos: 114104, rechazados: 74819, pctRechazo: '65,6', aptos: 39285, contactab: '50,1', ventas: 615, conversion: '5,0', pctVentaRec: '1,6' }
+      { mes: 'Junio', recibidos: 114104, rechazados: 74819, pctRechazo: '65,6', aptos: 39285, contactab: '46,2', ventas: 629, conversion: '3,9', pctVentaRec: '1,6' }
     ],
     tipificacionRechazo: [
       { motivo: 'Registro Enviado Anteriormente', cant: 96218, pct: '36,8' },
@@ -1774,25 +1783,25 @@ function renderDetalleStock() {
       { motivo: 'Otros motivos menores', cant: 9154, pct: '3,5' }
     ],
     tipificacionAptos: [
-      { desc: 'CONTACTO EFECTIVO', cant: 67420, pct: '49,4', isTitle: true },
-      { desc: 'Venta exitosa', cant: 3073, pct: '2,3' },
-      { desc: 'No interesado por el producto', cant: 24996, pct: '18,3' },
-      { desc: 'Cuelga la llamada', cant: 14356, pct: '10,5' },
-      { desc: 'No es responsable del pago', cant: 5881, pct: '4,3' },
-      { desc: 'Datos errados / experiencia', cant: 7026, pct: '5,2' },
-      { desc: 'No interesado por el precio', cant: 3063, pct: '2,3' },
-      { desc: 'Agendado / llamada posterior', cant: 2911, pct: '2,1' },
-      { desc: 'Otros motivos menores', cant: 6214, pct: '4,6' },
-      { desc: 'NO CONTACTO', cant: 68940, pct: '50,6', isTitle: true },
-      { desc: 'Contestador automático', cant: 56723, pct: '41,6' },
-      { desc: 'No contesta', cant: 8594, pct: '6,3' },
-      { desc: 'Teléfono apagado / fuera de servicio', cant: 3347, pct: '2,5' },
-      { desc: 'Otros no contacto', cant: 276, pct: '0,2' }
+      { desc: 'CONTACTO EFECTIVO', cant: 79922, pct: '51,7', isTitle: true },
+      { desc: 'Venta exitosa', cant: 2845, pct: '1,8' },
+      { desc: 'No interesado por el producto', cant: 29946, pct: '19,4' },
+      { desc: 'Cuelga la llamada', cant: 17158, pct: '11,1' },
+      { desc: 'No es responsable del pago', cant: 6993, pct: '4,5' },
+      { desc: 'Datos errados / experiencia', cant: 8281, pct: '5,4' },
+      { desc: 'No interesado por el precio', cant: 4169, pct: '2,7' },
+      { desc: 'Agendado / llamada posterior', cant: 3352, pct: '2,2' },
+      { desc: 'Otros motivos menores', cant: 7178, pct: '4,6' },
+      { desc: 'NO CONTACTO', cant: 74602, pct: '48,3', isTitle: true },
+      { desc: 'Contestador automático', cant: 59653, pct: '38,6' },
+      { desc: 'No contesta', cant: 10310, pct: '6,7' },
+      { desc: 'Teléfono apagado / fuera de servicio', cant: 4257, pct: '2,8' },
+      { desc: 'Otros no contacto', cant: 382, pct: '0,2' }
     ],
     observaciones: [
       "CP Stock es la **base de mayor volumen (420.641 registros recibidos)** en el semestre.",
       "El descarte estructural de **Registro Enviado Anteriormente (36,8 %)** y **Cuota Activa (32,7 %)** suma el **69,5 % del rechazo**, confirmando el agotamiento de la base.",
-      "El no contacto es muy alto (**50,6 %**), impulsado por contestadores automáticos (**41,6 %**), lo que exige depuración telefónica en 2S."
+      "El no contacto es muy alto (**48,3 %**), impulsado por contestadores automáticos (**38,6 %**), lo que exige depuración telefónica en 2S."
     ]
   };
   renderCampanaDeepDive('detalle-stock-body', data);
@@ -1802,16 +1811,16 @@ function renderDetalleVoluntarios() {
   const data = {
     highlights: [
       { label: 'INSUMO APTO TOTAL', val: '119.828', sub: 'Base masiva para gestión del marcador' },
-      { label: 'EFECTIVIDAD EN JUNIO', val: '4,9 %', sub: 'Importante repunte tras actualización de base' },
-      { label: 'VENTAS CONSEGUIDAS', val: '318', sub: 'Aporte incremental constante' }
+      { label: 'EFECTIVIDAD EN JUNIO', val: '3,1 %', sub: 'Importante repunte tras actualización de base' },
+      { label: 'VENTAS CONSEGUIDAS', val: '324', sub: 'Aporte incremental constante' }
     ],
     kpisBase: [
       { mes: 'Enero', recibidos: 55557, rechazados: 4225, pctRechazo: '7,6', aptos: 51332, contactab: '9,2', ventas: 31, conversion: '0,7', pctVentaRec: '0,1' },
       { mes: 'Febrero', recibidos: 24673, rechazados: 11397, pctRechazo: '46,2', aptos: 13276, contactab: '30,0', ventas: 123, conversion: '3,2', pctVentaRec: '0,9' },
-      { mes: 'Marzo', recibidos: 41870, rechazados: 4562, pctRechazo: '10,9', aptos: 37308, contactab: '22,1', ventas: 21, conversion: '0,4', pctVentaRec: '0,1' },
-      { mes: 'Abril', recibidos: 49232, rechazados: 48734, pctRechazo: '99,0', aptos: 498, contactab: '6,0', ventas: 0, conversion: '0,0', pctVentaRec: '0,0' },
+      { mes: 'Marzo', recibidos: 41873, rechazados: 4562, pctRechazo: '10,9', aptos: 37311, contactab: '24,5', ventas: 22, conversion: '0,3', pctVentaRec: '0,1' },
+      { mes: 'Abril', recibidos: 49232, rechazados: 48734, pctRechazo: '99,0', aptos: 498, contactab: '42,6', ventas: 0, conversion: '0,0', pctVentaRec: '0,0' },
       { mes: 'Mayo', recibidos: 49232, rechazados: 48734, pctRechazo: '99,0', aptos: 498, contactab: '43,2', ventas: 5, conversion: '2,3', pctVentaRec: '1,0' },
-      { mes: 'Junio', recibidos: 34574, rechazados: 17661, pctRechazo: '51,1', aptos: 16913, contactab: '25,9', ventas: 138, conversion: '4,9', pctVentaRec: '0,8' }
+      { mes: 'Junio', recibidos: 34574, rechazados: 17661, pctRechazo: '51,1', aptos: 16913, contactab: '27,7', ventas: 143, conversion: '3,1', pctVentaRec: '0,8' }
     ],
     tipificacionRechazo: [
       { motivo: 'Registro Enviado Anteriormente', cant: 103678, pct: '76,6' },
@@ -1824,24 +1833,24 @@ function renderDetalleVoluntarios() {
       { motivo: 'Otros motivos menores', cant: 4534, pct: '3,4' }
     ],
     tipificacionAptos: [
-      { desc: 'CONTACTO EFECTIVO', cant: 16926, pct: '17,0', isTitle: true },
-      { desc: 'Venta exitosa', cant: 318, pct: '0,3' },
-      { desc: 'No interesado por el producto', cant: 6037, pct: '6,1' },
-      { desc: 'Cuelga la llamada', cant: 4035, pct: '4,0' },
-      { desc: 'No es responsable del pago', cant: 1701, pct: '1,7' },
-      { desc: 'No interesado por el precio / datos', cant: 2583, pct: '2,6' },
-      { desc: 'Agendado / llamada posterior', cant: 657, pct: '0,7' },
-      { desc: 'Otros motivos menores', cant: 1595, pct: '1,6' },
-      { desc: 'NO CONTACTO', cant: 82895, pct: '83,0', isTitle: true },
-      { desc: 'Contestador automático', cant: 80769, pct: '80,9' },
-      { desc: 'No contesta', cant: 1640, pct: '1,6' },
-      { desc: 'Teléfono apagado / fuera de servicio', cant: 256, pct: '0,3' },
-      { desc: 'Otros no contacto', cant: 230, pct: '0,2' }
+      { desc: 'CONTACTO EFECTIVO', cant: 22030, pct: '18,9', isTitle: true },
+      { desc: 'Venta exitosa', cant: 324, pct: '0,3' },
+      { desc: 'No interesado por el producto', cant: 8140, pct: '7,0' },
+      { desc: 'Cuelga la llamada', cant: 5103, pct: '4,4' },
+      { desc: 'No es responsable del pago', cant: 2199, pct: '1,9' },
+      { desc: 'No interesado por el precio / datos', cant: 3483, pct: '3,0' },
+      { desc: 'Agendado / llamada posterior', cant: 736, pct: '0,6' },
+      { desc: 'Otros motivos menores', cant: 2045, pct: '1,8' },
+      { desc: 'NO CONTACTO', cant: 94253, pct: '81,1', isTitle: true },
+      { desc: 'Contestador automático', cant: 91416, pct: '78,6' },
+      { desc: 'No contesta', cant: 1938, pct: '1,7' },
+      { desc: 'Teléfono apagado / fuera de servicio', cant: 641, pct: '0,6' },
+      { desc: 'Otros no contacto', cant: 258, pct: '0,2' }
     ],
     observaciones: [
-      "Esta base tiene una **contactabilidad crítica muy baja (17,0 %)**, con un rechazo promedio del **53,04 %**.",
-      "El no contacto es el más alto del portafolio (**83,0 %**), impulsado masivamente por **Contestadores (80,9 %)**, lo que indica bases quemadas o números desactualizados.",
-      "En abril y mayo el rechazo llegó al **99 %** porque se enviaron registros duplicados. **Junio mostró recuperación (138 ventas y 4,92 % conversión)** al actualizarse la base."
+      "Esta base tiene una **contactabilidad crítica muy baja (19,0 %)**, con un rechazo promedio del **53,03 %**.",
+      "El no contacto es el más alto del portafolio (**81,1 %**), impulsado masivamente por **Contestadores (78,6 %)**, lo que indica bases quemadas o números desactualizados.",
+      "En abril y mayo el rechazo llegó al **99 %** porque se enviaron registros duplicados. **Junio mostró recuperación (143 ventas y 3,10 % conversión)** al actualizarse la base."
     ]
   };
   renderCampanaDeepDive('detalle-voluntarios-body', data);
@@ -1911,17 +1920,17 @@ function renderDetalleMicroseguro() {
     tipificacionAptos: [
       { desc: 'CONTACTO EFECTIVO', cant: 7400, pct: '78,9', isTitle: true },
       { desc: 'Venta exitosa', cant: 1309, pct: '14,0' },
-      { desc: 'No interesado por el producto', cant: 2508, pct: '26,8' },
+      { desc: 'No interesado por el producto', cant: 2480, pct: '26,4' },
       { desc: 'Cuelga la llamada', cant: 939, pct: '10,0' },
       { desc: 'No cumple requisito de edad (>69 años)', cant: 746, pct: '8,0' },
       { desc: 'Agendado / llamada posterior', cant: 505, pct: '5,4' },
       { desc: 'No es responsable del pago', cant: 386, pct: '4,1' },
-      { desc: 'Otros motivos menores', cant: 1008, pct: '10,7' },
-      { desc: 'NO CONTACTO', cant: 1978, pct: '21,1', isTitle: true },
+      { desc: 'Otros motivos menores', cant: 1035, pct: '11,0' },
+      { desc: 'NO CONTACTO', cant: 1977, pct: '21,1', isTitle: true },
       { desc: 'Contestador automático', cant: 1244, pct: '13,3' },
       { desc: 'No contesta', cant: 555, pct: '5,9' },
       { desc: 'Teléfono apagado / fuera de servicio', cant: 161, pct: '1,7' },
-      { desc: 'Otros no contacto', cant: 18, pct: '0,2' }
+      { desc: 'Otros no contacto', cant: 17, pct: '0,2' }
     ],
     observaciones: [
       "La campaña Microseguro tiene un **nivel de rechazo casi nulo (<1 %)** porque es base ultra-filtrada.",
