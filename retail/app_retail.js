@@ -161,16 +161,6 @@ function renderFormacion() {
         <div class="kpi-val" style="font-size:.85rem">${fmt(totalVisitas)}</div>
         <div class="kpi-sub" style="font-size:.5rem">Enero - Junio 2026</div>
       </div>
-      <div class="kpi-card warn" style="padding:5px 12px">
-        <div class="kpi-label" style="font-size:.58rem">Variación Ene → Jun</div>
-        <div class="kpi-val" style="font-size:.85rem">${dropPct} %</div>
-        <div class="kpi-sub" style="font-size:.5rem">${eneVisits} visitas → ${junVisits} visitas</div>
-      </div>
-      <div class="kpi-card warn" style="padding:5px 12px">
-        <div class="kpi-label" style="font-size:.58rem">PDV con venta activa</div>
-        <div class="kpi-val" style="font-size:.85rem">-${pdvDropPct} %</div>
-        <div class="kpi-sub" style="font-size:.5rem">${pdvIni} → ${pdvFin} PDV</div>
-      </div>
       <div class="kpi-card green" style="padding:5px 12px">
         <div class="kpi-label" style="font-size:.58rem">Efectivas por PDV activo</div>
         <div class="kpi-val" style="font-size:.85rem">+${efPorPdvUp} %</div>
@@ -178,69 +168,24 @@ function renderFormacion() {
       </div>
     </div>
 
-    <div class="two-col" style="gap:10px">
-      <div class="panel" style="padding:8px 12px">
-        <h3 style="margin-bottom:4px; padding-bottom:3px; font-size:.68rem">${icon('calendar')} Planta activa vs. formaciones por mes</h3>
-        <div class="tbl-wrap" style="margin-top:0">
-          <table class="tbl-compact">
-            <thead>
-              <tr>
-                <th>Mes</th>
-                <th class="r">Planta (gestores)*</th>
-                <th class="r">Formaciones</th>
-                <th class="r">PDV visitados</th>
-                <th class="r">% vs. Planta</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${RETAIL_DATA.visitas.map((v, i) => {
-                const planta = RETAIL_DATA.ventas.cp[i].gestores;
-                const pctActive = planta > 0 ? (v.asesores / planta * 100).toFixed(1) + '%' : 'S/D';
-                const bType = planta > 0 ? (v.asesores / planta * 100 >= 45 ? 'g' : v.asesores / planta * 100 >= 30 ? 'y' : 'r') : 'y';
-                return `
-                  <tr>
-                    <td><strong>${v.mes}</strong></td>
-                    <td class="r">${planta > 0 ? planta : 'S/D'}</td>
-                    <td class="r">${v.visitas}</td>
-                    <td class="r">${v.pdvs}</td>
-                    <td class="r">${planta > 0 ? badge(pctActive, bType) : badge('S/D', 'y')}</td>
-                  </tr>
-                `;
-              }).join('')}
-              <tr class="total">
-                <td>Total 1S</td>
-                <td class="r">—</td>
-                <td class="r">${totalVisitas}</td>
-                <td class="r">—</td>
-                <td class="r">—</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div style="font-size:.56rem; color:var(--gray3); margin-top:4px; line-height:1.3">
-          * Planta = gestores comerciales con actividad transaccional registrados en el "Como vamos" (cierres mensuales). Tipos de capacitación: Inicial 44 % · Portafolio 40 % · Recapacitación 9 % · Acompañamiento 7 %. El registro de visitas no distingue hoy entre producto CP y RS — ajuste pendiente en el formulario de captura.
-        </div>
-      </div>
-
-      <div class="panel" style="padding:8px 12px">
-        <h3 style="margin-bottom:4px; padding-bottom:3px; font-size:.68rem">${icon('trending-down')} Evolución de visitas por mes</h3>
-        <div class="chart-wrap chart-compact" style="margin-top:2px">
-          ${RETAIL_DATA.visitas.map(v => {
-            const maxV = Math.max(...RETAIL_DATA.visitas.map(x=>x.visitas));
-            const pct = (v.visitas / maxV * 100).toFixed(0) + '%';
-            const colorClass = (v.mes === 'May' || v.mes === 'Jun') ? 'warn' : 'teal';
-            const style = colorClass === 'warn' ? 'background:linear-gradient(90deg,#e05320,#ff6b35)' : '';
-            return `
-              <div class="bar-row">
-                <span class="bar-label" style="font-size:.58rem">${v.mes}</span>
-                <div class="bar-track">
-                  <div class="bar-fill ${colorClass === 'teal' ? 'teal' : ''}" data-w="${pct}" style="width:0; ${style}"></div>
-                </div>
-                <span class="bar-val" style="font-size:.58rem">${v.visitas}</span>
+    <div class="panel" style="padding:8px 12px">
+      <h3 style="margin-bottom:4px; padding-bottom:3px; font-size:.68rem">${icon('trending-down')} Evolución de visitas por mes</h3>
+      <div class="chart-wrap chart-compact" style="margin-top:2px">
+        ${RETAIL_DATA.visitas.map(v => {
+          const maxV = Math.max(...RETAIL_DATA.visitas.map(x=>x.visitas));
+          const pct = (v.visitas / maxV * 100).toFixed(0) + '%';
+          const colorClass = (v.mes === 'May' || v.mes === 'Jun') ? 'warn' : 'teal';
+          const style = colorClass === 'warn' ? 'background:linear-gradient(90deg,#e05320,#ff6b35)' : '';
+          return `
+            <div class="bar-row">
+              <span class="bar-label" style="font-size:.58rem">${v.mes}</span>
+              <div class="bar-track">
+                <div class="bar-fill ${colorClass === 'teal' ? 'teal' : ''}" data-w="${pct}" style="width:0; ${style}"></div>
               </div>
-            `;
-          }).join('')}
-        </div>
+              <span class="bar-val" style="font-size:.58rem">${v.visitas}</span>
+            </div>
+          `;
+        }).join('')}
       </div>
     </div>
     <div class="alert alert-warn" style="margin-top:6px; padding:6px 12px">

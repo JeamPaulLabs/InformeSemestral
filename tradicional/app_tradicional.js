@@ -159,16 +159,6 @@ function renderFormacion() {
         <div class="kpi-val" style="font-size:.85rem">${fmt(totalVisitas)}</div>
         <div class="kpi-sub" style="font-size:.5rem">Enero - Junio 2026</div>
       </div>
-      <div class="kpi-card warn" style="padding:5px 12px">
-        <div class="kpi-label" style="font-size:.58rem">Variación Mar → Jun</div>
-        <div class="kpi-val" style="font-size:.85rem">${dropPct} %</div>
-        <div class="kpi-sub" style="font-size:.5rem">${marVisits} visitas → ${junVisits} visitas</div>
-      </div>
-      <div class="kpi-card warn" style="padding:5px 12px">
-        <div class="kpi-label" style="font-size:.58rem">Asesores capacitados</div>
-        <div class="kpi-val" style="font-size:.85rem">-${asesoresDropPct} %</div>
-        <div class="kpi-sub" style="font-size:.5rem">${eneAsesores} → ${junAsesores} (ene→jun)</div>
-      </div>
       <div class="kpi-card" style="padding:5px 12px">
         <div class="kpi-label" style="font-size:.58rem">PDV Promedio / Mes</div>
         <div class="kpi-val" style="font-size:.85rem">${(TRADICIONAL_DATA.visitas.reduce((s, v) => s + v.pdvs, 0) / 6).toFixed(1)}</div>
@@ -176,57 +166,23 @@ function renderFormacion() {
       </div>
     </div>
 
-    <div class="two-col" style="gap:10px">
-      <div class="panel" style="padding:8px 12px">
-        <h3 style="margin-bottom:4px; padding-bottom:3px; font-size:.68rem">${icon('calendar')} Visitas, asesores capacitados y PDV por mes</h3>
-        <div class="tbl-wrap" style="margin-top:0">
-          <table>
-            <thead>
-              <tr>
-                <th>Mes</th>
-                <th class="r">Visitas</th>
-                <th class="r">Asesores Capacitados</th>
-                <th class="r">PDV Visitados</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${TRADICIONAL_DATA.visitas.map(v => `
-                <tr>
-                  <td><strong>${v.mes}</strong></td>
-                  <td class="r">${v.visitas}</td>
-                  <td class="r">${v.asesores}</td>
-                  <td class="r">${v.pdvs}</td>
-                </tr>
-              `).join('')}
-              <tr class="total">
-                <td>Total 1S</td>
-                <td class="r">${totalVisitas}</td>
-                <td class="r">—</td>
-                <td class="r">—</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <div class="panel" style="padding:8px 12px">
-        <h3 style="margin-bottom:4px; padding-bottom:3px; font-size:.68rem">${icon('trending-down')} Evolución de visitas por mes</h3>
-        <div class="chart-wrap" style="margin-top:2px">
-          ${TRADICIONAL_DATA.visitas.map(v => {
-            const pct = (v.visitas / bestMonth.visitas * 100).toFixed(0) + '%';
-            const colorClass = (v.mes === 'May' || v.mes === 'Jun') ? 'warn' : 'teal';
-            const style = colorClass === 'warn' ? 'background:linear-gradient(90deg,#e05320,#ff6b35)' : '';
-            return `
-              <div class="bar-row">
-                <span class="bar-label" style="font-size:.58rem">${v.mes}</span>
-                <div class="bar-track">
-                  <div class="bar-fill ${colorClass === 'teal' ? 'teal' : ''}" data-w="${pct}" style="width:0; ${style}"></div>
-                </div>
-                <span class="bar-val" style="font-size:.58rem">${v.visitas}</span>
+    <div class="panel" style="padding:8px 12px">
+      <h3 style="margin-bottom:4px; padding-bottom:3px; font-size:.68rem">${icon('trending-down')} Evolución de visitas por mes</h3>
+      <div class="chart-wrap" style="margin-top:2px">
+        ${TRADICIONAL_DATA.visitas.map(v => {
+          const pct = (v.visitas / bestMonth.visitas * 100).toFixed(0) + '%';
+          const colorClass = (v.mes === 'May' || v.mes === 'Jun') ? 'warn' : 'teal';
+          const style = colorClass === 'warn' ? 'background:linear-gradient(90deg,#e05320,#ff6b35)' : '';
+          return `
+            <div class="bar-row">
+              <span class="bar-label" style="font-size:.58rem">${v.mes}</span>
+              <div class="bar-track">
+                <div class="bar-fill ${colorClass === 'teal' ? 'teal' : ''}" data-w="${pct}" style="width:0; ${style}"></div>
               </div>
-            `;
-          }).join('')}
-        </div>
+              <span class="bar-val" style="font-size:.58rem">${v.visitas}</span>
+            </div>
+          `;
+        }).join('')}
       </div>
     </div>
     <div class="alert alert-warn" style="margin-top:6px; padding:6px 12px">
