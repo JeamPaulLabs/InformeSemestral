@@ -427,16 +427,17 @@ function renderCampanas() {
   const el = document.getElementById('campanas-body');
   if (!el) return;
 
+  // reg = base apta por campaña (tras depuración), sumada de los kpisBase de
+  // cada deep-dive. El total mostrado es el oficial del semestre (DATA.aptos).
   const detalleSemestre = [
-    { c: 'Bienvenidas CP',        reg: 114694, ventas: 6912, contactab: '79 %', convSC: '19,6 %', perfil: 'g' },
-    { c: 'Autogestión',           reg: 11685,  ventas: 803,  contactab: '73 %', convSC: '26,3 %', perfil: 'g' },
-    { c: 'CP Stock',              reg: 420641, ventas: 2845, contactab: '52 %', convSC: '3,6 %',  perfil: 'y' },
-    { c: 'Masiva Voluntarios',    reg: 255141, ventas: 324,  contactab: '19 %', convSC: '1,5 %',  perfil: 'r' },
-    { c: 'CP Clientes Satisf.*',  reg: 108659, ventas: 79,   contactab: '19 %', convSC: '1,2 %',  perfil: 'r' },
-    { c: 'Volunt. Cancelaciones*',reg: 1263,   ventas: 4,    contactab: '53 %', convSC: '0,7 %',  perfil: 'r' },
+    { c: 'Bienvenidas CP',        reg: 44428,  ventas: 6912, contactab: '79 %', convSC: '19,6 %', perfil: 'g' },
+    { c: 'Autogestión',           reg: 4225,   ventas: 803,  contactab: '73 %', convSC: '26,3 %', perfil: 'g' },
+    { c: 'CP Stock',              reg: 158941, ventas: 2845, contactab: '52 %', convSC: '3,6 %',  perfil: 'y' },
+    { c: 'Masiva Voluntarios',    reg: 119828, ventas: 324,  contactab: '19 %', convSC: '1,5 %',  perfil: 'r' },
+    { c: 'CP Clientes Satisf.*',  reg: 35228,  ventas: 79,   contactab: '19 %', convSC: '1,2 %',  perfil: 'r' },
+    { c: 'Volunt. Cancelaciones*',reg: 1065,   ventas: 4,    contactab: '53 %', convSC: '0,7 %',  perfil: 'r' },
   ];
 
-  const totalReg    = detalleSemestre.reduce((a, r) => a + r.reg, 0);
   const totalVentas = detalleSemestre.reduce((a, r) => a + r.ventas, 0);
 
   const maxDescarte = Math.max(...DESCARTE_MOTIVOS.map(d=>d.pct));
@@ -471,7 +472,7 @@ function renderCampanas() {
               <col style="width:18%"><col style="width:26%">
             </colgroup>
             <thead><tr>
-              <th>Campaña</th><th class="r">Registros</th><th class="r">Ventas</th>
+              <th>Campaña</th><th class="r">Base apta</th><th class="r">Ventas</th>
               <th class="r">Contactab.</th><th class="r">Conv./contacto</th>
             </tr></thead>
             <tbody>
@@ -484,14 +485,14 @@ function renderCampanas() {
                   <td class="r">${badge(r.convSC, r.perfil)}</td>
                 </tr>`).join('')}
               <tr class="total" style="font-size:.6rem">
-                <td>Total</td><td class="r">${fmt(totalReg)}</td>
+                <td>Total</td><td class="r">${fmt(aptTotal)}</td>
                 <td class="r">${fmt(totalVentas)}</td>
                 <td class="r">41 %</td><td class="r">7,4 %</td>
               </tr>
             </tbody>
           </table>
         </div>
-        <div style="font-size:.5rem; color:var(--gray3); margin-top:3px">* Campañas puntuales solo de enero (no recurrentes).</div>
+        <div style="font-size:.5rem; color:var(--gray3); margin-top:3px">* Campañas puntuales solo de enero (no recurrentes). Base apta = registros que quedaron tras la depuración; el total (${fmt(aptTotal)}) es la cifra oficial del semestre e incluye Microseguro.</div>
 
         <h3 style="margin:8px 0 3px; padding-bottom:2px; font-size:.7rem">${icon('bar-chart-3')} Tipificación de aptos por mes</h3>
         <div class="tbl-wrap" style="margin-top:0; flex:1 1 0; min-height:0; overflow:hidden">
@@ -543,48 +544,20 @@ function renderCampanas() {
       </div>
 
       <div class="panel" style="padding:10px 14px; display:flex; flex-direction:column; min-height:0; overflow:hidden">
-        <h3 style="margin-bottom:4px; padding-bottom:3px; font-size:.7rem">${icon('calendar-days')} Evolución del rechazo por mes</h3>
-        <div class="tbl-wrap" style="margin-top:0; flex:1 1 0; min-height:0; overflow:hidden">
-          <table class="tbl-compact" style="font-size:.56rem; height:100%; width:100%">
-            <thead><tr>
-              <th style="padding:2px 5px">Mes</th>
-              <th class="r" style="padding:2px 5px">Recibidos</th>
-              <th class="r" style="padding:2px 5px">Rechazados</th>
-              <th class="r" style="padding:2px 5px">% Rech.</th>
-            </tr></thead>
-            <tbody>
-              ${DATA.meses.map((m,i)=>`
-                <tr>
-                  <td style="padding:2px 5px"><strong>${m}</strong></td>
-                  <td class="r" style="padding:2px 5px">${fmt(DATA.registros[i])}</td>
-                  <td class="r" style="padding:2px 5px">${fmt(DATA.rechazados[i])}</td>
-                  <td class="r" style="padding:2px 5px">${badge(fmtPct(DATA.pctRechazo[i]), DATA.pctRechazo[i]>65?'r':DATA.pctRechazo[i]>50?'y':'g')}</td>
-                </tr>`).join('')}
-              <tr class="total" style="font-size:.52rem">
-                <td style="padding:2px 5px">Total</td>
-                <td class="r" style="padding:2px 5px">${fmt(DATA.registros.reduce((a,b)=>a+b,0))}</td>
-                <td class="r" style="padding:2px 5px">${fmt(rechTotal)}</td>
-                <td class="r" style="padding:2px 5px">${badge(fmtPct(rechTotal/(rechTotal+aptTotal)*100), 'r')}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div style="font-size:.5rem; color:var(--gray3); margin-top:3px">Rechazo promedio del semestre: 60 % de la base recibida.</div>
-
-        <h3 style="margin:8px 0 3px; padding-bottom:2px; font-size:.7rem">${icon('filter')} Tipificación de rechazo (semestre)</h3>
-        <div style="display:flex; flex-direction:column; gap:2px; flex:1 1 0; min-height:0; justify-content:space-evenly">
+        <h3 style="margin-bottom:6px; padding-bottom:3px; font-size:.7rem">${icon('filter')} Tipificación de rechazo (semestre)</h3>
+        <div style="display:flex; flex-direction:column; gap:4px; flex:1 1 0; min-height:0; justify-content:space-evenly">
           ${DESCARTE_MOTIVOS.map(d => {
             const w = Math.round(d.pct / maxDescarte * 65) + 15;
-            return `<div style="display:flex; align-items:center; gap:3px">
-              <span style="flex:0 0 120px; font-size:.48rem; color:var(--gray3); text-align:right; white-space:nowrap; overflow:hidden; text-overflow:ellipsis">${d.motivo}</span>
-              <div style="flex:1; height:7px; background:rgba(255,107,53,.12); border-radius:3px; overflow:hidden">
-                <div style="width:${w}%; height:100%; border-radius:3px; background:linear-gradient(90deg,var(--warn),#ff8c5a)"></div>
+            return `<div style="display:flex; align-items:center; gap:5px">
+              <span style="flex:0 0 150px; font-size:.56rem; color:var(--gray3); text-align:right; white-space:nowrap; overflow:hidden; text-overflow:ellipsis">${d.motivo}</span>
+              <div style="flex:1; height:10px; background:rgba(255,107,53,.12); border-radius:4px; overflow:hidden">
+                <div style="width:${w}%; height:100%; border-radius:4px; background:linear-gradient(90deg,var(--warn),#ff8c5a)"></div>
               </div>
-              <span style="flex:0 0 28px; font-size:.48rem; font-weight:700; color:var(--blue); text-align:right">${d.pct}%</span>
+              <span style="flex:0 0 34px; font-size:.56rem; font-weight:700; color:var(--blue); text-align:right">${d.pct}%</span>
             </div>`;
           }).join('')}
         </div>
-        <div style="font-size:.48rem; color:var(--gray3); margin-top:2px; text-align:right">${fmt(rechTotal)} registros descartados (${Math.round(rechTotal/(rechTotal+aptTotal)*100)} % de la base total)</div>
+        <div style="font-size:.54rem; color:var(--gray3); margin-top:4px; text-align:right">${fmt(rechTotal)} registros descartados (${Math.round(rechTotal/(rechTotal+aptTotal)*100)} % de la base recibida). El detalle mensual del rechazo está en la slide anterior (Consolidado de las Bases).</div>
       </div>
     </div>
 
@@ -649,26 +622,28 @@ function renderAutogestion() {
         <div class="tbl-wrap" style="margin-top:0; flex:1 1 0; min-height:0; overflow:hidden">
           <table class="tbl-compact" style="width:100%">
             <thead><tr>
-              <th>Mes</th><th class="r">Registros</th><th class="r">Ventas</th><th class="r">Rechazo</th><th class="r">% Rech.</th>
-              <th class="r">Contactab.</th><th class="r">Conversión</th>
+              <th>Mes</th><th class="r">Registros</th><th class="r">Rechazo</th><th class="r">% Rech.</th><th class="r">Aptos</th>
+              <th class="r">Ventas</th><th class="r">Contactab.</th><th class="r">Conversión</th>
             </tr></thead>
             <tbody>
               ${AUTOGESTION_MESES.map(m => `
                 <tr>
                   <td><strong>${m.mes}</strong></td>
                   <td class="r">${fmt(m.registros)}</td>
-                  <td class="r" style="font-weight:700;color:var(--teal)">${fmt(m.ventas)}</td>
                   <td class="r">${fmt(m.rechazo)}</td>
                   <td class="r">${fmtPct(m.pctRechazo)}</td>
+                  <td class="r">${fmt(m.aptos)}</td>
+                  <td class="r" style="font-weight:700;color:var(--teal)">${fmt(m.ventas)}</td>
                   <td class="r">${fmtPct(m.contactab)}</td>
                   <td class="r">${badge(fmtPct(m.efect), m.efect>=20?'g':'y')}</td>
                 </tr>`).join('')}
               <tr class="total">
                 <td>Total</td>
                 <td class="r">${fmt(totalReg)}</td>
-                <td class="r" style="font-weight:800;color:var(--teal)">${fmt(totalVentas)}</td>
                 <td class="r">${fmt(totalRech)}</td>
                 <td class="r">${fmtPct(pctRechGral)}</td>
+                <td class="r">${fmt(totalAptos)}</td>
+                <td class="r" style="font-weight:800;color:var(--teal)">${fmt(totalVentas)}</td>
                 <td class="r">${fmtPct(totalContactados/totalAptos*100)}</td>
                 <td class="r">${badge(fmtPct(efectProm), 'g')}</td>
               </tr>
@@ -1629,12 +1604,13 @@ function renderDetalleBienvenida() {
       { label: 'CONVERSIÓN PROMEDIO', val: '20,1 %', sub: 'Alta efectividad comercial sobre contacto' }
     ],
     kpisBase: [
-      { mes: 'Enero', recibidos: 14772, rechazados: 8485, pctRechazo: '57,4', aptos: 6459, contactab: '81,5', ventas: 1251, conversion: '23,8', pctVentaRec: '19,4' },
-      { mes: 'Febrero', recibidos: 19573, rechazados: 11134, pctRechazo: '56,9', aptos: 8610, contactab: '79,1', ventas: 1480, conversion: '21,7', pctVentaRec: '17,2' },
-      { mes: 'Marzo', recibidos: 21419, rechazados: 13486, pctRechazo: '63,0', aptos: 8608, contactab: '78,5', ventas: 1265, conversion: '18,7', pctVentaRec: '14,7' },
-      { mes: 'Abril', recibidos: 19096, rechazados: 10792, pctRechazo: '56,5', aptos: 9117, contactab: '75,6', ventas: 1180, conversion: '17,2', pctVentaRec: '12,9' },
-      { mes: 'Mayo', recibidos: 20067, rechazados: 13166, pctRechazo: '65,6', aptos: 7773, contactab: '82,3', ventas: 1286, conversion: '20,1', pctVentaRec: '16,5' },
-      { mes: 'Junio', recibidos: 19767, rechazados: 13203, pctRechazo: '66,8', aptos: 8085, contactab: '77,9', ventas: 1253, conversion: '19,9', pctVentaRec: '15,5' }
+      // aptos = recibidos - rechazados de cada mes (cuadre exacto de la base)
+      { mes: 'Enero', recibidos: 14772, rechazados: 8485, pctRechazo: '57,4', aptos: 6287, contactab: '81,5', ventas: 1251, conversion: '23,8', pctVentaRec: '19,4' },
+      { mes: 'Febrero', recibidos: 19573, rechazados: 11134, pctRechazo: '56,9', aptos: 8439, contactab: '79,1', ventas: 1480, conversion: '21,7', pctVentaRec: '17,2' },
+      { mes: 'Marzo', recibidos: 21419, rechazados: 13486, pctRechazo: '63,0', aptos: 7933, contactab: '78,5', ventas: 1265, conversion: '18,7', pctVentaRec: '14,7' },
+      { mes: 'Abril', recibidos: 19096, rechazados: 10792, pctRechazo: '56,5', aptos: 8304, contactab: '75,6', ventas: 1180, conversion: '17,2', pctVentaRec: '12,9' },
+      { mes: 'Mayo', recibidos: 20067, rechazados: 13166, pctRechazo: '65,6', aptos: 6901, contactab: '82,3', ventas: 1286, conversion: '20,1', pctVentaRec: '16,5' },
+      { mes: 'Junio', recibidos: 19767, rechazados: 13203, pctRechazo: '66,8', aptos: 6564, contactab: '77,9', ventas: 1253, conversion: '19,9', pctVentaRec: '15,5' }
     ],
     tipificacionRechazo: [
       { motivo: 'Cuota Protegida Activa', cant: 35758, pct: '50,9' },
@@ -1823,18 +1799,15 @@ function renderDetalleMicroseguro() {
       { label: 'VENTAS CONSOLIDADAS', val: '1.309', sub: 'Campaña estable y altamente rentable' }
     ],
     kpisBase: [
-      { mes: 'Enero', recibidos: 1368, rechazados: 5, pctRechazo: '0,4', aptos: 1363, contactab: '87,9', ventas: 264, conversion: '22,0', pctVentaRec: '19,3' },
-      { mes: 'Febrero', recibidos: 1575, rechazados: 4, pctRechazo: '0,3', aptos: 1571, contactab: '85,2', ventas: 254, conversion: '19,0', pctVentaRec: '16,1' },
-      { mes: 'Marzo', recibidos: 1147, rechazados: 4, pctRechazo: '0,3', aptos: 1143, contactab: '78,9', ventas: 158, conversion: '17,5', pctVentaRec: '13,8' },
-      { mes: 'Abril', recibidos: 1737, rechazados: 2, pctRechazo: '0,1', aptos: 1735, contactab: '50,0', ventas: 135, conversion: '15,6', pctVentaRec: '7,8' },
-      { mes: 'Mayo', recibidos: 1865, rechazados: 3, pctRechazo: '0,2', aptos: 1862, contactab: '86,8', ventas: 287, conversion: '17,8', pctVentaRec: '15,4' },
-      { mes: 'Junio', recibidos: 1705, rechazados: 1, pctRechazo: '0,1', aptos: 1704, contactab: '86,7', ventas: 211, conversion: '14,3', pctVentaRec: '12,4' }
+      // Base fabricada desde Xuma: sin depuración, el 100 % del insumo es apto
+      { mes: 'Enero', recibidos: 1368, rechazados: 0, pctRechazo: '0,0', aptos: 1368, contactab: '87,9', ventas: 264, conversion: '22,0', pctVentaRec: '19,3' },
+      { mes: 'Febrero', recibidos: 1575, rechazados: 0, pctRechazo: '0,0', aptos: 1575, contactab: '85,2', ventas: 254, conversion: '19,0', pctVentaRec: '16,1' },
+      { mes: 'Marzo', recibidos: 1147, rechazados: 0, pctRechazo: '0,0', aptos: 1147, contactab: '78,9', ventas: 158, conversion: '17,5', pctVentaRec: '13,8' },
+      { mes: 'Abril', recibidos: 1737, rechazados: 0, pctRechazo: '0,0', aptos: 1737, contactab: '50,0', ventas: 135, conversion: '15,6', pctVentaRec: '7,8' },
+      { mes: 'Mayo', recibidos: 1865, rechazados: 0, pctRechazo: '0,0', aptos: 1865, contactab: '86,8', ventas: 287, conversion: '17,8', pctVentaRec: '15,4' },
+      { mes: 'Junio', recibidos: 1705, rechazados: 0, pctRechazo: '0,0', aptos: 1705, contactab: '86,7', ventas: 211, conversion: '14,3', pctVentaRec: '12,4' }
     ],
-    tipificacionRechazo: [
-      { motivo: 'Microseguro Activo / Ya Posee el Producto', cant: 12, pct: '63,2' },
-      { motivo: 'Registro Enviado Anteriormente', cant: 5, pct: '26,3' },
-      { motivo: 'Otros motivos menores', cant: 2, pct: '10,5' }
-    ],
+    tipificacionRechazo: [],
     tipificacionAptos: [
       { desc: 'CONTACTO EFECTIVO', cant: 7400, pct: '78,9', isTitle: true },
       { desc: 'Venta exitosa', cant: 1309, pct: '14,0' },
@@ -1957,8 +1930,40 @@ function renderCampanaDeepDive(campanaId, data) {
     </div>
 
     <div class="two-col" style="gap:10px; margin-top:0; flex:1; min-height:0; grid-template-rows:minmax(0,1fr)">
-      <!-- Columna Izquierda: Descarte / Rechazo -->
+      <!-- Columna Izquierda: Descarte / Rechazo (o base limpia si no hay rechazo) -->
       <div class="panel" style="padding:6px 12px; display:flex; flex-direction:column; gap:4px; min-height:0; overflow:hidden">
+      ${data.tipificacionRechazo.length === 0 ? `
+        <h3 style="margin-bottom:2px; padding-bottom:2px; font-size:0.68rem; border-bottom:1px solid var(--gray2); color:var(--blue)">
+          ${icon('circle-check', {size: 12})} 1. Insumo Recibido por Mes
+        </h3>
+        <div class="tbl-wrap" style="margin-top:0">
+          <table style="font-size:0.53rem; table-layout:fixed; border-collapse:collapse; width:100%">
+            <colgroup>
+              <col style="width:40%">
+              <col style="width:60%">
+            </colgroup>
+            <thead><tr>
+              <th style="border-right:1px solid rgba(255,255,255,.18); padding:2px 4px">Mes</th>
+              <th class="r" style="padding:2px 4px">Registros recibidos</th>
+            </tr></thead>
+            <tbody>
+              ${data.kpisBase.map(m=>`
+                <tr>
+                  <td style="border-right:1px solid rgba(0,0,0,.06); padding:2px 4px"><strong>${m.mes}</strong></td>
+                  <td class="r" style="padding:2px 4px">${m.recibidos > 0 ? fmt(m.recibidos) : '—'}</td>
+                </tr>`).join('')}
+              <tr class="total">
+                <td style="border-right:1px solid rgba(0,0,0,.07); padding:2px 4px">Total</td>
+                <td class="r" style="padding:2px 4px">${fmt(totalRecibidos)}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="alert alert-info" style="margin:4px 0 0; padding:8px 12px; border-left: 4px solid var(--teal); background: rgba(0,205,147,0.06)">
+          <span class="ico">${icon('sparkles')}</span>
+          <span style="font-size:.62rem; line-height:1.4; color:var(--dark)"><strong>Base sin descarte:</strong> el insumo se fabrica directamente desde Xuma con registros ya validados, por lo que el <strong>100 % de la base recibida es apta para gestión</strong> — no existe rechazo en esta campaña.</span>
+        </div>
+      ` : `
         <h3 style="margin-bottom:2px; padding-bottom:2px; font-size:0.68rem; border-bottom:1px solid var(--gray2); color:var(--blue)">
           ${icon('alert-circle', {size: 12})} 1. Calidad de Base y Descarte Mensual
         </h3>
@@ -2037,6 +2042,7 @@ function renderCampanaDeepDive(campanaId, data) {
             </tbody>
           </table>
         </div>
+      `}
       </div>
 
       <!-- Columna Derecha: Gestión / Aptos -->
