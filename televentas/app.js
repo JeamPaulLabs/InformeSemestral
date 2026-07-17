@@ -339,7 +339,7 @@ function renderBases() {
       <div class="kpi-card" style="padding:8px 16px">
         <div class="kpi-label">Ventas operativas (base)</div>
         <div class="kpi-val">${fmt(totalOp)}</div>
-        <div class="kpi-sub">Tablero Power BI · ${Math.round((totalLiq - totalOp) / totalOp * 100)} % más en liquidación</div>
+        <div class="kpi-sub">Registradas en base · dif vs liquidación: ${fmt(totalLiq-totalOp)}</div>
       </div>
     </div>
 
@@ -380,7 +380,10 @@ function renderBases() {
             </tbody>
           </table>
         </div>
+        <div style="font-size:.6rem; color:var(--gray3); margin-top:4px; line-height:1.3">Las ventas en base (operativo) no incluyen campañas fuera de base como Microseguro Activo (<strong>1.462 pólizas</strong>). La liquidación consolida ambos orígenes.</div>
       </div>
+
+      <div class="panel" style="padding:8px 16px">
 
       <div class="panel" style="padding:8px 16px">
         <h3 style="margin-bottom:4px; padding-bottom:4px">${icon('trending-down')} Embudo de la gestión · de la base a la venta (semestre)</h3>
@@ -1207,8 +1210,9 @@ function renderContactab() {
                 <td class="r">${badge(c.perfil, c.perfil==='Excelente'?'g':c.perfil==='Moderado'?'y':'r')}</td>
               </tr>`).join('')}
           </tbody>
-        </table>
-      </div>
+          </table>
+        </div>
+        <div style="font-size:.6rem; color:var(--gray3); margin-top:4px; line-height:1.3">Las ventas en base (operativo) no incluyen campañas fuera de base como Microseguro Activo (<strong>1.462 pólizas</strong>). La liquidación consolida ambos orígenes.</div>
       <div class="alert alert-info" style="margin-top:10px">
         <span class="ico">${icon('lightbulb')}</span>
         <span><strong>Clave:</strong> Los números en el calendario cambian según qué tipo de cliente estamos llamando. Cuando trabajamos con gente que ya nos conoce (CP y Autogestión) los contactamos unas 4 veces mejor (73-79 %) que números nuevos en Masiva Voluntarios (19 %). <strong>Implicación:</strong> mejorar contactabilidad no es solo cuestión de horarios — es el tipo de base. Mejor calidad de números = mejores resultados.</span>
