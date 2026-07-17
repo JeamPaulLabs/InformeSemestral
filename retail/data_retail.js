@@ -93,31 +93,43 @@ const RETAIL_DATA = {
     rs: [
   {
     "mes": "Ene",
+    "gestores": 148,
+    "pdv": 91,
     "cantadas": 63,
     "efectivas": 34
   },
   {
     "mes": "Feb",
+    "gestores": 139,
+    "pdv": 90,
     "cantadas": 120,
     "efectivas": 65
   },
   {
     "mes": "Mar",
+    "gestores": 135,
+    "pdv": 82,
     "cantadas": 169,
     "efectivas": 122
   },
   {
     "mes": "Abr",
+    "gestores": 118,
+    "pdv": 72,
     "cantadas": 120,
     "efectivas": 91
   },
   {
     "mes": "May",
+    "gestores": 93,
+    "pdv": 57,
     "cantadas": 103,
     "efectivas": 70
   },
   {
     "mes": "Jun",
+    "gestores": 96,
+    "pdv": 52,
     "cantadas": 100,
     "efectivas": 85
   }
@@ -203,10 +215,10 @@ const RETAIL_DATA = {
 // Ene: visitados 56, gestión 92 -> 60,9 % · Feb: 52/91 -> 57,1 % · Mar: 45/82 -> 54,9 %
 // Abr: 36/72 -> 50,0 % · May: 19/57 -> 33,3 % · Jun: 14/52 -> 26,9 %
 const COBERTURA_PDV = [
-  { mes: 'Ene', gestion: 92, visitas: 56, pct: 60.9 },
-  { mes: 'Feb', gestion: 91, visitas: 52, pct: 57.1 },
-  { mes: 'Mar', gestion: 82, visitas: 45, pct: 54.9 },
-  { mes: 'Abr', gestion: 72, visitas: 36, pct: 50.0 },
-  { mes: 'May', gestion: 57, visitas: 19, pct: 33.3 },
-  { mes: 'Jun', gestion: 52, visitas: 14, pct: 26.9 },
+  { mes: 'Ene', gestores: 147, gestion: 92, visitas: 56, pct: 60.9 },
+  { mes: 'Feb', gestores: 146, gestion: 91, visitas: 52, pct: 57.1 },
+  { mes: 'Mar', gestores: 135, gestion: 82, visitas: 45, pct: 54.9 },
+  { mes: 'Abr', gestores: 118, gestion: 72, visitas: 36, pct: 50.0 },
+  { mes: 'May', gestores: 93,  gestion: 57, visitas: 19, pct: 33.3 },
+  { mes: 'Jun', gestores: 96,  gestion: 52, visitas: 14, pct: 26.9 },
 ];

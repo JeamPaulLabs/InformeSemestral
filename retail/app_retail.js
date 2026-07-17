@@ -283,10 +283,10 @@ function renderVentas() {
     </div>
 
     <div class="two-col" style="gap:10px">
-      <div class="panel" style="padding:8px 12px">
+      <div class="panel" style="padding:8px 12px; display:flex; flex-direction:column">
         <h3 style="margin-bottom:4px; padding-bottom:3px; font-size:.68rem">${icon('shield')} Cuota Protegida Retail (Como vamos)</h3>
-        <div class="tbl-wrap" style="margin-top:0">
-          <table class="tbl-compact">
+        <div class="tbl-wrap" style="margin-top:0; flex-grow:1">
+          <table class="tbl-compact" style="width:100%; height:100%">
             <thead>
               <tr>
                 <th>Mes</th>
@@ -326,8 +326,8 @@ function renderVentas() {
               })()}
               <tr class="total">
                 <td>Total 1S</td>
-                <td class="r">—</td>
-                <td class="r">—</td>
+                <td class="r">${Math.round(RETAIL_DATA.ventas.cp.reduce((s, v) => s + v.gestores, 0) / RETAIL_DATA.ventas.cp.length)}*</td>
+                <td class="r">${Math.round(RETAIL_DATA.ventas.cp.reduce((s, v) => s + v.pdv, 0) / RETAIL_DATA.ventas.cp.length)}*</td>
                 <td class="r">${fmt(totalCantadasCP)}</td>
                 <td class="r">${fmt(totalEfectivasCP)}</td>
                 <td class="r">${badge(promEfectCP.toFixed(1).replace('.', ',') + '%', 'g')}</td>
@@ -338,13 +338,14 @@ function renderVentas() {
       </div>
 
       <div class="panel" style="display:flex; flex-direction:column; padding:8px 12px">
-        <div>
+        <div style="display:flex; flex-direction:column; flex-grow:1">
           <h3 style="margin-bottom:4px; padding-bottom:3px; font-size:.68rem">${icon('bike')} Rueda Seguro Retail (Como vamos)</h3>
-          <div class="tbl-wrap" style="margin-top:0">
-            <table class="tbl-compact">
+          <div class="tbl-wrap" style="margin-top:0; flex-grow:1">
+            <table class="tbl-compact" style="width:100%; height:100%">
               <thead>
                 <tr>
                   <th>Mes</th>
+                  <th class="r">Gestores</th>
                   <th class="r">Cantadas</th>
                   <th class="r">Efectivas</th>
                   <th class="r">% Efect.</th>
@@ -360,6 +361,7 @@ function renderVentas() {
                     return `
                       <tr>
                         <td><strong>${v.mes}</strong></td>
+                        <td class="r">${v.gestores}</td>
                         <td class="r">${fmt(v.cantadas)}</td>
                         <td class="r">
                           <div style="display:flex; flex-direction:column; align-items:flex-end">
@@ -376,6 +378,7 @@ function renderVentas() {
                 })()}
                 <tr class="total">
                   <td>Total 1S</td>
+                  <td class="r">${Math.round(RETAIL_DATA.ventas.rs.reduce((s, v) => s + v.gestores, 0) / RETAIL_DATA.ventas.rs.length)}*</td>
                   <td class="r">${fmt(totalCantadasRS)}</td>
                   <td class="r">${fmt(totalEfectivasRS)}</td>
                   <td class="r">${badge(promEfectRS.toFixed(1).replace('.', ',') + '%', 'g')}</td>
@@ -387,7 +390,9 @@ function renderVentas() {
       </div>
     </div>
 
-    <div class="alert alert-info" style="margin-top:14px; margin-bottom:0; padding:12px 18px; border-left: 4px solid var(--green); background: rgba(90,226,128,0.08)">
+    <div style="font-size:.58rem; color:var(--gray3); margin-top:4px">* Gestores y PDV en la fila de total corresponden al promedio mensual de la estructura activa del canal (los mismos gestores atienden Cuota Protegida y Rueda Seguro).</div>
+
+    <div class="alert alert-info" style="margin-top:4px; margin-bottom:0; padding:12px 18px; border-left: 4px solid var(--green); background: rgba(90,226,128,0.08)">
       <span class="ico">${icon('trending-up')}</span>
       <span style="font-size:.68rem; line-height:1.4; color:var(--dark)"><strong>Logro Comercial:</strong> el canal Retail cerró el semestre con <strong>${fmt(totalEfectivasCP + totalEfectivasRS)} ventas efectivas</strong> entre Cuota Protegida y Rueda Seguro, sosteniendo una efectividad promedio superior al <strong>${Math.min(promEfectCP, promEfectRS).toFixed(0)} %</strong> durante todo el semestre — un desempeño comercial consistente que valida el enfoque del canal en los puntos de mayor valor.</span>
     </div>
@@ -436,14 +441,16 @@ function renderCobertura() {
         <div class="tbl-wrap" style="margin-top:0; flex-grow:1">
           <table class="tbl-compact" style="width:100%; table-layout:fixed">
             <colgroup>
-              <col style="width:22%">
-              <col style="width:28%">
-              <col style="width:26%">
-              <col style="width:24%">
+              <col style="width:16%">
+              <col style="width:20%">
+              <col style="width:23%">
+              <col style="width:21%">
+              <col style="width:20%">
             </colgroup>
             <thead>
               <tr>
                 <th>Mes</th>
+                <th class="r">Gestores</th>
                 <th class="r">PDV con Gestión</th>
                 <th class="r">PDV Visitados</th>
                 <th class="r">Cobertura %</th>
@@ -455,12 +462,27 @@ function renderCobertura() {
                 return `
                   <tr>
                     <td><strong>${d.mes}</strong></td>
+                    <td class="r">${d.gestores}</td>
                     <td class="r">${d.gestion}</td>
                     <td class="r">${d.visitas}</td>
                     <td class="r">${badge(d.pct.toFixed(1).replace('.', ',') + '%', bType)}</td>
                   </tr>
                 `;
               }).join('')}
+              ${(() => {
+                const n = COBERTURA_PDV.length;
+                const avg = k => Math.round(COBERTURA_PDV.reduce((s, d) => s + d[k], 0) / n);
+                const avgPct = COBERTURA_PDV.reduce((s, d) => s + d.pct, 0) / n;
+                return `
+                  <tr class="total">
+                    <td>Prom. 1S</td>
+                    <td class="r">${avg('gestores')}</td>
+                    <td class="r">${avg('gestion')}</td>
+                    <td class="r">${avg('visitas')}</td>
+                    <td class="r">${badge(avgPct.toFixed(1).replace('.', ',') + '%', 'y')}</td>
+                  </tr>
+                `;
+              })()}
             </tbody>
           </table>
         </div>
@@ -511,14 +533,14 @@ function renderCobertura() {
               <tr class="total">
                 <td>Total canal</td>
                 <td class="r">105</td>
-                <td class="r">—</td>
-                <td class="r">—</td>
+                <td class="r">108</td>
+                <td class="r">${badge('102,9 %','g')}</td>
                 <td class="r">373</td>
               </tr>
             </tbody>
           </table>
         </div>
-        <div style="font-size:.6rem; color:var(--gray3); margin-top:5px">* Universo = PDV físicos distintos observados en los 26 cortes semanales "Como vamos" del semestre. Coberturas &gt;100 % indican PDV que Formación visitó con nombre distinto al registrado en Como vamos ese corte, o puntos sin gestión comercial activa ese mes.</div>
+        <div style="font-size:.6rem; color:var(--gray3); margin-top:5px">* Universo = PDV físicos distintos observados en los 26 cortes semanales "Como vamos" del semestre. Coberturas &gt;100 % indican PDV que Formación visitó con nombre distinto al registrado en Como vamos ese corte, o puntos sin gestión comercial activa ese mes. <strong>Gestores del canal:</strong> 147 (ene) → 96 (jun), promedio 123; los cortes "Como vamos" no desagregan gestores por aliado.</div>
       </div>
     </div>
 
