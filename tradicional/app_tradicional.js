@@ -187,8 +187,8 @@ function renderFormacion() {
                 <tr class="total">
                   <td>Total 1S</td>
                   <td class="r">${totalVisitas}</td>
-                  <td class="r">—</td>
-                  <td class="r">—</td>
+                  <td class="r">${TRADICIONAL_DATA.visitas.reduce((s, v) => s + v.asesores, 0)}</td>
+                  <td class="r">${TRADICIONAL_DATA.visitas.reduce((s, v) => s + v.pdvs, 0)}</td>
                 </tr>
               </tbody>
             </table>
