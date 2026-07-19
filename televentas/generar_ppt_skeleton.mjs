@@ -172,12 +172,24 @@ async function extractText(page) {
     function pushResult(el, style, built, isCell) {
       const { runs, textRect } = built;
       const joined = runs.map(r => r.text).join('');
-      if (!joined || joined.trim().length < 2) return;
+      const trimmed = (joined || '').trim();
+      if (!trimmed) return;
+      // Textos de 1 carácter son válidos si son alfanuméricos o símbolo con
+      // significado (números de ranking, valores de un dígito, %, *) — solo
+      // se descarta puntuación decorativa suelta.
+      if (trimmed.length === 1 && /[·•—–\-|:;,.]/.test(trimmed)) return;
       const ep = vp(el); if (ep.w < 3 || ep.h < 3) return;
-      /* Celdas: se conserva la caja de la celda (la alineación manda).
+      /* Celdas: caja horizontal de la celda (la alineación manda) pero
+         posición VERTICAL exacta del texto — así el número no se centra
+         sobre toda la celda pisando barras/decoraciones del esqueleto.
          Resto: la caja es la unión exacta de los rects de texto, para no
-         pisar íconos ni decoraciones del mismo contenedor. */
-      const p = (!isCell && textRect) ? textRect : ep;
+         pisar íconos del mismo contenedor. */
+      let p;
+      if (isCell) {
+        p = textRect ? { x: ep.x, y: textRect.y, w: ep.w, h: textRect.h } : ep;
+      } else {
+        p = textRect || ep;
+      }
       const key = `${ep.x.toFixed(0)},${ep.y.toFixed(0)},${joined}`;
       if (seen.has(key)) return; seen.add(key);
       results.push({
@@ -186,6 +198,7 @@ async function extractText(page) {
         x: p.x, y: p.y, w: p.w, h: p.h,
         ex: ep.x, ey: ep.y, ew: ep.w, eh: ep.h,
         exactBox: (!isCell && !!textRect),
+        exactV: (isCell && !!textRect),
         fontSize: parseFloat(style.fontSize) || 10,
         color: style.color,
         bold: isBold(style),
@@ -283,9 +296,14 @@ async function buildDeck(page, port, deckKey) {
         for (const t of filtered) {
           if (t.w < 5 || t.h < 3) continue;
           // Cajas exactas de texto: sin margen interno (el padding del
-          // contenedor ya quedó excluido del rect). Celdas: padding real.
-          const margin = t.exactBox ? 0 : [t.padT * 0.75, t.padR * 0.75, t.padB * 0.75, t.padL * 0.75];
-          const yAdj = t.isCell ? Math.max(t.y * SY - 0.0156, 0) : t.y * SY;
+          // contenedor ya quedó excluido del rect). Celdas con posición
+          // vertical exacta: solo padding horizontal. Resto: padding real.
+          const margin = t.exactBox ? 0
+            : t.exactV ? [0, t.padR * 0.75, 0, t.padL * 0.75]
+            : [t.padT * 0.75, t.padR * 0.75, t.padB * 0.75, t.padL * 0.75];
+          // El ajuste fijo de -1,5px solo aplica a celdas SIN rect exacto
+          // (corría los encabezados respecto a las bandas azules del fondo)
+          const yAdj = (t.isCell && !t.exactV) ? Math.max(t.y * SY - 0.0156, 0) : t.y * SY;
           const runs = (t.runs && t.runs.length ? t.runs : [{ text: t.text, color: t.color, bold: t.bold, fontSize: t.fontSize }])
             .map(r => ({
               text: r.text,

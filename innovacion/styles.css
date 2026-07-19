@@ -267,7 +267,7 @@ body {
 /* ── SLIDE · CONTENT BASE ────────────────────────────────── */
 .slide-content {
   flex-direction: column;
-  background: var(--gray1);
+  background: var(--white);
 }
 .slide-content .s-header {
   background: var(--blue);

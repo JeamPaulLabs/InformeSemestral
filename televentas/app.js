@@ -620,7 +620,11 @@ function renderAutogestion() {
 
         <h3 style="margin-bottom:4px; padding-bottom:3px; font-size:.68rem">${icon('bar-chart-3')} Histórico mensual</h3>
         <div class="tbl-wrap" style="margin-top:0; flex:1 1 0; min-height:0; overflow:hidden">
-          <table class="tbl-compact" style="width:100%">
+          <table class="tbl-compact" style="width:100%; table-layout:fixed; font-size:.62rem">
+            <colgroup>
+              <col style="width:13%"><col style="width:13%"><col style="width:11%"><col style="width:10%">
+              <col style="width:11%"><col style="width:12%"><col style="width:14%"><col style="width:16%">
+            </colgroup>
             <thead><tr>
               <th>Mes</th><th class="r">Registros</th><th class="r">Rechazo</th><th class="r">% Rech.</th><th class="r">Aptos</th>
               <th class="r">Ventas</th><th class="r">Contactab.</th><th class="r">Conversión</th>
@@ -629,23 +633,23 @@ function renderAutogestion() {
               ${AUTOGESTION_MESES.map(m => `
                 <tr>
                   <td><strong>${m.mes}</strong></td>
-                  <td class="r">${fmt(m.registros)}</td>
-                  <td class="r">${fmt(m.rechazo)}</td>
-                  <td class="r">${fmtPct(m.pctRechazo)}</td>
-                  <td class="r">${fmt(m.aptos)}</td>
-                  <td class="r" style="font-weight:700;color:var(--teal)">${fmt(m.ventas)}</td>
-                  <td class="r">${fmtPct(m.contactab)}</td>
-                  <td class="r">${badge(fmtPct(m.efect), m.efect>=20?'g':'y')}</td>
+                  <td class="r" style="font-size:.6rem">${fmt(m.registros)}</td>
+                  <td class="r" style="font-size:.6rem">${fmt(m.rechazo)}</td>
+                  <td class="r" style="font-size:.6rem">${fmtPct(m.pctRechazo)}</td>
+                  <td class="r" style="font-size:.6rem">${fmt(m.aptos)}</td>
+                  <td class="r" style="font-size:.6rem;font-weight:700;color:var(--teal)">${fmt(m.ventas)}</td>
+                  <td class="r" style="font-size:.6rem">${fmtPct(m.contactab)}</td>
+                  <td class="r" style="font-size:.6rem">${badge(fmtPct(m.efect), m.efect>=20?'g':'y')}</td>
                 </tr>`).join('')}
               <tr class="total">
                 <td>Total</td>
-                <td class="r">${fmt(totalReg)}</td>
-                <td class="r">${fmt(totalRech)}</td>
-                <td class="r">${fmtPct(pctRechGral)}</td>
-                <td class="r">${fmt(totalAptos)}</td>
-                <td class="r" style="font-weight:800;color:var(--teal)">${fmt(totalVentas)}</td>
-                <td class="r">${fmtPct(totalContactados/totalAptos*100)}</td>
-                <td class="r">${badge(fmtPct(efectProm), 'g')}</td>
+                <td class="r" style="font-size:.6rem">${fmt(totalReg)}</td>
+                <td class="r" style="font-size:.6rem">${fmt(totalRech)}</td>
+                <td class="r" style="font-size:.6rem">${fmtPct(pctRechGral)}</td>
+                <td class="r" style="font-size:.6rem">${fmt(totalAptos)}</td>
+                <td class="r" style="font-size:.6rem;font-weight:800;color:var(--teal)">${fmt(totalVentas)}</td>
+                <td class="r" style="font-size:.6rem">${fmtPct(totalContactados/totalAptos*100)}</td>
+                <td class="r" style="font-size:.6rem">${badge(fmtPct(efectProm), 'g')}</td>
               </tr>
             </tbody>
           </table>
