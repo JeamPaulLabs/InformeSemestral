@@ -39,7 +39,7 @@ const FONT = 'Raleway';
 const DECKS = {
   televentas: {
     dir: 'televentas',
-    out: 'INFORME_TELEVENTAS_HIBRIDO_V2_SKELETON.pptx',
+    out: 'INFORME_TELEVENTAS.pptx',
     slides: [
       [0,'Portada',null],[1,'Cap. 1',null],
       [2,'Ventas',[['Vanti',"vtasTab('vanti')"],['Xuma',"vtasTab('xuma')"]]],
@@ -58,12 +58,12 @@ const DECKS = {
   },
   tradicional: {
     dir: 'tradicional',
-    out: 'INFORME_TRADICIONAL_SKELETON.pptx',
+    out: 'INFORME_TRADICIONAL.pptx',
     slides: [[0,'Formacion',null],[1,'Cobertura',null],[2,'Ventas',null]],
   },
   retail: {
     dir: 'retail',
-    out: 'INFORME_RETAIL_SKELETON.pptx',
+    out: 'INFORME_RETAIL.pptx',
     slides: [[0,'Formacion',null],[1,'Cobertura',null],[2,'Ventas',null]],
   },
 };
