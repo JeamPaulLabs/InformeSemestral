@@ -5,7 +5,7 @@
 // ============================================================
 
 const NAV_LABELS = [
-  'Portada', 'Resumen 1S', 'Línea de Tiempo', 'Detalle de Proyectos', 'Trabajo Conjunto', 'Plan 2S', 'Cierre'
+  'Portada', 'Resumen 1S', 'Estado Portafolio', 'Línea de Tiempo', 'Detalle de Proyectos', 'Trabajo Conjunto', 'Plan 2S', 'Cierre'
 ];
 
 /* ── STATE ──────────────────────────────────────────────────── */
@@ -132,6 +132,112 @@ function renderResumen() {
           <li style="font-size:.72rem"><strong>autoComovamos:</strong> 8 módulos en producción manual · 6 fuentes cruzadas por corte</li>
         </ul>
       </div>
+    </div>`;
+}
+
+/* ── Slide: Estado del Portafolio · los 13 proyectos de un vistazo ──
+   Vista infográfica ejecutiva: cada proyecto con su dato duro, su
+   estado en una línea y los puntos de fase alcanzada, agrupados en
+   3 bandas por estado real (producción / desarrollo·construido /
+   pausa). Los textos cortos son resúmenes editoriales de esta slide;
+   las cifras salen de los mismos proyectos de data_innovacion.js. */
+const PF_FASE_CORTA = { iniciacion: 'Iniciación', construccion: 'Construcción', piloto: 'Piloto', produccion: 'Producción' };
+// Colores de texto legibles sobre blanco (FASE_COLOR es para fondos/puntos)
+const PF_FASE_TXT = { iniciacion: '#6f61d8', construccion: '#8a6200', piloto: '#c44a1a', produccion: '#0f8a4d' };
+
+const PF_GRUPOS = [
+  {
+    titulo: 'En Producción', sub: 'Automatizaciones corriendo hoy con datos reales',
+    color: '90,226,128', txt: '#0f8a4d', ico: 'circle-check',
+    items: [
+      { id: 'autocarga-ocm',   dato: '23,58 M filas · sync cada 10 min', est: 'Actualiza las llamadas solo, en la VM del DataCenter', fecha: 'desde 23 Jun' },
+      { id: 'autoreport-ilio', dato: '197.142 filas · cron cada 15 min', est: 'Descarga y carga Ilio automático, en la VM', fecha: 'desde 08 Jul' },
+      { id: 'actixuma',        dato: '27 usuarios · 226.963 activos', est: 'Portal de consulta de pólizas, en la VM', fecha: 'desde 09 Jul' },
+      { id: 'depuracion',      dato: 'de 1,5–3 h a ~30 seg', est: 'Limpieza diaria de bases nuevas (corre en local)', fecha: 'desde 07 Jul' },
+      { id: 'autocomovamos',   dato: '8 módulos · 6 fuentes por corte', est: 'Reportes "Como Vamos" por corte (corre en local)', fecha: 'desde 18 Jun' },
+    ],
+  },
+  {
+    titulo: 'En Desarrollo · Construido', sub: 'Infraestructura en curso y piezas terminadas listas para activar',
+    color: '255,209,102', txt: '#8a6200', ico: 'wrench',
+    items: [
+      { id: 'datacenter-implementacion', dato: '3 servicios reales en la VM', est: '5 de 16 fases; faltan 7 fuentes por conectar', fecha: 'act. 09 Jul' },
+      { id: 'datacenter-diseno',   dato: '8 fuentes · 4 ETLs', est: 'Plano completo cerrado en v2.0 — ya se construye sobre él', fecha: 'cerrado 18 Jun', chip: '✔ Diseño completado' },
+      { id: 'mapa-contactabilidad', dato: '12.825 clientes × 3,02 M llamadas', est: 'Funcional, listo para desplegar en línea', fecha: 'act. 25 Jun' },
+      { id: 'notebookevin',        dato: '3 documentos fuente', est: 'Perfil y material listos para usar en NotebookLM', fecha: 'listo 25 Jun' },
+    ],
+  },
+  {
+    titulo: 'En Pausa · Por Retomar', sub: 'Validados con datos reales — solo esperan reactivarse en el 2S',
+    color: '255,107,53', txt: '#c44a1a', ico: 'hourglass',
+    items: [
+      { id: 'autogps',          dato: '94,5 % efectividad · 13.571 dir.', est: 'Falta terminar el lote masivo de 250 K registros', fecha: 'pausa 24 Jun' },
+      { id: 'autoconciliacion', dato: '2 cortes reales validados', est: 'El corte del 30 Jun quedó pendiente de procesar', fecha: 'pausa 30 Jun' },
+      { id: 'auditor-ia',       dato: 'Transcripción validada (Whisper)', est: 'Falta probar la evaluación con IA (Qwen)', fecha: 'pausa 19 Jun' },
+      { id: 'crm-twenty',       dato: 'Twenty elegido (self-hosted)', est: 'Instalación quedó a medias (falta reiniciar WSL)', fecha: 'pausa 12 Jun' },
+    ],
+  },
+];
+
+function pfDots(p) {
+  const ult = (p.etapas && p.etapas.length) ? p.etapas[p.etapas.length - 1].fase : 'iniciacion';
+  const reached = FASE_ORDER.indexOf(ult);
+  const dots = FASE_ORDER.map((f, i) =>
+    `<span style="width:7px; height:7px; border-radius:50%; display:inline-block; flex-shrink:0; background:${i <= reached ? `rgb(${FASE_COLOR[f]})` : '#e2e5f0'}"></span>`
+  ).join('');
+  return `<div style="display:flex; align-items:center; gap:3px">${dots}<span style="font-size:.52rem; font-weight:800; color:${PF_FASE_TXT[ult]}; margin-left:3px">${PF_FASE_CORTA[ult]}</span></div>`;
+}
+
+function renderPortafolio() {
+  const el = document.getElementById('portafolio-body');
+  if (!el) return;
+
+  const stat = (val, lbl, color) => `
+    <div style="background:var(--white); border-radius:10px; padding:8px 14px; box-shadow:0 2px 8px rgba(18,1,128,.07); display:flex; align-items:center; gap:10px">
+      <span style="font-size:1.5rem; font-weight:800; color:${color}; line-height:1">${val}</span>
+      <span style="font-size:.6rem; font-weight:700; color:var(--gray3); line-height:1.25; text-transform:uppercase; letter-spacing:.04em">${lbl}</span>
+    </div>`;
+
+  const card = (g, it) => {
+    const p = TIMELINE.find(x => x.id === it.id);
+    return `
+    <div style="background:var(--white); border-radius:10px; padding:8px 10px 7px; box-shadow:0 2px 8px rgba(18,1,128,.07); border-top:3px solid rgb(${g.color}); display:flex; flex-direction:column; gap:3px; min-width:0">
+      <div style="display:flex; align-items:center; gap:5px">
+        <span style="color:${g.txt}; flex-shrink:0; display:flex">${icon(p.ico, { size: 13 })}</span>
+        <span style="font-size:.63rem; font-weight:800; color:var(--blue); line-height:1.15">${p.corto}</span>
+      </div>
+      <div style="font-size:.6rem; font-weight:800; color:var(--dark); line-height:1.25">${it.dato}</div>
+      <div style="font-size:.55rem; font-weight:500; color:var(--gray3); line-height:1.35; flex:1">${it.est}</div>
+      <div style="display:flex; align-items:center; justify-content:space-between; gap:6px">
+        ${it.chip ? `<span style="font-size:.52rem; font-weight:800; color:#0f8a4d">${it.chip}</span>` : pfDots(p)}
+        <span style="font-size:.52rem; font-weight:700; color:var(--gray3); white-space:nowrap">${it.fecha}</span>
+      </div>
+    </div>`;
+  };
+
+  const banda = g => `
+    <div style="display:grid; grid-template-columns:158px 1fr; gap:10px; flex:1; min-height:0">
+      <div style="border-radius:10px; padding:8px 12px; background:rgba(${g.color},.10); border-left:4px solid rgb(${g.color}); display:flex; flex-direction:column; justify-content:center; gap:2px">
+        <div style="display:flex; align-items:center; gap:6px; color:${g.txt}">${icon(g.ico, { size: 15 })}<span style="font-size:1.35rem; font-weight:800; line-height:1">${g.items.length}</span></div>
+        <div style="font-size:.62rem; font-weight:800; color:var(--blue); text-transform:uppercase; letter-spacing:.04em; line-height:1.2">${g.titulo}</div>
+        <div style="font-size:.53rem; font-weight:500; color:var(--gray3); line-height:1.3">${g.sub}</div>
+      </div>
+      <div style="display:grid; grid-template-columns:repeat(${g.items.length},1fr); gap:8px">
+        ${g.items.map(it => card(g, it)).join('')}
+      </div>
+    </div>`;
+
+  el.innerHTML = `
+    <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:10px">
+      ${stat(TIMELINE.length, 'Proyectos en el portafolio', 'var(--blue)')}
+      ${stat(PF_GRUPOS[0].items.length, 'En producción con datos reales', PF_GRUPOS[0].txt)}
+      ${stat(PF_GRUPOS[1].items.length, 'En desarrollo · construidos', PF_GRUPOS[1].txt)}
+      ${stat(PF_GRUPOS[2].items.length, 'En pausa · por retomar 2S', PF_GRUPOS[2].txt)}
+    </div>
+    ${PF_GRUPOS.map(banda).join('')}
+    <div class="alert" style="border-left:4px solid var(--green); background:rgba(90,226,128,.08); color:#0f5c30; padding:9px 16px; font-size:.66rem; align-items:center">
+      <span style="flex-shrink:0; display:flex">${icon('trending-up', { size: 16 })}</span>
+      <div><strong>Logro del portafolio:</strong> 12 de los 13 proyectos nacieron en el 1S y hoy <strong>5 automatizaciones operan con datos reales</strong> — 3 de ellas dentro del DataCenter (VM bdvanti), que ya sostiene la capa técnica de los 3 canales; los 4 proyectos en pausa quedaron validados y solo esperan retomarse en el 2S.</div>
     </div>`;
 }
 
