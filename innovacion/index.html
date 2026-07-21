@@ -23,7 +23,7 @@
 <a id="home-btn" href="../index.html" title="Volver al portal de canales">⌂ PORTAL</a>
 
 <div id="progress" style="width:0"></div>
-<div id="counter">1 / 8</div>
+<div id="counter">1 / 9</div>
 <button id="prev-btn" title="Anterior (←)">&#8592;</button>
 <button id="next-btn" title="Siguiente (→)">&#8594;</button>
 
@@ -75,7 +75,16 @@
     <div class="s-body" id="portafolio-body" style="gap:10px"></div>
   </div>
 
-  <!-- ══════════ SLIDE 3 · LÍNEA DE TIEMPO ══════════ -->
+  <!-- ══════════ SLIDE 3 · CÓMO VAMOS (VISTA COMERCIAL) ══════════ -->
+  <div class="slide slide-content" data-label="Cómo Vamos">
+    <div class="s-header">
+      <h2>¿Cómo Vamos? · El Portafolio en Palabras Simples</h2>
+      <span class="s-tag">Innovación · Vista comercial</span>
+    </div>
+    <div class="s-body" id="portafolio-comercial-body" style="gap:10px"></div>
+  </div>
+
+  <!-- ══════════ SLIDE 4 · LÍNEA DE TIEMPO ══════════ -->
   <div class="slide slide-content" id="slide-timeline" data-label="Línea de Tiempo">
     <div class="s-header">
       <h2>Línea de Tiempo · De la Fundación a la Producción</h2>
@@ -84,7 +93,7 @@
     <div class="s-body" id="timeline-body"></div>
   </div>
 
-  <!-- ══════════ SLIDE 4 · DETALLE DE PROYECTOS ══════════ -->
+  <!-- ══════════ SLIDE 5 · DETALLE DE PROYECTOS ══════════ -->
   <div class="slide slide-content" data-label="Detalle de Proyectos">
     <div class="s-header">
       <h2>Detalle de Proyectos · Portafolio Completo (1S + 2S)</h2>
@@ -93,7 +102,7 @@
     <div class="s-body" id="tablero-body"></div>
   </div>
 
-  <!-- ══════════ SLIDE 5 · TRABAJO CONJUNTO ══════════ -->
+  <!-- ══════════ SLIDE 6 · TRABAJO CONJUNTO ══════════ -->
   <div class="slide slide-content" data-label="Trabajo Conjunto">
     <div class="s-header">
       <h2>Trabajo Conjunto · Isaac Álvarez y Jeam Paul</h2>
@@ -102,7 +111,7 @@
     <div class="s-body" id="equipo-body"></div>
   </div>
 
-  <!-- ══════════ SLIDE 6 · PLAN 2S ══════════ -->
+  <!-- ══════════ SLIDE 7 · PLAN 2S ══════════ -->
   <div class="slide slide-content" data-label="Plan 2S">
     <div class="s-header">
       <h2>Plan y Puntos Abiertos · Segundo Semestre</h2>
@@ -111,7 +120,7 @@
     <div class="s-body" id="plan-body"></div>
   </div>
 
-  <!-- ══════════ SLIDE 7 · CIERRE ══════════ -->
+  <!-- ══════════ SLIDE 8 · CIERRE ══════════ -->
   <div class="slide slide-section bg-teal" data-label="Cierre">
     <div class="section-label">Cierre del Informe</div>
     <h2 class="section-title">Innovación como Base del Canal</h2>
@@ -141,6 +150,7 @@
   document.addEventListener('DOMContentLoaded', () => {
     renderResumen();
     renderPortafolio();
+    renderPortafolioComercial();
     renderTimeline();
     renderTablero();
     renderEquipo();

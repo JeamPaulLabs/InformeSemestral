@@ -5,7 +5,7 @@
 // ============================================================
 
 const NAV_LABELS = [
-  'Portada', 'Resumen 1S', 'Estado Portafolio', 'Línea de Tiempo', 'Detalle de Proyectos', 'Trabajo Conjunto', 'Plan 2S', 'Cierre'
+  'Portada', 'Resumen 1S', 'Estado Portafolio', 'Cómo Vamos', 'Línea de Tiempo', 'Detalle de Proyectos', 'Trabajo Conjunto', 'Plan 2S', 'Cierre'
 ];
 
 /* ── STATE ──────────────────────────────────────────────────── */
@@ -192,12 +192,6 @@ function renderPortafolio() {
   const el = document.getElementById('portafolio-body');
   if (!el) return;
 
-  const stat = (val, lbl, color) => `
-    <div style="background:var(--white); border-radius:10px; padding:8px 14px; box-shadow:0 2px 8px rgba(18,1,128,.07); display:flex; align-items:center; gap:10px">
-      <span style="font-size:1.5rem; font-weight:800; color:${color}; line-height:1">${val}</span>
-      <span style="font-size:.6rem; font-weight:700; color:var(--gray3); line-height:1.25; text-transform:uppercase; letter-spacing:.04em">${lbl}</span>
-    </div>`;
-
   const card = (g, it) => {
     const p = TIMELINE.find(x => x.id === it.id);
     return `
@@ -228,16 +222,92 @@ function renderPortafolio() {
     </div>`;
 
   el.innerHTML = `
-    <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:10px">
-      ${stat(TIMELINE.length, 'Proyectos en el portafolio', 'var(--blue)')}
-      ${stat(PF_GRUPOS[0].items.length, 'En producción con datos reales', PF_GRUPOS[0].txt)}
-      ${stat(PF_GRUPOS[1].items.length, 'En desarrollo · construidos', PF_GRUPOS[1].txt)}
-      ${stat(PF_GRUPOS[2].items.length, 'En pausa · por retomar 2S', PF_GRUPOS[2].txt)}
-    </div>
     ${PF_GRUPOS.map(banda).join('')}
     <div class="alert" style="border-left:4px solid var(--green); background:rgba(90,226,128,.08); color:#0f5c30; padding:9px 16px; font-size:.66rem; align-items:center">
       <span style="flex-shrink:0; display:flex">${icon('trending-up', { size: 16 })}</span>
       <div><strong>Logro del portafolio:</strong> 12 de los 13 proyectos nacieron en el 1S y hoy <strong>5 automatizaciones operan con datos reales</strong> — 3 de ellas dentro del DataCenter (VM bdvanti), que ya sostiene la capa técnica de los 3 canales; los 4 proyectos en pausa quedaron validados y solo esperan retomarse en el 2S.</div>
+    </div>`;
+}
+
+/* ── Slide: ¿Cómo Vamos? · vista comercial en palabras simples ──────
+   Gemela de "Estado del Portafolio" pero para audiencia no técnica:
+   cada proyecto explicado en una frase cotidiana (sin jerga) y una
+   barra de avance visual cuyo nivel/etiqueta son editoriales de esta
+   slide (describen madurez del proyecto, no una cifra medida — por
+   eso la barra no imprime porcentaje). */
+const PF_COMERCIAL = [
+  {
+    titulo: 'Ya está funcionando', sub: 'Trabajan solos, todos los días, con datos reales',
+    color: '90,226,128', txt: '#0f8a4d', ico: 'circle-check',
+    items: [
+      { id: 'autocarga-ocm',   frase: 'La información de llamadas se actualiza sola cada 10 minutos — nadie tiene que hacerlo a mano.', nivel: 100, etiqueta: 'Funcionando' },
+      { id: 'autoreport-ilio', frase: 'Los reportes de Ilio se descargan y organizan solos cada 15 minutos, sin entrar al portal.', nivel: 100, etiqueta: 'Funcionando' },
+      { id: 'actixuma',        frase: '27 personas ya consultan el estado de las pólizas en un portal web propio de Xuma.', nivel: 100, etiqueta: 'Funcionando' },
+      { id: 'depuracion',      frase: 'La limpieza de bases nuevas pasó de 3 horas de trabajo manual a 30 segundos — se usa a diario.', nivel: 100, etiqueta: 'Funcionando' },
+      { id: 'autocomovamos',   frase: 'Los reportes "Como Vamos" ya no se arman a mano en Excel: salen solos en cada corte.', nivel: 100, etiqueta: 'Funcionando' },
+    ],
+  },
+  {
+    titulo: 'Se está construyendo', sub: 'En obra ahora mismo, o terminados y listos para encender',
+    color: '255,209,102', txt: '#8a6200', ico: 'wrench',
+    items: [
+      { id: 'datacenter-implementacion', frase: 'La "casa" donde vive toda la información de Vanti ya funciona y sostiene 3 sistemas; faltan fuentes por mudar.', nivel: 60, etiqueta: 'En obra' },
+      { id: 'datacenter-diseno',   frase: 'El plano completo de esa casa de datos quedó terminado: dónde va cada dato y cómo se conecta.', nivel: 100, etiqueta: 'Terminado' },
+      { id: 'mapa-contactabilidad', frase: 'El mapa que muestra en qué barrios contestan mejor los clientes está listo para publicarse.', nivel: 90, etiqueta: 'Listo para publicar' },
+      { id: 'notebookevin',        frase: 'El asistente que responde dudas sobre los guiones de venta está listo para que el equipo lo use.', nivel: 90, etiqueta: 'Listo para usar' },
+    ],
+  },
+  {
+    titulo: 'En pausa, listo para retomar', sub: 'Ya demostraron que funcionan — solo esperan su turno en el 2S',
+    color: '255,107,53', txt: '#c44a1a', ico: 'hourglass',
+    items: [
+      { id: 'autogps',          frase: 'Ya ubica en el mapa 9 de cada 10 direcciones de clientes sin ayuda; falta aplicarlo a toda la base.', nivel: 70, etiqueta: 'Probado con éxito' },
+      { id: 'autoconciliacion', frase: 'La confirmación automática de ventas cerradas ya se probó con éxito dos veces seguidas.', nivel: 80, etiqueta: 'Probado con éxito' },
+      { id: 'auditor-ia',       frase: 'Ya convierte las llamadas de venta en texto; falta encender la parte que las califica con IA.', nivel: 60, etiqueta: 'A mitad de camino' },
+      { id: 'crm-twenty',       frase: 'La herramienta para que los agentes gestionen sus clientes quedó a un paso de instalarse.', nivel: 25, etiqueta: 'Arrancando' },
+    ],
+  },
+];
+
+function renderPortafolioComercial() {
+  const el = document.getElementById('portafolio-comercial-body');
+  if (!el) return;
+
+  const card = (g, it) => {
+    const p = TIMELINE.find(x => x.id === it.id);
+    return `
+    <div style="background:var(--white); border-radius:10px; padding:9px 11px 8px; box-shadow:0 2px 8px rgba(18,1,128,.07); border-top:3px solid rgb(${g.color}); display:flex; flex-direction:column; gap:4px; min-width:0">
+      <div style="display:flex; align-items:center; gap:5px">
+        <span style="color:${g.txt}; flex-shrink:0; display:flex">${icon(p.ico, { size: 13 })}</span>
+        <span style="font-size:.63rem; font-weight:800; color:var(--blue); line-height:1.15">${p.corto}</span>
+      </div>
+      <div style="font-size:.58rem; font-weight:500; color:var(--dark); line-height:1.42; flex:1">${it.frase}</div>
+      <div style="display:flex; flex-direction:column; gap:3px">
+        <div style="height:7px; border-radius:4px; background:#e9ebf5; overflow:hidden">
+          <div style="height:100%; width:${it.nivel}%; border-radius:4px; background:rgb(${g.color})"></div>
+        </div>
+        <div style="font-size:.53rem; font-weight:800; color:${g.txt}; text-align:right">${it.etiqueta}</div>
+      </div>
+    </div>`;
+  };
+
+  const banda = g => `
+    <div style="display:grid; grid-template-columns:158px 1fr; gap:10px; flex:1; min-height:0">
+      <div style="border-radius:10px; padding:8px 12px; background:rgba(${g.color},.10); border-left:4px solid rgb(${g.color}); display:flex; flex-direction:column; justify-content:center; gap:2px">
+        <div style="display:flex; align-items:center; gap:6px; color:${g.txt}">${icon(g.ico, { size: 15 })}<span style="font-size:1.35rem; font-weight:800; line-height:1">${g.items.length}</span></div>
+        <div style="font-size:.62rem; font-weight:800; color:var(--blue); text-transform:uppercase; letter-spacing:.04em; line-height:1.2">${g.titulo}</div>
+        <div style="font-size:.53rem; font-weight:500; color:var(--gray3); line-height:1.3">${g.sub}</div>
+      </div>
+      <div style="display:grid; grid-template-columns:repeat(${g.items.length},1fr); gap:8px">
+        ${g.items.map(it => card(g, it)).join('')}
+      </div>
+    </div>`;
+
+  el.innerHTML = `
+    ${PF_COMERCIAL.map(banda).join('')}
+    <div class="alert" style="border-left:4px solid var(--green); background:rgba(90,226,128,.08); color:#0f5c30; padding:9px 16px; font-size:.66rem; align-items:center">
+      <span style="flex-shrink:0; display:flex">${icon('trending-up', { size: 16 })}</span>
+      <div><strong>En resumen:</strong> <strong>5 herramientas ya trabajan solas todos los días</strong> ahorrando horas de trabajo manual, 4 más están en obra o listas para encender, y 4 ya demostraron que funcionan y solo esperan su turno en el segundo semestre.</div>
     </div>`;
 }
 
