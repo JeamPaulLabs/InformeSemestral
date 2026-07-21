@@ -66,6 +66,15 @@ const DECKS = {
     out: 'INFORME_RETAIL.pptx',
     slides: [[0,'Formacion',null],[1,'Cobertura',null],[2,'Ventas',null]],
   },
+  innovacion: {
+    dir: 'innovacion',
+    out: 'INFORME_INNOVACION.pptx',
+    slides: [
+      [0,'Portada',null],[1,'Resumen 1S',null],[2,'Estado Portafolio',null],
+      [3,'Como Vamos',null],[4,'Linea de Tiempo',null],[5,'Detalle Proyectos',null],
+      [6,'Trabajo Conjunto',null],[7,'Plan 2S',null],[8,'Cierre',null],
+    ],
+  },
 };
 
 /* ── Utilidades ─────────────────────────────────────────────────── */
@@ -170,6 +179,9 @@ async function extractText(page) {
     }
 
     function pushResult(el, style, built, isCell) {
+      // Texto en escritura vertical (etiquetas decorativas de eje): no se
+      // extrae como caja — se conserva tal cual en la imagen de fondo.
+      if ((style.writingMode || '').startsWith('vertical')) return;
       const { runs, textRect } = built;
       const joined = runs.map(r => r.text).join('');
       const trimmed = (joined || '').trim();
@@ -280,7 +292,10 @@ async function buildDeck(page, port, deckKey) {
           window._c = [];
           document.querySelectorAll('svg,.lucide-ico').forEach(el => window._c.push({ el, color: getComputedStyle(el).color }));
           document.querySelectorAll('*').forEach(el => {
-            if (!el.closest('svg') && !el.classList.contains('lucide-ico')) el.style.setProperty('color', 'transparent', 'important');
+            if (el.closest('svg') || el.classList.contains('lucide-ico')) return;
+            // texto vertical decorativo: se queda visible en el fondo (no se extrae como caja)
+            if ((getComputedStyle(el).writingMode || '').startsWith('vertical')) return;
+            el.style.setProperty('color', 'transparent', 'important');
           });
           window._c.forEach(({ el, color }) => el.style.setProperty('color', color, 'important'));
         });
