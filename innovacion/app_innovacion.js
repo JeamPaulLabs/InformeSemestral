@@ -183,9 +183,9 @@ function pfDots(p) {
   const ult = (p.etapas && p.etapas.length) ? p.etapas[p.etapas.length - 1].fase : 'iniciacion';
   const reached = FASE_ORDER.indexOf(ult);
   const dots = FASE_ORDER.map((f, i) =>
-    `<span style="width:7px; height:7px; border-radius:50%; display:inline-block; flex-shrink:0; background:${i <= reached ? `rgb(${FASE_COLOR[f]})` : '#e2e5f0'}"></span>`
+    `<span style="width:8px; height:8px; border-radius:50%; display:inline-block; flex-shrink:0; background:${i <= reached ? `rgb(${FASE_COLOR[f]})` : '#e2e5f0'}"></span>`
   ).join('');
-  return `<div style="display:flex; align-items:center; gap:3px">${dots}<span style="font-size:.52rem; font-weight:800; color:${PF_FASE_TXT[ult]}; margin-left:3px">${PF_FASE_CORTA[ult]}</span></div>`;
+  return `<div style="display:flex; align-items:center; gap:3px">${dots}<span style="font-size:.6rem; font-weight:800; color:${PF_FASE_TXT[ult]}; margin-left:3px">${PF_FASE_CORTA[ult]}</span></div>`;
 }
 
 function renderPortafolio() {
@@ -197,14 +197,14 @@ function renderPortafolio() {
     return `
     <div style="background:var(--white); border-radius:10px; padding:8px 10px 7px; box-shadow:0 2px 8px rgba(18,1,128,.07); border-top:3px solid rgb(${g.color}); display:flex; flex-direction:column; gap:3px; min-width:0">
       <div style="display:flex; align-items:center; gap:5px">
-        <span style="color:${g.txt}; flex-shrink:0; display:flex">${icon(p.ico, { size: 13 })}</span>
-        <span style="font-size:.63rem; font-weight:800; color:var(--blue); line-height:1.15">${p.corto}</span>
+        <span style="color:${g.txt}; flex-shrink:0; display:flex">${icon(p.ico, { size: 15 })}</span>
+        <span style="font-size:.74rem; font-weight:800; color:var(--blue); line-height:1.15">${p.corto}</span>
       </div>
-      <div style="font-size:.6rem; font-weight:800; color:var(--dark); line-height:1.25">${it.dato}</div>
-      <div style="font-size:.55rem; font-weight:500; color:var(--gray3); line-height:1.35; flex:1">${it.est}</div>
+      <div style="font-size:.7rem; font-weight:800; color:var(--dark); line-height:1.25">${it.dato}</div>
+      <div style="font-size:.64rem; font-weight:500; color:var(--gray3); line-height:1.35; flex:1">${it.est}</div>
       <div style="display:flex; align-items:center; justify-content:space-between; gap:6px">
-        ${it.chip ? `<span style="font-size:.52rem; font-weight:800; color:#0f8a4d">${it.chip}</span>` : pfDots(p)}
-        <span style="font-size:.52rem; font-weight:700; color:var(--gray3); white-space:nowrap">${it.fecha}</span>
+        ${it.chip ? `<span style="font-size:.6rem; font-weight:800; color:#0f8a4d">${it.chip}</span>` : pfDots(p)}
+        <span style="font-size:.58rem; font-weight:700; color:var(--gray3); white-space:nowrap">${it.fecha}</span>
       </div>
     </div>`;
   };
@@ -212,9 +212,9 @@ function renderPortafolio() {
   const banda = g => `
     <div style="display:grid; grid-template-columns:158px 1fr; gap:10px; flex:1; min-height:0">
       <div style="border-radius:10px; padding:8px 12px; background:rgba(${g.color},.10); border-left:4px solid rgb(${g.color}); display:flex; flex-direction:column; justify-content:center; gap:2px">
-        <div style="display:flex; align-items:center; gap:6px; color:${g.txt}">${icon(g.ico, { size: 15 })}<span style="font-size:1.35rem; font-weight:800; line-height:1">${g.items.length}</span></div>
-        <div style="font-size:.62rem; font-weight:800; color:var(--blue); text-transform:uppercase; letter-spacing:.04em; line-height:1.2">${g.titulo}</div>
-        <div style="font-size:.53rem; font-weight:500; color:var(--gray3); line-height:1.3">${g.sub}</div>
+        <div style="display:flex; align-items:center; gap:6px; color:${g.txt}">${icon(g.ico, { size: 18 })}<span style="font-size:1.6rem; font-weight:800; line-height:1">${g.items.length}</span></div>
+        <div style="font-size:.74rem; font-weight:800; color:var(--blue); text-transform:uppercase; letter-spacing:.04em; line-height:1.2">${g.titulo}</div>
+        <div style="font-size:.62rem; font-weight:500; color:var(--gray3); line-height:1.3">${g.sub}</div>
       </div>
       <div style="display:grid; grid-template-columns:repeat(${g.items.length},1fr); gap:8px">
         ${g.items.map(it => card(g, it)).join('')}
@@ -223,7 +223,7 @@ function renderPortafolio() {
 
   el.innerHTML = `
     ${PF_GRUPOS.map(banda).join('')}
-    <div class="alert" style="border-left:4px solid var(--green); background:rgba(90,226,128,.08); color:#0f5c30; padding:9px 16px; font-size:.66rem; align-items:center">
+    <div class="alert" style="border-left:4px solid var(--green); background:rgba(90,226,128,.08); color:#0f5c30; padding:9px 16px; font-size:.76rem; align-items:center">
       <span style="flex-shrink:0; display:flex">${icon('trending-up', { size: 16 })}</span>
       <div><strong>Logro del portafolio:</strong> 12 de los 13 proyectos nacieron en el 1S y hoy <strong>5 automatizaciones operan con datos reales</strong> — 3 de ellas dentro del DataCenter (VM bdvanti), que ya sostiene la capa técnica de los 3 canales; los 4 proyectos en pausa quedaron validados y solo esperan retomarse en el 2S.</div>
     </div>`;
@@ -278,15 +278,15 @@ function renderPortafolioComercial() {
     return `
     <div style="background:var(--white); border-radius:10px; padding:9px 11px 8px; box-shadow:0 2px 8px rgba(18,1,128,.07); border-top:3px solid rgb(${g.color}); display:flex; flex-direction:column; gap:4px; min-width:0">
       <div style="display:flex; align-items:center; gap:5px">
-        <span style="color:${g.txt}; flex-shrink:0; display:flex">${icon(p.ico, { size: 13 })}</span>
-        <span style="font-size:.63rem; font-weight:800; color:var(--blue); line-height:1.15">${p.corto}</span>
+        <span style="color:${g.txt}; flex-shrink:0; display:flex">${icon(p.ico, { size: 15 })}</span>
+        <span style="font-size:.74rem; font-weight:800; color:var(--blue); line-height:1.15">${p.corto}</span>
       </div>
-      <div style="font-size:.58rem; font-weight:500; color:var(--dark); line-height:1.42; flex:1">${it.frase}</div>
+      <div style="font-size:.68rem; font-weight:500; color:var(--dark); line-height:1.42; flex:1">${it.frase}</div>
       <div style="display:flex; flex-direction:column; gap:3px">
-        <div style="height:7px; border-radius:4px; background:#e9ebf5; overflow:hidden">
+        <div style="height:8px; border-radius:4px; background:#e9ebf5; overflow:hidden">
           <div style="height:100%; width:${it.nivel}%; border-radius:4px; background:rgb(${g.color})"></div>
         </div>
-        <div style="font-size:.53rem; font-weight:800; color:${g.txt}; text-align:right">${it.etiqueta}</div>
+        <div style="font-size:.62rem; font-weight:800; color:${g.txt}; text-align:right">${it.etiqueta}</div>
       </div>
     </div>`;
   };
@@ -294,9 +294,9 @@ function renderPortafolioComercial() {
   const banda = g => `
     <div style="display:grid; grid-template-columns:158px 1fr; gap:10px; flex:1; min-height:0">
       <div style="border-radius:10px; padding:8px 12px; background:rgba(${g.color},.10); border-left:4px solid rgb(${g.color}); display:flex; flex-direction:column; justify-content:center; gap:2px">
-        <div style="display:flex; align-items:center; gap:6px; color:${g.txt}">${icon(g.ico, { size: 15 })}<span style="font-size:1.35rem; font-weight:800; line-height:1">${g.items.length}</span></div>
-        <div style="font-size:.62rem; font-weight:800; color:var(--blue); text-transform:uppercase; letter-spacing:.04em; line-height:1.2">${g.titulo}</div>
-        <div style="font-size:.53rem; font-weight:500; color:var(--gray3); line-height:1.3">${g.sub}</div>
+        <div style="display:flex; align-items:center; gap:6px; color:${g.txt}">${icon(g.ico, { size: 18 })}<span style="font-size:1.6rem; font-weight:800; line-height:1">${g.items.length}</span></div>
+        <div style="font-size:.74rem; font-weight:800; color:var(--blue); text-transform:uppercase; letter-spacing:.04em; line-height:1.2">${g.titulo}</div>
+        <div style="font-size:.62rem; font-weight:500; color:var(--gray3); line-height:1.3">${g.sub}</div>
       </div>
       <div style="display:grid; grid-template-columns:repeat(${g.items.length},1fr); gap:8px">
         ${g.items.map(it => card(g, it)).join('')}
@@ -305,7 +305,7 @@ function renderPortafolioComercial() {
 
   el.innerHTML = `
     ${PF_COMERCIAL.map(banda).join('')}
-    <div class="alert" style="border-left:4px solid var(--green); background:rgba(90,226,128,.08); color:#0f5c30; padding:9px 16px; font-size:.66rem; align-items:center">
+    <div class="alert" style="border-left:4px solid var(--green); background:rgba(90,226,128,.08); color:#0f5c30; padding:9px 16px; font-size:.76rem; align-items:center">
       <span style="flex-shrink:0; display:flex">${icon('trending-up', { size: 16 })}</span>
       <div><strong>En resumen:</strong> <strong>5 herramientas ya trabajan solas todos los días</strong> ahorrando horas de trabajo manual, 4 más están en obra o listas para encender, y 4 ya demostraron que funcionan y solo esperan su turno en el segundo semestre.</div>
     </div>`;
@@ -1119,7 +1119,7 @@ function initRedNetwork() {
       const x = MARGIN + step * (i + 0.5);
       redNodePos[p.id] = { x, y: row.y };
       nodesHtml.push(`<button class="red-node cat-${p.categoria}" data-id="${p.id}" data-cat="${p.categoria}" id="red-node-${p.id}"
-          style="left:${x}%; top:${row.y}%" onclick="selectProyectoRed('${p.id}')" title="${p.nombre}">${icon(p.ico, { size: 13 })}</button>`);
+          style="left:${x}%; top:${row.y}%" onclick="selectProyectoRed('${p.id}')" title="${p.nombre}">${icon(p.ico, { size: 15 })}</button>`);
       labelsHtml.push(`<div class="red-node-label" data-cat="${p.categoria}" id="red-label-${p.id}" style="left:${x}%; top:${row.y}%">${p.corto}</div>`);
     });
   });
