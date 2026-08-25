@@ -196,19 +196,29 @@ function renderFormacion() {
                     </tr>
                   `;
                 }).join('')}
-                <tr class="total">
-                  <td>Total Ene-${lastMes}</td>
-                  <td class="r">—</td>
-                  <td class="r">${RETAIL_DATA.visitas.reduce((s, v) => s + v.asesores, 0)}</td>
-                  <td class="r">${RETAIL_DATA.visitas.reduce((s, v) => s + v.pdvs, 0)}</td>
-                  <td class="r">—</td>
-                </tr>
+                ${(() => {
+                  const n = RETAIL_DATA.visitas.length;
+                  const avgPlanta = Math.round(RETAIL_DATA.visitas.reduce((s, v, i) => s + RETAIL_DATA.ventas.cp[i].gestores, 0) / n);
+                  const avgPct = RETAIL_DATA.visitas.reduce((s, v, i) => {
+                    const planta = RETAIL_DATA.ventas.cp[i].gestores;
+                    return s + (planta > 0 ? v.asesores / planta * 100 : 0);
+                  }, 0) / n;
+                  return `
+                    <tr class="total">
+                      <td>Total Ene-${lastMes}</td>
+                      <td class="r">${avgPlanta}*</td>
+                      <td class="r">${RETAIL_DATA.visitas.reduce((s, v) => s + v.asesores, 0)}</td>
+                      <td class="r">${RETAIL_DATA.visitas.reduce((s, v) => s + v.pdvs, 0)}</td>
+                      <td class="r">${badge(avgPct.toFixed(0) + '%', 'y')}</td>
+                    </tr>
+                  `;
+                })()}
               </tbody>
             </table>
           </div>
         </div>
         <div style="font-size:.58rem; color:var(--gray3); margin-top:8px; line-height:1.4">
-          * Planta = gestores comerciales con actividad transaccional registrados en el "Como vamos" (cierres mensuales).
+          * Planta = gestores comerciales con actividad transaccional registrados en el "Como vamos" (cierres mensuales); en la fila de total corresponde al promedio mensual.
         </div>
       </div>
 
@@ -502,7 +512,7 @@ function renderCobertura() {
       </div>
 
       <div class="panel" style="padding:8px 16px">
-        <h3 style="margin-bottom:4px; padding-bottom:4px">${icon('store')} Universo de PDV y cobertura real por aliado (1S · pendiente actualizar a ${lastCobPDV.mes})</h3>
+        <h3 style="margin-bottom:4px; padding-bottom:4px">${icon('store')} Universo de PDV y cobertura real por aliado (Ene-${lastCobPDV.mes})</h3>
         <div class="tbl-wrap" style="margin-top:0">
           <table class="tbl-compact">
             <thead>
@@ -517,10 +527,10 @@ function renderCobertura() {
             <tbody>
               <tr>
                 <td><strong>Colombiana de Comercio</strong> (Alkosto/Ktronix)</td>
-                <td class="r">42</td>
-                <td class="r">38</td>
-                <td class="r">${badge('90,5 %','g')}</td>
-                <td class="r">184</td>
+                <td class="r">54</td>
+                <td class="r">40</td>
+                <td class="r">${badge('74,1 %','y')}</td>
+                <td class="r">229</td>
               </tr>
               <tr>
                 <td><strong>Almacenes Éxito</strong> <span class="pend" style="font-size:.58rem">aliado retirado</span></td>
@@ -531,29 +541,29 @@ function renderCobertura() {
               </tr>
               <tr>
                 <td><strong>Cencosud</strong> (Jumbo/Metro/Easy)</td>
-                <td class="r">26</td>
-                <td class="r">31</td>
-                <td class="r">${badge('119 %','g')}</td>
-                <td class="r">90</td>
+                <td class="r">35</td>
+                <td class="r">32</td>
+                <td class="r">${badge('91,4 %','g')}</td>
+                <td class="r">104</td>
               </tr>
               <tr>
                 <td><strong>Olímpica</strong> <span class="pend" style="font-size:.58rem">solo ene · aliado retirado</span></td>
                 <td class="r">6</td>
-                <td class="r">3</td>
-                <td class="r">${badge('50 %','y')}</td>
                 <td class="r">4</td>
+                <td class="r">${badge('66,7 %','y')}</td>
+                <td class="r">8</td>
               </tr>
               <tr class="total">
                 <td>Total canal</td>
-                <td class="r">105</td>
-                <td class="r">108</td>
-                <td class="r">${badge('102,9 %','g')}</td>
-                <td class="r">373</td>
+                <td class="r">126</td>
+                <td class="r">112</td>
+                <td class="r">${badge('88,9 %','g')}</td>
+                <td class="r">440</td>
               </tr>
             </tbody>
           </table>
         </div>
-        <div style="font-size:.6rem; color:var(--gray3); margin-top:5px">* Universo = PDV físicos distintos observados en los cortes semanales "Como vamos" de 1S (Ene-Jun); tabla aún no recalculada con los cortes de Jul-${lastCobPDV.mes}. Coberturas &gt;100 % indican PDV que Formación visitó con nombre distinto al registrado en Como vamos ese corte, o puntos sin gestión comercial activa ese mes. <strong>Gestores del canal:</strong> ${RETAIL_DATA.ventas.cp[0].gestores} (ene) → ${RETAIL_DATA.ventas.cp[lastIdxV].gestores} (${lastMesV.toLowerCase()}); los cortes "Como vamos" no desagregan gestores por aliado.</div>
+        <div style="font-size:.6rem; color:var(--gray3); margin-top:5px">* Universo = PDV físicos distintos observados en los cortes semanales "Como vamos" de Ene-${lastCobPDV.mes}. Coberturas &gt;100 % indican PDV que Formación visitó con nombre distinto al registrado en Como vamos ese corte, o puntos sin gestión comercial activa ese mes. <strong>Gestores del canal:</strong> ${RETAIL_DATA.ventas.cp[0].gestores} (ene) → ${RETAIL_DATA.ventas.cp[lastIdxV].gestores} (${lastMesV.toLowerCase()}); los cortes "Como vamos" no desagregan gestores por aliado.</div>
       </div>
     </div>
 
@@ -600,11 +610,11 @@ function renderCobertura() {
         </div>
       </div>
       <div class="panel" style="padding:8px 14px; box-shadow:none; border:1px solid var(--gray2); display:flex; flex-direction:column; justify-content:space-between">
-        <div style="font-size:.6rem; font-weight:800; color:var(--blue); letter-spacing:.05em; margin-bottom:4px">${icon('tag', { size: 13 })} TIPO DE PUNTO VISITADO EN LAS 90 "SERDÁN" (1S · pendiente actualizar)</div>
-        <p style="font-size:.6rem; color:var(--dark); line-height:1.45; margin:0 0 6px"><strong>Sobre "Serdán" (90 visitas, corte 1S):</strong> empresa que provee promotores a ambos canales, no un aliado. De las 90: 33 puras Retail+Tradicional, 33 sedes/roles internos (no PDV) y 14 con cédula activa en ambos canales <strong>(contadas en los dos)</strong>. Total atribuido: <strong>24 a Retail</strong> y <strong>47 a Tradicional</strong>.</p>
+        <div style="font-size:.6rem; font-weight:800; color:var(--blue); letter-spacing:.05em; margin-bottom:4px">${icon('tag', { size: 13 })} TIPO DE PUNTO VISITADO EN LAS 103 "SERDÁN" (Ene-${lastCobPDV.mes})</div>
+        <p style="font-size:.6rem; color:var(--dark); line-height:1.45; margin:0 0 6px"><strong>Sobre "Serdán" (103 visitas):</strong> empresa que provee promotores a ambos canales, no un aliado. De las 103: 48 puras Retail+Tradicional, 39 sedes/roles internos (no PDV), 15 con cédula activa en ambos canales <strong>(contadas en los dos)</strong> y 1 sin clasificar. Total atribuido: <strong>24 a Retail</strong> y <strong>54 a Tradicional</strong>.</p>
         <div style="display:flex; gap:8px; flex-wrap:wrap">
           <div style="flex:1; min-width:85px; text-align:center; background:var(--gray1); border-radius:8px; padding:5px">
-            <div style="font-weight:800; font-size:.9rem; color:var(--teal)">37</div>
+            <div style="font-weight:800; font-size:.9rem; color:var(--teal)">42</div>
             <div style="font-size:.58rem; color:var(--gray3)">PDV físico</div>
           </div>
           <div style="flex:1; min-width:85px; text-align:center; background:var(--gray1); border-radius:8px; padding:5px">
@@ -612,7 +622,7 @@ function renderCobertura() {
             <div style="font-size:.58rem; color:var(--gray3)">Sede Serdán</div>
           </div>
           <div style="flex:1; min-width:85px; text-align:center; background:var(--gray1); border-radius:8px; padding:5px">
-            <div style="font-weight:800; font-size:.9rem; color:var(--warn)">20</div>
+            <div style="font-weight:800; font-size:.9rem; color:var(--warn)">28</div>
             <div style="font-size:.58rem; color:var(--gray3)">Itinerante</div>
           </div>
           <div style="flex:1; min-width:85px; text-align:center; background:var(--gray1); border-radius:8px; padding:5px">

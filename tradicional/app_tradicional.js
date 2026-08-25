@@ -149,6 +149,9 @@ function renderFormacion() {
   const junAsesores = TRADICIONAL_DATA.visitas[lastIdx].asesores;
   const asesoresDropPct = ((eneAsesores - junAsesores) / eneAsesores * 100).toFixed(0);
 
+  const cobMeses = TRADICIONAL_DATA.cobertura.meses;
+  const cobPromedio = cobMeses.reduce((s, m) => s + m.cobertura, 0) / cobMeses.length;
+
 
   el.innerHTML = `
     <div class="kpi-grid" style="gap:12px; margin-bottom:12px">
@@ -158,9 +161,9 @@ function renderFormacion() {
         <div class="kpi-sub" style="font-size:.58rem">Total de formación acumulada (Ene - ${lastMes} 2026)</div>
       </div>
       <div class="kpi-card green" style="padding:10px 18px">
-        <div class="kpi-label" style="font-size:.65rem">Cobertura PDV Activo</div>
-        <div class="kpi-val" style="font-size:1.45rem">7,5 %</div>
-        <div class="kpi-sub" style="font-size:.58rem">Cobertura promedio del canal Tradicional en 1S · pendiente actualizar a ${lastMes}</div>
+        <div class="kpi-label" style="font-size:.65rem">Cobertura de Formación</div>
+        <div class="kpi-val" style="font-size:1.45rem">${cobPromedio.toFixed(1).replace('.', ',')} %</div>
+        <div class="kpi-sub" style="font-size:.58rem">Promedio mensual Ene-${lastMes}: capacitados que financiaron / financiadores</div>
       </div>
     </div>
 
@@ -229,7 +232,7 @@ function renderFormacion() {
     </div>
     <div class="alert alert-info" style="margin-top:14px; margin-bottom:24px; padding:12px 18px; border-left: 4px solid var(--teal); background: rgba(0,205,147,0.06)">
       <span class="ico">${icon('shield-check')}</span>
-      <span style="font-size:.72rem; line-height:1.4; color:var(--dark)"><strong>Logro del periodo:</strong> El canal Tradicional concentró un esfuerzo récord de formación en marzo (148 visitas y 93 asesores capacitados). Con la posterior consolidación y el empalme con Retail, el canal centró su capacidad; la cobertura promedio de 1S alcanzó un <strong>7,5%</strong> (cifra pendiente de actualizar con los cortes de Jul-${lastMes}), identificando grandes oportunidades de crecimiento en los aliados de mayor volumen.</span>
+      <span style="font-size:.72rem; line-height:1.4; color:var(--dark)"><strong>Logro del periodo:</strong> El canal Tradicional concentró un esfuerzo récord de formación en marzo (148 visitas y 93 asesores capacitados). Con la posterior consolidación y el empalme con Retail, el canal centró su capacidad; la cobertura promedio de Ene-${lastMes} alcanzó un <strong>${cobPromedio.toFixed(1).replace('.', ',')}%</strong>, identificando grandes oportunidades de crecimiento en los aliados de mayor volumen.</span>
     </div>
   `;
 }
