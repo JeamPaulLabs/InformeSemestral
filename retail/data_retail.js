@@ -1,4 +1,4 @@
-// Archivo autogenerado por 07_analisis_retail_tradicional.py
+// Archivo autogenerado por 13_actualizar_jul_ago.py (extiende 07_analisis_retail_tradicional.py a Ene-Ago)
 // Contiene la base de datos completa para la presentación del Canal Retail 2026.
 const RETAIL_DATA = {
   visitas: [
@@ -37,6 +37,18 @@ const RETAIL_DATA = {
     "visitas": 30,
     "asesores": 25,
     "pdvs": 14
+  },
+  {
+    "mes": "Jul",
+    "visitas": 28,
+    "asesores": 24,
+    "pdvs": 14
+  },
+  {
+    "mes": "Ago",
+    "visitas": 31,
+    "asesores": 30,
+    "pdvs": 18
   }
 ],
   ventas: {
@@ -88,6 +100,22 @@ const RETAIL_DATA = {
     "cantadas": 2620,
     "efectivas": 2182,
     "corte": "CIERRE"
+  },
+  {
+    "mes": "Jul",
+    "gestores": 95,
+    "pdv": 48,
+    "cantadas": 2592,
+    "efectivas": 2100,
+    "corte": "corte 31"
+  },
+  {
+    "mes": "Ago",
+    "gestores": 90,
+    "pdv": 51,
+    "cantadas": 2185,
+    "efectivas": 1122,
+    "corte": "corte 16"
   }
 ],
     rs: [
@@ -132,6 +160,20 @@ const RETAIL_DATA = {
     "pdv": 52,
     "cantadas": 100,
     "efectivas": 85
+  },
+  {
+    "mes": "Jul",
+    "gestores": 95,
+    "pdv": 48,
+    "cantadas": 88,
+    "efectivas": 78
+  },
+  {
+    "mes": "Ago",
+    "gestores": 90,
+    "pdv": 51,
+    "cantadas": 43,
+    "efectivas": 35
   }
 ]
   },
@@ -140,19 +182,19 @@ const RETAIL_DATA = {
     "name": "Bogotá Centro",
     "lat": 4.628,
     "lon": -74.075,
-    "visits": 111
+    "visits": 129
   },
   {
     "name": "Bogotá Sur",
     "lat": 4.59,
     "lon": -74.15,
-    "visits": 74
+    "visits": 94
   },
   {
     "name": "Bogotá Occidente",
     "lat": 4.665,
     "lon": -74.125,
-    "visits": 44
+    "visits": 51
   },
   {
     "name": "Tunja",
@@ -176,7 +218,7 @@ const RETAIL_DATA = {
     "name": "Bogotá Norte",
     "lat": 4.73,
     "lon": -74.055,
-    "visits": 19
+    "visits": 23
   },
   {
     "name": "Sogamoso",
@@ -185,40 +227,88 @@ const RETAIL_DATA = {
     "visits": 15
   },
   {
-    "name": "Chía",
-    "lat": 4.8632,
-    "lon": -74.0514,
-    "visits": 8
-  },
-  {
     "name": "Mosquera",
     "lat": 4.7059,
     "lon": -74.2302,
-    "visits": 8
+    "visits": 14
+  },
+  {
+    "name": "Chía",
+    "lat": 4.8632,
+    "lon": -74.0514,
+    "visits": 9
   },
   {
     "name": "Facatativá",
     "lat": 4.8136,
     "lon": -74.3541,
-    "visits": 6
+    "visits": 8
   },
   {
     "name": "Zipaquirá",
     "lat": 5.0267,
     "lon": -74.0039,
-    "visits": 6
+    "visits": 7
   }
 ]
 };
 
 // Cobertura de PDV visitados vs. PDV con gestión activa en CP, por mes.
-// Ene: visitados 56, gestión 92 -> 60,9 % · Feb: 52/91 -> 57,1 % · Mar: 45/82 -> 54,9 %
-// Abr: 36/72 -> 50,0 % · May: 19/57 -> 33,3 % · Jun: 14/52 -> 26,9 %
 const COBERTURA_PDV = [
-  { mes: 'Ene', gestores: 147, gestion: 92, visitas: 56, pct: 60.9 },
-  { mes: 'Feb', gestores: 146, gestion: 91, visitas: 52, pct: 57.1 },
-  { mes: 'Mar', gestores: 135, gestion: 82, visitas: 45, pct: 54.9 },
-  { mes: 'Abr', gestores: 118, gestion: 72, visitas: 36, pct: 50.0 },
-  { mes: 'May', gestores: 93,  gestion: 57, visitas: 19, pct: 33.3 },
-  { mes: 'Jun', gestores: 96,  gestion: 52, visitas: 14, pct: 26.9 },
+  {
+    "mes": "Ene",
+    "gestores": 147,
+    "gestion": 91,
+    "visitas": 56,
+    "pct": 61.5
+  },
+  {
+    "mes": "Feb",
+    "gestores": 146,
+    "gestion": 90,
+    "visitas": 52,
+    "pct": 57.8
+  },
+  {
+    "mes": "Mar",
+    "gestores": 135,
+    "gestion": 82,
+    "visitas": 45,
+    "pct": 54.9
+  },
+  {
+    "mes": "Abr",
+    "gestores": 118,
+    "gestion": 72,
+    "visitas": 36,
+    "pct": 50.0
+  },
+  {
+    "mes": "May",
+    "gestores": 93,
+    "gestion": 57,
+    "visitas": 19,
+    "pct": 33.3
+  },
+  {
+    "mes": "Jun",
+    "gestores": 96,
+    "gestion": 52,
+    "visitas": 14,
+    "pct": 26.9
+  },
+  {
+    "mes": "Jul",
+    "gestores": 95,
+    "gestion": 48,
+    "visitas": 14,
+    "pct": 29.2
+  },
+  {
+    "mes": "Ago",
+    "gestores": 90,
+    "gestion": 51,
+    "visitas": 18,
+    "pct": 35.3
+  }
 ];

@@ -137,25 +137,27 @@ function renderFormacion() {
   const el = document.getElementById('formacion-body');
   if (!el) return;
 
+  const lastIdx = RETAIL_DATA.visitas.length - 1;
+  const lastMes = RETAIL_DATA.visitas[lastIdx].mes;
   const totalVisitas = RETAIL_DATA.visitas.reduce((s, v) => s + v.visitas, 0);
   const eneVisits = RETAIL_DATA.visitas[0].visitas;
-  const junVisits = RETAIL_DATA.visitas[5].visitas;
+  const junVisits = RETAIL_DATA.visitas[lastIdx].visitas;
   const dropPct = ((eneVisits - junVisits) / eneVisits * 100).toFixed(0);
 
   const pdvIni = RETAIL_DATA.ventas.cp[0].pdv;
-  const pdvFin = RETAIL_DATA.ventas.cp[5].pdv;
+  const pdvFin = RETAIL_DATA.ventas.cp[lastIdx].pdv;
   const pdvDropPct = ((pdvIni - pdvFin) / pdvIni * 100).toFixed(0);
 
   const efPorPdvIni = RETAIL_DATA.ventas.cp[0].efectivas / pdvIni;
-  const efPorPdvFin = RETAIL_DATA.ventas.cp[5].efectivas / pdvFin;
+  const efPorPdvFin = RETAIL_DATA.ventas.cp[lastIdx].efectivas / pdvFin;
   const efPorPdvUp = ((efPorPdvFin - efPorPdvIni) / efPorPdvIni * 100).toFixed(0);
 
   el.innerHTML = `
     <div class="kpi-grid" style="gap:12px; margin-bottom:12px">
       <div class="kpi-card" style="padding:10px 18px">
-        <div class="kpi-label" style="font-size:.65rem">Visitas Realizadas 1S</div>
+        <div class="kpi-label" style="font-size:.65rem">Visitas Realizadas Ene-${lastMes}</div>
         <div class="kpi-val" style="font-size:1.45rem">${fmt(totalVisitas)}</div>
-        <div class="kpi-sub" style="font-size:.58rem">Total de formación acumulada (Ene - Jun 2026)</div>
+        <div class="kpi-sub" style="font-size:.58rem">Total de formación acumulada (Ene - ${lastMes} 2026)</div>
       </div>
       <div class="kpi-card green" style="padding:10px 18px">
         <div class="kpi-label" style="font-size:.65rem">Eficiencia por PDV Activo</div>
@@ -195,7 +197,7 @@ function renderFormacion() {
                   `;
                 }).join('')}
                 <tr class="total">
-                  <td>Total 1S</td>
+                  <td>Total Ene-${lastMes}</td>
                   <td class="r">—</td>
                   <td class="r">${RETAIL_DATA.visitas.reduce((s, v) => s + v.asesores, 0)}</td>
                   <td class="r">${RETAIL_DATA.visitas.reduce((s, v) => s + v.pdvs, 0)}</td>
@@ -214,10 +216,10 @@ function renderFormacion() {
         <div>
           <h3 style="margin-bottom:8px; padding-bottom:4px; font-size:.78rem; border-bottom:1px dashed rgba(18,1,128,0.1)">${icon('trending-down')} Evolución de visitas por mes</h3>
           <div class="chart-wrap" style="margin-top:10px; display:flex; flex-direction:column; gap:8px">
-            ${RETAIL_DATA.visitas.map(v => {
+            ${RETAIL_DATA.visitas.map((v, i) => {
               const maxV = Math.max(...RETAIL_DATA.visitas.map(x=>x.visitas));
               const pct = (v.visitas / maxV * 100).toFixed(0) + '%';
-              const colorClass = (v.mes === 'May' || v.mes === 'Jun') ? 'warn' : 'teal';
+              const colorClass = i >= RETAIL_DATA.visitas.length - 2 ? 'warn' : 'teal';
               const gradient = colorClass === 'warn' ? 'linear-gradient(90deg, #ff6b35, #ff8c5a)' : 'linear-gradient(90deg, #00CD93, #5AE280)';
               return `
                 <div class="bar-row" style="margin:2px 0">
@@ -238,7 +240,7 @@ function renderFormacion() {
     </div>
     <div class="alert alert-info" style="margin-top:14px; margin-bottom:24px; padding:12px 18px; border-left: 4px solid var(--teal); background: rgba(0,205,147,0.06)">
       <span class="ico">${icon('shield-check')}</span>
-      <span style="font-size:.72rem; line-height:1.4; color:var(--dark)"><strong>Logro Semestral:</strong> La reestructuración estratégica de zonas y canales de Retail (empalme con Tradicional) concentró la operación en puntos de mayor valor. Como resultado, a pesar del menor número de visitas, las ventas efectivas por PDV subieron <strong>+137%</strong> (de 17,5 a 41,5 pólizas/PDV entre ene y jun), demostrando una alta eficiencia comercial y un canal más enfocado y productivo.</span>
+      <span style="font-size:.72rem; line-height:1.4; color:var(--dark)"><strong>Logro del periodo:</strong> La reestructuración estratégica de zonas y canales de Retail (empalme con Tradicional) concentró la operación en puntos de mayor valor. Como resultado, a pesar del menor número de visitas, las ventas efectivas por PDV subieron <strong>+${efPorPdvUp}%</strong> (de ${efPorPdvIni.toFixed(1).replace('.', ',')} a ${efPorPdvFin.toFixed(1).replace('.', ',')} pólizas/PDV entre ene y ${lastMes.toLowerCase()}), demostrando una alta eficiencia comercial y un canal más enfocado y productivo.</span>
     </div>
     <div style="height: 10px;"></div>
   `;
@@ -252,33 +254,39 @@ function renderVentas() {
   const totalCantadasCP = RETAIL_DATA.ventas.cp.reduce((s, v) => s + v.cantadas, 0);
   const totalEfectivasCP = RETAIL_DATA.ventas.cp.reduce((s, v) => s + v.efectivas, 0);
   const promEfectCP = totalCantadasCP > 0 ? (totalEfectivasCP / totalCantadasCP * 100) : 0;
-  
+
   // Calculos RS
   const totalCantadasRS = RETAIL_DATA.ventas.rs.reduce((s, v) => s + v.cantadas, 0);
   const totalEfectivasRS = RETAIL_DATA.ventas.rs.reduce((s, v) => s + v.efectivas, 0);
   const promEfectRS = totalCantadasRS > 0 ? (totalEfectivasRS / totalCantadasRS * 100) : 0;
 
+  const lastIdxV = RETAIL_DATA.ventas.cp.length - 1;
+  const lastMesV = RETAIL_DATA.ventas.cp[lastIdxV].mes;
+  const picoCP = RETAIL_DATA.ventas.cp.reduce((best, v) => v.efectivas > best.efectivas ? v : best, RETAIL_DATA.ventas.cp[0]);
+  const ultimos2CP = RETAIL_DATA.ventas.cp[lastIdxV - 1].efectivas + RETAIL_DATA.ventas.cp[lastIdxV].efectivas;
+  const ultimos2Label = `${RETAIL_DATA.ventas.cp[lastIdxV - 1].mes} + ${lastMesV}`;
+
   el.innerHTML = `
     <div class="kpi-grid" style="gap:8px; margin-bottom:8px">
       <div class="kpi-card green" style="padding:5px 12px">
-        <div class="kpi-label" style="font-size:.58rem">Ventas CP 1S (Efectivas)</div>
+        <div class="kpi-label" style="font-size:.58rem">Ventas CP Ene-${lastMesV} (Efectivas)</div>
         <div class="kpi-val" style="font-size:.85rem">${fmt(totalEfectivasCP)}</div>
         <div class="kpi-sub" style="font-size:.5rem">Total de ${fmt(totalCantadasCP)} cantadas (${promEfectCP.toFixed(1).replace('.', ',')}%)</div>
       </div>
       <div class="kpi-card green" style="padding:5px 12px">
-        <div class="kpi-label" style="font-size:.58rem">Ventas RS 1S (Efectivas)</div>
+        <div class="kpi-label" style="font-size:.58rem">Ventas RS Ene-${lastMesV} (Efectivas)</div>
         <div class="kpi-val" style="font-size:.85rem">${fmt(totalEfectivasRS)}</div>
         <div class="kpi-sub" style="font-size:.5rem">Total de ${fmt(totalCantadasRS)} cantadas (${promEfectRS.toFixed(1).replace('.', ',')}%)</div>
       </div>
       <div class="kpi-card" style="padding:5px 12px">
-        <div class="kpi-label" style="font-size:.58rem">Pico CP Semestre</div>
-        <div class="kpi-val" style="font-size:.85rem">2.474</div>
-        <div class="kpi-sub" style="font-size:.5rem">Marzo · 135 gestores activos</div>
+        <div class="kpi-label" style="font-size:.58rem">Pico CP del periodo</div>
+        <div class="kpi-val" style="font-size:.85rem">${fmt(picoCP.efectivas)}</div>
+        <div class="kpi-sub" style="font-size:.5rem">${picoCP.mes} · ${picoCP.gestores} gestores activos</div>
       </div>
       <div class="kpi-card warn" style="padding:5px 12px">
-        <div class="kpi-label" style="font-size:.58rem">Ventas CP Mayo + Junio</div>
-        <div class="kpi-val" style="font-size:.85rem">${fmt(RETAIL_DATA.ventas.cp[4].efectivas + RETAIL_DATA.ventas.cp[5].efectivas)}</div>
-        <div class="kpi-sub" style="font-size:.5rem">Reales consolidadas de cierre</div>
+        <div class="kpi-label" style="font-size:.58rem">Ventas CP ${ultimos2Label}</div>
+        <div class="kpi-val" style="font-size:.85rem">${fmt(ultimos2CP)}</div>
+        <div class="kpi-sub" style="font-size:.5rem">${lastMesV === 'Ago' ? 'Agosto a corte 16' : 'Reales consolidadas de cierre'}</div>
       </div>
     </div>
 
@@ -325,7 +333,7 @@ function renderVentas() {
                 }).join('');
               })()}
               <tr class="total">
-                <td>Total 1S</td>
+                <td>Total Ene-${lastMesV}</td>
                 <td class="r">${Math.round(RETAIL_DATA.ventas.cp.reduce((s, v) => s + v.gestores, 0) / RETAIL_DATA.ventas.cp.length)}*</td>
                 <td class="r">${Math.round(RETAIL_DATA.ventas.cp.reduce((s, v) => s + v.pdv, 0) / RETAIL_DATA.ventas.cp.length)}*</td>
                 <td class="r">${fmt(totalCantadasCP)}</td>
@@ -377,7 +385,7 @@ function renderVentas() {
                   }).join('');
                 })()}
                 <tr class="total">
-                  <td>Total 1S</td>
+                  <td>Total Ene-${lastMesV}</td>
                   <td class="r">${Math.round(RETAIL_DATA.ventas.rs.reduce((s, v) => s + v.gestores, 0) / RETAIL_DATA.ventas.rs.length)}*</td>
                   <td class="r">${fmt(totalCantadasRS)}</td>
                   <td class="r">${fmt(totalEfectivasRS)}</td>
@@ -394,7 +402,7 @@ function renderVentas() {
 
     <div class="alert alert-info" style="margin-top:4px; margin-bottom:0; padding:12px 18px; border-left: 4px solid var(--green); background: rgba(90,226,128,0.08)">
       <span class="ico">${icon('trending-up')}</span>
-      <span style="font-size:.68rem; line-height:1.4; color:var(--dark)"><strong>Logro Comercial:</strong> el canal Retail cerró el semestre con <strong>${fmt(totalEfectivasCP + totalEfectivasRS)} ventas efectivas</strong> entre Cuota Protegida y Rueda Seguro, sosteniendo una efectividad promedio superior al <strong>${Math.min(promEfectCP, promEfectRS).toFixed(0)} %</strong> durante todo el semestre — un desempeño comercial consistente que valida el enfoque del canal en los puntos de mayor valor.</span>
+      <span style="font-size:.68rem; line-height:1.4; color:var(--dark)"><strong>Logro Comercial:</strong> el canal Retail acumula a ${lastMesV === 'Ago' ? 'corte agosto' : lastMesV} <strong>${fmt(totalEfectivasCP + totalEfectivasRS)} ventas efectivas</strong> entre Cuota Protegida y Rueda Seguro, sosteniendo una efectividad promedio superior al <strong>${Math.min(promEfectCP, promEfectRS).toFixed(0)} %</strong> durante todo el periodo — un desempeño comercial consistente que valida el enfoque del canal en los puntos de mayor valor.</span>
     </div>
   `;
 }
@@ -407,22 +415,27 @@ function renderCobertura() {
   // data_retail.js como COBERTURA_PDV. El mapa fue reemplazado por la lista
   // de municipios visitados, alineado con el slide equivalente de Tradicional.
 
+  const lastCobPDV = COBERTURA_PDV[COBERTURA_PDV.length - 1];
+  const totalVisitasFormacion = RETAIL_DATA.visitas.reduce((s, v) => s + v.visitas, 0);
+  const lastIdxV = RETAIL_DATA.ventas.cp.length - 1;
+  const lastMesV = RETAIL_DATA.ventas.cp[lastIdxV].mes;
+
   el.innerHTML = `
     <div style="display:flex; flex-direction:column; gap:4px">
     <div class="kpi-grid" style="gap:8px; margin-bottom:4px">
       <div class="kpi-card" style="padding:5px 12px">
         <div class="kpi-label" style="font-size:.58rem">PDV con gestión promedio</div>
-        <div class="kpi-val" style="font-size:.85rem">${(COBERTURA_PDV.reduce((s,d)=>s+d.gestion,0)/6).toFixed(0)}</div>
+        <div class="kpi-val" style="font-size:.85rem">${(COBERTURA_PDV.reduce((s,d)=>s+d.gestion,0)/COBERTURA_PDV.length).toFixed(0)}</div>
         <div class="kpi-sub" style="font-size:.5rem">Total PDV activos en CP</div>
       </div>
       <div class="kpi-card warn" style="padding:5px 12px">
-        <div class="kpi-label" style="font-size:.58rem">Cobertura Junio</div>
-        <div class="kpi-val" style="font-size:.85rem">26,9 %</div>
-        <div class="kpi-sub" style="font-size:.5rem">14 de 52 PDV activos visitados</div>
+        <div class="kpi-label" style="font-size:.58rem">Cobertura ${lastCobPDV.mes}</div>
+        <div class="kpi-val" style="font-size:.85rem">${lastCobPDV.pct.toFixed(1).replace('.', ',')} %</div>
+        <div class="kpi-sub" style="font-size:.5rem">${lastCobPDV.visitas} de ${lastCobPDV.gestion} PDV activos visitados</div>
       </div>
       <div class="kpi-card" style="padding:5px 12px">
-        <div class="kpi-label" style="font-size:.58rem">Visitas de formación 1S</div>
-        <div class="kpi-val" style="font-size:.85rem">373</div>
+        <div class="kpi-label" style="font-size:.58rem">Visitas de formación Ene-${lastCobPDV.mes}</div>
+        <div class="kpi-val" style="font-size:.85rem">${fmt(totalVisitasFormacion)}</div>
         <div class="kpi-sub" style="font-size:.5rem">Capacitando asesores de venta</div>
       </div>
       <div class="kpi-card" style="padding:5px 12px">
@@ -475,7 +488,7 @@ function renderCobertura() {
                 const avgPct = COBERTURA_PDV.reduce((s, d) => s + d.pct, 0) / n;
                 return `
                   <tr class="total">
-                    <td>Prom. 1S</td>
+                    <td>Prom. Ene-${lastCobPDV.mes}</td>
                     <td class="r">${avg('gestores')}</td>
                     <td class="r">${avg('gestion')}</td>
                     <td class="r">${avg('visitas')}</td>
@@ -489,7 +502,7 @@ function renderCobertura() {
       </div>
 
       <div class="panel" style="padding:8px 16px">
-        <h3 style="margin-bottom:4px; padding-bottom:4px">${icon('store')} Universo de PDV y cobertura real por aliado (1S)</h3>
+        <h3 style="margin-bottom:4px; padding-bottom:4px">${icon('store')} Universo de PDV y cobertura real por aliado (1S · pendiente actualizar a ${lastCobPDV.mes})</h3>
         <div class="tbl-wrap" style="margin-top:0">
           <table class="tbl-compact">
             <thead>
@@ -540,16 +553,16 @@ function renderCobertura() {
             </tbody>
           </table>
         </div>
-        <div style="font-size:.6rem; color:var(--gray3); margin-top:5px">* Universo = PDV físicos distintos observados en los 26 cortes semanales "Como vamos" del semestre. Coberturas &gt;100 % indican PDV que Formación visitó con nombre distinto al registrado en Como vamos ese corte, o puntos sin gestión comercial activa ese mes. <strong>Gestores del canal:</strong> 147 (ene) → 96 (jun), promedio 123; los cortes "Como vamos" no desagregan gestores por aliado.</div>
+        <div style="font-size:.6rem; color:var(--gray3); margin-top:5px">* Universo = PDV físicos distintos observados en los cortes semanales "Como vamos" de 1S (Ene-Jun); tabla aún no recalculada con los cortes de Jul-${lastCobPDV.mes}. Coberturas &gt;100 % indican PDV que Formación visitó con nombre distinto al registrado en Como vamos ese corte, o puntos sin gestión comercial activa ese mes. <strong>Gestores del canal:</strong> ${RETAIL_DATA.ventas.cp[0].gestores} (ene) → ${RETAIL_DATA.ventas.cp[lastIdxV].gestores} (${lastMesV.toLowerCase()}); los cortes "Como vamos" no desagregan gestores por aliado.</div>
       </div>
     </div>
 
     <div style="display:flex; flex-direction:column; gap:6px; margin-top:4px">
     <div class="two-col" style="gap:10px; align-items:stretch; grid-template-columns:1fr 1.35fr">
       <div class="panel" style="padding:8px 14px">
-        <h3 style="margin-bottom:2px; padding-bottom:2px; font-size:.7rem; border-bottom:1px dashed rgba(18,1,128,0.1)">${icon('map-pin')} Municipios Visitados (1S)</h3>
+        <h3 style="margin-bottom:2px; padding-bottom:2px; font-size:.7rem; border-bottom:1px dashed rgba(18,1,128,0.1)">${icon('map-pin')} Municipios Visitados (Ene-${lastCobPDV.mes})</h3>
         <p style="font-size:.56rem; color:var(--gray3); margin:2px 0 6px">
-          Zonas y municipios con al menos una visita de formación registrada en el semestre.
+          Zonas y municipios con al menos una visita de formación registrada en el periodo.
         </p>
         <div style="display:flex; gap:14px">
           <div style="flex:1">
@@ -559,7 +572,7 @@ function renderCobertura() {
                 <col style="width:25%">
               </colgroup>
               <tbody>
-                ${RETAIL_DATA.mapa.slice(0, 6).map(pt => `
+                ${RETAIL_DATA.mapa.slice(0, Math.ceil(RETAIL_DATA.mapa.length / 2)).map(pt => `
                   <tr>
                     <td style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"><strong>${pt.name}</strong></td>
                     <td class="r" style="color:var(--teal)">${pt.visits}</td>
@@ -575,7 +588,7 @@ function renderCobertura() {
                 <col style="width:25%">
               </colgroup>
               <tbody>
-                ${RETAIL_DATA.mapa.slice(6).map(pt => `
+                ${RETAIL_DATA.mapa.slice(Math.ceil(RETAIL_DATA.mapa.length / 2)).map(pt => `
                   <tr>
                     <td style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"><strong>${pt.name}</strong></td>
                     <td class="r" style="color:var(--teal)">${pt.visits}</td>
@@ -587,8 +600,8 @@ function renderCobertura() {
         </div>
       </div>
       <div class="panel" style="padding:8px 14px; box-shadow:none; border:1px solid var(--gray2); display:flex; flex-direction:column; justify-content:space-between">
-        <div style="font-size:.6rem; font-weight:800; color:var(--blue); letter-spacing:.05em; margin-bottom:4px">${icon('tag', { size: 13 })} TIPO DE PUNTO VISITADO EN LAS 90 "SERDÁN"</div>
-        <p style="font-size:.6rem; color:var(--dark); line-height:1.45; margin:0 0 6px"><strong>Sobre "Serdán" (90 visitas):</strong> empresa que provee promotores a ambos canales, no un aliado. De las 90: 33 puras Retail+Tradicional, 33 sedes/roles internos (no PDV) y 14 con cédula activa en ambos canales <strong>(contadas en los dos)</strong>. Total atribuido: <strong>24 a Retail</strong> y <strong>47 a Tradicional</strong>.</p>
+        <div style="font-size:.6rem; font-weight:800; color:var(--blue); letter-spacing:.05em; margin-bottom:4px">${icon('tag', { size: 13 })} TIPO DE PUNTO VISITADO EN LAS 90 "SERDÁN" (1S · pendiente actualizar)</div>
+        <p style="font-size:.6rem; color:var(--dark); line-height:1.45; margin:0 0 6px"><strong>Sobre "Serdán" (90 visitas, corte 1S):</strong> empresa que provee promotores a ambos canales, no un aliado. De las 90: 33 puras Retail+Tradicional, 33 sedes/roles internos (no PDV) y 14 con cédula activa en ambos canales <strong>(contadas en los dos)</strong>. Total atribuido: <strong>24 a Retail</strong> y <strong>47 a Tradicional</strong>.</p>
         <div style="display:flex; gap:8px; flex-wrap:wrap">
           <div style="flex:1; min-width:85px; text-align:center; background:var(--gray1); border-radius:8px; padding:5px">
             <div style="font-weight:800; font-size:.9rem; color:var(--teal)">37</div>

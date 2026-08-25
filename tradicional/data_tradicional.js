@@ -1,4 +1,4 @@
-// Archivo autogenerado por 07_analisis_retail_tradicional.py
+// Archivo autogenerado por 13_actualizar_jul_ago.py (extiende 07_analisis_retail_tradicional.py a Ene-Ago)
 // Contiene la base de datos completa para la presentación del Canal Tradicional 2026.
 const TRADICIONAL_DATA = {
   visitas: [
@@ -36,6 +36,18 @@ const TRADICIONAL_DATA = {
     "mes": "Jun",
     "visitas": 43,
     "asesores": 42,
+    "pdvs": 20
+  },
+  {
+    "mes": "Jul",
+    "visitas": 81,
+    "asesores": 76,
+    "pdvs": 24
+  },
+  {
+    "mes": "Ago",
+    "visitas": 52,
+    "asesores": 48,
     "pdvs": 20
   }
 ],
@@ -100,6 +112,26 @@ const TRADICIONAL_DATA = {
     "positivas": 96,
     "meta": 0,
     "corte": "CIERRE"
+  },
+  {
+    "mes": "Jul",
+    "aliados": 12,
+    "gestores": 31,
+    "financiaciones": 6949,
+    "cantadas": 149,
+    "positivas": 110,
+    "meta": 0,
+    "corte": "corte 31"
+  },
+  {
+    "mes": "Ago",
+    "aliados": 12,
+    "gestores": 31,
+    "financiaciones": 236,
+    "cantadas": 9,
+    "positivas": 6,
+    "meta": 0,
+    "corte": "corte 16"
   }
 ],
     rs: [
@@ -156,6 +188,24 @@ const TRADICIONAL_DATA = {
     "cantadas": 38,
     "positivas": 23,
     "meta": 0
+  },
+  {
+    "mes": "Jul",
+    "aliados": 25,
+    "gestores": 45,
+    "financiaciones": 1686,
+    "cantadas": 29,
+    "positivas": 18,
+    "meta": 0
+  },
+  {
+    "mes": "Ago",
+    "aliados": 25,
+    "gestores": 45,
+    "financiaciones": 3,
+    "cantadas": 3,
+    "positivas": 2,
+    "meta": 0
   }
 ]
   },
@@ -202,36 +252,57 @@ const TRADICIONAL_DATA = {
     "capacitados": 42,
     "ambos": 4,
     "cobertura": 10.8
+  },
+  {
+    "mes": "Jul",
+    "financiaron": 62,
+    "capacitados": 76,
+    "ambos": 4,
+    "cobertura": 6.5
+  },
+  {
+    "mes": "Ago",
+    "financiaron": 32,
+    "capacitados": 48,
+    "ambos": 2,
+    "cobertura": 6.2
   }
 ],
     aliados: [
   {
     "aliado": "Multintegral",
-    "financiaron": 88,
-    "capacitados": 62,
-    "ambos": 8,
-    "cobertura": 9.1
-  },
-  {
-    "aliado": "Diverxa",
-    "financiaron": 15,
-    "capacitados": 53,
-    "ambos": 8,
-    "cobertura": 53.3
+    "financiaron": 105,
+    "capacitados": 64,
+    "ambos": 10,
+    "cobertura": 9.5
   },
   {
     "aliado": "Maximuebles",
-    "financiaron": 15,
-    "capacitados": 12,
+    "financiaron": 17,
+    "capacitados": 16,
     "ambos": 5,
-    "cobertura": 33.3
+    "cobertura": 29.4
+  },
+  {
+    "aliado": "Diverxa",
+    "financiaron": 16,
+    "capacitados": 69,
+    "ambos": 9,
+    "cobertura": 56.2
   },
   {
     "aliado": "Grupo Merpes",
-    "financiaron": 14,
+    "financiaron": 16,
     "capacitados": 9,
     "ambos": 3,
-    "cobertura": 21.4
+    "cobertura": 18.8
+  },
+  {
+    "aliado": "Tech Red",
+    "financiaron": 15,
+    "capacitados": 40,
+    "ambos": 1,
+    "cobertura": 6.7
   },
   {
     "aliado": "M&F Super Gas",
@@ -241,39 +312,32 @@ const TRADICIONAL_DATA = {
     "cobertura": 69.2
   },
   {
-    "aliado": "Tech Red",
-    "financiaron": 12,
-    "capacitados": 14,
-    "ambos": 0,
-    "cobertura": 0.0
-  },
-  {
     "aliado": "Electroferia",
     "financiaron": 9,
-    "capacitados": 33,
+    "capacitados": 36,
     "ambos": 7,
     "cobertura": 77.8
   },
   {
     "aliado": "Carrera Motos",
-    "financiaron": 7,
-    "capacitados": 21,
+    "financiaron": 8,
+    "capacitados": 27,
     "ambos": 3,
-    "cobertura": 42.9
-  },
-  {
-    "aliado": "Casa Bajaj",
-    "financiaron": 4,
-    "capacitados": 1,
-    "ambos": 0,
-    "cobertura": 0.0
+    "cobertura": 37.5
   },
   {
     "aliado": "Dismerca",
-    "financiaron": 4,
-    "capacitados": 9,
+    "financiaron": 6,
+    "capacitados": 10,
     "ambos": 1,
-    "cobertura": 25.0
+    "cobertura": 16.7
+  },
+  {
+    "aliado": "Casa Bajaj",
+    "financiaron": 5,
+    "capacitados": 1,
+    "ambos": 0,
+    "cobertura": 0.0
   },
   {
     "aliado": "Planeta Motos",
@@ -290,11 +354,32 @@ const TRADICIONAL_DATA = {
     "cobertura": 0.0
   },
   {
+    "aliado": "Credimovil",
+    "financiaron": 3,
+    "capacitados": 18,
+    "ambos": 3,
+    "cobertura": 100.0
+  },
+  {
+    "aliado": "Moto Market",
+    "financiaron": 3,
+    "capacitados": 17,
+    "ambos": 3,
+    "cobertura": 100.0
+  },
+  {
     "aliado": "Motos Del Sur",
     "financiaron": 3,
-    "capacitados": 6,
+    "capacitados": 9,
     "ambos": 2,
     "cobertura": 66.7
+  },
+  {
+    "aliado": "Distrimotos",
+    "financiaron": 2,
+    "capacitados": 5,
+    "ambos": 0,
+    "cobertura": 0.0
   },
   {
     "aliado": "Distritodo",
@@ -304,32 +389,11 @@ const TRADICIONAL_DATA = {
     "cobertura": 50.0
   },
   {
-    "aliado": "Moto Market",
-    "financiaron": 2,
-    "capacitados": 10,
-    "ambos": 2,
-    "cobertura": 100.0
-  },
-  {
-    "aliado": "Credimovil",
-    "financiaron": 1,
-    "capacitados": 11,
-    "ambos": 0,
-    "cobertura": 0.0
-  },
-  {
-    "aliado": "Distrimotos",
-    "financiaron": 1,
-    "capacitados": 5,
-    "ambos": 0,
-    "cobertura": 0.0
-  },
-  {
     "aliado": "Grupo Uma",
     "financiaron": 1,
-    "capacitados": 11,
-    "ambos": 0,
-    "cobertura": 0.0
+    "capacitados": 17,
+    "ambos": 1,
+    "cobertura": 100.0
   },
   {
     "aliado": "Motos De La Boyaca",
@@ -366,43 +430,49 @@ const TRADICIONAL_DATA = {
     "name": "Bogotá Centro",
     "lat": 4.628,
     "lon": -74.075,
-    "visits": 209
+    "visits": 283
   },
   {
     "name": "Bogotá Occidente",
     "lat": 4.665,
     "lon": -74.125,
-    "visits": 117
+    "visits": 149
   },
   {
     "name": "Bogotá Sur",
     "lat": 4.59,
     "lon": -74.15,
-    "visits": 31
+    "visits": 42
   },
   {
     "name": "Tunja",
     "lat": 5.5353,
     "lon": -73.3678,
-    "visits": 31
+    "visits": 33
   },
   {
     "name": "Soacha",
     "lat": 4.5781,
     "lon": -74.2158,
-    "visits": 24
+    "visits": 25
   },
   {
     "name": "Chía",
     "lat": 4.8632,
     "lon": -74.0514,
-    "visits": 14
+    "visits": 22
   },
   {
     "name": "Sogamoso",
     "lat": 5.7148,
     "lon": -72.9339,
-    "visits": 13
+    "visits": 15
+  },
+  {
+    "name": "Facatativá",
+    "lat": 4.8136,
+    "lon": -74.3541,
+    "visits": 9
   },
   {
     "name": "Mosquera",
@@ -411,21 +481,15 @@ const TRADICIONAL_DATA = {
     "visits": 7
   },
   {
-    "name": "Facatativá",
-    "lat": 4.8136,
-    "lon": -74.3541,
-    "visits": 7
+    "name": "Zipaquirá",
+    "lat": 5.0267,
+    "lon": -74.0039,
+    "visits": 5
   },
   {
     "name": "Bucaramanga",
     "lat": 7.1193,
     "lon": -73.1227,
-    "visits": 4
-  },
-  {
-    "name": "Zipaquirá",
-    "lat": 5.0267,
-    "lon": -74.0039,
     "visits": 4
   },
   {

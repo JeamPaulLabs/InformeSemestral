@@ -137,27 +137,30 @@ function renderFormacion() {
   const el = document.getElementById('formacion-body');
   if (!el) return;
 
+  const lastIdx = TRADICIONAL_DATA.visitas.length - 1;
+  const lastMes = TRADICIONAL_DATA.visitas[lastIdx].mes;
   const totalVisitas = TRADICIONAL_DATA.visitas.reduce((s, v) => s + v.visitas, 0);
   const bestMonth = TRADICIONAL_DATA.visitas.reduce((best, curr) => curr.visitas > best.visitas ? curr : best, TRADICIONAL_DATA.visitas[0]);
   const marVisits = TRADICIONAL_DATA.visitas[2].visitas;
-  const junVisits = TRADICIONAL_DATA.visitas[5].visitas;
+  const junVisits = TRADICIONAL_DATA.visitas[lastIdx].visitas;
   const dropPct = ((junVisits - marVisits) / marVisits * 100).toFixed(0);
 
   const eneAsesores = TRADICIONAL_DATA.visitas[0].asesores;
-  const junAsesores = TRADICIONAL_DATA.visitas[5].asesores;
+  const junAsesores = TRADICIONAL_DATA.visitas[lastIdx].asesores;
   const asesoresDropPct = ((eneAsesores - junAsesores) / eneAsesores * 100).toFixed(0);
+
 
   el.innerHTML = `
     <div class="kpi-grid" style="gap:12px; margin-bottom:12px">
       <div class="kpi-card" style="padding:10px 18px">
-        <div class="kpi-label" style="font-size:.65rem">Visitas Realizadas 1S</div>
+        <div class="kpi-label" style="font-size:.65rem">Visitas Realizadas Ene-${lastMes}</div>
         <div class="kpi-val" style="font-size:1.45rem">${fmt(totalVisitas)}</div>
-        <div class="kpi-sub" style="font-size:.58rem">Total de formación acumulada (Ene - Jun 2026)</div>
+        <div class="kpi-sub" style="font-size:.58rem">Total de formación acumulada (Ene - ${lastMes} 2026)</div>
       </div>
       <div class="kpi-card green" style="padding:10px 18px">
         <div class="kpi-label" style="font-size:.65rem">Cobertura PDV Activo</div>
         <div class="kpi-val" style="font-size:1.45rem">7,5 %</div>
-        <div class="kpi-sub" style="font-size:.58rem">Cobertura promedio del canal Tradicional en el semestre</div>
+        <div class="kpi-sub" style="font-size:.58rem">Cobertura promedio del canal Tradicional en 1S · pendiente actualizar a ${lastMes}</div>
       </div>
     </div>
 
@@ -185,7 +188,7 @@ function renderFormacion() {
                   </tr>
                 `).join('')}
                 <tr class="total">
-                  <td>Total 1S</td>
+                  <td>Total Ene-${lastMes}</td>
                   <td class="r">${totalVisitas}</td>
                   <td class="r">${TRADICIONAL_DATA.visitas.reduce((s, v) => s + v.asesores, 0)}</td>
                   <td class="r">${TRADICIONAL_DATA.visitas.reduce((s, v) => s + v.pdvs, 0)}</td>
@@ -203,9 +206,9 @@ function renderFormacion() {
         <div>
           <h3 style="margin-bottom:8px; padding-bottom:4px; font-size:.78rem; border-bottom:1px dashed rgba(18,1,128,0.1)">${icon('trending-down')} Evolución de visitas por mes</h3>
           <div class="chart-wrap" style="margin-top:10px; display:flex; flex-direction:column; gap:8px">
-            ${TRADICIONAL_DATA.visitas.map(v => {
+            ${TRADICIONAL_DATA.visitas.map((v, i) => {
               const pct = (v.visitas / bestMonth.visitas * 100).toFixed(0) + '%';
-              const colorClass = (v.mes === 'May' || v.mes === 'Jun') ? 'warn' : 'teal';
+              const colorClass = i >= TRADICIONAL_DATA.visitas.length - 2 ? 'warn' : 'teal';
               const gradient = colorClass === 'warn' ? 'linear-gradient(90deg, #ff6b35, #ff8c5a)' : 'linear-gradient(90deg, #00CD93, #5AE280)';
               return `
                 <div class="bar-row" style="margin:2px 0">
@@ -226,7 +229,7 @@ function renderFormacion() {
     </div>
     <div class="alert alert-info" style="margin-top:14px; margin-bottom:24px; padding:12px 18px; border-left: 4px solid var(--teal); background: rgba(0,205,147,0.06)">
       <span class="ico">${icon('shield-check')}</span>
-      <span style="font-size:.72rem; line-height:1.4; color:var(--dark)"><strong>Logro Semestral:</strong> El canal Tradicional concentró un esfuerzo récord de formación en marzo (148 visitas y 93 asesores capacitados). Con la posterior consolidación y el empalme con Retail, el canal centró su capacidad y cobertura promedio del semestre alcanzó un <strong>7,5%</strong>, identificando grandes oportunidades de crecimiento en los aliados de mayor volumen.</span>
+      <span style="font-size:.72rem; line-height:1.4; color:var(--dark)"><strong>Logro del periodo:</strong> El canal Tradicional concentró un esfuerzo récord de formación en marzo (148 visitas y 93 asesores capacitados). Con la posterior consolidación y el empalme con Retail, el canal centró su capacidad; la cobertura promedio de 1S alcanzó un <strong>7,5%</strong> (cifra pendiente de actualizar con los cortes de Jul-${lastMes}), identificando grandes oportunidades de crecimiento en los aliados de mayor volumen.</span>
     </div>
   `;
 }
@@ -247,27 +250,32 @@ function renderVentas() {
   const rsMeta = TRADICIONAL_DATA.ventas.rs.reduce((s, v) => s + v.meta, 0);
   const rsCumpl = rsMeta > 0 ? (rsPositivas / rsMeta * 100) : 0;
 
+  const lastIdxV = TRADICIONAL_DATA.ventas.cp.length - 1;
+  const lastMesV = TRADICIONAL_DATA.ventas.cp[lastIdxV].mes;
+  const cpAliadosUlt = TRADICIONAL_DATA.ventas.cp[lastIdxV].aliados;
+  const rsAliadosUlt = TRADICIONAL_DATA.ventas.rs[lastIdxV].aliados;
+
   el.innerHTML = `
     <div class="kpi-grid" style="gap:8px; margin-bottom:8px">
       <div class="kpi-card green" style="padding:5px 12px">
-        <div class="kpi-label" style="font-size:.58rem">Ventas CP positivas 1S</div>
+        <div class="kpi-label" style="font-size:.58rem">Ventas CP positivas Ene-${lastMesV}</div>
         <div class="kpi-val" style="font-size:.85rem">${fmt(cpPositivas)}</div>
         <div class="kpi-sub" style="font-size:.5rem">${fmt(cpCantadas)} cantadas · ${cpMeta>0?cpCumpl.toFixed(1).replace('.', ','):'S/D'}% meta</div>
       </div>
       <div class="kpi-card green" style="padding:5px 12px">
-        <div class="kpi-label" style="font-size:.58rem">Ventas RS positivas 1S</div>
+        <div class="kpi-label" style="font-size:.58rem">Ventas RS positivas Ene-${lastMesV}</div>
         <div class="kpi-val" style="font-size:.85rem">${fmt(rsPositivas)}</div>
         <div class="kpi-sub" style="font-size:.5rem">${fmt(rsCantadas)} cantadas · ${rsMeta>0?rsCumpl.toFixed(1).replace('.', ','):'S/D'}% meta</div>
       </div>
       <div class="kpi-card" style="padding:5px 12px">
         <div class="kpi-label" style="font-size:.58rem">Financiaciones CP</div>
         <div class="kpi-val" style="font-size:.85rem">${fmt(cpFinanciaciones)}</div>
-        <div class="kpi-sub" style="font-size:.5rem">12 aliados activos</div>
+        <div class="kpi-sub" style="font-size:.5rem">${cpAliadosUlt} aliados activos</div>
       </div>
       <div class="kpi-card" style="padding:5px 12px">
         <div class="kpi-label" style="font-size:.58rem">Financiaciones RS</div>
         <div class="kpi-val" style="font-size:.85rem">${fmt(rsFinanciaciones)}</div>
-        <div class="kpi-sub" style="font-size:.5rem">25 aliados activos</div>
+        <div class="kpi-sub" style="font-size:.5rem">${rsAliadosUlt} aliados activos</div>
       </div>
     </div>
 
@@ -322,7 +330,10 @@ function renderVentas() {
             </tbody>
           </table>
         </div>
-        <div style="font-size:.56rem; color:var(--gray3); margin-top:4px">El cierre de junio registra un incremento en financiaciones (5.605) y 12 aliados activos.</div>
+        <div style="font-size:.56rem; color:var(--gray3); margin-top:4px">${(() => {
+          const pico = TRADICIONAL_DATA.ventas.cp.reduce((best, v) => v.financiaciones > best.financiaciones ? v : best, TRADICIONAL_DATA.ventas.cp[0]);
+          return `${pico.mes} registra el mayor volumen de financiaciones (${fmt(pico.financiaciones)}) con ${pico.aliados} aliados activos.`;
+        })()}</div>
       </div>
 
       <div class="panel" style="padding:8px 12px; display:flex; flex-direction:column">
@@ -375,7 +386,10 @@ function renderVentas() {
             </tbody>
           </table>
         </div>
-        <div style="font-size:.56rem; color:var(--gray3); margin-top:4px">Junio muestra un repunte de financiaciones de motocicletas (1.395) con 25 aliados activos.</div>
+        <div style="font-size:.56rem; color:var(--gray3); margin-top:4px">${(() => {
+          const pico = TRADICIONAL_DATA.ventas.rs.reduce((best, v) => v.financiaciones > best.financiaciones ? v : best, TRADICIONAL_DATA.ventas.rs[0]);
+          return `${pico.mes} muestra el mayor volumen de financiaciones de motocicletas (${fmt(pico.financiaciones)}) con ${pico.aliados} aliados activos.`;
+        })()}</div>
       </div>
     </div>
 
@@ -383,7 +397,11 @@ function renderVentas() {
 
     <div class="alert alert-info" style="margin-top:4px; margin-bottom:0; padding:12px 18px; border-left: 4px solid var(--green); background: rgba(90,226,128,0.08)">
       <span class="ico">${icon('trending-up')}</span>
-      <span style="font-size:.68rem; line-height:1.4; color:var(--dark)"><strong>Logro Comercial:</strong> el canal Tradicional cerró el semestre con <strong>${fmt(cpPositivas + rsPositivas)} ventas positivas</strong> entre Cuota Protegida y Rueda Seguro, y junio marcó el mayor volumen de financiaciones del 1S (<strong>5.605 en CP</strong> y <strong>1.395 en RS</strong>) con la red de aliados más amplia del semestre — una base sólida para acelerar la conversión en el 2S.</span>
+      <span style="font-size:.68rem; line-height:1.4; color:var(--dark)">${(() => {
+        const picoCP = TRADICIONAL_DATA.ventas.cp.reduce((best, v) => v.financiaciones > best.financiaciones ? v : best, TRADICIONAL_DATA.ventas.cp[0]);
+        const picoRS = TRADICIONAL_DATA.ventas.rs.reduce((best, v) => v.financiaciones > best.financiaciones ? v : best, TRADICIONAL_DATA.ventas.rs[0]);
+        return `<strong>Logro Comercial:</strong> el canal Tradicional acumula a ${lastMesV === 'Ago' ? 'corte agosto' : lastMesV} <strong>${fmt(cpPositivas + rsPositivas)} ventas positivas</strong> entre Cuota Protegida y Rueda Seguro; ${picoCP.mes} marcó el mayor volumen de financiaciones en CP (<strong>${fmt(picoCP.financiaciones)}</strong>) y ${picoRS.mes} en RS (<strong>${fmt(picoRS.financiaciones)}</strong>) — una base sólida para acelerar la conversión en lo que resta del año.`;
+      })()}</span>
     </div>
   `;
 }
@@ -396,12 +414,14 @@ function renderCobertura() {
   const half = Math.ceil(aliados.length / 2);
   const col1 = aliados.slice(0, half);
   const col2 = aliados.slice(half);
+  const lastMesC = TRADICIONAL_DATA.visitas[TRADICIONAL_DATA.visitas.length - 1].mes;
+  const halfMapa = Math.ceil(TRADICIONAL_DATA.mapa.length / 2);
 
   el.innerHTML = `
     <div class="two-col" style="grid-template-columns: 1.6fr 1fr; gap: 14px; align-items: start;">
       <!-- Columna Izquierda: Aliados completa sin scroll -->
       <div class="panel" style="padding:10px 14px; display:flex; flex-direction:column; min-height:360px">
-        <h3 style="margin-bottom:6px; padding-bottom:3px; font-size:.74rem; border-bottom:1px dashed rgba(18,1,128,0.1)">${icon('store')} Cobertura de Formación por Aliado (Ene-Jun 2026)</h3>
+        <h3 style="margin-bottom:6px; padding-bottom:3px; font-size:.74rem; border-bottom:1px dashed rgba(18,1,128,0.1)">${icon('store')} Cobertura de Formación por Aliado (Ene-${lastMesC} 2026)</h3>
         <p style="font-size: .58rem; color: var(--gray3); margin-top: -3px; margin-bottom: 8px;">
           Asesores que financiaron en conciliaciones vs capacitados (cruzados por cédula).
         </p>
@@ -507,7 +527,7 @@ function renderCobertura() {
                 const avgCob = ms.reduce((s, m) => s + m.cobertura, 0) / ms.length;
                 return `
                   <tr class="total">
-                    <td>Prom. 1S</td>
+                    <td>Prom. Ene-${lastMesC}</td>
                     <td class="r">${avg('financiaron')}</td>
                     <td class="r">${avg('capacitados')}</td>
                     <td class="r"><strong>${avg('ambos')}</strong></td>
@@ -521,7 +541,7 @@ function renderCobertura() {
 
         <!-- Panel de Municipios Visitados -->
         <div class="panel" style="padding:10px 14px">
-          <h3 style="margin-bottom:6px; padding-bottom:2px; font-size:.74rem; border-bottom:1px dashed rgba(18,1,128,0.1)">${icon('map-pin')} Municipios Visitados (1S)</h3>
+          <h3 style="margin-bottom:6px; padding-bottom:2px; font-size:.74rem; border-bottom:1px dashed rgba(18,1,128,0.1)">${icon('map-pin')} Municipios Visitados (Ene-${lastMesC})</h3>
           <div style="display:flex; gap:14px">
             <div style="flex:1">
               <table class="tbl-compact" style="font-size:0.56rem; table-layout:fixed; width:100%">
@@ -530,7 +550,7 @@ function renderCobertura() {
                   <col style="width:25%">
                 </colgroup>
                 <tbody>
-                  ${TRADICIONAL_DATA.mapa.slice(0, 6).map(pt => `
+                  ${TRADICIONAL_DATA.mapa.slice(0, halfMapa).map(pt => `
                     <tr>
                       <td style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"><strong>${pt.name}</strong></td>
                       <td class="r" style="color:var(--teal)">${pt.visits}</td>
@@ -546,7 +566,7 @@ function renderCobertura() {
                   <col style="width:25%">
                 </colgroup>
                 <tbody>
-                  ${TRADICIONAL_DATA.mapa.slice(6).map(pt => `
+                  ${TRADICIONAL_DATA.mapa.slice(halfMapa).map(pt => `
                     <tr>
                       <td style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"><strong>${pt.name}</strong></td>
                       <td class="r" style="color:var(--teal)">${pt.visits}</td>
