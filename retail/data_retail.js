@@ -1,4 +1,6 @@
-// Archivo autogenerado por 13_actualizar_jul_ago.py (extiende 07_analisis_retail_tradicional.py a Ene-Ago)
+// Archivo autogenerado por 15_actualizar_formacion_sep.py (refresca visitas de
+// formación con el formulario a corte 22-sep-2026; ventas.cp/ventas.rs preservados
+// de 13_actualizar_jul_ago.py — sin cierre 'Como vamos' de septiembre aún).
 // Contiene la base de datos completa para la presentación del Canal Retail 2026.
 const RETAIL_DATA = {
   visitas: [
@@ -46,9 +48,9 @@ const RETAIL_DATA = {
   },
   {
     "mes": "Ago",
-    "visitas": 31,
-    "asesores": 30,
-    "pdvs": 18
+    "visitas": 79,
+    "asesores": 58,
+    "pdvs": 34
   }
 ],
   ventas: {
@@ -182,49 +184,49 @@ const RETAIL_DATA = {
     "name": "Bogotá Centro",
     "lat": 4.628,
     "lon": -74.075,
-    "visits": 129
+    "visits": 143
   },
   {
     "name": "Bogotá Sur",
     "lat": 4.59,
     "lon": -74.15,
-    "visits": 94
+    "visits": 114
   },
   {
     "name": "Bogotá Occidente",
     "lat": 4.665,
     "lon": -74.125,
-    "visits": 51
+    "visits": 56
   },
   {
     "name": "Tunja",
     "lat": 5.5353,
     "lon": -73.3678,
-    "visits": 33
+    "visits": 36
   },
   {
     "name": "Bucaramanga",
     "lat": 7.1193,
     "lon": -73.1227,
-    "visits": 25
+    "visits": 28
   },
   {
     "name": "Soacha",
     "lat": 4.5781,
     "lon": -74.2158,
-    "visits": 24
+    "visits": 25
   },
   {
     "name": "Bogotá Norte",
     "lat": 4.73,
     "lon": -74.055,
-    "visits": 23
+    "visits": 24
   },
   {
     "name": "Sogamoso",
     "lat": 5.7148,
     "lon": -72.9339,
-    "visits": 15
+    "visits": 16
   },
   {
     "name": "Mosquera",
@@ -308,7 +310,7 @@ const COBERTURA_PDV = [
     "mes": "Ago",
     "gestores": 90,
     "gestion": 51,
-    "visitas": 18,
-    "pct": 35.3
+    "visitas": 34,
+    "pct": 66.7
   }
 ];

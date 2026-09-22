@@ -1,4 +1,6 @@
-// Archivo autogenerado por 13_actualizar_jul_ago.py (extiende 07_analisis_retail_tradicional.py a Ene-Ago)
+// Archivo autogenerado por 15_actualizar_formacion_sep.py (refresca visitas de
+// formación con el formulario a corte 22-sep-2026; ventas.cp/ventas.rs/cobertura
+// preservados de 13_actualizar_jul_ago.py — sin cierre 'Como vamos' de septiembre aún).
 // Contiene la base de datos completa para la presentación del Canal Tradicional 2026.
 const TRADICIONAL_DATA = {
   visitas: [
@@ -46,9 +48,9 @@ const TRADICIONAL_DATA = {
   },
   {
     "mes": "Ago",
-    "visitas": 52,
-    "asesores": 48,
-    "pdvs": 20
+    "visitas": 74,
+    "asesores": 69,
+    "pdvs": 28
   }
 ],
   ventas: {
@@ -430,7 +432,7 @@ const TRADICIONAL_DATA = {
     "name": "Bogotá Centro",
     "lat": 4.628,
     "lon": -74.075,
-    "visits": 283
+    "visits": 294
   },
   {
     "name": "Bogotá Occidente",
@@ -448,7 +450,7 @@ const TRADICIONAL_DATA = {
     "name": "Tunja",
     "lat": 5.5353,
     "lon": -73.3678,
-    "visits": 33
+    "visits": 41
   },
   {
     "name": "Soacha",
@@ -466,7 +468,7 @@ const TRADICIONAL_DATA = {
     "name": "Sogamoso",
     "lat": 5.7148,
     "lon": -72.9339,
-    "visits": 15
+    "visits": 18
   },
   {
     "name": "Facatativá",

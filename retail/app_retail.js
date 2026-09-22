@@ -528,9 +528,9 @@ function renderCobertura() {
               <tr>
                 <td><strong>Colombiana de Comercio</strong> (Alkosto/Ktronix)</td>
                 <td class="r">54</td>
-                <td class="r">40</td>
-                <td class="r">${badge('74,1 %','y')}</td>
-                <td class="r">229</td>
+                <td class="r">45</td>
+                <td class="r">${badge('83,3 %','g')}</td>
+                <td class="r">261</td>
               </tr>
               <tr>
                 <td><strong>Almacenes Éxito</strong> <span class="pend" style="font-size:.58rem">aliado retirado</span></td>
@@ -542,9 +542,9 @@ function renderCobertura() {
               <tr>
                 <td><strong>Cencosud</strong> (Jumbo/Metro/Easy)</td>
                 <td class="r">35</td>
-                <td class="r">32</td>
-                <td class="r">${badge('91,4 %','g')}</td>
-                <td class="r">104</td>
+                <td class="r">33</td>
+                <td class="r">${badge('94,3 %','g')}</td>
+                <td class="r">120</td>
               </tr>
               <tr>
                 <td><strong>Olímpica</strong> <span class="pend" style="font-size:.58rem">solo ene · aliado retirado</span></td>
@@ -556,9 +556,9 @@ function renderCobertura() {
               <tr class="total">
                 <td>Total canal</td>
                 <td class="r">126</td>
-                <td class="r">112</td>
-                <td class="r">${badge('88,9 %','g')}</td>
-                <td class="r">440</td>
+                <td class="r">118</td>
+                <td class="r">${badge('93,7 %','g')}</td>
+                <td class="r">488</td>
               </tr>
             </tbody>
           </table>
@@ -610,11 +610,11 @@ function renderCobertura() {
         </div>
       </div>
       <div class="panel" style="padding:8px 14px; box-shadow:none; border:1px solid var(--gray2); display:flex; flex-direction:column; justify-content:space-between">
-        <div style="font-size:.6rem; font-weight:800; color:var(--blue); letter-spacing:.05em; margin-bottom:4px">${icon('tag', { size: 13 })} TIPO DE PUNTO VISITADO EN LAS 103 "SERDÁN" (Ene-${lastCobPDV.mes})</div>
-        <p style="font-size:.6rem; color:var(--dark); line-height:1.45; margin:0 0 6px"><strong>Sobre "Serdán" (103 visitas):</strong> empresa que provee promotores a ambos canales, no un aliado. De las 103: 48 puras Retail+Tradicional, 39 sedes/roles internos (no PDV), 15 con cédula activa en ambos canales <strong>(contadas en los dos)</strong> y 1 sin clasificar. Total atribuido: <strong>24 a Retail</strong> y <strong>54 a Tradicional</strong>.</p>
+        <div style="font-size:.6rem; font-weight:800; color:var(--blue); letter-spacing:.05em; margin-bottom:4px">${icon('tag', { size: 13 })} TIPO DE PUNTO VISITADO EN LAS 106 "SERDÁN" (Ene-${lastCobPDV.mes})</div>
+        <p style="font-size:.6rem; color:var(--dark); line-height:1.45; margin:0 0 6px"><strong>Sobre "Serdán" (106 visitas):</strong> empresa que provee promotores a ambos canales, no un aliado. De las 106: 48 puras Retail+Tradicional, 39 sedes/roles internos (no PDV), 18 con cédula activa en ambos canales <strong>(contadas en los dos)</strong> y 1 sin clasificar. Total atribuido: <strong>27 a Retail</strong> y <strong>57 a Tradicional</strong>.</p>
         <div style="display:flex; gap:8px; flex-wrap:wrap">
           <div style="flex:1; min-width:85px; text-align:center; background:var(--gray1); border-radius:8px; padding:5px">
-            <div style="font-weight:800; font-size:.9rem; color:var(--teal)">42</div>
+            <div style="font-weight:800; font-size:.9rem; color:var(--teal)">43</div>
             <div style="font-size:.58rem; color:var(--gray3)">PDV físico</div>
           </div>
           <div style="flex:1; min-width:85px; text-align:center; background:var(--gray1); border-radius:8px; padding:5px">
@@ -622,7 +622,7 @@ function renderCobertura() {
             <div style="font-size:.58rem; color:var(--gray3)">Sede Serdán</div>
           </div>
           <div style="flex:1; min-width:85px; text-align:center; background:var(--gray1); border-radius:8px; padding:5px">
-            <div style="font-weight:800; font-size:.9rem; color:var(--warn)">28</div>
+            <div style="font-weight:800; font-size:.9rem; color:var(--warn)">29</div>
             <div style="font-size:.58rem; color:var(--gray3)">Itinerante</div>
           </div>
           <div style="flex:1; min-width:85px; text-align:center; background:var(--gray1); border-radius:8px; padding:5px">
@@ -630,7 +630,7 @@ function renderCobertura() {
             <div style="font-size:.58rem; color:var(--gray3)">Ofic. SAC</div>
           </div>
           <div style="flex:1; min-width:85px; text-align:center; background:var(--gray1); border-radius:8px; padding:5px">
-            <div style="font-weight:800; font-size:.9rem; color:var(--gray3)">4</div>
+            <div style="font-weight:800; font-size:.9rem; color:var(--gray3)">5</div>
             <div style="font-size:.58rem; color:var(--gray3)">Supervisión</div>
           </div>
         </div>
