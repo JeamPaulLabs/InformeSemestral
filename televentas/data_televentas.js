@@ -37,6 +37,43 @@ const DATA = {
   promPolizas:     [149.7,  139.6, 135.1,  118.3,  109.3,  110.2],
 };
 
+/* ── EXTENSIÓN PROVISIONAL JUL-AGO 2026 (tablero operativo, NO liquidación) ──
+   DATA de arriba es y sigue siendo la cifra OFICIAL de liquidación (Martha),
+   Ene-Jun — no se toca. Esto es un bloque aparte: suma de las 5 campañas
+   recurrentes (Bienvenidas CP, CP Stock, Masiva Voluntarios, Autogestión,
+   Microseguro) leídas de las capturas "Resumen Anual TMK Vanti" (ver
+   context_Televentas/Reporte Ilio/capturas_campanas/). Usado solo en
+   "Consolidado de las Bases" y "Desempeño por Campaña" para extender esas
+   2 slides a ene-ago mientras llega la liquidación oficial de jul-ago.
+   Falta septiembre completo: CP Stock y Masiva Voluntarios no tienen ese
+   mes en la captura (corte incompleto), así que no se agregó ago+1.
+   recibidos de CP Stock y Masiva Voluntarios = aptos (su captura no trae
+   un "recibidos" previo al filtro, a diferencia de Bienvenida/Autogestión/
+   Microseguro) — por eso su "rechazados" aparece en 0, no es que no haya
+   descarte real, es que el dashboard nuevo no lo desglosa para esas 2. */
+const DATA_OP_JUL_AGO = {
+  meses: ['Jul', 'Ago'],
+  registros:       [54686, 58458],
+  rechazados:      [12582, 21658],
+  aptos:           [42104, 36800],
+  pctRechazo:      [23.0,  37.1],
+  gestionados:     [42592, 36493],
+  contactados:     [18426, 24140],
+  contactabilidad: [43.3,  66.2],
+  efectividad:     [11.5,  6.5],
+  ventasOp:        [2114,  1564],
+  // Desglose por campaña (para "Desempeño por Campaña"): aptos entregados y ventas.
+  porCampana: {
+    'Bienvenidas CP':     { aptos: [7337, 6166],   ventas: [1100, 792] },
+    'Autogestión':        { aptos: [1990, 2111],   ventas: [355,  224] },
+    'CP Stock':           { aptos: [15362, 18068], ventas: [310,  357] },
+    'Masiva Voluntarios': { aptos: [16011, 9366],  ventas: [98,   107] },
+    'CP Clientes Satisf.*':  { aptos: [0, 0], ventas: [0, 0] },  // campaña de una sola vez (ene), sin más cortes
+    'Volunt. Cancelaciones*':{ aptos: [0, 0], ventas: [0, 0] },  // ídem
+    'Microseguro':         { aptos: [1404, 1089],  ventas: [251,  84] },
+  }
+};
+
 /* ── ESQUEMA DE INCENTIVOS (extraído de liquidaciones) ──────── */
 const ESQUEMA_MESES = [
   { mes: 'Ene', e1meta: 135, e1pago: 675000,  e2meta: 162, e2pago: 972000,  e3meta: 189, e3pago: 1323000, telemed: 6, condicional: 25, volante: null,   novedades: 'Meta inicial del equipo' },

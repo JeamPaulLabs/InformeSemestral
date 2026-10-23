@@ -299,18 +299,29 @@ function renderBases() {
   const el = document.getElementById('bases-body');
   if (!el) return;
 
-  /* Todas las etapas de base salen de DATA (tableros Manager Performance),
-     que YA incluye la campaña Microseguro Activo en cada mes — no debe
-     volver a sumarse aparte. Las ventas de esta slide (y de todas las
-     vistas consolidadas) son SIEMPRE la liquidación oficial (Martha),
-     única cifra de ventas del informe; las tipificaciones "venta exitosa"
-     del tablero operativo no se muestran para evitar dobles lecturas. */
-  const totalRec  = DATA.registros.reduce((a,b)=>a+b,0);
-  const totalRech = DATA.rechazados.reduce((a,b)=>a+b,0);
-  const totalApt  = DATA.aptos.reduce((a,b)=>a+b,0);
-  const totalGest = DATA.gestionados.reduce((a,b)=>a+b,0);
-  const totalCont = DATA.contactados.reduce((a,b)=>a+b,0);
-  const totalLiq  = DATA.ventasLiq.reduce((a,b)=>a+b,0);
+  /* Ene-Jun sale de DATA (tableros Manager Performance, cifra OFICIAL de
+     liquidación Martha). Jul-Ago es PROVISIONAL: DATA_OP_JUL_AGO, suma del
+     tablero operativo (Ilio) de las 5 campañas recurrentes — no hay
+     liquidación oficial de jul-ago todavía. Se combinan en un solo arreglo
+     para la tabla/embudo, marcando visualmente las columnas jul-ago como
+     operativas. Septiembre no entra (CP Stock/Masiva Voluntarios no tienen
+     ese mes en la fuente todavía). */
+  const mesesAll = [...DATA.meses, ...DATA_OP_JUL_AGO.meses];
+  const nOficial = DATA.meses.length;
+  const registrosAll = [...DATA.registros, ...DATA_OP_JUL_AGO.registros];
+  const rechazadosAll = [...DATA.rechazados, ...DATA_OP_JUL_AGO.rechazados];
+  const aptosAll = [...DATA.aptos, ...DATA_OP_JUL_AGO.aptos];
+  const pctRechazoAll = [...DATA.pctRechazo, ...DATA_OP_JUL_AGO.pctRechazo];
+  const gestionadosAll = [...DATA.gestionados, ...DATA_OP_JUL_AGO.gestionados];
+  const contactadosAll = [...DATA.contactados, ...DATA_OP_JUL_AGO.contactados];
+  const ventasAll = [...DATA.ventasLiq, ...DATA_OP_JUL_AGO.ventasOp];
+
+  const totalRec  = registrosAll.reduce((a,b)=>a+b,0);
+  const totalRech = rechazadosAll.reduce((a,b)=>a+b,0);
+  const totalApt  = aptosAll.reduce((a,b)=>a+b,0);
+  const totalGest = gestionadosAll.reduce((a,b)=>a+b,0);
+  const totalCont = contactadosAll.reduce((a,b)=>a+b,0);
+  const totalLiq  = ventasAll.reduce((a,b)=>a+b,0);
   const pctRechProm = Math.round(totalRech/totalRec*100);
 
   const funnel = [
@@ -318,16 +329,16 @@ function renderBases() {
     { label: 'Aptos para gestión',  val: totalApt,  pct: Math.round(totalApt/totalRec*100),   nota: 'Tras depuración' },
     { label: 'Gestionados',         val: totalGest, pct: Math.round(totalGest/totalApt*100),  nota: 'Registros marcados' },
     { label: 'Contactados',         val: totalCont, pct: Math.round(totalCont/totalGest*100), nota: 'Contacto efectivo' },
-    { label: 'Ventas',              val: totalLiq,  pct: Math.round(totalLiq/totalCont*100),  nota: 'Cifra oficial liquidación' },
+    { label: 'Ventas',              val: totalLiq,  pct: Math.round(totalLiq/totalCont*100),  nota: 'Liquidación ene-jun + operativo jul-ago' },
   ];
 
   el.innerHTML = `
     <div style="height:100%; display:flex; flex-direction:column; min-height:0">
     <div class="kpi-grid" style="gap:10px; flex-shrink:0; margin-bottom:12px">
       <div class="kpi-card" style="padding:6px 14px">
-        <div class="kpi-label">Registros recibidos (ene–jun)</div>
+        <div class="kpi-label">Registros recibidos (ene-ago)</div>
         <div class="kpi-val">${fmt(totalRec)}</div>
-        <div class="kpi-sub">Fuente: dashboards Power BI</div>
+        <div class="kpi-sub">Ene-jun: Power BI oficial · jul-ago: tablero operativo</div>
       </div>
       <div class="kpi-card warn" style="padding:6px 14px">
         <div class="kpi-label">Rechazo promedio</div>
@@ -340,7 +351,7 @@ function renderBases() {
         <div class="kpi-sub">De ${fmt(totalRec)} recibidos</div>
       </div>
       <div class="kpi-card green" style="padding:6px 14px">
-        <div class="kpi-label">Ventas 1S</div>
+        <div class="kpi-label">Ventas ene-ago</div>
         <div class="kpi-val">${fmt(totalLiq)}</div>
         <div class="kpi-sub">1 venta por cada ${Math.round(totalRec/totalLiq)} registros recibidos</div>
       </div>
@@ -350,7 +361,7 @@ function renderBases() {
       <div class="panel" style="padding:6px 14px; display:flex; flex-direction:column; min-height:0; overflow:hidden">
         <h3 style="margin-bottom:4px; padding-bottom:4px">${icon('calendar')} Volumen y calidad de base por mes</h3>
         <div class="tbl-wrap" style="margin-top:0; flex:1; min-height:0; overflow:hidden">
-          <table class="tbl-compact" style="font-size:.7rem; height:100%; width:100%">
+          <table class="tbl-compact" style="font-size:.66rem; height:100%; width:100%">
             <thead><tr>
               <th>Mes</th>
               <th class="r">Recibidos</th>
@@ -360,15 +371,16 @@ function renderBases() {
               <th class="r">Ventas</th>
             </tr></thead>
             <tbody>
-              ${DATA.meses.map((m,i) => {
-                const p = DATA.pctRechazo[i];
-                return `<tr>
-                  <td><strong>${m}</strong></td>
-                  <td class="r">${fmt(DATA.registros[i])}</td>
-                  <td class="r">${fmt(DATA.rechazados[i])}</td>
+              ${mesesAll.map((m,i) => {
+                const p = pctRechazoAll[i];
+                const op = i >= nOficial;
+                return `<tr${op?' style="background:rgba(255,193,7,.06)"':''}>
+                  <td><strong>${m}</strong>${op?' <span style="font-size:.46rem;color:var(--warn);font-weight:700">(op.)</span>':''}</td>
+                  <td class="r">${fmt(registrosAll[i])}</td>
+                  <td class="r">${fmt(rechazadosAll[i])}</td>
                   <td class="r">${badge(Math.round(p) + ' %', p>65?'r':p>50?'y':'g')}</td>
-                  <td class="r">${fmt(DATA.aptos[i])}</td>
-                  <td class="r"><strong>${fmt(DATA.ventasLiq[i])}</strong></td>
+                  <td class="r">${fmt(aptosAll[i])}</td>
+                  <td class="r"><strong>${fmt(ventasAll[i])}</strong></td>
                 </tr>`;
               }).join('')}
               <tr class="total">
@@ -382,6 +394,7 @@ function renderBases() {
             </tbody>
           </table>
         </div>
+        <div style="font-size:.48rem; color:var(--gray3); margin-top:2px">(op.) = jul-ago, cifra provisional del tablero operativo (sin liquidación oficial todavía); recibidos de CP Stock/Masiva Voluntarios esos meses = aptos entregados (el dashboard nuevo no desglosa un "recibidos" previo al filtro para esas 2 campañas).</div>
       </div>
 
       <div class="panel" style="padding:6px 14px; display:flex; flex-direction:column; min-height:0; overflow:hidden">
@@ -429,121 +442,141 @@ function renderCampanas() {
   const el = document.getElementById('campanas-body');
   if (!el) return;
 
-  // reg = base apta por campaña (tras depuración), sumada de los kpisBase de
-  // cada deep-dive. El total mostrado es el oficial del semestre (DATA.aptos).
+  // reg/ventas = ene-ago (1S oficial + jul-ago operativo de DATA_OP_JUL_AGO.porCampana).
+  // contactab/convSC recalculados con contactados reales de jul-ago + un estimado del 1S
+  // (reg1S × contactab1S publicado, ya que el 1S no guardó el conteo crudo de contactados
+  // por campaña — ver nota histórica abajo). Microseguro no tiene fila propia (igual que
+  // antes), pero sí está en el total oficial/operativo de abajo.
+  const op = DATA_OP_JUL_AGO.porCampana;
   const detalleSemestre = [
-    { c: 'Bienvenidas CP',        reg: 44428,  ventas: 6912, contactab: '79 %', convSC: '19,6 %', perfil: 'g' },
-    { c: 'Autogestión',           reg: 4225,   ventas: 803,  contactab: '73 %', convSC: '26,3 %', perfil: 'g' },
-    { c: 'CP Stock',              reg: 158941, ventas: 2845, contactab: '52 %', convSC: '3,6 %',  perfil: 'y' },
-    { c: 'Masiva Voluntarios',    reg: 119828, ventas: 324,  contactab: '19 %', convSC: '1,5 %',  perfil: 'r' },
+    { c: 'Bienvenidas CP',        reg1S: 44428,  ventas1S: 6912, contactab1S: 79, key: 'Bienvenidas CP',     perfil: 'g' },
+    { c: 'Autogestión',           reg1S: 4225,   ventas1S: 803,  contactab1S: 73, key: 'Autogestión',        perfil: 'g' },
+    { c: 'CP Stock',              reg1S: 158941, ventas1S: 2845, contactab1S: 52, key: 'CP Stock',           perfil: 'y' },
+    { c: 'Masiva Voluntarios',    reg1S: 119828, ventas1S: 324,  contactab1S: 19, key: 'Masiva Voluntarios', perfil: 'r' },
     { c: 'CP Clientes Satisf.*',  reg: 35228,  ventas: 79,   contactab: '19 %', convSC: '1,2 %',  perfil: 'r' },
     { c: 'Volunt. Cancelaciones*',reg: 1065,   ventas: 4,    contactab: '53 %', convSC: '0,7 %',  perfil: 'r' },
-  ];
+  ].map(r => {
+    if (r.reg != null) return r;  // campañas de una sola vez, sin jul-ago (sin cambios)
+    const aptosJulAgo = op[r.key].aptos.reduce((a,b)=>a+b,0);
+    const ventasJulAgo = op[r.key].ventas.reduce((a,b)=>a+b,0);
+    return { ...r, reg: r.reg1S + aptosJulAgo, ventas: r.ventas1S + ventasJulAgo };
+  });
+  // contactados jul-ago reales por campaña (de las mismas capturas, fila "Registros contactados")
+  const CONTACTADOS_JUL_AGO = {
+    'Bienvenidas CP': 5950+4692, 'Autogestión': 1440+1134, 'CP Stock': 5609+11089, 'Masiva Voluntarios': 4383+6309
+  };
+  detalleSemestre.forEach(r => {
+    if (r.reg1S == null) return;
+    const contactados1S = Math.round(r.reg1S * r.contactab1S / 100);
+    const contactadosTotal = contactados1S + (CONTACTADOS_JUL_AGO[r.key] || 0);
+    r.contactab = Math.round(contactadosTotal / r.reg * 100) + ' %';
+    r.convSC = (r.ventas / contactadosTotal * 100).toFixed(1).replace('.', ',') + ' %';
+  });
 
   const totalVentas = detalleSemestre.reduce((a, r) => a + r.ventas, 0);
 
   const maxDescarte = Math.max(...DESCARTE_MOTIVOS.map(d=>d.pct));
-  const rechTotal = DATA.rechazados.reduce((a,b)=>a+b,0);
-  const aptTotal  = DATA.aptos.reduce((a,b)=>a+b,0);
-  const gestTotal = DATA.gestionados.reduce((a,b)=>a+b,0);
-  const contTotal = DATA.contactados.reduce((a,b)=>a+b,0);
-  const liqTotal  = DATA.ventasLiq.reduce((a,b)=>a+b,0);
+  const rechTotal = DATA.rechazados.reduce((a,b)=>a+b,0) + DATA_OP_JUL_AGO.rechazados.reduce((a,b)=>a+b,0);
+  const aptTotal  = DATA.aptos.reduce((a,b)=>a+b,0) + DATA_OP_JUL_AGO.aptos.reduce((a,b)=>a+b,0);
+  const gestTotal = DATA.gestionados.reduce((a,b)=>a+b,0) + DATA_OP_JUL_AGO.gestionados.reduce((a,b)=>a+b,0);
+  const contTotal = DATA.contactados.reduce((a,b)=>a+b,0) + DATA_OP_JUL_AGO.contactados.reduce((a,b)=>a+b,0);
+  const liqTotal  = DATA.ventasLiq.reduce((a,b)=>a+b,0) + DATA_OP_JUL_AGO.ventasOp.reduce((a,b)=>a+b,0);
 
   el.innerHTML = `
     <div style="height:100%; display:flex; flex-direction:column; min-height:0">
     <div class="kpi-grid" style="gap:8px; margin-bottom:8px; flex-shrink:0">
       <div class="kpi-card green" style="padding:4px 12px">
         <div class="kpi-label" style="font-size:.6rem">Bienvenidas CP</div>
-        <div class="kpi-val" style="font-size:.85rem">${fmt(6912)} <span style="font-size:.5rem;font-weight:500;color:var(--gray3)">ventas</span></div>
-        <div class="kpi-sub" style="font-size:.5rem">${fmt(Math.round(6912/liqTotal*100))} % de las ventas del semestre · 19,6 % de conversión</div>
+        <div class="kpi-val" style="font-size:.85rem">${fmt(detalleSemestre[0].ventas)} <span style="font-size:.5rem;font-weight:500;color:var(--gray3)">ventas</span></div>
+        <div class="kpi-sub" style="font-size:.5rem">${fmt(Math.round(detalleSemestre[0].ventas/liqTotal*100))} % de las ventas ene-ago · ${detalleSemestre[0].convSC} de conversión</div>
       </div>
       <div class="kpi-card green" style="padding:4px 12px">
         <div class="kpi-label" style="font-size:.6rem">Autogestión</div>
-        <div class="kpi-val" style="font-size:.85rem">26,3 %</div>
-        <div class="kpi-sub" style="font-size:.5rem">Conversión más alta del portafolio · 2,9× el promedio del canal</div>
+        <div class="kpi-val" style="font-size:.85rem">${detalleSemestre[1].convSC}</div>
+        <div class="kpi-sub" style="font-size:.5rem">Conversión más alta del portafolio (ene-ago)</div>
       </div>
     </div>
 
     <div class="two-col" style="gap:12px; flex:1; min-height:0; grid-template-rows:minmax(0,1fr); overflow:hidden">
       <div class="panel" style="padding:10px 14px; display:flex; flex-direction:column; min-height:0; overflow:hidden">
-        <h3 style="margin-bottom:4px; padding-bottom:3px; font-size:.7rem">${icon('target')} Rendimiento por campaña (ene–jun)</h3>
-        <div class="tbl-wrap" style="margin-top:0; flex:1 1 0; min-height:0; overflow:hidden">
-          <table class="tbl-compact" style="font-size:.6rem; height:100%; width:100%">
+        <h3 style="margin-bottom:3px; padding-bottom:2px; font-size:.68rem">${icon('target')} Rendimiento por campaña (ene-ago)</h3>
+        <div class="tbl-wrap" style="margin-top:0; flex:0.85 1 0; min-height:0; overflow:hidden">
+          <table class="tbl-compact" style="font-size:.56rem; height:100%; width:100%">
             <colgroup>
               <col style="width:26%"><col style="width:16%"><col style="width:14%">
               <col style="width:18%"><col style="width:26%">
             </colgroup>
             <thead><tr>
-              <th>Campaña</th><th class="r">Base apta</th><th class="r">Ventas</th>
-              <th class="r">Contactab.</th><th class="r">Conv./contacto</th>
+              <th style="padding:1px 4px">Campaña</th><th class="r" style="padding:1px 4px">Base apta</th><th class="r" style="padding:1px 4px">Ventas</th>
+              <th class="r" style="padding:1px 4px">Contactab.</th><th class="r" style="padding:1px 4px">Conv./contacto</th>
             </tr></thead>
             <tbody>
               ${detalleSemestre.map(r=>`
                 <tr>
-                  <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${badge(r.c, r.perfil)}</td>
-                  <td class="r">${fmt(r.reg)}</td>
-                  <td class="r"><strong>${fmt(r.ventas)}</strong></td>
-                  <td class="r">${badge(r.contactab, r.perfil)}</td>
-                  <td class="r">${badge(r.convSC, r.perfil)}</td>
+                  <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:1px 4px">${badge(r.c, r.perfil)}</td>
+                  <td class="r" style="padding:1px 4px">${fmt(r.reg)}</td>
+                  <td class="r" style="padding:1px 4px"><strong>${fmt(r.ventas)}</strong></td>
+                  <td class="r" style="padding:1px 4px">${badge(r.contactab, r.perfil)}</td>
+                  <td class="r" style="padding:1px 4px">${badge(r.convSC, r.perfil)}</td>
                 </tr>`).join('')}
-              <tr class="total" style="font-size:.6rem">
-                <td>Total</td><td class="r">${fmt(aptTotal)}</td>
-                <td class="r">${fmt(totalVentas)}</td>
-                <td class="r">41 %</td><td class="r">7,4 %</td>
+              <tr class="total" style="font-size:.56rem">
+                <td style="padding:1px 4px">Total</td><td class="r" style="padding:1px 4px">${fmt(aptTotal)}</td>
+                <td class="r" style="padding:1px 4px">${fmt(totalVentas)}</td>
+                <td class="r">${Math.round(contTotal/aptTotal*100)} %</td><td class="r">${(totalVentas/contTotal*100).toFixed(1).replace('.', ',')} %</td>
               </tr>
             </tbody>
           </table>
         </div>
-        <div style="font-size:.5rem; color:var(--gray3); margin-top:3px">* Campañas puntuales solo de enero (no recurrentes). Base apta = registros que quedaron tras la depuración; el total (${fmt(aptTotal)}) es la cifra oficial del semestre (ene-jun) e incluye Microseguro.</div>
+        <div style="font-size:.5rem; color:var(--gray3); margin-top:3px">* Campañas puntuales solo de enero (no recurrentes). Base apta = registros que quedaron tras la depuración; ene-jun es cifra oficial, jul-ago es tablero operativo provisional (ver "Consolidado de las Bases"); el total (${fmt(aptTotal)}) incluye Microseguro aunque no tiene fila propia.</div>
 
-        <div style="display:flex; gap:10px; margin-top:4px; padding:4px 8px; background:rgba(18,1,128,.04); border-radius:5px; font-size:.54rem">
-          <strong style="color:var(--blue)">Campañas nuevas (ago-oct, fuera del 1S):</strong>
+        <div style="display:flex; gap:10px; margin-top:4px; padding:4px 8px; background:rgba(255,193,7,.08); border-radius:5px; font-size:.54rem">
+          <strong style="color:var(--blue)">Campañas nuevas (ago-oct, fuera de ene-ago):</strong>
           <span>Rueda Seguro SBS: ${fmt(16360)} aptos, <strong>254</strong> ventas (${badge('5,3 %','y')} conv.)</span>
           <span>Billetera Protegida: ${fmt(15743)} aptos, <strong>57</strong> ventas (${badge('1,3 %','r')} conv.)</span>
         </div>
 
-        <h3 style="margin:8px 0 3px; padding-bottom:2px; font-size:.7rem">${icon('bar-chart-3')} Tipificación de aptos por mes</h3>
-        <div class="tbl-wrap" style="margin-top:0; flex:1 1 0; min-height:0; overflow:hidden">
-          <table class="tbl-compact" style="font-size:.55rem; height:100%; width:100%">
+        <h3 style="margin:5px 0 2px; padding-bottom:2px; font-size:.68rem">${icon('bar-chart-3')} Tipificación de aptos por mes</h3>
+        <div class="tbl-wrap" style="margin-top:0; flex:1.3 1 0; min-height:0; overflow:hidden">
+          <table class="tbl-compact" style="font-size:.5rem; height:100%; width:100%">
             <thead><tr>
-              <th style="padding:2px 4px">Mes</th>
-              <th class="r" style="padding:2px 4px">Aptos</th>
-              <th class="r" style="padding:2px 4px">Gestión</th>
-              <th class="r" style="padding:2px 4px">% Gest.</th>
-              <th class="r" style="padding:2px 4px">Contacto</th>
-              <th class="r" style="padding:2px 4px">% Ctto.</th>
-              <th class="r" style="padding:2px 4px">Ventas</th>
-              <th class="r" style="padding:2px 4px">% Conv.</th>
+              <th style="padding:1px 4px">Mes</th>
+              <th class="r" style="padding:1px 4px">Aptos</th>
+              <th class="r" style="padding:1px 4px">Gestión</th>
+              <th class="r" style="padding:1px 4px">% Gest.</th>
+              <th class="r" style="padding:1px 4px">Contacto</th>
+              <th class="r" style="padding:1px 4px">% Ctto.</th>
+              <th class="r" style="padding:1px 4px">Ventas</th>
+              <th class="r" style="padding:1px 4px">% Conv.</th>
             </tr></thead>
             <tbody>
-              ${DATA.meses.map((m,i)=>{
-                const gest = DATA.gestionados[i];
-                const ctto = DATA.contactados[i];
-                const apto = DATA.aptos[i];
-                const venta = DATA.ventasLiq[i];  // liquidación oficial, única cifra de ventas
+              ${[...DATA.meses, ...DATA_OP_JUL_AGO.meses].map((m,i)=>{
+                const gest = i < DATA.meses.length ? DATA.gestionados[i] : DATA_OP_JUL_AGO.gestionados[i-DATA.meses.length];
+                const ctto = i < DATA.meses.length ? DATA.contactados[i] : DATA_OP_JUL_AGO.contactados[i-DATA.meses.length];
+                const apto = i < DATA.meses.length ? DATA.aptos[i] : DATA_OP_JUL_AGO.aptos[i-DATA.meses.length];
+                const venta = i < DATA.meses.length ? DATA.ventasLiq[i] : DATA_OP_JUL_AGO.ventasOp[i-DATA.meses.length];  // ene-jun: liquidación oficial; jul-ago: tablero operativo
                 const pctGest = Math.round(gest/apto*100);
                 const pctCtto = Math.round(ctto/gest*100);
                 const pctConv = Math.round(venta/ctto*100);
                 return `<tr>
-                  <td style="padding:2px 4px"><strong>${m}</strong></td>
-                  <td class="r" style="padding:2px 4px">${fmt(apto)}</td>
-                  <td class="r" style="padding:2px 4px">${fmt(gest)}</td>
-                  <td class="r" style="padding:2px 4px">${badge(pctGest+'%', pctGest>=70?'g':'y')}</td>
-                  <td class="r" style="padding:2px 4px">${fmt(ctto)}</td>
-                  <td class="r" style="padding:2px 4px">${badge(pctCtto+'%', pctCtto>=50?'g':'y')}</td>
-                  <td class="r" style="padding:2px 4px;font-weight:700">${fmt(venta)}</td>
-                  <td class="r" style="padding:2px 4px">${badge(pctConv+'%', pctConv>=10?'g':pctConv>=7?'y':'r')}</td>
+                  <td style="padding:1px 4px"><strong>${m}</strong></td>
+                  <td class="r" style="padding:1px 4px">${fmt(apto)}</td>
+                  <td class="r" style="padding:1px 4px">${fmt(gest)}</td>
+                  <td class="r" style="padding:1px 4px">${badge(pctGest+'%', pctGest>=70?'g':'y')}</td>
+                  <td class="r" style="padding:1px 4px">${fmt(ctto)}</td>
+                  <td class="r" style="padding:1px 4px">${badge(pctCtto+'%', pctCtto>=50?'g':'y')}</td>
+                  <td class="r" style="padding:1px 4px;font-weight:700">${fmt(venta)}</td>
+                  <td class="r" style="padding:1px 4px">${badge(pctConv+'%', pctConv>=10?'g':pctConv>=7?'y':'r')}</td>
                 </tr>`;
               }).join('')}
-              <tr class="total" style="font-size:.52rem">
-                <td style="padding:2px 4px">Total</td>
-                <td class="r" style="padding:2px 4px">${fmt(aptTotal)}</td>
-                <td class="r" style="padding:2px 4px">${fmt(gestTotal)}</td>
-                <td class="r" style="padding:2px 4px">${badge(Math.round(gestTotal/aptTotal*100)+'%', 'g')}</td>
-                <td class="r" style="padding:2px 4px">${fmt(contTotal)}</td>
-                <td class="r" style="padding:2px 4px">${badge(Math.round(contTotal/gestTotal*100)+'%', 'y')}</td>
-                <td class="r" style="padding:2px 4px;font-weight:700">${fmt(liqTotal)}</td>
-                <td class="r" style="padding:2px 4px">${badge(Math.round(liqTotal/contTotal*100)+'%', 'y')}</td>
+              <tr class="total" style="font-size:.48rem">
+                <td style="padding:1px 4px">Total</td>
+                <td class="r" style="padding:1px 4px">${fmt(aptTotal)}</td>
+                <td class="r" style="padding:1px 4px">${fmt(gestTotal)}</td>
+                <td class="r" style="padding:1px 4px">${badge(Math.round(gestTotal/aptTotal*100)+'%', 'g')}</td>
+                <td class="r" style="padding:1px 4px">${fmt(contTotal)}</td>
+                <td class="r" style="padding:1px 4px">${badge(Math.round(contTotal/gestTotal*100)+'%', 'y')}</td>
+                <td class="r" style="padding:1px 4px;font-weight:700">${fmt(liqTotal)}</td>
+                <td class="r" style="padding:1px 4px">${badge(Math.round(liqTotal/contTotal*100)+'%', 'y')}</td>
               </tr>
             </tbody>
           </table>
@@ -552,7 +585,7 @@ function renderCampanas() {
       </div>
 
       <div class="panel" style="padding:10px 14px; display:flex; flex-direction:column; min-height:0; overflow:hidden">
-        <h3 style="margin-bottom:6px; padding-bottom:3px; font-size:.7rem">${icon('filter')} Tipificación de rechazo (semestre)</h3>
+        <h3 style="margin-bottom:6px; padding-bottom:3px; font-size:.7rem">${icon('filter')} Tipificación de rechazo <span style="font-weight:400;color:var(--gray3)">(1S, motivos ene-jun)</span></h3>
         <div style="display:flex; flex-direction:column; gap:4px; flex:1 1 0; min-height:0; justify-content:space-evenly">
           ${DESCARTE_MOTIVOS.map(d => {
             const w = Math.round(d.pct / maxDescarte * 65) + 15;
