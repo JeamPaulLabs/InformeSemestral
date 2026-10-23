@@ -447,7 +447,11 @@ function renderCampanas() {
   // (reg1S × contactab1S publicado, ya que el 1S no guardó el conteo crudo de contactados
   // por campaña — ver nota histórica abajo). Microseguro no tiene fila propia (igual que
   // antes), pero sí está en el total oficial/operativo de abajo.
+  // reg/ventas = ene-sep para Bienvenidas CP y Autogestión (únicas 2 con septiembre
+  // completo en la fuente, vía DATA_OP_SEP.porCampana); CP Stock y Masiva Voluntarios
+  // se quedan en ene-ago (no tienen septiembre todavía — ver nota al pie).
   const op = DATA_OP_JUL_AGO.porCampana;
+  const opSep = DATA_OP_SEP.porCampana;
   const detalleSemestre = [
     { c: 'Bienvenidas CP',        reg1S: 44428,  ventas1S: 6912, contactab1S: 79, key: 'Bienvenidas CP',     perfil: 'g' },
     { c: 'Autogestión',           reg1S: 4225,   ventas1S: 803,  contactab1S: 73, key: 'Autogestión',        perfil: 'g' },
@@ -459,16 +463,20 @@ function renderCampanas() {
     if (r.reg != null) return r;  // campañas de una sola vez, sin jul-ago (sin cambios)
     const aptosJulAgo = op[r.key].aptos.reduce((a,b)=>a+b,0);
     const ventasJulAgo = op[r.key].ventas.reduce((a,b)=>a+b,0);
-    return { ...r, reg: r.reg1S + aptosJulAgo, ventas: r.ventas1S + ventasJulAgo };
+    const sep = opSep[r.key];
+    const aptosSep = sep ? sep.aptos : 0;
+    const ventasSep = sep ? sep.ventas : 0;
+    return { ...r, reg: r.reg1S + aptosJulAgo + aptosSep, ventas: r.ventas1S + ventasJulAgo + ventasSep, tieneSep: !!sep };
   });
-  // contactados jul-ago reales por campaña (de las mismas capturas, fila "Registros contactados")
+  // contactados jul-ago y sep reales por campaña (de las mismas capturas, fila "Registros contactados")
   const CONTACTADOS_JUL_AGO = {
     'Bienvenidas CP': 5950+4692, 'Autogestión': 1440+1134, 'CP Stock': 5609+11089, 'Masiva Voluntarios': 4383+6309
   };
+  const CONTACTADOS_SEP = { 'Bienvenidas CP': 6192, 'Autogestión': 2144 };
   detalleSemestre.forEach(r => {
     if (r.reg1S == null) return;
     const contactados1S = Math.round(r.reg1S * r.contactab1S / 100);
-    const contactadosTotal = contactados1S + (CONTACTADOS_JUL_AGO[r.key] || 0);
+    const contactadosTotal = contactados1S + (CONTACTADOS_JUL_AGO[r.key] || 0) + (CONTACTADOS_SEP[r.key] || 0);
     r.contactab = Math.round(contactadosTotal / r.reg * 100) + ' %';
     r.convSC = (r.ventas / contactadosTotal * 100).toFixed(1).replace('.', ',') + ' %';
   });
@@ -479,11 +487,11 @@ function renderCampanas() {
   const filasNuevas = CAMPANAS_NUEVAS_AGO_OCT;
 
   const maxDescarte = Math.max(...DESCARTE_MOTIVOS.map(d=>d.pct));
-  const rechTotal = DATA.rechazados.reduce((a,b)=>a+b,0) + DATA_OP_JUL_AGO.rechazados.reduce((a,b)=>a+b,0);
-  const aptTotal  = DATA.aptos.reduce((a,b)=>a+b,0) + DATA_OP_JUL_AGO.aptos.reduce((a,b)=>a+b,0);
-  const gestTotal = DATA.gestionados.reduce((a,b)=>a+b,0) + DATA_OP_JUL_AGO.gestionados.reduce((a,b)=>a+b,0);
-  const contTotal = DATA.contactados.reduce((a,b)=>a+b,0) + DATA_OP_JUL_AGO.contactados.reduce((a,b)=>a+b,0);
-  const liqTotal  = DATA.ventasLiq.reduce((a,b)=>a+b,0) + DATA_OP_JUL_AGO.ventasOp.reduce((a,b)=>a+b,0);
+  const rechTotal = DATA.rechazados.reduce((a,b)=>a+b,0) + DATA_OP_JUL_AGO.rechazados.reduce((a,b)=>a+b,0) + DATA_OP_SEP.rechazados;
+  const aptTotal  = DATA.aptos.reduce((a,b)=>a+b,0) + DATA_OP_JUL_AGO.aptos.reduce((a,b)=>a+b,0) + DATA_OP_SEP.aptos;
+  const gestTotal = DATA.gestionados.reduce((a,b)=>a+b,0) + DATA_OP_JUL_AGO.gestionados.reduce((a,b)=>a+b,0) + DATA_OP_SEP.gestionados;
+  const contTotal = DATA.contactados.reduce((a,b)=>a+b,0) + DATA_OP_JUL_AGO.contactados.reduce((a,b)=>a+b,0) + DATA_OP_SEP.contactados;
+  const liqTotal  = DATA.ventasLiq.reduce((a,b)=>a+b,0) + DATA_OP_JUL_AGO.ventasOp.reduce((a,b)=>a+b,0) + DATA_OP_SEP.ventasOp;
 
   el.innerHTML = `
     <div style="height:100%; display:flex; flex-direction:column; min-height:0">
@@ -491,17 +499,17 @@ function renderCampanas() {
       <div class="kpi-card green" style="padding:4px 12px">
         <div class="kpi-label" style="font-size:.6rem">Bienvenidas CP</div>
         <div class="kpi-val" style="font-size:.85rem">${fmt(detalleSemestre[0].ventas)} <span style="font-size:.5rem;font-weight:500;color:var(--gray3)">ventas</span></div>
-        <div class="kpi-sub" style="font-size:.5rem">${fmt(Math.round(detalleSemestre[0].ventas/liqTotal*100))} % de las ventas ene-ago · ${detalleSemestre[0].convSC} de conversión</div>
+        <div class="kpi-sub" style="font-size:.5rem">${fmt(Math.round(detalleSemestre[0].ventas/liqTotal*100))} % de las ventas ene-sep · ${detalleSemestre[0].convSC} de conversión</div>
       </div>
       <div class="kpi-card green" style="padding:4px 12px">
         <div class="kpi-label" style="font-size:.6rem">Autogestión</div>
         <div class="kpi-val" style="font-size:.85rem">${detalleSemestre[1].convSC}</div>
-        <div class="kpi-sub" style="font-size:.5rem">Conversión más alta del portafolio (ene-ago)</div>
+        <div class="kpi-sub" style="font-size:.5rem">Conversión más alta del portafolio (ene-sep)</div>
       </div>
     </div>
 
     <div class="panel" style="padding:8px 14px; flex-shrink:0; margin-bottom:8px">
-      <h3 style="margin-bottom:3px; padding-bottom:2px; font-size:.68rem">${icon('target')} Rendimiento por campaña (ene-ago)</h3>
+      <h3 style="margin-bottom:3px; padding-bottom:2px; font-size:.68rem">${icon('target')} Rendimiento por campaña (ene-sep*)</h3>
       <div class="tbl-wrap" style="margin-top:0">
         <table class="tbl-compact" style="font-size:.56rem; width:100%">
           <colgroup>
@@ -530,14 +538,14 @@ function renderCampanas() {
                 <td class="r" style="padding:1px 4px">${badge(r.convSC, r.perfil)}</td>
               </tr>`).join('')}
             <tr class="total" style="font-size:.56rem">
-              <td style="padding:1px 4px">Total ene-ago</td><td class="r" style="padding:1px 4px">${fmt(aptTotal)}</td>
+              <td style="padding:1px 4px">Total ene-sep</td><td class="r" style="padding:1px 4px">${fmt(aptTotal)}</td>
               <td class="r" style="padding:1px 4px">${fmt(totalVentas)}</td>
               <td class="r">${Math.round(contTotal/aptTotal*100)} %</td><td class="r">${(totalVentas/contTotal*100).toFixed(1).replace('.', ',')} %</td>
             </tr>
           </tbody>
         </table>
       </div>
-      <div style="font-size:.5rem; color:var(--gray3); margin-top:3px">* Campañas puntuales solo de enero (no recurrentes). Base apta = registros que quedaron tras la depuración; ene-jun es cifra oficial, jul-ago es tablero operativo provisional (ver "Consolidado de las Bases"); el total ene-ago (${fmt(aptTotal)}) incluye Microseguro aunque no tiene fila propia. Rueda Seguro SBS y Billetera Protegida son campañas nuevas con rango ago-oct (no ene-ago) — no se suman al Total ene-ago.</div>
+      <div style="font-size:.5rem; color:var(--gray3); margin-top:3px">* Campañas puntuales solo de enero (no recurrentes). Base apta = registros que quedaron tras la depuración; ene-jun es cifra oficial, jul-ago/sep es tablero operativo provisional (ver "Consolidado de las Bases"). Solo Bienvenidas CP y Autogestión llegan a septiembre (únicas 2 con ese mes en la fuente); CP Stock y Masiva Voluntarios se quedan en ene-ago. El total ene-sep (${fmt(aptTotal)}) incluye Microseguro aunque no tiene fila propia. Rueda Seguro SBS y Billetera Protegida son campañas nuevas con rango ago-oct — no se suman a este total.</div>
     </div>
 
     <div class="two-col" style="gap:12px; flex:1; min-height:0; grid-template-rows:minmax(0,1fr); overflow:hidden">
@@ -555,7 +563,7 @@ function renderCampanas() {
             </div>`;
           }).join('')}
         </div>
-        <div style="font-size:.5rem; color:var(--gray3); margin-top:4px">${fmt(rechTotal)} registros descartados ene-ago (${Math.round(rechTotal/(rechTotal+aptTotal)*100)} % de la base recibida) — <strong>el desglose por motivo de arriba es solo ene-jun</strong>: el dashboard operativo de jul-ago no trae motivos de rechazo por campaña (solo totales), así que no hay con qué extender este gráfico sin inventar proporciones. El detalle mensual (sin motivo) está en "Consolidado de las Bases".</div>
+        <div style="font-size:.5rem; color:var(--gray3); margin-top:4px">${fmt(rechTotal)} registros descartados ene-sep (${Math.round(rechTotal/(rechTotal+aptTotal)*100)} % de la base recibida) — <strong>el desglose por motivo de arriba es solo ene-jun</strong>: el dashboard operativo de jul-ago-sep no trae motivos de rechazo por campaña (solo totales), así que no hay con qué extender este gráfico sin inventar proporciones. El detalle mensual (sin motivo) está en "Consolidado de las Bases".</div>
       </div>
 
       <div class="panel" style="padding:10px 14px; display:flex; flex-direction:column; min-height:0; overflow:hidden">
@@ -600,7 +608,7 @@ function renderCampanas() {
                 </tr>`;
                 }).join('') + `
               <tr class="total" style="font-size:.44rem">
-                <td style="padding:0 4px">Total ene-ago</td>
+                <td style="padding:0 4px">Total ene-sep</td>
                 <td class="r" style="padding:0 4px">${fmt(aptTotal)}</td>
                 <td class="r" style="padding:0 4px">${fmt(gestTotal)}</td>
                 <td class="r" style="padding:0 4px">${miniBadge(Math.round(gestTotal/aptTotal*100)+'%', 'g')}</td>
@@ -613,7 +621,7 @@ function renderCampanas() {
             </tbody>
           </table>
         </div>
-        <div style="font-size:.44rem; color:var(--gray3); margin-top:2px">Cada mes: aptos → gestión → contacto → ventas. *Septiembre parcial: solo Bienvenidas CP + Autogestión + Microseguro (CP Stock y Masiva Voluntarios no tienen setiembre en la fuente todavía) — no entra en el Total ene-ago.</div>
+        <div style="font-size:.44rem; color:var(--gray3); margin-top:2px">Cada mes: aptos → gestión → contacto → ventas. *Septiembre parcial: solo Bienvenidas CP + Autogestión + Microseguro (CP Stock y Masiva Voluntarios no tienen setiembre en la fuente todavía) — el Total ene-sep ya lo incluye, con esa salvedad.</div>
       </div>
     </div>
 
