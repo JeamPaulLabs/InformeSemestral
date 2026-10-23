@@ -314,7 +314,7 @@ function renderBases() {
   const pctRechazoAll = [...DATA.pctRechazo, ...DATA_OP_JUL_AGO.pctRechazo];
   const gestionadosAll = [...DATA.gestionados, ...DATA_OP_JUL_AGO.gestionados];
   const contactadosAll = [...DATA.contactados, ...DATA_OP_JUL_AGO.contactados];
-  const ventasAll = [...DATA.ventasLiq, ...DATA_OP_JUL_AGO.ventasOp];
+  const ventasAll = [...DATA.ventasLiq, ...DATA_OP_JUL_AGO.ventasLiq];
 
   const totalRec  = registrosAll.reduce((a,b)=>a+b,0);
   const totalRech = rechazadosAll.reduce((a,b)=>a+b,0);
@@ -394,7 +394,7 @@ function renderBases() {
             </tbody>
           </table>
         </div>
-        <div style="font-size:.48rem; color:var(--gray3); margin-top:2px">(op.) = jul-ago, cifra provisional del tablero operativo (sin liquidación oficial todavía); recibidos de CP Stock/Masiva Voluntarios esos meses = aptos entregados (el dashboard nuevo no desglosa un "recibidos" previo al filtro para esas 2 campañas).</div>
+        <div style="font-size:.48rem; color:var(--gray3); margin-top:2px">(op.) = jul-ago, embudo (recibidos→aptos→gestión→contacto) del tablero operativo — las <strong>ventas ya son la cifra oficial de liquidación</strong> (llegó después). Recibidos de CP Stock/Masiva Voluntarios esos meses = aptos entregados (el dashboard nuevo no desglosa un "recibidos" previo al filtro para esas 2 campañas).</div>
       </div>
 
       <div class="panel" style="padding:6px 14px; display:flex; flex-direction:column; min-height:0; overflow:hidden">
@@ -496,7 +496,7 @@ function renderCampanas() {
   const aptTotal  = DATA.aptos.reduce((a,b)=>a+b,0) + DATA_OP_JUL_AGO.aptos.reduce((a,b)=>a+b,0) + DATA_OP_SEP.aptos;
   const gestTotal = DATA.gestionados.reduce((a,b)=>a+b,0) + DATA_OP_JUL_AGO.gestionados.reduce((a,b)=>a+b,0) + DATA_OP_SEP.gestionados;
   const contTotal = DATA.contactados.reduce((a,b)=>a+b,0) + DATA_OP_JUL_AGO.contactados.reduce((a,b)=>a+b,0) + DATA_OP_SEP.contactados;
-  const liqTotal  = DATA.ventasLiq.reduce((a,b)=>a+b,0) + DATA_OP_JUL_AGO.ventasOp.reduce((a,b)=>a+b,0) + DATA_OP_SEP.ventasOp;
+  const liqTotal  = DATA.ventasLiq.reduce((a,b)=>a+b,0) + DATA_OP_JUL_AGO.ventasLiq.reduce((a,b)=>a+b,0) + DATA_OP_SEP.ventasLiq;
 
   el.innerHTML = `
     <div style="height:100%; display:flex; flex-direction:column; min-height:0">
@@ -504,7 +504,7 @@ function renderCampanas() {
       <div class="kpi-card green" style="padding:3px 12px">
         <div class="kpi-label" style="font-size:.58rem">Bienvenidas CP</div>
         <div class="kpi-val" style="font-size:.8rem">${fmt(detalleSemestre[0].ventas)} <span style="font-size:.48rem;font-weight:500;color:var(--gray3)">ventas</span></div>
-        <div class="kpi-sub" style="font-size:.48rem">${fmt(Math.round(detalleSemestre[0].ventas/liqTotal*100))} % de las ventas ene-sep · ${detalleSemestre[0].convSC} de conversión</div>
+        <div class="kpi-sub" style="font-size:.48rem">${fmt(Math.round(detalleSemestre[0].ventas/totalVentas*100))} % de las ventas por campaña ene-sep · ${detalleSemestre[0].convSC} de conversión</div>
       </div>
       <div class="kpi-card green" style="padding:3px 12px">
         <div class="kpi-label" style="font-size:.58rem">Autogestión</div>
@@ -550,43 +550,28 @@ function renderCampanas() {
           </tbody>
         </table>
       </div>
-      <div style="font-size:.5rem; color:var(--gray3); margin-top:3px">* Campañas puntuales solo de enero (no recurrentes). Base apta = registros que quedaron tras la depuración; ene-jun es cifra oficial, jul-ago/sep es tablero operativo provisional (ver "Consolidado de las Bases"). Solo Bienvenidas CP y Autogestión llegan a septiembre (únicas 2 con ese mes en la fuente); CP Stock y Masiva Voluntarios se quedan en ene-ago. El total ene-sep (${fmt(aptTotal)}) incluye Microseguro aunque no tiene fila propia. Rueda Seguro SBS y Billetera Protegida son campañas nuevas con rango ago-oct — no se suman a este total.</div>
+      <div style="font-size:.5rem; color:var(--gray3); margin-top:3px">* Campañas puntuales solo de enero (no recurrentes). Base apta = registros que quedaron tras la depuración; ene-jun es liquidación oficial. Jul-ago-sep: base apta/contactabilidad del tablero operativo, pero <strong>ventas ya es la cifra oficial de liquidación</strong>. Solo Bienvenidas CP y Autogestión llegan a septiembre (únicas 2 con ese mes en la fuente); CP Stock y Masiva Voluntarios se quedan en ene-ago. El total ene-sep (${fmt(aptTotal)}) incluye Microseguro aunque no tiene fila propia. Rueda Seguro SBS y Billetera Protegida son campañas nuevas con rango ago-oct — no se suman a este total.</div>
     </div>
 
     <div class="two-col" style="gap:12px; flex:1; min-height:0; grid-template-rows:minmax(0,1fr); overflow:hidden">
       <div class="panel" style="padding:10px 14px; display:flex; flex-direction:column; min-height:0; overflow:hidden">
-        <h3 style="margin-bottom:3px; padding-bottom:2px; font-size:.64rem">${icon('filter')} Rechazo del canal <span style="font-weight:400;color:var(--gray3)">(1S, motivos ene-jun)</span></h3>
-        <div style="display:flex; flex-direction:column; gap:2px; flex:0 0 auto">
-          ${DESCARTE_MOTIVOS.map(d => {
-            const w = Math.round(d.pct / maxDescarte * 65) + 15;
-            return `<div style="display:flex; align-items:center; gap:4px">
-              <span style="flex:0 0 130px; font-size:.5rem; color:var(--gray3); text-align:right; white-space:nowrap; overflow:hidden; text-overflow:ellipsis">${d.motivo}</span>
-              <div style="flex:1; height:7px; background:rgba(255,107,53,.12); border-radius:4px; overflow:hidden">
-                <div style="width:${w}%; height:100%; border-radius:4px; background:linear-gradient(90deg,var(--warn),#ff8c5a)"></div>
-              </div>
-              <span style="flex:0 0 28px; font-size:.5rem; font-weight:700; color:var(--blue); text-align:right">${d.pct}%</span>
-            </div>`;
-          }).join('')}
-        </div>
-        <div style="font-size:.44rem; color:var(--gray3); margin:3px 0 6px">${fmt(rechTotal)} registros descartados ene-sep en todo el canal — este desglose por motivo es solo 1S (ene-jun); CP Stock/Masiva/Microseguro no traen motivo de rechazo jul-sep en la fuente nueva.</div>
-
-        <h3 style="margin-bottom:3px; padding-bottom:2px; font-size:.64rem; border-top:1px dashed var(--gray2); padding-top:5px">${icon('filter')} Rechazo Bienvenida CP + Autogestión <span style="font-weight:400;color:var(--gray3)">(ene, abr-sep)</span></h3>
-        <div style="display:flex; flex-direction:column; gap:1px; flex:1 1 0; min-height:0; overflow:hidden; justify-content:space-evenly">
+        <h3 style="margin-bottom:4px; padding-bottom:3px; font-size:.68rem">${icon('filter')} Tipificación de rechazo <span style="font-weight:400;color:var(--gray3)">(ene-sep)</span></h3>
+        <div style="display:flex; flex-direction:column; gap:5px; flex:1 1 0; min-height:0; justify-content:space-evenly">
           ${(() => {
-            const maxR = Math.max(...RECHAZO_BIENVENIDA_AUTOGESTION.motivos.map(d=>d.pct));
-            return RECHAZO_BIENVENIDA_AUTOGESTION.motivos.map(d => {
-              const w = Math.round(d.pct / maxR * 65) + 15;
-              return `<div style="display:flex; align-items:center; gap:4px">
-                <span style="flex:0 0 130px; font-size:.48rem; color:var(--gray3); text-align:right; white-space:nowrap; overflow:hidden; text-overflow:ellipsis">${d.motivo}</span>
-                <div style="flex:1; height:7px; background:rgba(90,226,128,.15); border-radius:4px; overflow:hidden">
-                  <div style="width:${w}%; height:100%; border-radius:4px; background:linear-gradient(90deg,var(--teal),var(--green))"></div>
+            const maxT = Math.max(...DESCARTE_MOTIVOS_TOTAL.map(d=>d.pct));
+            return DESCARTE_MOTIVOS_TOTAL.map(d => {
+              const w = Math.round(d.pct / maxT * 65) + 15;
+              return `<div style="display:flex; align-items:center; gap:5px">
+                <span style="flex:0 0 150px; font-size:.56rem; color:var(--gray3); text-align:right; white-space:nowrap; overflow:hidden; text-overflow:ellipsis">${d.motivo}</span>
+                <div style="flex:1; height:10px; background:rgba(255,107,53,.12); border-radius:4px; overflow:hidden">
+                  <div style="width:${w}%; height:100%; border-radius:4px; background:linear-gradient(90deg,var(--warn),#ff8c5a)"></div>
                 </div>
-                <span style="flex:0 0 28px; font-size:.48rem; font-weight:700; color:var(--blue); text-align:right">${d.pct}%</span>
+                <span style="flex:0 0 34px; font-size:.56rem; font-weight:700; color:var(--blue); text-align:right">${d.pct}%</span>
               </div>`;
             }).join('');
           })()}
         </div>
-        <div style="font-size:.44rem; color:var(--gray3); margin-top:3px">${fmt(RECHAZO_BIENVENIDA_AUTOGESTION.total)} registros descartados de estas 2 campañas, ene + abr-sep (faltan feb-mar, se perdieron las capturas). Fuente: panel "Detalle descartados" del dashboard operativo, filtrado por mes.</div>
+        <div style="font-size:.5rem; color:var(--gray3); margin-top:4px">${fmt(rechTotal)} registros descartados ene-sep en todo el canal. Metodología: canal completo de ene-jun (548.368, todas las campañas) + incremental real de jul-ago-sep (38.497) de Bienvenida CP + Autogestión. <strong>CP Stock, Masiva Voluntarios y Microseguro sí tuvieron rechazo en jul-ago-sep</strong>, pero el dashboard nuevo no lo tipifica por motivo para esas 3 campañas — por eso no suman aquí (el total de registros de esas 3 sí está contado en "Consolidado de las Bases", solo no con motivo). Categorías re-agrupadas a la misma taxonomía del 1S.</div>
       </div>
 
       <div class="panel" style="padding:10px 14px; display:flex; flex-direction:column; min-height:0; overflow:hidden">
@@ -614,8 +599,8 @@ function renderCampanas() {
                 const nOf = DATA.meses.length, nOp = DATA_OP_JUL_AGO.meses.length;
                 let gest, ctto, apto, venta, parcial = false;
                 if (i < nOf) { gest=DATA.gestionados[i]; ctto=DATA.contactados[i]; apto=DATA.aptos[i]; venta=DATA.ventasLiq[i]; }
-                else if (i < nOf+nOp) { const j=i-nOf; gest=DATA_OP_JUL_AGO.gestionados[j]; ctto=DATA_OP_JUL_AGO.contactados[j]; apto=DATA_OP_JUL_AGO.aptos[j]; venta=DATA_OP_JUL_AGO.ventasOp[j]; }
-                else { gest=DATA_OP_SEP.gestionados; ctto=DATA_OP_SEP.contactados; apto=DATA_OP_SEP.aptos; venta=DATA_OP_SEP.ventasOp; parcial=true; }
+                else if (i < nOf+nOp) { const j=i-nOf; gest=DATA_OP_JUL_AGO.gestionados[j]; ctto=DATA_OP_JUL_AGO.contactados[j]; apto=DATA_OP_JUL_AGO.aptos[j]; venta=DATA_OP_JUL_AGO.ventasLiq[j]; }
+                else { gest=DATA_OP_SEP.gestionados; ctto=DATA_OP_SEP.contactados; apto=DATA_OP_SEP.aptos; venta=DATA_OP_SEP.ventasLiq; parcial=true; }
                 const pctGest = Math.round(gest/apto*100);
                 const pctCtto = Math.round(ctto/gest*100);
                 const pctConv = Math.round(venta/ctto*100);
@@ -1746,7 +1731,7 @@ function renderDetalleBienvenida() {
       "El descarte principal (1S) es **Cuota Protegida Activa (50,9 %)**, lo que indica que el 1S se depuró correctamente contra clientes vigentes antes de lanzar el marcador.",
       "**Registros enviados anteriormente:** cada vez hay menos clientes nuevos en la base — hay mucho cliente que ya gestionamos en algún momento (los re-envíos suman el **16,6 % del descarte** en el 1S).",
       "**Venta Exitosa** representa el **15,9 % de la gestión de leads aptos en el 1S**, convirtiéndose en el motor de ventas del canal.",
-      "El detalle de motivos de descarte y tipificación de leads (tablas 2 y 4) sigue a nivel **1S (ene-jun)** — jul-sep solo se actualizó el resumen mensual (recibidos, rechazo, aptos, contactabilidad, ventas); falta el desglose de motivos para esos 3 meses."
+      "**Tabla 2 (motivos de descarte)** sigue a nivel **1S (ene-jun)**: el dashboard operativo de jul-sep no trae motivos de rechazo para esta campaña. **Tabla 4 (tipificación de leads)** sí extiende a jul-sep, pero esos 3 meses son una **estimación algorítmica** (se reparte el total 1S de cada motivo según la contactabilidad y ventas reales de cada mes) — no son conteos reales por motivo, a diferencia de ene-jun."
     ]
   };
   renderCampanaDeepDive('detalle-bienvenida-body', data);
@@ -1765,7 +1750,13 @@ function renderDetalleStock() {
       { mes: 'Marzo', recibidos: 69741, rechazados: 41761, pctRechazo: '59,9', aptos: 27980, contactab: '59,2', ventas: 626, conversion: '3,8', pctVentaRec: '2,2' },
       { mes: 'Abril', recibidos: 82833, rechazados: 53460, pctRechazo: '64,5', aptos: 29373, contactab: '56,4', ventas: 77, conversion: '0,5', pctVentaRec: '0,3' },
       { mes: 'Mayo', recibidos: 82833, rechazados: 53460, pctRechazo: '64,5', aptos: 29373, contactab: '59,3', ventas: 750, conversion: '4,3', pctVentaRec: '2,6' },
-      { mes: 'Junio', recibidos: 114104, rechazados: 74819, pctRechazo: '65,6', aptos: 39285, contactab: '46,2', ventas: 629, conversion: '3,9', pctVentaRec: '1,6' }
+      { mes: 'Junio', recibidos: 114104, rechazados: 74819, pctRechazo: '65,6', aptos: 39285, contactab: '46,2', ventas: 629, conversion: '3,9', pctVentaRec: '1,6' },
+      // Jul-Ago: "Resumen Anual TMK Vanti" filtrado por campaña CP Stock (ver context_Televentas/
+      // Reporte Ilio/capturas_campanas/). Esa vista no trae "recibidos" previo al filtro ni motivos de
+      // rechazo — "recibidos" aquí = aptos entregados (rechazados=0 no es que no haya descarte real,
+      // es que el dashboard nuevo no lo desglosa para esta campaña). Septiembre no está disponible.
+      { mes: 'Julio', recibidos: 15362, rechazados: 0, pctRechazo: '0,0', aptos: 15362, contactab: '44,1', ventas: 310, conversion: '5,5', pctVentaRec: '2,0', tipificado: false },
+      { mes: 'Agosto', recibidos: 18068, rechazados: 0, pctRechazo: '0,0', aptos: 18068, contactab: '62,4', ventas: 357, conversion: '3,2', pctVentaRec: '2,0', tipificado: false }
     ],
     tipificacionRechazo: [
       { motivo: 'Registro Enviado Anteriormente', cant: 96218, pct: '36,8' },
@@ -1798,7 +1789,7 @@ function renderDetalleStock() {
       "CP Stock es la **base de mayor volumen (420.641 registros recibidos)** en el 1S.",
       "El descarte estructural de **Registro Enviado Anteriormente (36,8 %)** y **Cuota Activa (32,7 %)** suma el **69,5 % del rechazo**, confirmando el agotamiento de la base.",
       "El no contacto es muy alto (**48,3 %**), impulsado por contestadores automáticos (**38,6 %**), lo que exige depuración telefónica en 2S.",
-      "**Jul-Ago (dato parcial, nuevo dashboard \"Resumen Anual TMK Vanti\"):** 15.362 y 18.068 registros aptos entregados, con 310 y 357 ventas (sin desglose de recibidos/rechazo todavía — pendiente para completar la tabla mes a mes; septiembre aún no tiene este corte)."
+      "**Jul-Ago** ya están en el resumen mensual (tabla 1 y 3) y en la tabla 4 (tipificación de leads, estimada a partir de contactabilidad/ventas reales). **Tabla 2 (motivos de descarte)** sigue a nivel 1S: el dashboard nuevo no desglosa motivos para esta campaña. Septiembre todavía no tiene corte."
     ]
   };
   renderCampanaDeepDive('detalle-stock-body', data);
@@ -1817,7 +1808,11 @@ function renderDetalleVoluntarios() {
       { mes: 'Marzo', recibidos: 41873, rechazados: 4562, pctRechazo: '10,9', aptos: 37311, contactab: '24,5', ventas: 22, conversion: '0,3', pctVentaRec: '0,1' },
       { mes: 'Abril', recibidos: 49232, rechazados: 48734, pctRechazo: '99,0', aptos: 498, contactab: '42,6', ventas: 0, conversion: '0,0', pctVentaRec: '0,0' },
       { mes: 'Mayo', recibidos: 49232, rechazados: 48734, pctRechazo: '99,0', aptos: 498, contactab: '43,2', ventas: 5, conversion: '2,3', pctVentaRec: '1,0' },
-      { mes: 'Junio', recibidos: 34574, rechazados: 17661, pctRechazo: '51,1', aptos: 16913, contactab: '27,7', ventas: 143, conversion: '3,1', pctVentaRec: '0,8' }
+      { mes: 'Junio', recibidos: 34574, rechazados: 17661, pctRechazo: '51,1', aptos: 16913, contactab: '27,7', ventas: 143, conversion: '3,1', pctVentaRec: '0,8' },
+      // Jul-Ago: mismo origen y misma salvedad que CP Stock (ver nota ahí) — recibidos = aptos
+      // entregados, sin desglose de rechazo disponible para esta campaña. Sin septiembre todavía.
+      { mes: 'Julio', recibidos: 16011, rechazados: 0, pctRechazo: '0,0', aptos: 16011, contactab: '27,2', ventas: 98, conversion: '2,2', pctVentaRec: '0,6', tipificado: false },
+      { mes: 'Agosto', recibidos: 9366, rechazados: 0, pctRechazo: '0,0', aptos: 9366, contactab: '67,4', ventas: 107, conversion: '1,7', pctVentaRec: '1,1', tipificado: false }
     ],
     tipificacionRechazo: [
       { motivo: 'Registro Enviado Anteriormente', cant: 103678, pct: '76,6' },
@@ -1849,7 +1844,7 @@ function renderDetalleVoluntarios() {
       "Densa y baja contactabilidad.",
       "**Febrero:** Cabinas exclusivas, actualmente no se encuentran activas.",
       "**Junio:** A corte, la base presenta un saludable porcentaje de conversión cercano al **5 %**, impulsado principalmente por la calidad de los registros y la integridad de la información suministrada en la base de datos.",
-      "**Jul-Ago (dato parcial, nuevo dashboard \"Resumen Anual TMK Vanti\"):** 16.011 y 9.366 registros aptos entregados, con 98 y 107 ventas (sin desglose de recibidos/rechazo todavía — pendiente para completar la tabla mes a mes; septiembre aún no tiene este corte)."
+      "**Jul-Ago** ya están en el resumen mensual (tabla 1 y 3) y en la tabla 4 (tipificación de leads, estimada a partir de contactabilidad/ventas reales). **Tabla 2 (motivos de descarte)** sigue a nivel 1S: el dashboard nuevo no desglosa motivos para esta campaña. Septiembre todavía no tiene corte."
     ]
   };
   renderCampanaDeepDive('detalle-voluntarios-body', data);
@@ -2313,7 +2308,7 @@ function renderCampanaDeepDive(campanaId, data) {
                   const g = grupo;
                   const pSem = r.cant / semTotal * 100;
                   const celdas = data.kpisBase.map(m => {
-                    if (!(m.recibidos > 0) || m.tipificado === false) return `<td class="r" style="border-right:1px solid rgba(0,0,0,.06); padding:2px 4px; color:var(--gray3)">—</td>`;
+                    if (!(m.recibidos > 0)) return `<td class="r" style="border-right:1px solid rgba(0,0,0,.06); padding:2px 4px; color:var(--gray3)">—</td>`;
                     const cm = parseFloat((m.contactab||'0').replace(',','.'));
                     let pMes;
                     if (r.isTitle) pMes = g === 'CE' ? cm : 100 - cm;
@@ -2333,7 +2328,7 @@ function renderCampanaDeepDive(campanaId, data) {
                 const totalRow = `
                 <tr class="total">
                   <td style="border-right:1px solid rgba(0,0,0,.07); padding:2px 4px">Total gestionado</td>
-                  ${data.kpisBase.map(m => `<td class="r" style="border-right:1px solid rgba(0,0,0,.07); padding:2px 4px">${(m.recibidos>0 && m.tipificado!==false)?'100 %':'—'}</td>`).join('')}
+                  ${data.kpisBase.map(m => `<td class="r" style="border-right:1px solid rgba(0,0,0,.07); padding:2px 4px">${m.recibidos>0?'100 %':'—'}</td>`).join('')}
                   <td class="r" style="padding:2px 4px">100 %</td>
                 </tr>`;
                 return filas + totalRow;
