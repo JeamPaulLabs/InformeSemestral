@@ -474,6 +474,9 @@ function renderCampanas() {
   });
 
   const totalVentas = detalleSemestre.reduce((a, r) => a + r.ventas, 0);
+  // Campañas nuevas (ago-oct, sin precedente en ene-ago) — se muestran como filas aparte,
+  // con su propio período, no se suman al Total de arriba (son rangos de meses distintos).
+  const filasNuevas = CAMPANAS_NUEVAS_AGO_OCT;
 
   const maxDescarte = Math.max(...DESCARTE_MOTIVOS.map(d=>d.pct));
   const rechTotal = DATA.rechazados.reduce((a,b)=>a+b,0) + DATA_OP_JUL_AGO.rechazados.reduce((a,b)=>a+b,0);
@@ -497,93 +500,47 @@ function renderCampanas() {
       </div>
     </div>
 
-    <div class="two-col" style="gap:12px; flex:1; min-height:0; grid-template-rows:minmax(0,1fr); overflow:hidden">
-      <div class="panel" style="padding:10px 14px; display:flex; flex-direction:column; min-height:0; overflow:hidden">
-        <h3 style="margin-bottom:3px; padding-bottom:2px; font-size:.68rem">${icon('target')} Rendimiento por campaña (ene-ago)</h3>
-        <div class="tbl-wrap" style="margin-top:0; flex:0.85 1 0; min-height:0; overflow:hidden">
-          <table class="tbl-compact" style="font-size:.56rem; height:100%; width:100%">
-            <colgroup>
-              <col style="width:26%"><col style="width:16%"><col style="width:14%">
-              <col style="width:18%"><col style="width:26%">
-            </colgroup>
-            <thead><tr>
-              <th style="padding:1px 4px">Campaña</th><th class="r" style="padding:1px 4px">Base apta</th><th class="r" style="padding:1px 4px">Ventas</th>
-              <th class="r" style="padding:1px 4px">Contactab.</th><th class="r" style="padding:1px 4px">Conv./contacto</th>
-            </tr></thead>
-            <tbody>
-              ${detalleSemestre.map(r=>`
-                <tr>
-                  <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:1px 4px">${badge(r.c, r.perfil)}</td>
-                  <td class="r" style="padding:1px 4px">${fmt(r.reg)}</td>
-                  <td class="r" style="padding:1px 4px"><strong>${fmt(r.ventas)}</strong></td>
-                  <td class="r" style="padding:1px 4px">${badge(r.contactab, r.perfil)}</td>
-                  <td class="r" style="padding:1px 4px">${badge(r.convSC, r.perfil)}</td>
-                </tr>`).join('')}
-              <tr class="total" style="font-size:.56rem">
-                <td style="padding:1px 4px">Total</td><td class="r" style="padding:1px 4px">${fmt(aptTotal)}</td>
-                <td class="r" style="padding:1px 4px">${fmt(totalVentas)}</td>
-                <td class="r">${Math.round(contTotal/aptTotal*100)} %</td><td class="r">${(totalVentas/contTotal*100).toFixed(1).replace('.', ',')} %</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div style="font-size:.5rem; color:var(--gray3); margin-top:3px">* Campañas puntuales solo de enero (no recurrentes). Base apta = registros que quedaron tras la depuración; ene-jun es cifra oficial, jul-ago es tablero operativo provisional (ver "Consolidado de las Bases"); el total (${fmt(aptTotal)}) incluye Microseguro aunque no tiene fila propia.</div>
-
-        <div style="display:flex; gap:10px; margin-top:4px; padding:4px 8px; background:rgba(255,193,7,.08); border-radius:5px; font-size:.54rem">
-          <strong style="color:var(--blue)">Campañas nuevas (ago-oct, fuera de ene-ago):</strong>
-          <span>Rueda Seguro SBS: ${fmt(16360)} aptos, <strong>254</strong> ventas (${badge('5,3 %','y')} conv.)</span>
-          <span>Billetera Protegida: ${fmt(15743)} aptos, <strong>57</strong> ventas (${badge('1,3 %','r')} conv.)</span>
-        </div>
-
-        <h3 style="margin:5px 0 2px; padding-bottom:2px; font-size:.68rem">${icon('bar-chart-3')} Tipificación de aptos por mes</h3>
-        <div class="tbl-wrap" style="margin-top:0; flex:1.3 1 0; min-height:0; overflow:hidden">
-          <table class="tbl-compact" style="font-size:.5rem; height:100%; width:100%">
-            <thead><tr>
-              <th style="padding:1px 4px">Mes</th>
-              <th class="r" style="padding:1px 4px">Aptos</th>
-              <th class="r" style="padding:1px 4px">Gestión</th>
-              <th class="r" style="padding:1px 4px">% Gest.</th>
-              <th class="r" style="padding:1px 4px">Contacto</th>
-              <th class="r" style="padding:1px 4px">% Ctto.</th>
-              <th class="r" style="padding:1px 4px">Ventas</th>
-              <th class="r" style="padding:1px 4px">% Conv.</th>
-            </tr></thead>
-            <tbody>
-              ${[...DATA.meses, ...DATA_OP_JUL_AGO.meses].map((m,i)=>{
-                const gest = i < DATA.meses.length ? DATA.gestionados[i] : DATA_OP_JUL_AGO.gestionados[i-DATA.meses.length];
-                const ctto = i < DATA.meses.length ? DATA.contactados[i] : DATA_OP_JUL_AGO.contactados[i-DATA.meses.length];
-                const apto = i < DATA.meses.length ? DATA.aptos[i] : DATA_OP_JUL_AGO.aptos[i-DATA.meses.length];
-                const venta = i < DATA.meses.length ? DATA.ventasLiq[i] : DATA_OP_JUL_AGO.ventasOp[i-DATA.meses.length];  // ene-jun: liquidación oficial; jul-ago: tablero operativo
-                const pctGest = Math.round(gest/apto*100);
-                const pctCtto = Math.round(ctto/gest*100);
-                const pctConv = Math.round(venta/ctto*100);
-                return `<tr>
-                  <td style="padding:1px 4px"><strong>${m}</strong></td>
-                  <td class="r" style="padding:1px 4px">${fmt(apto)}</td>
-                  <td class="r" style="padding:1px 4px">${fmt(gest)}</td>
-                  <td class="r" style="padding:1px 4px">${badge(pctGest+'%', pctGest>=70?'g':'y')}</td>
-                  <td class="r" style="padding:1px 4px">${fmt(ctto)}</td>
-                  <td class="r" style="padding:1px 4px">${badge(pctCtto+'%', pctCtto>=50?'g':'y')}</td>
-                  <td class="r" style="padding:1px 4px;font-weight:700">${fmt(venta)}</td>
-                  <td class="r" style="padding:1px 4px">${badge(pctConv+'%', pctConv>=10?'g':pctConv>=7?'y':'r')}</td>
-                </tr>`;
-              }).join('')}
-              <tr class="total" style="font-size:.48rem">
-                <td style="padding:1px 4px">Total</td>
-                <td class="r" style="padding:1px 4px">${fmt(aptTotal)}</td>
-                <td class="r" style="padding:1px 4px">${fmt(gestTotal)}</td>
-                <td class="r" style="padding:1px 4px">${badge(Math.round(gestTotal/aptTotal*100)+'%', 'g')}</td>
-                <td class="r" style="padding:1px 4px">${fmt(contTotal)}</td>
-                <td class="r" style="padding:1px 4px">${badge(Math.round(contTotal/gestTotal*100)+'%', 'y')}</td>
-                <td class="r" style="padding:1px 4px;font-weight:700">${fmt(liqTotal)}</td>
-                <td class="r" style="padding:1px 4px">${badge(Math.round(liqTotal/contTotal*100)+'%', 'y')}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div style="font-size:.48rem; color:var(--gray3); margin-top:2px; text-align:right">Cada mes: aptos → gestión → contacto → ventas</div>
+    <div class="panel" style="padding:8px 14px; flex-shrink:0; margin-bottom:8px">
+      <h3 style="margin-bottom:3px; padding-bottom:2px; font-size:.68rem">${icon('target')} Rendimiento por campaña (ene-ago)</h3>
+      <div class="tbl-wrap" style="margin-top:0">
+        <table class="tbl-compact" style="font-size:.56rem; width:100%">
+          <colgroup>
+            <col style="width:26%"><col style="width:16%"><col style="width:14%">
+            <col style="width:18%"><col style="width:26%">
+          </colgroup>
+          <thead><tr>
+            <th style="padding:1px 4px">Campaña</th><th class="r" style="padding:1px 4px">Base apta</th><th class="r" style="padding:1px 4px">Ventas</th>
+            <th class="r" style="padding:1px 4px">Contactab.</th><th class="r" style="padding:1px 4px">Conv./contacto</th>
+          </tr></thead>
+          <tbody>
+            ${detalleSemestre.map(r=>`
+              <tr>
+                <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:1px 4px">${badge(r.c, r.perfil)}</td>
+                <td class="r" style="padding:1px 4px">${fmt(r.reg)}</td>
+                <td class="r" style="padding:1px 4px"><strong>${fmt(r.ventas)}</strong></td>
+                <td class="r" style="padding:1px 4px">${badge(r.contactab, r.perfil)}</td>
+                <td class="r" style="padding:1px 4px">${badge(r.convSC, r.perfil)}</td>
+              </tr>`).join('')}
+            ${filasNuevas.map(r=>`
+              <tr style="background:rgba(255,193,7,.07)">
+                <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:1px 4px">${badge(r.c, r.perfil)} <span style="font-size:.44rem;color:var(--warn);font-weight:700">ago-oct</span></td>
+                <td class="r" style="padding:1px 4px">${fmt(r.reg)}</td>
+                <td class="r" style="padding:1px 4px"><strong>${fmt(r.ventas)}</strong></td>
+                <td class="r" style="padding:1px 4px">${badge(r.contactab, r.perfil)}</td>
+                <td class="r" style="padding:1px 4px">${badge(r.convSC, r.perfil)}</td>
+              </tr>`).join('')}
+            <tr class="total" style="font-size:.56rem">
+              <td style="padding:1px 4px">Total ene-ago</td><td class="r" style="padding:1px 4px">${fmt(aptTotal)}</td>
+              <td class="r" style="padding:1px 4px">${fmt(totalVentas)}</td>
+              <td class="r">${Math.round(contTotal/aptTotal*100)} %</td><td class="r">${(totalVentas/contTotal*100).toFixed(1).replace('.', ',')} %</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
+      <div style="font-size:.5rem; color:var(--gray3); margin-top:3px">* Campañas puntuales solo de enero (no recurrentes). Base apta = registros que quedaron tras la depuración; ene-jun es cifra oficial, jul-ago es tablero operativo provisional (ver "Consolidado de las Bases"); el total ene-ago (${fmt(aptTotal)}) incluye Microseguro aunque no tiene fila propia. Rueda Seguro SBS y Billetera Protegida son campañas nuevas con rango ago-oct (no ene-ago) — no se suman al Total ene-ago.</div>
+    </div>
 
+    <div class="two-col" style="gap:12px; flex:1; min-height:0; grid-template-rows:minmax(0,1fr); overflow:hidden">
       <div class="panel" style="padding:10px 14px; display:flex; flex-direction:column; min-height:0; overflow:hidden">
         <h3 style="margin-bottom:6px; padding-bottom:3px; font-size:.7rem">${icon('filter')} Tipificación de rechazo <span style="font-weight:400;color:var(--gray3)">(1S, motivos ene-jun)</span></h3>
         <div style="display:flex; flex-direction:column; gap:4px; flex:1 1 0; min-height:0; justify-content:space-evenly">
@@ -598,13 +555,71 @@ function renderCampanas() {
             </div>`;
           }).join('')}
         </div>
-        <div style="font-size:.54rem; color:var(--gray3); margin-top:4px; text-align:right">${fmt(rechTotal)} registros descartados (${Math.round(rechTotal/(rechTotal+aptTotal)*100)} % de la base recibida). El detalle mensual del rechazo está en la slide anterior (Consolidado de las Bases).</div>
+        <div style="font-size:.5rem; color:var(--gray3); margin-top:4px">${fmt(rechTotal)} registros descartados ene-ago (${Math.round(rechTotal/(rechTotal+aptTotal)*100)} % de la base recibida) — <strong>el desglose por motivo de arriba es solo ene-jun</strong>: el dashboard operativo de jul-ago no trae motivos de rechazo por campaña (solo totales), así que no hay con qué extender este gráfico sin inventar proporciones. El detalle mensual (sin motivo) está en "Consolidado de las Bases".</div>
+      </div>
+
+      <div class="panel" style="padding:10px 14px; display:flex; flex-direction:column; min-height:0; overflow:hidden">
+        <h3 style="margin-bottom:4px; padding-bottom:2px; font-size:.7rem">${icon('bar-chart-3')} Tipificación de aptos por mes</h3>
+        <div class="tbl-wrap" style="margin-top:0; flex:1 1 0; min-height:0; overflow:hidden">
+          <table class="tbl-compact" style="font-size:.46rem; width:100%">
+            <thead><tr>
+              <th style="padding:0 4px">Mes</th>
+              <th class="r" style="padding:0 4px">Aptos</th>
+              <th class="r" style="padding:0 4px">Gestión</th>
+              <th class="r" style="padding:0 4px">% Gest.</th>
+              <th class="r" style="padding:0 4px">Contacto</th>
+              <th class="r" style="padding:0 4px">% Ctto.</th>
+              <th class="r" style="padding:0 4px">Ventas</th>
+              <th class="r" style="padding:0 4px">% Conv.</th>
+            </tr></thead>
+            <tbody>
+              ${(() => {
+                const miniBadge = (txt, type) => {
+                  const colors = { g: ['rgba(0,205,147,.15)','#008060'], r: ['rgba(255,107,53,.15)','#c44a1a'], y: ['rgba(255,200,0,.2)','#8a6200'] };
+                  const [bg, fg] = colors[type];
+                  return `<span style="display:inline-block;padding:0 4px;border-radius:6px;font-size:.44rem;font-weight:700;background:${bg};color:${fg}">${txt}</span>`;
+                };
+                return [...DATA.meses, ...DATA_OP_JUL_AGO.meses, DATA_OP_SEP.mes].map((m,i)=>{
+                const nOf = DATA.meses.length, nOp = DATA_OP_JUL_AGO.meses.length;
+                let gest, ctto, apto, venta, parcial = false;
+                if (i < nOf) { gest=DATA.gestionados[i]; ctto=DATA.contactados[i]; apto=DATA.aptos[i]; venta=DATA.ventasLiq[i]; }
+                else if (i < nOf+nOp) { const j=i-nOf; gest=DATA_OP_JUL_AGO.gestionados[j]; ctto=DATA_OP_JUL_AGO.contactados[j]; apto=DATA_OP_JUL_AGO.aptos[j]; venta=DATA_OP_JUL_AGO.ventasOp[j]; }
+                else { gest=DATA_OP_SEP.gestionados; ctto=DATA_OP_SEP.contactados; apto=DATA_OP_SEP.aptos; venta=DATA_OP_SEP.ventasOp; parcial=true; }
+                const pctGest = Math.round(gest/apto*100);
+                const pctCtto = Math.round(ctto/gest*100);
+                const pctConv = Math.round(venta/ctto*100);
+                return `<tr${parcial?' style="background:rgba(255,193,7,.07)"':''}>
+                  <td style="padding:0 4px"><strong>${m}</strong>${parcial?' <span style="font-size:.38rem;color:var(--warn);font-weight:700">parcial*</span>':''}</td>
+                  <td class="r" style="padding:0 4px">${fmt(apto)}</td>
+                  <td class="r" style="padding:0 4px">${fmt(gest)}</td>
+                  <td class="r" style="padding:0 4px">${miniBadge(pctGest+'%', pctGest>=70?'g':'y')}</td>
+                  <td class="r" style="padding:0 4px">${fmt(ctto)}</td>
+                  <td class="r" style="padding:0 4px">${miniBadge(pctCtto+'%', pctCtto>=50?'g':'y')}</td>
+                  <td class="r" style="padding:0 4px;font-weight:700">${fmt(venta)}</td>
+                  <td class="r" style="padding:0 4px">${miniBadge(pctConv+'%', pctConv>=10?'g':pctConv>=7?'y':'r')}</td>
+                </tr>`;
+                }).join('') + `
+              <tr class="total" style="font-size:.44rem">
+                <td style="padding:0 4px">Total ene-ago</td>
+                <td class="r" style="padding:0 4px">${fmt(aptTotal)}</td>
+                <td class="r" style="padding:0 4px">${fmt(gestTotal)}</td>
+                <td class="r" style="padding:0 4px">${miniBadge(Math.round(gestTotal/aptTotal*100)+'%', 'g')}</td>
+                <td class="r" style="padding:0 4px">${fmt(contTotal)}</td>
+                <td class="r" style="padding:0 4px">${miniBadge(Math.round(contTotal/gestTotal*100)+'%', 'y')}</td>
+                <td class="r" style="padding:0 4px;font-weight:700">${fmt(liqTotal)}</td>
+                <td class="r" style="padding:0 4px">${miniBadge(Math.round(liqTotal/contTotal*100)+'%', 'y')}</td>
+              </tr>`;
+              })()}
+            </tbody>
+          </table>
+        </div>
+        <div style="font-size:.44rem; color:var(--gray3); margin-top:2px">Cada mes: aptos → gestión → contacto → ventas. *Septiembre parcial: solo Bienvenidas CP + Autogestión + Microseguro (CP Stock y Masiva Voluntarios no tienen setiembre en la fuente todavía) — no entra en el Total ene-ago.</div>
       </div>
     </div>
 
-    <div class="alert alert-info" style="margin:10px 0 14px; padding:10px 18px; flex-shrink:0">
+    <div class="alert alert-info" style="margin:8px 0 10px; padding:8px 16px; flex-shrink:0">
       <span class="ico">${icon('lightbulb')}</span>
-      <span style="font-size:.7rem"><strong>¿Por qué la gestión no llega al 100 %?</strong> El semestre cerró en <strong>97,9 %</strong>: la base de junio no llegó a tiempo — ingresó sobre el cierre del mes y ~8.000 registros quedaron sin tiempo de marcación.</span>
+      <span style="font-size:.66rem"><strong>¿Por qué la gestión no llega al 100 %?</strong> Junio (1S) cerró en <strong>97,9 %</strong>: la base no llegó a tiempo — ingresó sobre el cierre del mes y ~8.000 registros quedaron sin tiempo de marcación.</span>
     </div>
     </div>`;
 }
@@ -660,7 +675,7 @@ function renderAutogestion() {
       <div class="panel" style="padding:8px 12px; display:flex; flex-direction:column; min-height:0; overflow:hidden">
 
         <h3 style="margin-bottom:3px; padding-bottom:2px; font-size:.66rem">${icon('bar-chart-3')} Histórico mensual</h3>
-        <div class="tbl-wrap" style="margin-top:0; flex:1.7 1 0; min-height:0; overflow:hidden">
+        <div class="tbl-wrap" style="margin-top:0; flex:0 0 auto; min-height:0; overflow:hidden">
           <table class="tbl-compact" style="width:100%; table-layout:fixed; font-size:.56rem">
             <colgroup>
               <col style="width:13%"><col style="width:13%"><col style="width:11%"><col style="width:10%">
@@ -696,8 +711,8 @@ function renderAutogestion() {
           </table>
         </div>
 
-        <h3 style="margin:4px 0 2px; padding-bottom:2px; font-size:.64rem">${icon('users',{size:13})} Ventas Autogestión por asesor <span style="font-weight:400;color:var(--gray3)">(ene-jun)</span></h3>
-        <div class="tbl-wrap" style="margin-top:0; flex:0.8 1 0; min-height:0; overflow:hidden">
+        <h3 style="margin:8px 0 2px; padding-bottom:2px; font-size:.64rem">${icon('users',{size:13})} Ventas Autogestión por asesor <span style="font-weight:400;color:var(--gray3)">(ene-jun)</span></h3>
+        <div class="tbl-wrap" style="margin-top:0; flex:0 0 auto; min-height:0; overflow:hidden">
           <table class="tbl-compact" style="font-size:.6rem; width:100%">
             <thead><tr>
               <th>Asesor</th>${MESES.map(m=>`<th class="r" style="font-size:.56rem">${m}</th>`).join('')}<th class="r" style="font-size:.56rem">Total</th>
@@ -718,6 +733,10 @@ function renderAutogestion() {
           </table>
         </div>
 
+        <div class="alert alert-info" style="margin-top:8px; padding:8px 12px; flex:1 1 0; min-height:0; display:flex; align-items:center">
+          <span class="ico">${icon('info', {size: 14})}</span>
+          <span style="font-size:.6rem; line-height:1.4">Falta el desglose <strong>por asesor</strong> de jul-sep: las capturas del dashboard operativo traen el total de la campaña por mes, pero no abren por asesor (eso sale de <code>reporte de ventas.xlsx</code>, y en <code>context_Televentas/ventas autogestion/</code> solo está la versión hasta junio). El "Histórico mensual" de la izquierda sí llega a septiembre porque es el total de la campaña, no por asesor.</span>
+        </div>
       </div>
 
       <div class="panel" style="padding:8px 12px; display:flex; flex-direction:column; min-height:0; overflow:hidden">

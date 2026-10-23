@@ -74,6 +74,36 @@ const DATA_OP_JUL_AGO = {
   }
 };
 
+/* ── EXTENSIÓN PROVISIONAL SEPTIEMBRE 2026 (parcial — SOLO 3 de 5 campañas) ──
+   CP Stock y Masiva Voluntarios NO tienen septiembre en la captura (corte
+   incompleto en el dashboard al momento de pedir esto) — no se inventa ese
+   dato. Este bloque solo suma Bienvenidas CP + Autogestión + Microseguro,
+   que sí tienen septiembre completo. Por eso septiembre en "Tipificación de
+   aptos por mes" queda con una base más chica que un mes típico — no es que
+   bajó la operación, es que faltan 2 de 5 campañas en la fuente. */
+const DATA_OP_SEP = {
+  mes: 'Sep',
+  parcial: true,  // true = no están todas las campañas, usar nota aclaratoria
+  registros: 16780, rechazados: 4257, aptos: 12523, pctRechazo: 25.4,
+  gestionados: 12509, contactados: 9698, contactabilidad: 77.5, efectividad: 11.9,
+  ventasOp: 1158,
+  porCampana: {
+    'Bienvenidas CP': { aptos: 7979, ventas: 624 },
+    'Autogestión':    { aptos: 2938, ventas: 324 },
+    'Microseguro':    { aptos: 1606, ventas: 210 },
+  }
+};
+
+/* ── CAMPAÑAS NUEVAS AGO-OCT 2026 (sin precedente en el 1S) ──
+   Rueda Seguro SBS y Billetera Protegida. Mismo origen (capturas "TMK Vanti
+   Annual Management Summary"), pero su propio rango de meses (ago-oct, no
+   ene-ago) — ver detalle completo en los renderDetalleRuedaSBS/Billetera de
+   app.js. Aquí solo el resumen usado en la tabla "Rendimiento por campaña". */
+const CAMPANAS_NUEVAS_AGO_OCT = [
+  { c: 'Rueda Seguro SBS',     reg: 16360, ventas: 254, contactab: '48 %', convSC: '5,3 %', perfil: 'y' },
+  { c: 'Billetera Protegida',  reg: 15743, ventas: 57,  contactab: '48 %', convSC: '1,3 %', perfil: 'r' },
+];
+
 /* ── ESQUEMA DE INCENTIVOS (extraído de liquidaciones) ──────── */
 const ESQUEMA_MESES = [
   { mes: 'Ene', e1meta: 135, e1pago: 675000,  e2meta: 162, e2pago: 972000,  e3meta: 189, e3pago: 1323000, telemed: 6, condicional: 25, volante: null,   novedades: 'Meta inicial del equipo' },
