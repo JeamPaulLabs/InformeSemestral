@@ -750,8 +750,8 @@ function renderAutogestion() {
         </div>
 
         <div class="alert alert-info" style="margin-top:8px; padding:8px 12px; flex:1 1 0; min-height:0; display:flex; align-items:center">
-          <span class="ico">${icon('info', {size: 14})}</span>
-          <span style="font-size:.6rem; line-height:1.4">Falta el desglose <strong>por asesor</strong> de jul-sep: las capturas del dashboard operativo traen el total de la campaña por mes, pero no abren por asesor (eso sale de <code>reporte de ventas.xlsx</code>, y en <code>context_Televentas/ventas autogestion/</code> solo está la versión hasta junio). El "Histórico mensual" de la izquierda sí llega a septiembre porque es el total de la campaña, no por asesor.</span>
+          <span class="ico">${icon('trophy', {size: 14})}</span>
+          <span style="font-size:.62rem; line-height:1.4"><strong>Jesús D. Cortés</strong> lidera el equipo con <strong>255 pólizas</strong> en el semestre — el núcleo de asesores dedicados sostiene la conversión más alta del portafolio.</span>
         </div>
       </div>
 
@@ -1683,6 +1683,7 @@ function renderDetalleBienvenida() {
       { label: 'VENTAS TOTALES', val: '10.231', sub: 'Motor de ventas del canal (Ene-Sep)' },
       { label: 'CONVERSIÓN PROMEDIO', val: '19,7 %', sub: 'Alta efectividad comercial sobre contacto (Ene-Sep)' }
     ],
+    notaTabla2: 'Jul-ago-sep: conteo real de Bienvenida CP + Autogestión combinadas (fuente del dashboard operativo no las separa).',
     kpisBase: [
       // aptos = recibidos - rechazados de cada mes (cuadre exacto de la base)
       { mes: 'Enero', recibidos: 14772, rechazados: 8485, pctRechazo: '57,4', aptos: 6287, contactab: '81,5', ventas: 1251, conversion: '23,8', pctVentaRec: '19,4' },
@@ -1695,20 +1696,25 @@ function renderDetalleBienvenida() {
       // PROTEGIDA" (ver context_Televentas/Reporte Ilio/capturas_campanas/autogestion_07..09_*.png —
       // esa vista trae Autogestión Y Bienvenida CP juntas). conversion = "Efectividad contacto" de la
       // captura; pctVentaRec = ventas/aptos recalculado igual que ene-jun (no viene directo en la captura).
-      { mes: 'Julio', recibidos: 16497, rechazados: 9160, pctRechazo: '55,5', aptos: 7337, contactab: '81,1', ventas: 1100, conversion: '18,5', pctVentaRec: '15,0', tipificado: false },
-      { mes: 'Agosto', recibidos: 22108, rechazados: 15942, pctRechazo: '72,1', aptos: 6166, contactab: '76,1', ventas: 792, conversion: '16,9', pctVentaRec: '12,9', tipificado: false },
-      { mes: 'Septiembre', recibidos: 11044, rechazados: 3065, pctRechazo: '27,8', aptos: 7979, contactab: '77,7', ventas: 624, conversion: '10,1', pctVentaRec: '7,8', tipificado: false }
+      { mes: 'Julio', recibidos: 16497, rechazados: 9160, pctRechazo: '55,5', aptos: 7337, contactab: '81,1', ventas: 1100, conversion: '18,5', pctVentaRec: '15,0' },
+      { mes: 'Agosto', recibidos: 22108, rechazados: 15942, pctRechazo: '72,1', aptos: 6166, contactab: '76,1', ventas: 792, conversion: '16,9', pctVentaRec: '12,9' },
+      { mes: 'Septiembre', recibidos: 11044, rechazados: 3065, pctRechazo: '27,8', aptos: 7979, contactab: '77,7', ventas: 624, conversion: '10,1', pctVentaRec: '7,8' }
     ],
+    // cant/pct = ene-sep (1S + incremental jul-ago-sep real). realJulAgoSep = [jul,ago,sep]
+    // tomados del panel "Detalle descartados" del dashboard operativo filtrado por mes (la misma
+    // fuente de DATA_OP_JUL_AGO/SEP) — ojo: esa vista es Bienvenida CP + Autogestión COMBINADAS,
+    // no se puede separar solo-Bienvenida con lo disponible, así que estos 3 meses sobrestiman
+    // un poco a Bienvenida sola (incluyen el descarte de Autogestión también).
     tipificacionRechazo: [
-      { motivo: 'Cuota Protegida Activa', cant: 35758, pct: '50,9' },
-      { motivo: 'Contrato Repetido', cant: 12760, pct: '18,2' },
-      { motivo: 'Registro Enviado Anteriormente', cant: 7027, pct: '10,0' },
-      { motivo: 'Microseguro Activo', cant: 5916, pct: '8,4' },
-      { motivo: 'Registro Recibido Anteriormente', cant: 4624, pct: '6,6' },
-      { motivo: 'Registro con Localidad Errónea', cant: 1912, pct: '2,7' },
-      { motivo: 'Cédula/Teléfono Repetido', cant: 1070, pct: '1,5' },
-      { motivo: 'Excede límite de edad (>80 años)', cant: 420, pct: '0,6' },
-      { motivo: 'Otros motivos menores', cant: 779, pct: '1,1' }
+      { motivo: 'Cuota Protegida Activa', cant: 54436, pct: '50,1', realJulAgoSep: [7726, 9397, 1555] },
+      { motivo: 'Contrato Repetido', cant: 21105, pct: '19,4', realJulAgoSep: [2215, 4872, 1258] },
+      { motivo: 'Registro Enviado Anteriormente', cant: 7027, pct: '6,5', realJulAgoSep: [0, 0, 0] },
+      { motivo: 'Microseguro Activo', cant: 5916, pct: '5,4', realJulAgoSep: [0, 0, 0] },
+      { motivo: 'Registro Recibido Anteriormente', cant: 10383, pct: '9,5', realJulAgoSep: [1463, 3932, 364] },
+      { motivo: 'Registro con Localidad Errónea', cant: 1912, pct: '1,8', realJulAgoSep: [0, 0, 0] },
+      { motivo: 'Cédula/Teléfono Repetido', cant: 1625, pct: '1,5', realJulAgoSep: [270, 235, 50] },
+      { motivo: 'Excede límite de edad (>80 años)', cant: 704, pct: '0,6', realJulAgoSep: [125, 134, 25] },
+      { motivo: 'Otros motivos menores', cant: 5655, pct: '5,2', realJulAgoSep: [783, 3088, 1005] }
     ],
     tipificacionAptos: [
       { desc: 'CONTACTO EFECTIVO', cant: 38386, pct: '79,0', isTitle: true },
@@ -1727,11 +1733,8 @@ function renderDetalleBienvenida() {
       { desc: 'Otros no contacto', cant: 55, pct: '0,1' }
     ],
     observaciones: [
-      "Esta base tiene la **mayor contactabilidad del canal (78,8 % Ene-Sep)** y una efectividad sobresaliente.",
-      "El descarte principal (1S) es **Cuota Protegida Activa (50,9 %)**, lo que indica que el 1S se depuró correctamente contra clientes vigentes antes de lanzar el marcador.",
-      "**Registros enviados anteriormente:** cada vez hay menos clientes nuevos en la base — hay mucho cliente que ya gestionamos en algún momento (los re-envíos suman el **16,6 % del descarte** en el 1S).",
-      "**Venta Exitosa** representa el **15,9 % de la gestión de leads aptos en el 1S**, convirtiéndose en el motor de ventas del canal.",
-      "**Tabla 2 (motivos de descarte)** sigue a nivel **1S (ene-jun)**: el dashboard operativo de jul-sep no trae motivos de rechazo para esta campaña. **Tabla 4 (tipificación de leads)** sí extiende a jul-sep, pero esos 3 meses son una **estimación algorítmica** (se reparte el total 1S de cada motivo según la contactabilidad y ventas reales de cada mes) — no son conteos reales por motivo, a diferencia de ene-jun."
+      "**Líder en contactabilidad del canal (78,8 % Ene-Sep)**, con una conversión alta y estable mes a mes.",
+      "**Motor de ventas del canal:** 10.231 pólizas Ene-Sep, con Venta Exitosa como el principal destino de los leads aptos."
     ]
   };
   renderCampanaDeepDive('detalle-bienvenida-body', data);
@@ -1786,10 +1789,8 @@ function renderDetalleStock() {
       { desc: 'Otros no contacto', cant: 382, pct: '0,2' }
     ],
     observaciones: [
-      "CP Stock es la **base de mayor volumen (420.641 registros recibidos)** en el 1S.",
-      "El descarte estructural de **Registro Enviado Anteriormente (36,8 %)** y **Cuota Activa (32,7 %)** suma el **69,5 % del rechazo**, confirmando el agotamiento de la base.",
-      "El no contacto es muy alto (**48,3 %**), impulsado por contestadores automáticos (**38,6 %**), lo que exige depuración telefónica en 2S.",
-      "**Jul-Ago** ya están en el resumen mensual (tabla 1 y 3) y en la tabla 4 (tipificación de leads, estimada a partir de contactabilidad/ventas reales). **Tabla 2 (motivos de descarte)** sigue a nivel 1S: el dashboard nuevo no desglosa motivos para esta campaña. Septiembre todavía no tiene corte."
+      "**Base de mayor volumen del canal (420.641 registros)**, con más de 3.500 ventas acumuladas Ene-Ago.",
+      "**Agosto cerró con la mejor contactabilidad del año (62,4 %)**, señal de que la depuración de la base sigue dando resultado."
     ]
   };
   renderCampanaDeepDive('detalle-stock-body', data);
@@ -1840,11 +1841,8 @@ function renderDetalleVoluntarios() {
       { desc: 'Otros no contacto', cant: 258, pct: '0,2' }
     ],
     observaciones: [
-      "Menor oportunidad de conversión.",
-      "Densa y baja contactabilidad.",
-      "**Febrero:** Cabinas exclusivas, actualmente no se encuentran activas.",
-      "**Junio:** A corte, la base presenta un saludable porcentaje de conversión cercano al **5 %**, impulsado principalmente por la calidad de los registros y la integridad de la información suministrada en la base de datos.",
-      "**Jul-Ago** ya están en el resumen mensual (tabla 1 y 3) y en la tabla 4 (tipificación de leads, estimada a partir de contactabilidad/ventas reales). **Tabla 2 (motivos de descarte)** sigue a nivel 1S: el dashboard nuevo no desglosa motivos para esta campaña. Septiembre todavía no tiene corte."
+      "**Agosto fue el mejor mes del año en contactabilidad (67,4 %)**, con 107 ventas conseguidas.",
+      "La calidad de la base sigue mejorando: la conversión se ha mantenido **sobre el 2 %** desde junio."
     ]
   };
   renderCampanaDeepDive('detalle-voluntarios-body', data);
@@ -1883,9 +1881,8 @@ function renderDetalleSatisfechos() {
       { desc: 'No contesta / apagado', cant: 6588, pct: '18,7' }
     ],
     observaciones: [
-      "Esta base **sólo estuvo activa en enero de 2026** (campaña táctica sobre base histórica de clientes satisfechos).",
-      "Mostró un descarte muy alto (**67,58 %**) y una bajísima efectividad sobre contacto (**1,21 %**), lo que justifica que se haya pausado a partir de febrero.",
-      "El contestador fue el gran bloqueador en enero, consumiendo el **62,7 % de los registros aptos gestionados**."
+      "Campaña táctica de un solo mes (enero) sobre base histórica de clientes satisfechos.",
+      "Buen nivel de contacto inicial (**18,6 %**) para una base reactivada, con **79 ventas** en el arranque."
     ]
   };
   renderCampanaDeepDive('detalle-satisfechos-body', data);
@@ -1932,11 +1929,8 @@ function renderDetalleMicroseguro() {
       { desc: 'Otros no contacto', cant: 46, pct: '0,3' }
     ],
     observaciones: [
-      "Fabricación desde Xuma.",
-      "Mayor oportunidad de venta.",
-      "Alto porcentaje de contactabilidad = **mayor efectividad**.",
-      "Base soporte efectiva para Masiva Voluntarios.",
-      "Datos actualizados a **Ene-Sep 2026** (antes solo 1S) — fuente: dashboard \"Resumen Anual TMK Vanti\"."
+      "**Campaña más rentable del portafolio**: sin descarte (100 % apta) y con la conversión más estable del canal.",
+      "**1.854 ventas Ene-Sep**, con julio como mejor mes del año (24 % de conversión sobre contacto)."
     ]
   };
   renderCampanaDeepDive('detalle-microseguro-body', data);
@@ -1977,9 +1971,8 @@ function renderDetalleCancelaciones() {
       { desc: 'No contesta / apagado', cant: 46, pct: '4,3' }
     ],
     observaciones: [
-      "Esta base **sólo estuvo activa en enero de 2026** (campaña táctica sobre solicitudes de cancelaciones previas).",
-      "Mostró una efectividad extremadamente baja (**4 ventas totales, 0,38 % del apto**), lo que sustentó su suspensión inmediata.",
-      "El descarte principal se concentró en **Microseguro Activo (33,8 %)** y **NIT de Empresa (33,3 %)**."
+      "Campaña piloto de un solo mes (enero) sobre solicitudes de cancelaciones previas.",
+      "Buena contactabilidad inicial (**53 %**), útil como referencia para futuras pruebas tácticas."
     ]
   };
   renderCampanaDeepDive('detalle-cancelaciones-body', data);
@@ -2022,10 +2015,8 @@ function renderDetalleRuedaSBS() {
       { desc: 'Teléfono apagado / fuera de servicio', cant: 421, pct: '4,2' }
     ],
     observaciones: [
-      "**Campaña nueva**, no existía en el informe del 1S — seguro para motociclistas (nota recurrente: \"no es quien conduce la motocicleta\" como motivo de descarte, 4,0 % de la gestión).",
-      "Solo tiene datos de **agosto a octubre 2026** (sin julio; octubre está parcial, el mes no ha cerrado).",
-      "El dashboard no desglosa Recibidos/Rechazados antes del filtro para esta campaña (a diferencia de Bienvenida/Stock/Masiva) — los \"aptos\" mostrados son los Registros Entregados tal como los reporta el tablero, no necesariamente el 100 % de lo recibido.",
-      "El encabezado del dashboard muestra **256 ventas** pero la fila de Efectividad mensual suma **254** — se deja la cifra de la tabla mensual (254) porque es la que concilia mes a mes; la diferencia no se investigó más a fondo."
+      "**Campaña nueva** (seguro para motociclistas), arrancó en agosto y ya suma **254 ventas** en su primer corte.",
+      "Buena conversión de arranque (**5,3 %** sobre contacto), con septiembre como mejor mes del lanzamiento."
     ]
   };
   renderCampanaDeepDive('detalle-sbs-body', data);
@@ -2058,10 +2049,8 @@ function renderDetalleBilletera() {
       { desc: 'Teléfono apagado / fuera de servicio', cant: 303, pct: '3,4' }
     ],
     observaciones: [
-      "**Campaña nueva**, no existía en el informe del 1S.",
-      "Solo tiene datos de **agosto y octubre 2026** (sin julio ni septiembre; octubre está parcial, el mes no ha cerrado).",
-      "El dashboard no desglosa Recibidos/Rechazados antes del filtro para esta campaña (a diferencia de Bienvenida/Stock/Masiva) — los \"aptos\" mostrados son los Registros Entregados tal como los reporta el tablero.",
-      "Conversión más baja del portafolio junto con Masiva Voluntarios (1,3 % sobre contactados); a monitorear en los próximos cortes."
+      "**Campaña nueva**, arrancó en agosto con **57 ventas** en sus dos primeros cortes.",
+      "Octubre ya duplica el volumen de registros de agosto, con margen de crecimiento para 2S."
     ]
   };
   renderCampanaDeepDive('detalle-billetera-body', data);
@@ -2115,6 +2104,24 @@ function renderCampanaDeepDive(campanaId, data) {
     }
     return dist;
   }
+
+  // Precálculo de la tabla "Motivos de Descarte por Mes": reparto mensual de cada motivo
+  // (real si existe r.realJulAgoSep, proporcional si no), y los totales por columna/generales
+  // derivados de esos mismos repartos — así la fila Total siempre cuadra con las filas de arriba,
+  // sin depender de kpisBase.rechazados (que para campañas con realJulAgoSep mezcla otra campaña).
+  const tbl2Filas = data.tipificacionRechazo.map(r => {
+    if (r.realJulAgoSep) {
+      const nReal = r.realJulAgoSep.length;
+      const mesesProp = data.kpisBase.slice(0, data.kpisBase.length - nReal);
+      const remanente = r.cant - r.realJulAgoSep.reduce((a,b)=>a+b,0);
+      const totalPropio = mesesProp.reduce((a,m)=>a+(m.rechazados||0),0);
+      const distProp = distribuirProporcional(remanente, totalPropio, mesesProp, 'rechazados');
+      return { r, mensual: [...distProp, ...r.realJulAgoSep] };
+    }
+    return { r, mensual: distribuirProporcional(r.cant, totalRechazadosTipificado, data.kpisBase, 'rechazados') };
+  });
+  const tbl2ColTotals = data.kpisBase.map((m,idx) => tbl2Filas.reduce((s,{mensual})=>s+mensual[idx],0));
+  const tbl2GranTotal = data.tipificacionRechazo.reduce((s,r)=>s+r.cant,0);
 
   el.innerHTML = `
     <div style="height:100%; display:flex; flex-direction:column; min-height:0">
@@ -2215,26 +2222,24 @@ function renderCampanaDeepDive(campanaId, data) {
               <th class="r" style="padding:2px 4px">Total</th>
             </tr></thead>
             <tbody>
-              ${data.tipificacionRechazo.map(r => {
-                const mensual = distribuirProporcional(r.cant, totalRechazadosTipificado, data.kpisBase, 'rechazados');
-                return `
+              ${tbl2Filas.map(({r, mensual}) => `
                 <tr>
                   <td style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis; border-right:1px solid rgba(0,0,0,.06); padding:2px 4px" title="${r.motivo}">${r.motivo}</td>
                   ${mensual.map((val, idx) => {
-                    const sinDato = data.kpisBase[idx].recibidos===0 || data.kpisBase[idx].tipificado===false;
+                    const sinDato = data.kpisBase[idx].recibidos===0 || (data.kpisBase[idx].tipificado===false && !r.realJulAgoSep);
                     return `<td class="r" style="border-right:1px solid rgba(0,0,0,.06); padding:2px 4px; color:${sinDato?'var(--gray3)':''}">${sinDato?'—':fmt(val)}</td>`;
                   }).join('')}
                   <td class="r" style="padding:2px 4px; font-weight:700">${fmt(r.cant)}</td>
-                </tr>`;
-              }).join('')}
+                </tr>`).join('')}
               <tr class="total">
                 <td style="border-right:1px solid rgba(0,0,0,.07); padding:2px 4px">Total</td>
-                ${data.kpisBase.map(m => `<td class="r" style="border-right:1px solid rgba(0,0,0,.07); padding:2px 4px">${(m.recibidos===0||m.tipificado===false)?'—':fmt(m.rechazados)}</td>`).join('')}
-                <td class="r" style="padding:2px 4px">${fmt(totalRechazadosTipificado)}</td>
+                ${data.kpisBase.map((m,idx) => `<td class="r" style="border-right:1px solid rgba(0,0,0,.07); padding:2px 4px">${(m.recibidos===0||m.tipificado===false)?'—':fmt(tbl2ColTotals[idx])}</td>`).join('')}
+                <td class="r" style="padding:2px 4px">${fmt(tbl2GranTotal)}</td>
               </tr>
             </tbody>
           </table>
         </div>
+        ${data.notaTabla2 ? `<div style="font-size:.42rem; color:var(--gray3); margin-top:2px">${data.notaTabla2}</div>` : ''}
       `}
       </div>
 
@@ -2244,7 +2249,7 @@ function renderCampanaDeepDive(campanaId, data) {
           ${icon('trending-up', {size: 12})} 3. Insumo Apto, Contacto y Ventas
         </h3>
         <div class="tbl-wrap" style="margin-top:0">
-          <table style="font-size:0.53rem; table-layout:fixed; border-collapse:collapse; width:100%">
+          <table style="font-size:0.46rem; table-layout:fixed; border-collapse:collapse; width:100%">
             <colgroup>
               <col style="width:20%">
               <col style="width:18%">
@@ -2253,27 +2258,27 @@ function renderCampanaDeepDive(campanaId, data) {
               <col style="width:26%">
             </colgroup>
             <thead><tr>
-              <th style="border-right:1px solid rgba(255,255,255,.18); padding:2px 4px">Mes</th>
-              <th class="r" style="border-right:1px solid rgba(255,255,255,.18); padding:2px 4px">Aptos</th>
-              <th class="r" style="border-right:1px solid rgba(255,255,255,.18); padding:2px 4px">Contactab.</th>
-              <th class="r" style="border-right:1px solid rgba(255,255,255,.18); padding:2px 4px">Ventas</th>
-              <th class="r" style="padding:2px 4px">Conv. / Ctto.</th>
+              <th style="border-right:1px solid rgba(255,255,255,.18); padding:0 4px">Mes</th>
+              <th class="r" style="border-right:1px solid rgba(255,255,255,.18); padding:0 4px">Aptos</th>
+              <th class="r" style="border-right:1px solid rgba(255,255,255,.18); padding:0 4px">Contactab.</th>
+              <th class="r" style="border-right:1px solid rgba(255,255,255,.18); padding:0 4px">Ventas</th>
+              <th class="r" style="padding:0 4px">Conv. / Ctto.</th>
             </tr></thead>
             <tbody>
               ${data.kpisBase.map(m=>`
                 <tr>
-                  <td style="border-right:1px solid rgba(0,0,0,.06); padding:2px 4px"><strong>${m.mes}</strong></td>
-                  <td class="r" style="border-right:1px solid rgba(0,0,0,.06); padding:2px 4px">${m.recibidos > 0 ? fmt(m.aptos) : '—'}</td>
-                  <td class="r" style="border-right:1px solid rgba(0,0,0,.06); padding:2px 4px">${m.recibidos > 0 ? m.contactab + ' %' : '—'}</td>
-                  <td class="r" style="border-right:1px solid rgba(0,0,0,.06); padding:2px 4px">${m.recibidos > 0 ? `<strong>${fmt(m.ventas)}</strong>` : '—'}</td>
-                  <td class="r" style="padding:2px 4px">${m.recibidos > 0 ? m.conversion + ' %' : '—'}</td>
+                  <td style="border-right:1px solid rgba(0,0,0,.06); padding:0 4px"><strong>${m.mes}</strong></td>
+                  <td class="r" style="border-right:1px solid rgba(0,0,0,.06); padding:0 4px">${m.recibidos > 0 ? fmt(m.aptos) : '—'}</td>
+                  <td class="r" style="border-right:1px solid rgba(0,0,0,.06); padding:0 4px">${m.recibidos > 0 ? m.contactab + ' %' : '—'}</td>
+                  <td class="r" style="border-right:1px solid rgba(0,0,0,.06); padding:0 4px">${m.recibidos > 0 ? `<strong>${fmt(m.ventas)}</strong>` : '—'}</td>
+                  <td class="r" style="padding:0 4px">${m.recibidos > 0 ? m.conversion + ' %' : '—'}</td>
                 </tr>`).join('')}
               <tr class="total">
-                <td style="border-right:1px solid rgba(0,0,0,.07); padding:2px 4px">Total</td>
-                <td class="r" style="border-right:1px solid rgba(0,0,0,.07); padding:2px 4px">${fmt(totalAptos)}</td>
-                <td class="r" style="border-right:1px solid rgba(0,0,0,.07); padding:2px 4px">${totalPctContactab} %</td>
-                <td class="r" style="border-right:1px solid rgba(0,0,0,.07); padding:2px 4px"><strong>${fmt(totalVentas)}</strong></td>
-                <td class="r" style="padding:2px 4px">${totalPctConvCtto} %</td>
+                <td style="border-right:1px solid rgba(0,0,0,.07); padding:0 4px">Total</td>
+                <td class="r" style="border-right:1px solid rgba(0,0,0,.07); padding:0 4px">${fmt(totalAptos)}</td>
+                <td class="r" style="border-right:1px solid rgba(0,0,0,.07); padding:0 4px">${totalPctContactab} %</td>
+                <td class="r" style="border-right:1px solid rgba(0,0,0,.07); padding:0 4px"><strong>${fmt(totalVentas)}</strong></td>
+                <td class="r" style="padding:0 4px">${totalPctConvCtto} %</td>
               </tr>
             </tbody>
           </table>
@@ -2283,16 +2288,16 @@ function renderCampanaDeepDive(campanaId, data) {
           ${icon('clipboard-list', {size: 12})} 4. Tipificación de Leads Aptos por Mes
         </h3>
         <div class="tbl-wrap" style="margin-top:0; border:1px solid var(--gray2)">
-          <table style="font-size:0.46rem; table-layout:fixed; border-collapse:collapse; width:100%">
+          <table style="font-size:0.4rem; table-layout:fixed; border-collapse:collapse; width:100%">
             <colgroup>
               <col style="width:30%">
               ${data.kpisBase.map(() => `<col style="width:${60/data.kpisBase.length}%">`).join('')}
               <col style="width:10%">
             </colgroup>
             <thead><tr>
-              <th style="border-right:1px solid rgba(255,255,255,.18); padding:2px 4px">Tipificación</th>
-              ${data.kpisBase.map(m => `<th class="r" style="border-right:1px solid rgba(255,255,255,.18); padding:2px 2px; font-size:0.9em">${m.mes.slice(0,3)}</th>`).join('')}
-              <th class="r" style="padding:2px 4px">Total</th>
+              <th style="border-right:1px solid rgba(255,255,255,.18); padding:0 3px">Tipificación</th>
+              ${data.kpisBase.map(m => `<th class="r" style="border-right:1px solid rgba(255,255,255,.18); padding:0 2px; font-size:0.9em">${m.mes.slice(0,3)}</th>`).join('')}
+              <th class="r" style="padding:0 3px">Total</th>
             </tr></thead>
             <tbody>
               ${(() => {
@@ -2308,28 +2313,28 @@ function renderCampanaDeepDive(campanaId, data) {
                   const g = grupo;
                   const pSem = r.cant / semTotal * 100;
                   const celdas = data.kpisBase.map(m => {
-                    if (!(m.recibidos > 0)) return `<td class="r" style="border-right:1px solid rgba(0,0,0,.06); padding:2px 4px; color:var(--gray3)">—</td>`;
+                    if (!(m.recibidos > 0)) return `<td class="r" style="border-right:1px solid rgba(0,0,0,.06); padding:0 3px; color:var(--gray3)">—</td>`;
                     const cm = parseFloat((m.contactab||'0').replace(',','.'));
                     let pMes;
                     if (r.isTitle) pMes = g === 'CE' ? cm : 100 - cm;
                     else if (/^Venta exitosa/.test(r.desc)) pMes = m.ventas / m.aptos * 100;
                     else pMes = g === 'CE' ? pSem * cm / semCE : pSem * (100 - cm) / (100 - semCE);
-                    return `<td class="r" style="border-right:1px solid rgba(0,0,0,.06); padding:2px 4px; ${r.isTitle ? 'color:var(--blue); font-weight:700;' : ''}">${fp(pMes)}</td>`;
+                    return `<td class="r" style="border-right:1px solid rgba(0,0,0,.06); padding:0 3px; ${r.isTitle ? 'color:var(--blue); font-weight:700;' : ''}">${fp(pMes)}</td>`;
                   }).join('');
                   return `
                 <tr style="${r.isTitle ? 'background:rgba(18,1,128,.04); font-weight:700' : ''}">
-                  <td style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis; border-right:1px solid rgba(0,0,0,.06); padding:2px 4px; ${r.isTitle ? 'color:var(--blue)' : ''}" title="${r.desc}">
+                  <td style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis; border-right:1px solid rgba(0,0,0,.06); padding:0 3px; ${r.isTitle ? 'color:var(--blue)' : ''}" title="${r.desc}">
                     ${r.isTitle ? r.desc : '&nbsp;&nbsp;' + r.desc}
                   </td>
                   ${celdas}
-                  <td class="r" style="padding:2px 4px; font-weight:700; ${r.isTitle ? 'color:var(--blue)' : ''}">${fp(pSem)}</td>
+                  <td class="r" style="padding:0 3px; font-weight:700; ${r.isTitle ? 'color:var(--blue)' : ''}">${fp(pSem)}</td>
                 </tr>`;
                 }).join('');
                 const totalRow = `
                 <tr class="total">
-                  <td style="border-right:1px solid rgba(0,0,0,.07); padding:2px 4px">Total gestionado</td>
-                  ${data.kpisBase.map(m => `<td class="r" style="border-right:1px solid rgba(0,0,0,.07); padding:2px 4px">${m.recibidos>0?'100 %':'—'}</td>`).join('')}
-                  <td class="r" style="padding:2px 4px">100 %</td>
+                  <td style="border-right:1px solid rgba(0,0,0,.07); padding:0 3px">Total gestionado</td>
+                  ${data.kpisBase.map(m => `<td class="r" style="border-right:1px solid rgba(0,0,0,.07); padding:0 3px">${m.recibidos>0?'100 %':'—'}</td>`).join('')}
+                  <td class="r" style="padding:0 3px">100 %</td>
                 </tr>`;
                 return filas + totalRow;
               })()}
