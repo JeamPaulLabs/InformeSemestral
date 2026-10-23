@@ -121,6 +121,12 @@ const AUTOGESTION_MESES = [
   { mes: 'Abr', registros: 1950,  aptos: 813,   contactados: 564, contactab: 71.03, efect: 20.39, ventas: 115, rechazo: 1137, pctRechazo: 58.31 },
   { mes: 'May', registros: 2203,  aptos: 872,   contactados: 661, contactab: 75.80, efect: 32.98, ventas: 218, rechazo: 1331, pctRechazo: 60.42 },
   { mes: 'Jun', registros: 4968,  aptos: 1521,  contactados: 1040, contactab: 68.38, efect: 27.60, ventas: 287, rechazo: 3447, pctRechazo: 69.38 },
+  // Jul-Sep: capturas "Resumen Anual TMK Vanti" filtradas por Mes (ver context_Televentas/Reporte Ilio/campanas_ene_sep_2026.md).
+  // Mismo origen de datos que ene-jun (ventas/rechazo cuadran exacto contra el histórico ya publicado; registros/aptos
+  // difieren en ±1 por redondeo del dashboard entre refrescos — no se ajustan a mano).
+  { mes: 'Jul', registros: 5412,  aptos: 1990,  contactados: 1440, contactab: 72.36, efect: 24.65, ventas: 355, rechazo: 3422, pctRechazo: 63.23 },
+  { mes: 'Ago', registros: 7827,  aptos: 2111,  contactados: 1134, contactab: 54.39, efect: 19.75, ventas: 224, rechazo: 5716, pctRechazo: 73.03 },
+  { mes: 'Sep', registros: 4130,  aptos: 2938,  contactados: 2144, contactab: 73.07, efect: 15.11, ventas: 324, rechazo: 1192, pctRechazo: 28.86 },
 ];
 
 /* ── AUTOGESTIÓN · ventas por asesor (fuente: reporte de ventas.xlsx) ── */
