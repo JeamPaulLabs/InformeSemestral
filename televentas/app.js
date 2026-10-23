@@ -481,6 +481,11 @@ function renderCampanas() {
     r.convSC = (r.ventas / contactadosTotal * 100).toFixed(1).replace('.', ',') + ' %';
   });
 
+  const miniBadge = (txt, type) => {
+    const colors = { g: ['rgba(0,205,147,.15)','#008060'], r: ['rgba(255,107,53,.15)','#c44a1a'], y: ['rgba(255,200,0,.2)','#8a6200'] };
+    const [bg, fg] = colors[type];
+    return `<span style="display:inline-block;padding:0 4px;border-radius:6px;font-size:.5rem;font-weight:700;background:${bg};color:${fg}">${txt}</span>`;
+  };
   const totalVentas = detalleSemestre.reduce((a, r) => a + r.ventas, 0);
   // Campañas nuevas (ago-oct, sin precedente en ene-ago) — se muestran como filas aparte,
   // con su propio período, no se suman al Total de arriba (son rangos de meses distintos).
@@ -495,20 +500,20 @@ function renderCampanas() {
 
   el.innerHTML = `
     <div style="height:100%; display:flex; flex-direction:column; min-height:0">
-    <div class="kpi-grid" style="gap:8px; margin-bottom:8px; flex-shrink:0">
-      <div class="kpi-card green" style="padding:4px 12px">
-        <div class="kpi-label" style="font-size:.6rem">Bienvenidas CP</div>
-        <div class="kpi-val" style="font-size:.85rem">${fmt(detalleSemestre[0].ventas)} <span style="font-size:.5rem;font-weight:500;color:var(--gray3)">ventas</span></div>
-        <div class="kpi-sub" style="font-size:.5rem">${fmt(Math.round(detalleSemestre[0].ventas/liqTotal*100))} % de las ventas ene-sep · ${detalleSemestre[0].convSC} de conversión</div>
+    <div class="kpi-grid" style="gap:8px; margin-bottom:5px; flex-shrink:0">
+      <div class="kpi-card green" style="padding:3px 12px">
+        <div class="kpi-label" style="font-size:.58rem">Bienvenidas CP</div>
+        <div class="kpi-val" style="font-size:.8rem">${fmt(detalleSemestre[0].ventas)} <span style="font-size:.48rem;font-weight:500;color:var(--gray3)">ventas</span></div>
+        <div class="kpi-sub" style="font-size:.48rem">${fmt(Math.round(detalleSemestre[0].ventas/liqTotal*100))} % de las ventas ene-sep · ${detalleSemestre[0].convSC} de conversión</div>
       </div>
-      <div class="kpi-card green" style="padding:4px 12px">
-        <div class="kpi-label" style="font-size:.6rem">Autogestión</div>
-        <div class="kpi-val" style="font-size:.85rem">${detalleSemestre[1].convSC}</div>
-        <div class="kpi-sub" style="font-size:.5rem">Conversión más alta del portafolio (ene-sep)</div>
+      <div class="kpi-card green" style="padding:3px 12px">
+        <div class="kpi-label" style="font-size:.58rem">Autogestión</div>
+        <div class="kpi-val" style="font-size:.8rem">${detalleSemestre[1].convSC}</div>
+        <div class="kpi-sub" style="font-size:.48rem">Conversión más alta del portafolio (ene-sep)</div>
       </div>
     </div>
 
-    <div class="panel" style="padding:8px 14px; flex-shrink:0; margin-bottom:8px">
+    <div class="panel" style="padding:6px 14px; flex-shrink:0; margin-bottom:5px">
       <h3 style="margin-bottom:3px; padding-bottom:2px; font-size:.68rem">${icon('target')} Rendimiento por campaña (ene-sep*)</h3>
       <div class="tbl-wrap" style="margin-top:0">
         <table class="tbl-compact" style="font-size:.56rem; width:100%">
@@ -523,19 +528,19 @@ function renderCampanas() {
           <tbody>
             ${detalleSemestre.map(r=>`
               <tr>
-                <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:1px 4px">${badge(r.c, r.perfil)}</td>
-                <td class="r" style="padding:1px 4px">${fmt(r.reg)}</td>
-                <td class="r" style="padding:1px 4px"><strong>${fmt(r.ventas)}</strong></td>
-                <td class="r" style="padding:1px 4px">${badge(r.contactab, r.perfil)}</td>
-                <td class="r" style="padding:1px 4px">${badge(r.convSC, r.perfil)}</td>
+                <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 4px">${badge(r.c, r.perfil)}</td>
+                <td class="r" style="padding:0 4px">${fmt(r.reg)}</td>
+                <td class="r" style="padding:0 4px"><strong>${fmt(r.ventas)}</strong></td>
+                <td class="r" style="padding:0 4px">${miniBadge(r.contactab, r.perfil)}</td>
+                <td class="r" style="padding:0 4px">${miniBadge(r.convSC, r.perfil)}</td>
               </tr>`).join('')}
             ${filasNuevas.map(r=>`
               <tr style="background:rgba(255,193,7,.07)">
-                <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:1px 4px">${badge(r.c, r.perfil)} <span style="font-size:.44rem;color:var(--warn);font-weight:700">ago-oct</span></td>
-                <td class="r" style="padding:1px 4px">${fmt(r.reg)}</td>
-                <td class="r" style="padding:1px 4px"><strong>${fmt(r.ventas)}</strong></td>
-                <td class="r" style="padding:1px 4px">${badge(r.contactab, r.perfil)}</td>
-                <td class="r" style="padding:1px 4px">${badge(r.convSC, r.perfil)}</td>
+                <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 4px">${badge(r.c, r.perfil)} <span style="font-size:.42rem;color:var(--warn);font-weight:700">ago-oct</span></td>
+                <td class="r" style="padding:0 4px">${fmt(r.reg)}</td>
+                <td class="r" style="padding:0 4px"><strong>${fmt(r.ventas)}</strong></td>
+                <td class="r" style="padding:0 4px">${miniBadge(r.contactab, r.perfil)}</td>
+                <td class="r" style="padding:0 4px">${miniBadge(r.convSC, r.perfil)}</td>
               </tr>`).join('')}
             <tr class="total" style="font-size:.56rem">
               <td style="padding:1px 4px">Total ene-sep</td><td class="r" style="padding:1px 4px">${fmt(aptTotal)}</td>
@@ -550,26 +555,44 @@ function renderCampanas() {
 
     <div class="two-col" style="gap:12px; flex:1; min-height:0; grid-template-rows:minmax(0,1fr); overflow:hidden">
       <div class="panel" style="padding:10px 14px; display:flex; flex-direction:column; min-height:0; overflow:hidden">
-        <h3 style="margin-bottom:6px; padding-bottom:3px; font-size:.7rem">${icon('filter')} Tipificación de rechazo <span style="font-weight:400;color:var(--gray3)">(1S, motivos ene-jun)</span></h3>
-        <div style="display:flex; flex-direction:column; gap:4px; flex:1 1 0; min-height:0; justify-content:space-evenly">
+        <h3 style="margin-bottom:3px; padding-bottom:2px; font-size:.64rem">${icon('filter')} Rechazo del canal <span style="font-weight:400;color:var(--gray3)">(1S, motivos ene-jun)</span></h3>
+        <div style="display:flex; flex-direction:column; gap:2px; flex:0 0 auto">
           ${DESCARTE_MOTIVOS.map(d => {
             const w = Math.round(d.pct / maxDescarte * 65) + 15;
-            return `<div style="display:flex; align-items:center; gap:5px">
-              <span style="flex:0 0 150px; font-size:.56rem; color:var(--gray3); text-align:right; white-space:nowrap; overflow:hidden; text-overflow:ellipsis">${d.motivo}</span>
-              <div style="flex:1; height:10px; background:rgba(255,107,53,.12); border-radius:4px; overflow:hidden">
+            return `<div style="display:flex; align-items:center; gap:4px">
+              <span style="flex:0 0 130px; font-size:.5rem; color:var(--gray3); text-align:right; white-space:nowrap; overflow:hidden; text-overflow:ellipsis">${d.motivo}</span>
+              <div style="flex:1; height:7px; background:rgba(255,107,53,.12); border-radius:4px; overflow:hidden">
                 <div style="width:${w}%; height:100%; border-radius:4px; background:linear-gradient(90deg,var(--warn),#ff8c5a)"></div>
               </div>
-              <span style="flex:0 0 34px; font-size:.56rem; font-weight:700; color:var(--blue); text-align:right">${d.pct}%</span>
+              <span style="flex:0 0 28px; font-size:.5rem; font-weight:700; color:var(--blue); text-align:right">${d.pct}%</span>
             </div>`;
           }).join('')}
         </div>
-        <div style="font-size:.5rem; color:var(--gray3); margin-top:4px">${fmt(rechTotal)} registros descartados ene-sep (${Math.round(rechTotal/(rechTotal+aptTotal)*100)} % de la base recibida) — <strong>el desglose por motivo de arriba es solo ene-jun</strong>: el dashboard operativo de jul-ago-sep no trae motivos de rechazo por campaña (solo totales), así que no hay con qué extender este gráfico sin inventar proporciones. El detalle mensual (sin motivo) está en "Consolidado de las Bases".</div>
+        <div style="font-size:.44rem; color:var(--gray3); margin:3px 0 6px">${fmt(rechTotal)} registros descartados ene-sep en todo el canal — este desglose por motivo es solo 1S (ene-jun); CP Stock/Masiva/Microseguro no traen motivo de rechazo jul-sep en la fuente nueva.</div>
+
+        <h3 style="margin-bottom:3px; padding-bottom:2px; font-size:.64rem; border-top:1px dashed var(--gray2); padding-top:5px">${icon('filter')} Rechazo Bienvenida CP + Autogestión <span style="font-weight:400;color:var(--gray3)">(ene, abr-sep)</span></h3>
+        <div style="display:flex; flex-direction:column; gap:1px; flex:1 1 0; min-height:0; overflow:hidden; justify-content:space-evenly">
+          ${(() => {
+            const maxR = Math.max(...RECHAZO_BIENVENIDA_AUTOGESTION.motivos.map(d=>d.pct));
+            return RECHAZO_BIENVENIDA_AUTOGESTION.motivos.map(d => {
+              const w = Math.round(d.pct / maxR * 65) + 15;
+              return `<div style="display:flex; align-items:center; gap:4px">
+                <span style="flex:0 0 130px; font-size:.48rem; color:var(--gray3); text-align:right; white-space:nowrap; overflow:hidden; text-overflow:ellipsis">${d.motivo}</span>
+                <div style="flex:1; height:7px; background:rgba(90,226,128,.15); border-radius:4px; overflow:hidden">
+                  <div style="width:${w}%; height:100%; border-radius:4px; background:linear-gradient(90deg,var(--teal),var(--green))"></div>
+                </div>
+                <span style="flex:0 0 28px; font-size:.48rem; font-weight:700; color:var(--blue); text-align:right">${d.pct}%</span>
+              </div>`;
+            }).join('');
+          })()}
+        </div>
+        <div style="font-size:.44rem; color:var(--gray3); margin-top:3px">${fmt(RECHAZO_BIENVENIDA_AUTOGESTION.total)} registros descartados de estas 2 campañas, ene + abr-sep (faltan feb-mar, se perdieron las capturas). Fuente: panel "Detalle descartados" del dashboard operativo, filtrado por mes.</div>
       </div>
 
       <div class="panel" style="padding:10px 14px; display:flex; flex-direction:column; min-height:0; overflow:hidden">
         <h3 style="margin-bottom:4px; padding-bottom:2px; font-size:.7rem">${icon('bar-chart-3')} Tipificación de aptos por mes</h3>
         <div class="tbl-wrap" style="margin-top:0; flex:1 1 0; min-height:0; overflow:hidden">
-          <table class="tbl-compact" style="font-size:.46rem; width:100%">
+          <table class="tbl-compact" style="font-size:.5rem; width:100%">
             <thead><tr>
               <th style="padding:0 4px">Mes</th>
               <th class="r" style="padding:0 4px">Aptos</th>
@@ -607,7 +630,7 @@ function renderCampanas() {
                   <td class="r" style="padding:0 4px">${miniBadge(pctConv+'%', pctConv>=10?'g':pctConv>=7?'y':'r')}</td>
                 </tr>`;
                 }).join('') + `
-              <tr class="total" style="font-size:.44rem">
+              <tr class="total" style="font-size:.48rem">
                 <td style="padding:0 4px">Total ene-sep</td>
                 <td class="r" style="padding:0 4px">${fmt(aptTotal)}</td>
                 <td class="r" style="padding:0 4px">${fmt(gestTotal)}</td>

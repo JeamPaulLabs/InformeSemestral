@@ -94,6 +94,29 @@ const DATA_OP_SEP = {
   }
 };
 
+/* ── MOTIVOS DE DESCARTE · Bienvenida CP + Autogestión combinadas (ene-sep) ──
+   Fuente: panel "Detalle descartados" de las mismas capturas "auto <mes>"
+   (vista del dashboard filtrada por Mes, que trae Autogestión + Base
+   Bienvenidas Cuota Protegida juntas — mismo origen que DATA_OP_SEP).
+   NO es el canal completo (eso sigue en DESCARTE_MOTIVOS, 1S, 548.368
+   registros) — este bloque es solo esas 2 campañas. Cubre ene, abr-sep
+   (7 de 9 meses): feb y mar se perdieron antes de poder guardarlos, no se
+   inventan. Los totales por mes (8.606/11.929/14.497/16.650/12.582/21.658/
+   4.257) cuadran exacto con rechazados de Bienvenida+Autogestión de
+   DATA_OP_JUL_AGO/DATA_OP_SEP — confirma que es la misma fuente. */
+const RECHAZO_BIENVENIDA_AUTOGESTION = {
+  meses: 'Ene, Abr-Sep (faltan feb-mar)',
+  total: 90179,
+  motivos: [
+    { motivo: 'Cuota Protegida Activa',              cant: 44771, pct: 49.6 },
+    { motivo: 'Contrato Repetido',                    cant: 16923, pct: 18.8 },
+    { motivo: 'Registro Enviado/Recibido Anteriorm.',cant: 13268, pct: 14.7 },
+    { motivo: 'Microseguro Activo',                   cant: 5189,  pct: 5.8 },
+    { motivo: 'Venta PDV en Mismo Archivo',           cant: 4790,  pct: 5.3 },
+    { motivo: 'Otros (cédula/localidad/edad/etc.)',   cant: 5183,  pct: 5.7 },
+  ]
+};
+
 /* ── CAMPAÑAS NUEVAS AGO-OCT 2026 (sin precedente en el 1S) ──
    Rueda Seguro SBS y Billetera Protegida. Mismo origen (capturas "TMK Vanti
    Annual Management Summary"), pero su propio rango de meses (ago-oct, no
