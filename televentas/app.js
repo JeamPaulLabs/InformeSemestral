@@ -2216,7 +2216,7 @@ function renderCampanaDeepDive(campanaId, data) {
             </colgroup>
             <thead><tr>
               <th style="border-right:1px solid rgba(255,255,255,.18); padding:2px 4px">Motivo</th>
-              ${data.kpisBase.map(m => `<th class="r" style="border-right:1px solid rgba(255,255,255,.18); padding:2px 4px">${m.mes}</th>`).join('')}
+              ${data.kpisBase.map(m => `<th class="r" style="border-right:1px solid rgba(255,255,255,.18); padding:2px 2px; font-size:0.9em">${m.mes.slice(0,3)}</th>`).join('')}
               <th class="r" style="padding:2px 4px">Total</th>
             </tr></thead>
             <tbody>
@@ -2296,7 +2296,7 @@ function renderCampanaDeepDive(campanaId, data) {
             </colgroup>
             <thead><tr>
               <th style="border-right:1px solid rgba(255,255,255,.18); padding:2px 4px">Tipificación</th>
-              ${data.kpisBase.map(m => `<th class="r" style="border-right:1px solid rgba(255,255,255,.18); padding:2px 4px">${m.mes}</th>`).join('')}
+              ${data.kpisBase.map(m => `<th class="r" style="border-right:1px solid rgba(255,255,255,.18); padding:2px 2px; font-size:0.9em">${m.mes.slice(0,3)}</th>`).join('')}
               <th class="r" style="padding:2px 4px">Total</th>
             </tr></thead>
             <tbody>
